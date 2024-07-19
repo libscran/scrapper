@@ -1,0 +1,22 @@
+Package: scrapper
+Version: 0.99.0
+Date: 2024-07-18
+Authors@R: person("Aaron", "Lun", role=c("cre", "aut"), email="infinite.monkeys.with.keyboards@gmail.com")
+Title: Bindings to C++ Code for Single-Cell Analysis
+Description: 
+    Implements bindings to C++ code for analyzing single-cell (expression) data, mostly from the libscran library. 
+    This provides low-level utilities for individual analysis steps from quality control to clustering and marker detection.
+    It is intended for other package developers, with only limited support for a user-friendly end-to-end workflow.
+Imports:
+    Rcpp,
+    beachmat
+Suggests:
+    knitr,
+    Rmarkdown,
+    BiocStyle
+LinkingTo:
+    assorthead,
+    beachmat
+VignetteBuilder: knitr
+Encoding: UTF-8
+RoxygenNote: 7.3.2
