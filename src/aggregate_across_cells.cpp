@@ -1,4 +1,4 @@
-#include "config.h"
+//#include "config.h"
 
 #include <vector>
 
@@ -10,7 +10,8 @@
 
 //[[Rcpp::export(rng=false)]]
 SEXP aggregate_across_cells(SEXP x, Rcpp::IntegerVector combined, int nthreads) {
-    auto mat = BoundNumericPointer(x);
+    auto raw_mat = Rtatami::BoundNumericPointer(x);
+    const auto& mat = raw_mat->ptr;
     size_t NC = mat->ncol();
     size_t NR = mat->nrow();
 
@@ -24,25 +25,22 @@ SEXP aggregate_across_cells(SEXP x, Rcpp::IntegerVector combined, int nthreads) 
 
     scran_aggregate::AggregateAcrossCellsBuffers<double, int> buffers;
     {
-        buffers.sum.reserve(ncombos);
+        buffers.sums.reserve(ncombos);
         buffers.detected.reserve(ncombos);
         double* osum = sums.begin();
         int* odet = detected.begin();
         for (size_t i = 0; i < ncombos; ++i, osum += NR, odet += NR) {
-            buffers.sum.push_back(osum);
+            buffers.sums.push_back(osum);
             buffers.detected.push_back(odet);
         }
     }
 
     scran_aggregate::AggregateAcrossCellsOptions opt;
     opt.num_threads = nthreads;
-    scran_aggregate::aggregate_across_cells(*mat, static_cast<const int*>(combined.begin()), buffers);
-
-    auto table = tatami::tabulate_groups(static_cast<const int*>(combined.begin()), NC);
+    scran_aggregate::aggregate_across_cells(*mat, static_cast<const int*>(combined.begin()), buffers, opt);
 
     return Rcpp::List::create(
         Rcpp::Named("sums") = sums,
-        Rcpp::Named("detected") = detected,
-        Rcpp::Named("counts") = Rcpp::IntegerVector(table.begin(), table.end())
+        Rcpp::Named("detected") = detected
     );
 }

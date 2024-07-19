@@ -11,10 +11,13 @@ Imports:
     Rcpp,
     beachmat
 Suggests:
+    Matrix,
+    testthat,
     knitr,
     Rmarkdown,
     BiocStyle
 LinkingTo:
+    Rcpp,
     assorthead,
     beachmat
 VignetteBuilder: knitr
