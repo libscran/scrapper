@@ -10,6 +10,43 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// compute_adt_qc_metrics
+Rcpp::List compute_adt_qc_metrics(SEXP x, Rcpp::List subsets, int num_threads);
+RcppExport SEXP _scrapper_compute_adt_qc_metrics(SEXP xSEXP, SEXP subsetsSEXP, SEXP num_threadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type subsets(subsetsSEXP);
+    Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_adt_qc_metrics(x, subsets, num_threads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// suggest_adt_qc_thresholds
+Rcpp::List suggest_adt_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::IntegerVector> block, double min_detected_drop, double num_mads);
+RcppExport SEXP _scrapper_suggest_adt_qc_thresholds(SEXP metricsSEXP, SEXP blockSEXP, SEXP min_detected_dropSEXP, SEXP num_madsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type metrics(metricsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type block(blockSEXP);
+    Rcpp::traits::input_parameter< double >::type min_detected_drop(min_detected_dropSEXP);
+    Rcpp::traits::input_parameter< double >::type num_mads(num_madsSEXP);
+    rcpp_result_gen = Rcpp::wrap(suggest_adt_qc_thresholds(metrics, block, min_detected_drop, num_mads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// filter_adt_qc_metrics
+Rcpp::LogicalVector filter_adt_qc_metrics(Rcpp::List filters, Rcpp::List metrics, Rcpp::Nullable<Rcpp::IntegerVector> block);
+RcppExport SEXP _scrapper_filter_adt_qc_metrics(SEXP filtersSEXP, SEXP metricsSEXP, SEXP blockSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type filters(filtersSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type metrics(metricsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type block(blockSEXP);
+    rcpp_result_gen = Rcpp::wrap(filter_adt_qc_metrics(filters, metrics, block));
+    return rcpp_result_gen;
+END_RCPP
+}
 // aggregate_across_cells
 SEXP aggregate_across_cells(SEXP x, Rcpp::IntegerVector combined, int nthreads);
 RcppExport SEXP _scrapper_aggregate_across_cells(SEXP xSEXP, SEXP combinedSEXP, SEXP nthreadsSEXP) {
@@ -34,10 +71,92 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// compute_crispr_qc_metrics
+Rcpp::List compute_crispr_qc_metrics(SEXP x, int num_threads);
+RcppExport SEXP _scrapper_compute_crispr_qc_metrics(SEXP xSEXP, SEXP num_threadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_crispr_qc_metrics(x, num_threads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// suggest_crispr_qc_thresholds
+Rcpp::List suggest_crispr_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::IntegerVector> block, double min_detected_drop, double num_mads);
+RcppExport SEXP _scrapper_suggest_crispr_qc_thresholds(SEXP metricsSEXP, SEXP blockSEXP, SEXP min_detected_dropSEXP, SEXP num_madsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type metrics(metricsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type block(blockSEXP);
+    Rcpp::traits::input_parameter< double >::type min_detected_drop(min_detected_dropSEXP);
+    Rcpp::traits::input_parameter< double >::type num_mads(num_madsSEXP);
+    rcpp_result_gen = Rcpp::wrap(suggest_crispr_qc_thresholds(metrics, block, min_detected_drop, num_mads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// filter_crispr_qc_metrics
+Rcpp::LogicalVector filter_crispr_qc_metrics(Rcpp::List filters, Rcpp::List metrics, Rcpp::Nullable<Rcpp::IntegerVector> block);
+RcppExport SEXP _scrapper_filter_crispr_qc_metrics(SEXP filtersSEXP, SEXP metricsSEXP, SEXP blockSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type filters(filtersSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type metrics(metricsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type block(blockSEXP);
+    rcpp_result_gen = Rcpp::wrap(filter_crispr_qc_metrics(filters, metrics, block));
+    return rcpp_result_gen;
+END_RCPP
+}
+// compute_rna_qc_metrics
+Rcpp::List compute_rna_qc_metrics(SEXP x, Rcpp::List subsets, int num_threads);
+RcppExport SEXP _scrapper_compute_rna_qc_metrics(SEXP xSEXP, SEXP subsetsSEXP, SEXP num_threadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type subsets(subsetsSEXP);
+    Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_rna_qc_metrics(x, subsets, num_threads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// suggest_rna_qc_thresholds
+Rcpp::List suggest_rna_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::IntegerVector> block, double min_detected_drop, double num_mads);
+RcppExport SEXP _scrapper_suggest_rna_qc_thresholds(SEXP metricsSEXP, SEXP blockSEXP, SEXP min_detected_dropSEXP, SEXP num_madsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type metrics(metricsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type block(blockSEXP);
+    Rcpp::traits::input_parameter< double >::type min_detected_drop(min_detected_dropSEXP);
+    Rcpp::traits::input_parameter< double >::type num_mads(num_madsSEXP);
+    rcpp_result_gen = Rcpp::wrap(suggest_rna_qc_thresholds(metrics, block, min_detected_drop, num_mads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// filter_rna_qc_metrics
+Rcpp::LogicalVector filter_rna_qc_metrics(Rcpp::List filters, Rcpp::List metrics, Rcpp::Nullable<Rcpp::IntegerVector> block);
+RcppExport SEXP _scrapper_filter_rna_qc_metrics(SEXP filtersSEXP, SEXP metricsSEXP, SEXP blockSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type filters(filtersSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type metrics(metricsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type block(blockSEXP);
+    rcpp_result_gen = Rcpp::wrap(filter_rna_qc_metrics(filters, metrics, block));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_scrapper_compute_adt_qc_metrics", (DL_FUNC) &_scrapper_compute_adt_qc_metrics, 3},
+    {"_scrapper_suggest_adt_qc_thresholds", (DL_FUNC) &_scrapper_suggest_adt_qc_thresholds, 4},
+    {"_scrapper_filter_adt_qc_metrics", (DL_FUNC) &_scrapper_filter_adt_qc_metrics, 3},
     {"_scrapper_aggregate_across_cells", (DL_FUNC) &_scrapper_aggregate_across_cells, 3},
     {"_scrapper_combine_factors", (DL_FUNC) &_scrapper_combine_factors, 3},
+    {"_scrapper_compute_crispr_qc_metrics", (DL_FUNC) &_scrapper_compute_crispr_qc_metrics, 2},
+    {"_scrapper_suggest_crispr_qc_thresholds", (DL_FUNC) &_scrapper_suggest_crispr_qc_thresholds, 4},
+    {"_scrapper_filter_crispr_qc_metrics", (DL_FUNC) &_scrapper_filter_crispr_qc_metrics, 3},
+    {"_scrapper_compute_rna_qc_metrics", (DL_FUNC) &_scrapper_compute_rna_qc_metrics, 3},
+    {"_scrapper_suggest_rna_qc_thresholds", (DL_FUNC) &_scrapper_suggest_rna_qc_thresholds, 4},
+    {"_scrapper_filter_rna_qc_metrics", (DL_FUNC) &_scrapper_filter_rna_qc_metrics, 3},
     {NULL, NULL, 0}
 };
 
