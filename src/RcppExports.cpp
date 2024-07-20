@@ -59,6 +59,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// center_size_factors
+Rcpp::NumericVector center_size_factors(Rcpp::NumericVector size_factors, Rcpp::Nullable<Rcpp::IntegerVector> block, bool lowest);
+RcppExport SEXP _scrapper_center_size_factors(SEXP size_factorsSEXP, SEXP blockSEXP, SEXP lowestSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type size_factors(size_factorsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type block(blockSEXP);
+    Rcpp::traits::input_parameter< bool >::type lowest(lowestSEXP);
+    rcpp_result_gen = Rcpp::wrap(center_size_factors(size_factors, block, lowest));
+    return rcpp_result_gen;
+END_RCPP
+}
 // combine_factors
 Rcpp::List combine_factors(Rcpp::List factors, bool keep_unused, Rcpp::IntegerVector nlevels);
 RcppExport SEXP _scrapper_combine_factors(SEXP factorsSEXP, SEXP keep_unusedSEXP, SEXP nlevelsSEXP) {
@@ -144,12 +156,27 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// sanitize_size_factors
+Rcpp::NumericVector sanitize_size_factors(Rcpp::NumericVector size_factors, bool handle_zero, bool handle_negative, bool handle_nan, bool handle_infinite);
+RcppExport SEXP _scrapper_sanitize_size_factors(SEXP size_factorsSEXP, SEXP handle_zeroSEXP, SEXP handle_negativeSEXP, SEXP handle_nanSEXP, SEXP handle_infiniteSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type size_factors(size_factorsSEXP);
+    Rcpp::traits::input_parameter< bool >::type handle_zero(handle_zeroSEXP);
+    Rcpp::traits::input_parameter< bool >::type handle_negative(handle_negativeSEXP);
+    Rcpp::traits::input_parameter< bool >::type handle_nan(handle_nanSEXP);
+    Rcpp::traits::input_parameter< bool >::type handle_infinite(handle_infiniteSEXP);
+    rcpp_result_gen = Rcpp::wrap(sanitize_size_factors(size_factors, handle_zero, handle_negative, handle_nan, handle_infinite));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_compute_adt_qc_metrics", (DL_FUNC) &_scrapper_compute_adt_qc_metrics, 3},
     {"_scrapper_suggest_adt_qc_thresholds", (DL_FUNC) &_scrapper_suggest_adt_qc_thresholds, 4},
     {"_scrapper_filter_adt_qc_metrics", (DL_FUNC) &_scrapper_filter_adt_qc_metrics, 3},
     {"_scrapper_aggregate_across_cells", (DL_FUNC) &_scrapper_aggregate_across_cells, 3},
+    {"_scrapper_center_size_factors", (DL_FUNC) &_scrapper_center_size_factors, 3},
     {"_scrapper_combine_factors", (DL_FUNC) &_scrapper_combine_factors, 3},
     {"_scrapper_compute_crispr_qc_metrics", (DL_FUNC) &_scrapper_compute_crispr_qc_metrics, 2},
     {"_scrapper_suggest_crispr_qc_thresholds", (DL_FUNC) &_scrapper_suggest_crispr_qc_thresholds, 4},
@@ -157,6 +184,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_compute_rna_qc_metrics", (DL_FUNC) &_scrapper_compute_rna_qc_metrics, 3},
     {"_scrapper_suggest_rna_qc_thresholds", (DL_FUNC) &_scrapper_suggest_rna_qc_thresholds, 4},
     {"_scrapper_filter_rna_qc_metrics", (DL_FUNC) &_scrapper_filter_rna_qc_metrics, 3},
+    {"_scrapper_sanitize_size_factors", (DL_FUNC) &_scrapper_sanitize_size_factors, 5},
     {NULL, NULL, 0}
 };
 

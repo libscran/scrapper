@@ -17,6 +17,10 @@ aggregate_across_cells <- function(x, combined, nthreads) {
     .Call('_scrapper_aggregate_across_cells', PACKAGE = 'scrapper', x, combined, nthreads)
 }
 
+center_size_factors <- function(size_factors, block, lowest) {
+    .Call('_scrapper_center_size_factors', PACKAGE = 'scrapper', size_factors, block, lowest)
+}
+
 combine_factors <- function(factors, keep_unused, nlevels) {
     .Call('_scrapper_combine_factors', PACKAGE = 'scrapper', factors, keep_unused, nlevels)
 }
@@ -43,5 +47,9 @@ suggest_rna_qc_thresholds <- function(metrics, block, min_detected_drop, num_mad
 
 filter_rna_qc_metrics <- function(filters, metrics, block) {
     .Call('_scrapper_filter_rna_qc_metrics', PACKAGE = 'scrapper', filters, metrics, block)
+}
+
+sanitize_size_factors <- function(size_factors, handle_zero, handle_negative, handle_nan, handle_infinite) {
+    .Call('_scrapper_sanitize_size_factors', PACKAGE = 'scrapper', size_factors, handle_zero, handle_negative, handle_nan, handle_infinite)
 }
 
