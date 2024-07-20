@@ -71,6 +71,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// choose_pseudo_count
+double choose_pseudo_count(Rcpp::NumericVector size_factors, double quantile, double max_bias, double min_value);
+RcppExport SEXP _scrapper_choose_pseudo_count(SEXP size_factorsSEXP, SEXP quantileSEXP, SEXP max_biasSEXP, SEXP min_valueSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type size_factors(size_factorsSEXP);
+    Rcpp::traits::input_parameter< double >::type quantile(quantileSEXP);
+    Rcpp::traits::input_parameter< double >::type max_bias(max_biasSEXP);
+    Rcpp::traits::input_parameter< double >::type min_value(min_valueSEXP);
+    rcpp_result_gen = Rcpp::wrap(choose_pseudo_count(size_factors, quantile, max_bias, min_value));
+    return rcpp_result_gen;
+END_RCPP
+}
 // combine_factors
 Rcpp::List combine_factors(Rcpp::List factors, bool keep_unused, Rcpp::IntegerVector nlevels);
 RcppExport SEXP _scrapper_combine_factors(SEXP factorsSEXP, SEXP keep_unusedSEXP, SEXP nlevelsSEXP) {
@@ -116,6 +129,21 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::List >::type metrics(metricsSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type block(blockSEXP);
     rcpp_result_gen = Rcpp::wrap(filter_crispr_qc_metrics(filters, metrics, block));
+    return rcpp_result_gen;
+END_RCPP
+}
+// normalize_counts
+SEXP normalize_counts(SEXP x, Rcpp::NumericVector size_factors, bool log, double pseudo_count, double log_base, bool preserve_sparsity);
+RcppExport SEXP _scrapper_normalize_counts(SEXP xSEXP, SEXP size_factorsSEXP, SEXP logSEXP, SEXP pseudo_countSEXP, SEXP log_baseSEXP, SEXP preserve_sparsitySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type size_factors(size_factorsSEXP);
+    Rcpp::traits::input_parameter< bool >::type log(logSEXP);
+    Rcpp::traits::input_parameter< double >::type pseudo_count(pseudo_countSEXP);
+    Rcpp::traits::input_parameter< double >::type log_base(log_baseSEXP);
+    Rcpp::traits::input_parameter< bool >::type preserve_sparsity(preserve_sparsitySEXP);
+    rcpp_result_gen = Rcpp::wrap(normalize_counts(x, size_factors, log, pseudo_count, log_base, preserve_sparsity));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -177,10 +205,12 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_filter_adt_qc_metrics", (DL_FUNC) &_scrapper_filter_adt_qc_metrics, 3},
     {"_scrapper_aggregate_across_cells", (DL_FUNC) &_scrapper_aggregate_across_cells, 3},
     {"_scrapper_center_size_factors", (DL_FUNC) &_scrapper_center_size_factors, 3},
+    {"_scrapper_choose_pseudo_count", (DL_FUNC) &_scrapper_choose_pseudo_count, 4},
     {"_scrapper_combine_factors", (DL_FUNC) &_scrapper_combine_factors, 3},
     {"_scrapper_compute_crispr_qc_metrics", (DL_FUNC) &_scrapper_compute_crispr_qc_metrics, 2},
     {"_scrapper_suggest_crispr_qc_thresholds", (DL_FUNC) &_scrapper_suggest_crispr_qc_thresholds, 4},
     {"_scrapper_filter_crispr_qc_metrics", (DL_FUNC) &_scrapper_filter_crispr_qc_metrics, 3},
+    {"_scrapper_normalize_counts", (DL_FUNC) &_scrapper_normalize_counts, 6},
     {"_scrapper_compute_rna_qc_metrics", (DL_FUNC) &_scrapper_compute_rna_qc_metrics, 3},
     {"_scrapper_suggest_rna_qc_thresholds", (DL_FUNC) &_scrapper_suggest_rna_qc_thresholds, 4},
     {"_scrapper_filter_rna_qc_metrics", (DL_FUNC) &_scrapper_filter_rna_qc_metrics, 3},

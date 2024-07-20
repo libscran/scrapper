@@ -34,11 +34,11 @@ Numeric vector of length equal to \code{size.factors}, containing the sanitized 
 Replace invalid size factors, i.e., zero, negative, infinite or NaN values.
 }
 \examples{
-sf <- runif(1000)
+sf <- 2^rnorm(100)
 sf[1] <- 0
 sf[2] <- -1
 sf[3] <- Inf
-sf[4] <- Inf
+sf[4] <- NaN
 sanitizeSizeFactors(sf)
 
 }

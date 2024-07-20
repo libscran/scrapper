@@ -21,6 +21,10 @@ center_size_factors <- function(size_factors, block, lowest) {
     .Call('_scrapper_center_size_factors', PACKAGE = 'scrapper', size_factors, block, lowest)
 }
 
+choose_pseudo_count <- function(size_factors, quantile, max_bias, min_value) {
+    .Call('_scrapper_choose_pseudo_count', PACKAGE = 'scrapper', size_factors, quantile, max_bias, min_value)
+}
+
 combine_factors <- function(factors, keep_unused, nlevels) {
     .Call('_scrapper_combine_factors', PACKAGE = 'scrapper', factors, keep_unused, nlevels)
 }
@@ -35,6 +39,10 @@ suggest_crispr_qc_thresholds <- function(metrics, block, min_detected_drop, num_
 
 filter_crispr_qc_metrics <- function(filters, metrics, block) {
     .Call('_scrapper_filter_crispr_qc_metrics', PACKAGE = 'scrapper', filters, metrics, block)
+}
+
+normalize_counts <- function(x, size_factors, log, pseudo_count, log_base, preserve_sparsity) {
+    .Call('_scrapper_normalize_counts', PACKAGE = 'scrapper', x, size_factors, log, pseudo_count, log_base, preserve_sparsity)
 }
 
 compute_rna_qc_metrics <- function(x, subsets, num_threads) {

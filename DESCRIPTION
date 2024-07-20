@@ -9,9 +9,10 @@ Description:
     It is intended for other package developers, with only limited support for a user-friendly end-to-end workflow.
 Imports:
     Rcpp,
-    beachmat
-Suggests:
+    beachmat,
     Matrix,
+    DelayedArray
+Suggests:
     testthat,
     knitr,
     Rmarkdown,
