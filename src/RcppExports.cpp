@@ -71,6 +71,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// choose_highly_variable_genes
+Rcpp::IntegerVector choose_highly_variable_genes(Rcpp::NumericVector stats, int top, bool larger, bool keep_ties);
+RcppExport SEXP _scrapper_choose_highly_variable_genes(SEXP statsSEXP, SEXP topSEXP, SEXP largerSEXP, SEXP keep_tiesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type stats(statsSEXP);
+    Rcpp::traits::input_parameter< int >::type top(topSEXP);
+    Rcpp::traits::input_parameter< bool >::type larger(largerSEXP);
+    Rcpp::traits::input_parameter< bool >::type keep_ties(keep_tiesSEXP);
+    rcpp_result_gen = Rcpp::wrap(choose_highly_variable_genes(stats, top, larger, keep_ties));
+    return rcpp_result_gen;
+END_RCPP
+}
 // choose_pseudo_count
 double choose_pseudo_count(Rcpp::NumericVector size_factors, double quantile, double max_bias, double min_value);
 RcppExport SEXP _scrapper_choose_pseudo_count(SEXP size_factorsSEXP, SEXP quantileSEXP, SEXP max_biasSEXP, SEXP min_valueSEXP) {
@@ -129,6 +142,47 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::List >::type metrics(metricsSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type block(blockSEXP);
     rcpp_result_gen = Rcpp::wrap(filter_crispr_qc_metrics(filters, metrics, block));
+    return rcpp_result_gen;
+END_RCPP
+}
+// fit_variance_trend
+Rcpp::List fit_variance_trend(Rcpp::NumericVector means, Rcpp::NumericVector variances, bool mean_filter, double min_mean, bool transform, double span, bool use_min_width, double min_width, int min_window_count, int num_threads);
+RcppExport SEXP _scrapper_fit_variance_trend(SEXP meansSEXP, SEXP variancesSEXP, SEXP mean_filterSEXP, SEXP min_meanSEXP, SEXP transformSEXP, SEXP spanSEXP, SEXP use_min_widthSEXP, SEXP min_widthSEXP, SEXP min_window_countSEXP, SEXP num_threadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type means(meansSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type variances(variancesSEXP);
+    Rcpp::traits::input_parameter< bool >::type mean_filter(mean_filterSEXP);
+    Rcpp::traits::input_parameter< double >::type min_mean(min_meanSEXP);
+    Rcpp::traits::input_parameter< bool >::type transform(transformSEXP);
+    Rcpp::traits::input_parameter< double >::type span(spanSEXP);
+    Rcpp::traits::input_parameter< bool >::type use_min_width(use_min_widthSEXP);
+    Rcpp::traits::input_parameter< double >::type min_width(min_widthSEXP);
+    Rcpp::traits::input_parameter< int >::type min_window_count(min_window_countSEXP);
+    Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(fit_variance_trend(means, variances, mean_filter, min_mean, transform, span, use_min_width, min_width, min_window_count, num_threads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// model_gene_variances
+Rcpp::List model_gene_variances(SEXP x, Rcpp::Nullable<Rcpp::IntegerVector> block, size_t nblocks, std::string block_weight_policy, Rcpp::NumericVector variable_block_weight, bool mean_filter, double min_mean, bool transform, double span, bool use_min_width, double min_width, int min_window_count, int num_threads);
+RcppExport SEXP _scrapper_model_gene_variances(SEXP xSEXP, SEXP blockSEXP, SEXP nblocksSEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP mean_filterSEXP, SEXP min_meanSEXP, SEXP transformSEXP, SEXP spanSEXP, SEXP use_min_widthSEXP, SEXP min_widthSEXP, SEXP min_window_countSEXP, SEXP num_threadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type block(blockSEXP);
+    Rcpp::traits::input_parameter< size_t >::type nblocks(nblocksSEXP);
+    Rcpp::traits::input_parameter< std::string >::type block_weight_policy(block_weight_policySEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type variable_block_weight(variable_block_weightSEXP);
+    Rcpp::traits::input_parameter< bool >::type mean_filter(mean_filterSEXP);
+    Rcpp::traits::input_parameter< double >::type min_mean(min_meanSEXP);
+    Rcpp::traits::input_parameter< bool >::type transform(transformSEXP);
+    Rcpp::traits::input_parameter< double >::type span(spanSEXP);
+    Rcpp::traits::input_parameter< bool >::type use_min_width(use_min_widthSEXP);
+    Rcpp::traits::input_parameter< double >::type min_width(min_widthSEXP);
+    Rcpp::traits::input_parameter< int >::type min_window_count(min_window_countSEXP);
+    Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(model_gene_variances(x, block, nblocks, block_weight_policy, variable_block_weight, mean_filter, min_mean, transform, span, use_min_width, min_width, min_window_count, num_threads));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -205,11 +259,14 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_filter_adt_qc_metrics", (DL_FUNC) &_scrapper_filter_adt_qc_metrics, 3},
     {"_scrapper_aggregate_across_cells", (DL_FUNC) &_scrapper_aggregate_across_cells, 3},
     {"_scrapper_center_size_factors", (DL_FUNC) &_scrapper_center_size_factors, 3},
+    {"_scrapper_choose_highly_variable_genes", (DL_FUNC) &_scrapper_choose_highly_variable_genes, 4},
     {"_scrapper_choose_pseudo_count", (DL_FUNC) &_scrapper_choose_pseudo_count, 4},
     {"_scrapper_combine_factors", (DL_FUNC) &_scrapper_combine_factors, 3},
     {"_scrapper_compute_crispr_qc_metrics", (DL_FUNC) &_scrapper_compute_crispr_qc_metrics, 2},
     {"_scrapper_suggest_crispr_qc_thresholds", (DL_FUNC) &_scrapper_suggest_crispr_qc_thresholds, 4},
     {"_scrapper_filter_crispr_qc_metrics", (DL_FUNC) &_scrapper_filter_crispr_qc_metrics, 3},
+    {"_scrapper_fit_variance_trend", (DL_FUNC) &_scrapper_fit_variance_trend, 10},
+    {"_scrapper_model_gene_variances", (DL_FUNC) &_scrapper_model_gene_variances, 13},
     {"_scrapper_normalize_counts", (DL_FUNC) &_scrapper_normalize_counts, 6},
     {"_scrapper_compute_rna_qc_metrics", (DL_FUNC) &_scrapper_compute_rna_qc_metrics, 3},
     {"_scrapper_suggest_rna_qc_thresholds", (DL_FUNC) &_scrapper_suggest_rna_qc_thresholds, 4},

@@ -21,6 +21,10 @@ center_size_factors <- function(size_factors, block, lowest) {
     .Call('_scrapper_center_size_factors', PACKAGE = 'scrapper', size_factors, block, lowest)
 }
 
+choose_highly_variable_genes <- function(stats, top, larger, keep_ties) {
+    .Call('_scrapper_choose_highly_variable_genes', PACKAGE = 'scrapper', stats, top, larger, keep_ties)
+}
+
 choose_pseudo_count <- function(size_factors, quantile, max_bias, min_value) {
     .Call('_scrapper_choose_pseudo_count', PACKAGE = 'scrapper', size_factors, quantile, max_bias, min_value)
 }
@@ -39,6 +43,14 @@ suggest_crispr_qc_thresholds <- function(metrics, block, min_detected_drop, num_
 
 filter_crispr_qc_metrics <- function(filters, metrics, block) {
     .Call('_scrapper_filter_crispr_qc_metrics', PACKAGE = 'scrapper', filters, metrics, block)
+}
+
+fit_variance_trend <- function(means, variances, mean_filter, min_mean, transform, span, use_min_width, min_width, min_window_count, num_threads) {
+    .Call('_scrapper_fit_variance_trend', PACKAGE = 'scrapper', means, variances, mean_filter, min_mean, transform, span, use_min_width, min_width, min_window_count, num_threads)
+}
+
+model_gene_variances <- function(x, block, nblocks, block_weight_policy, variable_block_weight, mean_filter, min_mean, transform, span, use_min_width, min_width, min_window_count, num_threads) {
+    .Call('_scrapper_model_gene_variances', PACKAGE = 'scrapper', x, block, nblocks, block_weight_policy, variable_block_weight, mean_filter, min_mean, transform, span, use_min_width, min_width, min_window_count, num_threads)
 }
 
 normalize_counts <- function(x, size_factors, log, pseudo_count, log_base, preserve_sparsity) {

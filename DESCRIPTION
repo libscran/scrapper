@@ -16,7 +16,8 @@ Suggests:
     testthat,
     knitr,
     Rmarkdown,
-    BiocStyle
+    BiocStyle,
+    MatrixGenerics
 LinkingTo:
     Rcpp,
     assorthead,
