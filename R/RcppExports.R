@@ -69,6 +69,10 @@ filter_rna_qc_metrics <- function(filters, metrics, block) {
     .Call('_scrapper_filter_rna_qc_metrics', PACKAGE = 'scrapper', filters, metrics, block)
 }
 
+run_pca <- function(x, number, block, block_weight_policy, variable_block_weight, components_from_residuals, scale, realized, irlba_work, irlba_iterations, irlba_seed, num_threads) {
+    .Call('_scrapper_run_pca', PACKAGE = 'scrapper', x, number, block, block_weight_policy, variable_block_weight, components_from_residuals, scale, realized, irlba_work, irlba_iterations, irlba_seed, num_threads)
+}
+
 sanitize_size_factors <- function(size_factors, handle_zero, handle_negative, handle_nan, handle_infinite) {
     .Call('_scrapper_sanitize_size_factors', PACKAGE = 'scrapper', size_factors, handle_zero, handle_negative, handle_nan, handle_infinite)
 }
