@@ -6,7 +6,7 @@
 #include "scran_qc/scran_qc.hpp"
 #include "Rtatami.h"
 
-#include "ResolvedBatch.h"
+#include "utils_block.h"
 
 // [[Rcpp::export(rng=false)]]
 Rcpp::List compute_rna_qc_metrics(SEXP x, Rcpp::List subsets, int num_threads) {
@@ -122,7 +122,7 @@ Rcpp::List suggest_rna_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::In
     opt.detected_num_mads = num_mads;
     opt.subset_proportion_num_mads = num_mads;
 
-    auto block_info = ResolvedBatch(block);
+    auto block_info = MaybeBlock(block);
     auto ptr = block_info.get();
     if (ptr) {
         auto filt = scran_qc::compute_rna_qc_filters_blocked(ncells, buffers, ptr, opt);
@@ -162,7 +162,7 @@ Rcpp::LogicalVector filter_rna_qc_metrics(Rcpp::List filters, Rcpp::List metrics
 
     Rcpp::LogicalVector keep(ncells);
 
-    auto block_info = ResolvedBatch(block);
+    auto block_info = MaybeBlock(block);
     auto ptr = block_info.get();
     if (ptr) {
         scran_qc::RnaQcBlockedFilters filt;

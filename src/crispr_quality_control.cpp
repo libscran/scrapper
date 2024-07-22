@@ -6,7 +6,7 @@
 #include "scran_qc/scran_qc.hpp"
 #include "Rtatami.h"
 
-#include "ResolvedBatch.h"
+#include "utils_block.h"
 
 // [[Rcpp::export(rng=false)]]
 Rcpp::List compute_crispr_qc_metrics(SEXP x, int num_threads) {
@@ -92,7 +92,7 @@ Rcpp::List suggest_crispr_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp:
     scran_qc::ComputeCrisprQcFiltersOptions opt;
     opt.max_value_num_mads = num_mads;
 
-    auto block_info = ResolvedBatch(block);
+    auto block_info = MaybeBlock(block);
     auto ptr = block_info.get();
     if (ptr) {
         auto filt = scran_qc::compute_crispr_qc_filters_blocked(ncells, buffers, ptr, opt);
@@ -120,7 +120,7 @@ Rcpp::LogicalVector filter_crispr_qc_metrics(Rcpp::List filters, Rcpp::List metr
 
     Rcpp::LogicalVector keep(ncells);
 
-    auto block_info = ResolvedBatch(block);
+    auto block_info = MaybeBlock(block);
     auto ptr = block_info.get();
     if (ptr) {
         scran_qc::CrisprQcBlockedFilters filt;

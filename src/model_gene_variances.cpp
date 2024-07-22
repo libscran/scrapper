@@ -6,7 +6,7 @@
 #include "Rtatami.h"
 #include "scran_variances/scran_variances.hpp"
 
-#include "ResolvedBatch.h"
+#include "utils_block.h"
 
 //[[Rcpp::export(rng=false)]]
 Rcpp::List model_gene_variances(
@@ -34,21 +34,8 @@ Rcpp::List model_gene_variances(
     opt.fit_variance_trend_options.minimum_window_count = min_window_count;
     opt.num_threads = num_threads;
 
-    if (block_weight_policy == "none") {
-        opt.block_weight_policy = scran_blocks::WeightPolicy::NONE;
-    } else if (block_weight_policy == "equal") {
-        opt.block_weight_policy = scran_blocks::WeightPolicy::EQUAL;
-    } else if (block_weight_policy == "variable") {
-        opt.block_weight_policy = scran_blocks::WeightPolicy::VARIABLE;
-    } else {
-        throw std::runtime_error("unknown block weight policy '" + block_weight_policy + "'");
-    }
-
-    if (variable_block_weight.size() != 2) {
-        throw std::runtime_error("'variable_block_weight' must be a numeric vector of length 2");
-    }
-    opt.variable_block_weight_parameters.lower_bound = variable_block_weight[0];
-    opt.variable_block_weight_parameters.upper_bound = variable_block_weight[1];
+    opt.block_weight_policy = parse_block_weight_policy(block_weight_policy);
+    opt.variable_block_weight_parameters = parse_variable_block_weight(variable_block_weight);
 
     auto raw_mat = Rtatami::BoundNumericPointer(x);
     const auto& mat = raw_mat->ptr;
@@ -62,7 +49,7 @@ Rcpp::List model_gene_variances(
     buffers.fitted = fitted.begin();
     buffers.residuals = residuals.begin();
 
-    auto block_info = ResolvedBatch(block);
+    auto block_info = MaybeBlock(block);
     auto ptr = block_info.get();
     if (ptr) {
         scran_variances::ModelGeneVariancesBlockedBuffers<double> bbuffers;

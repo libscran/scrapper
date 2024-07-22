@@ -5,11 +5,11 @@
 #include "Rcpp.h"
 #include "scran_norm/scran_norm.hpp"
 
-#include "ResolvedBatch.h"
+#include "utils_block.h"
 
 //[[Rcpp::export(rng=false)]]
 Rcpp::NumericVector center_size_factors(Rcpp::NumericVector size_factors, Rcpp::Nullable<Rcpp::IntegerVector> block, bool lowest) {
-    auto block_info = ResolvedBatch(block);
+    auto block_info = MaybeBlock(block);
     auto ptr = block_info.get();
 
     scran_norm::CenterSizeFactorsOptions opt;

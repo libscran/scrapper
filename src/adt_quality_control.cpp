@@ -6,7 +6,7 @@
 #include "scran_qc/scran_qc.hpp"
 #include "Rtatami.h"
 
-#include "ResolvedBatch.h"
+#include "utils_block.h"
 
 // [[Rcpp::export(rng=false)]]
 Rcpp::List compute_adt_qc_metrics(SEXP x, Rcpp::List subsets, int num_threads) {
@@ -122,7 +122,7 @@ Rcpp::List suggest_adt_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::In
     opt.subset_sum_num_mads = num_mads;
     opt.detected_min_drop = min_detected_drop;
 
-    auto block_info = ResolvedBatch(block);
+    auto block_info = MaybeBlock(block);
     auto ptr = block_info.get();
     if (ptr) {
         auto filt = scran_qc::compute_adt_qc_filters_blocked(ncells, buffers, ptr, opt);
@@ -159,7 +159,7 @@ Rcpp::LogicalVector filter_adt_qc_metrics(Rcpp::List filters, Rcpp::List metrics
 
     Rcpp::LogicalVector keep(ncells);
 
-    auto block_info = ResolvedBatch(block);
+    auto block_info = MaybeBlock(block);
     auto ptr = block_info.get();
     if (ptr) {
         scran_qc::AdtQcBlockedFilters filt;
