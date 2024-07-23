@@ -32,7 +32,7 @@
 #' Each row is a gene and each column is a group.
 #' \item \code{detected}, a numeric matrix containing the proportion of detected cells in each group.
 #' Each row is a gene and each column is a group.
-#' \item \code{cohens.d}, a 3-dimensional array containing the Cohen's from each pairwise comparison between groups.
+#' \item \code{cohens.d}, a 3-dimensional numeric array containing the Cohen's from each pairwise comparison between groups.
 #' The first dimension represents the first group, the second dimension represents the second group, and the final dimension represents the gene;
 #' the entry \code{[i, j, k]} represents Cohen's d for \code{i} minus \code{j} of gene \code{k}.
 #' \item \code{auc}, an array like \code{cohens.d} but containing the AUCs from each pairwise comparison.
@@ -47,18 +47,19 @@
 #' x <- round(abs(rsparsematrix(1000, 100, 0.1) * 100))
 #' normed <- normalizeCounts(x, size.factors=centerSizeFactors(colSums(x)))
 #'
-#' # Making up some groups.
 #' g <- sample(letters[1:4], ncol(x), replace=TRUE)
-#' markers <- scoreMarkers(normed, g)
-#' names(markers)
-#' head(markers$mean)
-#' head(markers$cohens.d[["a"]])
+#' scores <- scoreMarkers(normed, g)
+#' names(scores)
+#' head(scores$mean)
+#' head(scores$cohens.d[["a"]])
 #'
 #' @seealso
-#' \url{https://libscran.github.io/scran_variances}, in particular 
+#' \url{https://libscran.github.io/scran_markers}, in particular 
 #' the \code{score_markers_summary} function (for \code{all.pairwise=FALSE}),
 #' the \code{score_markers_pairwise} function (for \code{all.pairwise=TRUE}),
 #' and their blocked equivalents \code{score_markers_summary_blocked} and \code{score_markers_pairwise_blocked} (when \code{block} is not \code{NULL}).
+#'
+#' \code{\link{summarizeEffects}}, to summarize the pairwise effects returned when \code{all.pairwise=TRUE}.
 #' @export
 #' @importFrom beachmat initializeCpp
 scoreMarkers <- function(

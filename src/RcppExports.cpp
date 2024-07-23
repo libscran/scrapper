@@ -309,6 +309,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// summarize_effects
+SEXP summarize_effects(int num_genes, int num_groups, Rcpp::NumericVector effects, int num_threads);
+RcppExport SEXP _scrapper_summarize_effects(SEXP num_genesSEXP, SEXP num_groupsSEXP, SEXP effectsSEXP, SEXP num_threadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< int >::type num_genes(num_genesSEXP);
+    Rcpp::traits::input_parameter< int >::type num_groups(num_groupsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type effects(effectsSEXP);
+    Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(summarize_effects(num_genes, num_groups, effects, num_threads));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_compute_adt_qc_metrics", (DL_FUNC) &_scrapper_compute_adt_qc_metrics, 3},
@@ -332,6 +345,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_sanitize_size_factors", (DL_FUNC) &_scrapper_sanitize_size_factors, 5},
     {"_scrapper_score_markers_summary", (DL_FUNC) &_scrapper_score_markers_summary, 9},
     {"_scrapper_score_markers_pairwise", (DL_FUNC) &_scrapper_score_markers_pairwise, 9},
+    {"_scrapper_summarize_effects", (DL_FUNC) &_scrapper_summarize_effects, 4},
     {NULL, NULL, 0}
 };
 
