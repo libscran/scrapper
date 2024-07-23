@@ -21,18 +21,18 @@ modelGeneVariances(
 }
 \arguments{
 \item{x}{A matrix-like object where rows correspond to genes or genomic features and columns correspond to cells.
-Values are typically expected to be log-expression values.}
+It is typically expected to contain log-expression values, e.g., from \code{\link{normalizeCounts}}.}
 
-\item{block}{Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{metrics}.
+\item{block}{Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{x}.
 Alternatively \code{NULL} if all cells are from the same block.}
 
 \item{block.weight.policy}{String specifying the policy to use for weighting different blocks when computing the average for each statistic
-(Check out the comments in \url{https://libscran.github.io/scran_blocks} for more details.)
+(See documentation at \url{https://libscran.github.io/scran_blocks} for more details.)
 Only used if \code{block} is not \code{NULL}.}
 
 \item{variable.block.weight}{Numeric vector of length 2, specifying the parameters for variable block weighting.
 The first and second values are used as the lower and upper bounds, respectively, for the variable weight calculation.
-(Check out the comments in \url{https://libscran.github.io/scran_blocks} for more details.)
+(See documentation at \url{https://libscran.github.io/scran_blocks} for more details.)
 Only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.}
 
 \item{mean.filter}{Logical scalar indicating whether to filter on the means before trend fitting.}
@@ -53,7 +53,7 @@ Useful to avoid overfitting in high-density intervals.}
 \item{min.window.count}{Minimum number of observations in each window.
 Only used if \code{use.min.width=TRUE}.}
 
-\item{num.threads}{Number of threads to use.}
+\item{num.threads}{Integer scalar specifying the number of threads to use.}
 }
 \value{
 A list containing \code{means}, \code{variances}, \code{fitted} and \code{residuals},

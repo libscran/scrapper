@@ -77,3 +77,11 @@ sanitize_size_factors <- function(size_factors, handle_zero, handle_negative, ha
     .Call('_scrapper_sanitize_size_factors', PACKAGE = 'scrapper', size_factors, handle_zero, handle_negative, handle_nan, handle_infinite)
 }
 
+score_markers_summary <- function(x, groups, num_groups, block, block_weight_policy, variable_block_weight, threshold, num_threads, compute_auc) {
+    .Call('_scrapper_score_markers_summary', PACKAGE = 'scrapper', x, groups, num_groups, block, block_weight_policy, variable_block_weight, threshold, num_threads, compute_auc)
+}
+
+score_markers_pairwise <- function(x, groups, num_groups, block, block_weight_policy, variable_block_weight, threshold, num_threads, compute_auc) {
+    .Call('_scrapper_score_markers_pairwise', PACKAGE = 'scrapper', x, groups, num_groups, block, block_weight_policy, variable_block_weight, threshold, num_threads, compute_auc)
+}
+
