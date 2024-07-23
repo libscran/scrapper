@@ -273,6 +273,55 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// score_markers_summary
+Rcpp::List score_markers_summary(SEXP x, Rcpp::IntegerVector groups, int num_groups, Rcpp::Nullable<Rcpp::IntegerVector> block, std::string block_weight_policy, Rcpp::NumericVector variable_block_weight, double threshold, int num_threads, bool compute_auc);
+RcppExport SEXP _scrapper_score_markers_summary(SEXP xSEXP, SEXP groupsSEXP, SEXP num_groupsSEXP, SEXP blockSEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP thresholdSEXP, SEXP num_threadsSEXP, SEXP compute_aucSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type groups(groupsSEXP);
+    Rcpp::traits::input_parameter< int >::type num_groups(num_groupsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type block(blockSEXP);
+    Rcpp::traits::input_parameter< std::string >::type block_weight_policy(block_weight_policySEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type variable_block_weight(variable_block_weightSEXP);
+    Rcpp::traits::input_parameter< double >::type threshold(thresholdSEXP);
+    Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
+    Rcpp::traits::input_parameter< bool >::type compute_auc(compute_aucSEXP);
+    rcpp_result_gen = Rcpp::wrap(score_markers_summary(x, groups, num_groups, block, block_weight_policy, variable_block_weight, threshold, num_threads, compute_auc));
+    return rcpp_result_gen;
+END_RCPP
+}
+// score_markers_pairwise
+Rcpp::List score_markers_pairwise(SEXP x, Rcpp::IntegerVector groups, int num_groups, Rcpp::Nullable<Rcpp::IntegerVector> block, std::string block_weight_policy, Rcpp::NumericVector variable_block_weight, double threshold, int num_threads, bool compute_auc);
+RcppExport SEXP _scrapper_score_markers_pairwise(SEXP xSEXP, SEXP groupsSEXP, SEXP num_groupsSEXP, SEXP blockSEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP thresholdSEXP, SEXP num_threadsSEXP, SEXP compute_aucSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type groups(groupsSEXP);
+    Rcpp::traits::input_parameter< int >::type num_groups(num_groupsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type block(blockSEXP);
+    Rcpp::traits::input_parameter< std::string >::type block_weight_policy(block_weight_policySEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type variable_block_weight(variable_block_weightSEXP);
+    Rcpp::traits::input_parameter< double >::type threshold(thresholdSEXP);
+    Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
+    Rcpp::traits::input_parameter< bool >::type compute_auc(compute_aucSEXP);
+    rcpp_result_gen = Rcpp::wrap(score_markers_pairwise(x, groups, num_groups, block, block_weight_policy, variable_block_weight, threshold, num_threads, compute_auc));
+    return rcpp_result_gen;
+END_RCPP
+}
+// summarize_effects
+SEXP summarize_effects(int num_genes, int num_groups, Rcpp::NumericVector effects, int num_threads);
+RcppExport SEXP _scrapper_summarize_effects(SEXP num_genesSEXP, SEXP num_groupsSEXP, SEXP effectsSEXP, SEXP num_threadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< int >::type num_genes(num_genesSEXP);
+    Rcpp::traits::input_parameter< int >::type num_groups(num_groupsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type effects(effectsSEXP);
+    Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(summarize_effects(num_genes, num_groups, effects, num_threads));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_compute_adt_qc_metrics", (DL_FUNC) &_scrapper_compute_adt_qc_metrics, 3},
@@ -294,6 +343,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_filter_rna_qc_metrics", (DL_FUNC) &_scrapper_filter_rna_qc_metrics, 3},
     {"_scrapper_run_pca", (DL_FUNC) &_scrapper_run_pca, 12},
     {"_scrapper_sanitize_size_factors", (DL_FUNC) &_scrapper_sanitize_size_factors, 5},
+    {"_scrapper_score_markers_summary", (DL_FUNC) &_scrapper_score_markers_summary, 9},
+    {"_scrapper_score_markers_pairwise", (DL_FUNC) &_scrapper_score_markers_pairwise, 9},
+    {"_scrapper_summarize_effects", (DL_FUNC) &_scrapper_summarize_effects, 4},
     {NULL, NULL, 0}
 };
 

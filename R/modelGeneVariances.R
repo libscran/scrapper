@@ -4,18 +4,18 @@
 #' and model the trend in the variances with respect to the mean.
 #'
 #' @param x A matrix-like object where rows correspond to genes or genomic features and columns correspond to cells.
-#' Values are typically expected to be log-expression values.
-#' @param block Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{metrics}.
+#' It is typically expected to contain log-expression values, e.g., from \code{\link{normalizeCounts}}.
+#' @param block Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{x}.
 #' Alternatively \code{NULL} if all cells are from the same block.
 #' @param block.weight.policy String specifying the policy to use for weighting different blocks when computing the average for each statistic
-#' (Check out the comments in \url{https://libscran.github.io/scran_blocks} for more details.)
+#' (See documentation at \url{https://libscran.github.io/scran_blocks} for more details.)
 #' Only used if \code{block} is not \code{NULL}.
 #' @param variable.block.weight Numeric vector of length 2, specifying the parameters for variable block weighting.
 #' The first and second values are used as the lower and upper bounds, respectively, for the variable weight calculation.
-#' (Check out the comments in \url{https://libscran.github.io/scran_blocks} for more details.)
+#' (See documentation at \url{https://libscran.github.io/scran_blocks} for more details.)
 #' Only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.
 #' @inheritParams fitVarianceTrend
-#' @param num.threads Number of threads to use.
+#' @param num.threads Integer scalar specifying the number of threads to use.
 #'
 #' @return A list containing \code{means}, \code{variances}, \code{fitted} and \code{residuals},
 #' each of which is a numeric vector containing the statistic of the same name across all genes.
