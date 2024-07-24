@@ -1,6 +1,7 @@
 //#include "config.h"
 
 #include <vector>
+#include <stdexcept>
 
 #include "Rcpp.h"
 #include "scran_qc/scran_qc.hpp"
@@ -125,12 +126,17 @@ Rcpp::List suggest_rna_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::In
     auto block_info = MaybeBlock(block);
     auto ptr = block_info.get();
     if (ptr) {
+        if (block_info.size() != ncells) {
+            throw std::runtime_error("'block' must be the same length as the number of cells");
+        }
+
         auto filt = scran_qc::compute_rna_qc_filters_blocked(ncells, buffers, ptr, opt);
         const auto& ssout = filt.get_subset_proportion();
         Rcpp::List subs(nsubs);
         for (size_t s = 0; s < nsubs; ++s) {
             subs[s] = Rcpp::NumericVector(ssout[s].begin(), ssout[s].end());
         }
+
         const auto& sout = filt.get_sum();
         const auto& dout = filt.get_detected();
         return Rcpp::List::create(
@@ -165,6 +171,10 @@ Rcpp::LogicalVector filter_rna_qc_metrics(Rcpp::List filters, Rcpp::List metrics
     auto block_info = MaybeBlock(block);
     auto ptr = block_info.get();
     if (ptr) {
+        if (block_info.size() != ncells) {
+            throw std::runtime_error("'block' must be the same length as the number of cells");
+        }
+
         scran_qc::RnaQcBlockedFilters filt;
 
         Rcpp::NumericVector sum(filters[0]);

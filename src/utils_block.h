@@ -46,6 +46,10 @@ public:
         return (my_has_block ? static_cast<const int*>(my_block.begin()) : NULL);
     }
 
+    size_t size() const {
+        return my_block.size();
+    }
+
     size_t number() const {
         size_t nblocks = 1;
         if (my_has_block && my_block.size()){

@@ -3,6 +3,7 @@
 #include <vector>
 #include <algorithm>
 #include <string>
+#include <stdexcept>
 
 #include "Rcpp.h"
 #include "Rtatami.h"
@@ -50,6 +51,10 @@ Rcpp::List run_pca(
     Rcpp::List output;
 
     if (ptr) {
+        if (block_info.size() != static_cast<size_t>(mat->ptr->nrow())) {
+            throw std::runtime_error("'block' must be the same length as the number of cells");
+        }
+
         scran_pca::BlockedPcaOptions opt;
         opt.number = number;
         opt.scale = scale;

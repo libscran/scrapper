@@ -78,7 +78,7 @@ computeRnaQcMetrics <- function(x, subsets, num.threads = 1) {
 #' @export
 #' @rdname rna_quality_control
 suggestRnaQcThresholds <- function(metrics, block=NULL, min.detected.drop=0.1, num.mads=3) {
-    block <- .transformFactor(block, n = length(metrics[[1]]))
+    block <- .transformFactor(block)
     filters <- suggest_rna_qc_thresholds(metrics, block=block$index, min_detected_drop=min.detected.drop, num_mads=num.mads)
 
     names(filters$detected) <- block$names
@@ -93,6 +93,6 @@ suggestRnaQcThresholds <- function(metrics, block=NULL, min.detected.drop=0.1, n
 #' @export
 #' @rdname rna_quality_control
 filterRnaQcMetrics <- function(filters, metrics, block=NULL) {
-    block <- .transformFactor(block, n = length(metrics[[1]]))
+    block <- .transformFactor(block)
     filter_rna_qc_metrics(filters, metrics, block=block$index)
 }

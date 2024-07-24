@@ -74,8 +74,8 @@ scoreMarkers <- function(
     num.threads=1)
 {
     x <- initializeCpp(x)
-    groups <- .transformFactor(groups, n = ncol(x))
-    block <- .transformFactor(block, n = ncol(x))
+    groups <- .transformFactor(groups)
+    block <- .transformFactor(block)
 
     args <- list(
         groups=groups$index,

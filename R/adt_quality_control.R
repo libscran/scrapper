@@ -77,7 +77,7 @@ computeAdtQcMetrics <- function(x, subsets, num.threads = 1) {
 #' @export
 #' @rdname adt_quality_control
 suggestAdtQcThresholds <- function(metrics, block=NULL, min.detected.drop=0.1, num.mads=3) {
-    block <- .transformFactor(block, n = length(metrics[[1]]))
+    block <- .transformFactor(block) 
     filters <- suggest_adt_qc_thresholds(metrics, block=block$index, min_detected_drop=min.detected.drop, num_mads=num.mads)
 
     names(filters$detected) <- block$names
@@ -92,6 +92,6 @@ suggestAdtQcThresholds <- function(metrics, block=NULL, min.detected.drop=0.1, n
 #' @export
 #' @rdname adt_quality_control
 filterAdtQcMetrics <- function(filters, metrics, block=NULL) {
-    block <- .transformFactor(block, n = length(metrics[[1]]))
+    block <- .transformFactor(block)
     filter_adt_qc_metrics(filters, metrics, block=block$index)
 }

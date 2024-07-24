@@ -1,6 +1,7 @@
 //#include "config.h"
 
 #include <vector>
+#include <stdexcept>
 
 #include "Rcpp.h"
 #include "scran_variances/scran_variances.hpp"

@@ -1,6 +1,7 @@
 //#include "config.h"
 
 #include <vector>
+#include <stdexcept>
 
 #include "Rcpp.h"
 #include "scran_qc/scran_qc.hpp"
@@ -125,12 +126,17 @@ Rcpp::List suggest_adt_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::In
     auto block_info = MaybeBlock(block);
     auto ptr = block_info.get();
     if (ptr) {
+        if (block_info.size() != ncells) {
+            throw std::runtime_error("'block' must be the same length as the number of cells");
+        }
+
         auto filt = scran_qc::compute_adt_qc_filters_blocked(ncells, buffers, ptr, opt);
         const auto& ssout = filt.get_subset_sum();
         Rcpp::List subs(nsubs);
         for (size_t s = 0; s < nsubs; ++s) {
             subs[s] = Rcpp::NumericVector(ssout[s].begin(), ssout[s].end());
         }
+
         const auto& dout = filt.get_detected();
         return Rcpp::List::create(
             Rcpp::Named("detected") = Rcpp::NumericVector(dout.begin(), dout.end()),
@@ -162,6 +168,10 @@ Rcpp::LogicalVector filter_adt_qc_metrics(Rcpp::List filters, Rcpp::List metrics
     auto block_info = MaybeBlock(block);
     auto ptr = block_info.get();
     if (ptr) {
+        if (block_info.size() != ncells) {
+            throw std::runtime_error("'block' must be the same length as the number of cells");
+        }
+
         scran_qc::AdtQcBlockedFilters filt;
 
         Rcpp::NumericVector detected(filters[0]);

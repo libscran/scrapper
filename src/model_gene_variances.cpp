@@ -1,6 +1,7 @@
 //#include "config.h"
 
 #include <vector>
+#include <stdexcept>
 
 #include "Rcpp.h"
 #include "Rtatami.h"
@@ -52,6 +53,10 @@ Rcpp::List model_gene_variances(
     auto block_info = MaybeBlock(block);
     auto ptr = block_info.get();
     if (ptr) {
+        if (block_info.size() != nc) {
+            throw std::runtime_error("'block' must be the same length as the number of cells");
+        }
+
         scran_variances::ModelGeneVariancesBlockedBuffers<double> bbuffers;
         bbuffers.average = buffers;
         bbuffers.per_block.resize(nblocks);

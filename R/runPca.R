@@ -73,7 +73,7 @@ runPca <- function(x,
     realized=TRUE,
     num.threads=1) 
 {
-    block <- .transformFactor(block, n = ncol(x))
+    block <- .transformFactor(block)
 
     x <- initializeCpp(x)
     out <- run_pca(x, 

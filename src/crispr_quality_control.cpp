@@ -1,6 +1,7 @@
 //#include "config.h"
 
 #include <vector>
+#include <stdexcept>
 
 #include "Rcpp.h"
 #include "scran_qc/scran_qc.hpp"
@@ -13,7 +14,6 @@ Rcpp::List compute_crispr_qc_metrics(SEXP x, int num_threads) {
     auto raw_mat = Rtatami::BoundNumericPointer(x);
     const auto& mat = raw_mat->ptr;
     size_t nc = mat->ncol();
-    size_t nr = mat->nrow();
 
     // Creating output containers.
     Rcpp::NumericVector sums(nc), max_value(nc);
@@ -95,6 +95,10 @@ Rcpp::List suggest_crispr_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp:
     auto block_info = MaybeBlock(block);
     auto ptr = block_info.get();
     if (ptr) {
+        if (block_info.size() != ncells) {
+            throw std::runtime_error("'block' must be the same length as the number of cells");
+        }
+
         auto filt = scran_qc::compute_crispr_qc_filters_blocked(ncells, buffers, ptr, opt);
         const auto& mout = filt.get_max_value();
         return Rcpp::List::create(
@@ -123,6 +127,10 @@ Rcpp::LogicalVector filter_crispr_qc_metrics(Rcpp::List filters, Rcpp::List metr
     auto block_info = MaybeBlock(block);
     auto ptr = block_info.get();
     if (ptr) {
+        if (block_info.size() != ncells) {
+            throw std::runtime_error("'block' must be the same length as the number of cells");
+        }
+
         scran_qc::CrisprQcBlockedFilters filt;
 
         Rcpp::NumericVector max_value(filters[0]);

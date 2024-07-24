@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <string>
+#include <stdexcept>
 
 #include "Rcpp.h"
 #include "Rtatami.h"
@@ -26,6 +27,9 @@ Rcpp::List score_markers_summary(
     const auto& mat = raw_mat->ptr;
     size_t NC = mat->ncol();
     size_t NR = mat->nrow();
+    if (static_cast<size_t>(groups.size()) != NC) {
+        throw std::runtime_error("'groups' must have length equal to the number of cells");
+    }
 
     scran_markers::ScoreMarkersSummaryOptions opt;
     opt.threshold = threshold;
@@ -90,6 +94,9 @@ Rcpp::List score_markers_summary(
     auto block_info = MaybeBlock(block);
     auto ptr = block_info.get();
     if (ptr) {
+        if (block_info.size() != NC) {
+            throw std::runtime_error("'block' must be the same length as the number of cells");
+        }
         scran_markers::score_markers_summary_blocked(*mat, static_cast<const int*>(groups.begin()), ptr, opt, buffers);
     } else {
         scran_markers::score_markers_summary(*mat, static_cast<const int*>(groups.begin()), opt, buffers);
@@ -142,6 +149,9 @@ Rcpp::List score_markers_pairwise(
     const auto& mat = raw_mat->ptr;
     size_t NC = mat->ncol();
     size_t NR = mat->nrow();
+    if (static_cast<size_t>(groups.size()) != NC) {
+        throw std::runtime_error("'groups' must have length equal to the number of cells");
+    }
 
     scran_markers::ScoreMarkersPairwiseOptions opt;
     opt.threshold = threshold;
@@ -175,6 +185,9 @@ Rcpp::List score_markers_pairwise(
     auto block_info = MaybeBlock(block);
     auto ptr = block_info.get();
     if (ptr) {
+        if (block_info.size() != NC) {
+            throw std::runtime_error("'block' must be the same length as the number of cells");
+        }
         scran_markers::score_markers_pairwise_blocked(*mat, static_cast<const int*>(groups.begin()), ptr, opt, buffers);
     } else {
         scran_markers::score_markers_pairwise(*mat, static_cast<const int*>(groups.begin()), opt, buffers);

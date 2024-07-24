@@ -1,10 +1,7 @@
-.transformFactor <- function(f, n = NULL) {
+.transformFactor <- function(f) {
     if (is.null(f)) {
         list(index=NULL, names=NULL)
     } else {
-        if (!is.null(n)) {
-            stopifnot(length(f) == n, !anyNA(f))
-        }
         f <- factor(f)
         list(index=as.integer(f) - 1L, names=levels(f))
     }

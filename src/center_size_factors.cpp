@@ -1,6 +1,7 @@
 //#include "config.h"
 
 #include <vector>
+#include <stdexcept>
 
 #include "Rcpp.h"
 #include "scran_norm/scran_norm.hpp"
@@ -16,9 +17,13 @@ Rcpp::NumericVector center_size_factors(Rcpp::NumericVector size_factors, Rcpp::
     opt.block_mode = (lowest ? scran_norm::CenterBlockMode::LOWEST : scran_norm::CenterBlockMode::PER_BLOCK);
     opt.ignore_invalid = true;
 
+    size_t ncells = size_factors.size();
     auto output = Rcpp::clone(size_factors);
     if (ptr) {
-        scran_norm::center_size_factors_blocked(output.size(), static_cast<double*>(output.begin()), ptr, NULL, opt);
+        if (block_info.size() != ncells) {
+            throw std::runtime_error("'block' must be the same length as the number of cells");
+        }
+        scran_norm::center_size_factors_blocked(ncells, static_cast<double*>(output.begin()), ptr, NULL, opt);
     } else {
         scran_norm::center_size_factors(output.size(), static_cast<double*>(output.begin()), NULL, opt);
     }

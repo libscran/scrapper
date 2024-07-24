@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <stdexcept>
 
 #include "scran_aggregate/scran_aggregate.hpp"
 

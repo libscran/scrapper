@@ -57,7 +57,7 @@ modelGeneVariances <- function(
     min.window.count=200,
     num.threads=1) 
 {
-    block <- .transformFactor(block, n = ncol(x))
+    block <- .transformFactor(block)
 
     output <- model_gene_variances(
         initializeCpp(x),

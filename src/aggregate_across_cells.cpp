@@ -1,6 +1,7 @@
 //#include "config.h"
 
 #include <vector>
+#include <stdexcept>
 
 #include "scran_aggregate/scran_aggregate.hpp"
 #include "tatami_stats/tatami_stats.hpp"
