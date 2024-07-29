@@ -17,6 +17,10 @@ aggregate_across_cells <- function(x, combined, nthreads) {
     .Call('_scrapper_aggregate_across_cells', PACKAGE = 'scrapper', x, combined, nthreads)
 }
 
+build_snn_graph <- function(neighbors, scheme, num_threads) {
+    .Call('_scrapper_build_snn_graph', PACKAGE = 'scrapper', neighbors, scheme, num_threads)
+}
+
 center_size_factors <- function(size_factors, block, lowest) {
     .Call('_scrapper_center_size_factors', PACKAGE = 'scrapper', size_factors, block, lowest)
 }
