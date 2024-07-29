@@ -1,0 +1,2 @@
+PKG_CXXFLAGS = $(SHLIB_OPENMP_CXXFLAGS) -I_deps/include
+PKG_LIBS = $(SHLIB_OPENMP_CXXFLAGS) -L_deps/lib -ligraph

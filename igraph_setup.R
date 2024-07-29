@@ -59,22 +59,35 @@ options <- c(options,
 # Downloading the file:
 version <- "0.10.13"
 
-build_path <- paste0("build_", version)
-if (!file.exists(build_path)) {
-    source_path <- paste0("source_", version)
-    if (!file.exists(source_path)) {
-        igraph_path <- "igraph-0.10.13.tar.gz"
-        if (!file.exists(igraph_path)) {
-            if (download.file("https://github.com/igraph/igraph/releases/download/0.10.13/igraph-0.10.13.tar.gz", igraph_path)) {
-                stop("failed to download the igraph sources")
+install_path <- file.path("src", "_deps")
+
+if (!file.exists(install_path)) {
+    tmp_dir <- "igraph_temp"
+    dir.create(tmp_dir, recursive=TRUE, showWarnings=FALSE)
+    build_path <- file.path(tmp_dir, paste0("build_", version))
+
+    if (!file.exists(build_path)) {
+        source_path <- file.path(tmp_dir, paste0("source_", version))
+        if (!file.exists(source_path)) {
+            igraph_path <- file.path(tmp_dir, paste0("igraph-", version, ".tar.gz"))
+
+            if (!file.exists(igraph_path)) {
+                if (download.file(paste0("https://github.com/igraph/igraph/releases/download/", version, "/igraph-", version, ".tar.gz"), igraph_path)) {
+                    stop("failed to download the igraph sources")
+                }
             }
+            untar(igraph_path, exdir=source_path)
         }
-        untar(igraph_path, exdir=source_path)
+
+        options <- c(options, paste0("-DCMAKE_INSTALL_PREFIX=", install_path))
+        system2(cmake, c("-S", file.path(source_path, paste0("igraph-", version)), "-B", build_path, options))
     }
 
-    options <- c(options, paste0("-DCMAKE_INSTALL_PREFIX=", file.path(normalizePath(dirname(getwd())), "src", "_deps")))
-    system2(cmake, c("-S", file.path(source_path, paste0("igraph-", version)), "-B", build_path, options))
-}
+    if (.Platform$OS.type != "windows") {
+        system2(cmake, c("--build", build_path))
+    } else {
+        system2(cmake, c("--build", build_path, "--config", "Release"))
+    }
 
-system2(cmake, c("--build", build_path))
-system2(cmake, c("--install", build_path))
+    system2(cmake, c("--install", build_path))
+}
