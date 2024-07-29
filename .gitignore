@@ -2,3 +2,7 @@
 docs/*.html
 src/*.so
 src/*.o
+src/_deps
+igraph/*.tar.gz
+igraph/build_*
+igraph/source_*
