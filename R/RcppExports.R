@@ -17,8 +17,8 @@ aggregate_across_cells <- function(x, combined, nthreads) {
     .Call('_scrapper_aggregate_across_cells', PACKAGE = 'scrapper', x, combined, nthreads)
 }
 
-build_snn_graph <- function(neighbors, scheme, num_threads) {
-    .Call('_scrapper_build_snn_graph', PACKAGE = 'scrapper', neighbors, scheme, num_threads)
+build_snn_graph <- function(neighbors, scheme, num_threads, raw) {
+    .Call('_scrapper_build_snn_graph', PACKAGE = 'scrapper', neighbors, scheme, num_threads, raw)
 }
 
 center_size_factors <- function(size_factors, block, lowest) {
@@ -33,16 +33,16 @@ choose_pseudo_count <- function(size_factors, quantile, max_bias, min_value) {
     .Call('_scrapper_choose_pseudo_count', PACKAGE = 'scrapper', size_factors, quantile, max_bias, min_value)
 }
 
-cluster_multilevel <- function(num_vertices, edges, weights, resolution, seed) {
-    .Call('_scrapper_cluster_multilevel', PACKAGE = 'scrapper', num_vertices, edges, weights, resolution, seed)
+cluster_multilevel <- function(graph, resolution, seed) {
+    .Call('_scrapper_cluster_multilevel', PACKAGE = 'scrapper', graph, resolution, seed)
 }
 
-cluster_leiden <- function(num_vertices, edges, weights, resolution, use_cpm, seed) {
-    .Call('_scrapper_cluster_leiden', PACKAGE = 'scrapper', num_vertices, edges, weights, resolution, use_cpm, seed)
+cluster_leiden <- function(graph, resolution, use_cpm, seed) {
+    .Call('_scrapper_cluster_leiden', PACKAGE = 'scrapper', graph, resolution, use_cpm, seed)
 }
 
-cluster_walktrap <- function(num_vertices, edges, weights, steps, seed) {
-    .Call('_scrapper_cluster_walktrap', PACKAGE = 'scrapper', num_vertices, edges, weights, steps, seed)
+cluster_walktrap <- function(graph, steps) {
+    .Call('_scrapper_cluster_walktrap', PACKAGE = 'scrapper', graph, steps)
 }
 
 combine_factors <- function(factors, keep_unused, nlevels) {

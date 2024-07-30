@@ -2,6 +2,7 @@
 
 export(aggregateAcrossCells)
 export(buildSnnGraph)
+export(buildSnnGraphFromNeighbors)
 export(centerSizeFactors)
 export(chooseHighlyVariableGenes)
 export(choosePseudoCount)

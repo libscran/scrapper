@@ -2,7 +2,7 @@
 #'
 #' Identify clusters of cells using a variety of community detection methods from a graph where similar cells are connected.
 #'
-#' @param graph List containing graph information, e.g., from \code{\link{buildSnnGraph}}.
+#' @param x List containing graph information or an external pointer to a graph, as returned by \code{\link{buildSnnGraph}}.
 #' @param method String specifying the algorithm to use.
 #' @param multilevel.resolution Numeric scalar specifying the resolution when \code{method="multilevel"}.
 #' @param leiden.resolution Numeric scalar specifying the resolution when \code{method="leiden"}.
@@ -37,7 +37,7 @@
 #'
 #' @export
 clusterGraph <- function(
-    graph, 
+    x,
     method=c("multilevel", "leiden", "walktrap"),
     multilevel.resolution=1, 
     leiden.resolution=1, 
@@ -48,36 +48,17 @@ clusterGraph <- function(
     method <- match.arg(method)
 
     if (method == "multilevel") {
-        out <- cluster_multilevel(
-            graph$vertices,
-            graph$edges,
-            graph$weights, 
-            resolution=multilevel.resolution,
-            seed=seed
-        )
-
+        out <- cluster_multilevel(x, resolution=multilevel.resolution, seed=seed)
         for (l in seq_along(out$levels)) {
             out$levels[[l]] <- out$levels[[l]] + 1L
         }
 
     } else if (method == "leiden") {
         leiden.objective <- match.arg(leiden.objective)
-        out <- cluster_leiden(
-            graph$vertices,
-            graph$edges,
-            graph$weights, 
-            use_cpm=(leiden.objective=="cpm"),
-            resolution=leiden.resolution,
-            seed=seed
-        )
+        out <- cluster_leiden(x, use_cpm=(leiden.objective=="cpm"), resolution=leiden.resolution, seed=seed)
 
     } else if (method == "walktrap") {
-        out <- cluster_walktrap(
-            graph$vertices,
-            graph$edges,
-            graph$weights, 
-            steps=walktrap.steps
-        )
+        out <- cluster_walktrap(x, steps=walktrap.steps)
     }
 
     out$membership <- out$membership + 1L

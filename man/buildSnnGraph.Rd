@@ -2,39 +2,57 @@
 % Please edit documentation in R/buildSnnGraph.R
 \name{buildSnnGraph}
 \alias{buildSnnGraph}
+\alias{buildSnnGraphFromNeighbors}
 \title{Build a shared nearest neighbor graph}
 \usage{
 buildSnnGraph(
   x,
   num.neighbors = 10,
   weight.scheme = "ranked",
+  as.pointer = FALSE,
   num.threads = 1,
   BNPARAM = AnnoyParam()
 )
+
+buildSnnGraphFromNeighbors(
+  x,
+  weight.scheme = "ranked",
+  as.pointer = FALSE,
+  num.threads = 1
+)
 }
 \arguments{
-\item{x}{Numeric matrix where rows are dimensions and columns are cells,
+\item{x}{For \code{buildSnnGraph}, a numeric matrix where rows are dimensions and columns are cells,
 typically containing a low-dimensional representation from, e.g., \code{\link{runPca}}.
-Alternatively, an index constructed by \code{\link{buildIndex}}.}
+Alternatively, an index constructed by \code{\link{buildIndex}}.
+
+For \code{buildSnnGraphFromNeighbors}, an integer matrix where rows are neighbors and columns are cells.
+Each column contains 1-based indices for the nearest neighbors of the corresponding cell, ordered by increasing distance.}
 
 \item{num.neighbors}{Integer scalar specifying the number of neighbors to use to construct the graph.}
 
 \item{weight.scheme}{String specifying the weighting scheme to use for constructing the SNN graph.
 This can be \code{"ranked"} (default), \code{"jaccard"} or \code{"number"}.}
 
+\item{as.pointer}{Logical scalar indicating whether to return a pointer to the graph.
+This avoids an unnecessary serialization to/from R objects in downstream functions like \code{\link{clusterGraph}}.}
+
 \item{num.threads}{Integer scalar specifying the number of threads to use.}
 
 \item{BNPARAM}{A \linkS4class{BiocNeighborParam} object specifying the algorithm to use.}
 }
 \value{
-List containing:
+If \code{as.pointer=FALSE}, a list is returned containing:
 \itemize{
-\item \code{edges}, an integer vector of 0-based indices for graph edges.
+\item \code{vertices}, an integer scalar specifying the number of vertices in the graph (i.e., cells in \code{x}).
+\item \code{edges}, an integer vector of 1-based indices for graph edges.
 Pairs of values represent the endpoints of an (undirected) edge,
 i.e., \code{edges[1:2]} form the first edge, \code{edges[3:4]} form the second edge and so on.
 \item \code{weights}, a numeric vector of weights for each edge.
 This has length equal to half the length of \code{edges}.
 }
+
+If \code{as.pointer=TRUE}, an external pointer is returned that can be used in \code{\link{clusterGraph}}.
 }
 \description{
 Build a shared nearest neighbor (SNN) graph where each node is a cell.
@@ -47,7 +65,7 @@ out <- buildSnnGraph(data)
 str(out)
 
 # We can use this to make an igraph::graph.
-g <- igraph::make_graph(out$edges + 1L, n = out$vertices)
+g <- igraph::make_graph(out$edges, n = out$vertices)
 igraph::E(g)$weight <- out$weight
 
 }

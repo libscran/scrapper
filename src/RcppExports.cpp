@@ -60,14 +60,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // build_snn_graph
-Rcpp::List build_snn_graph(Rcpp::IntegerMatrix neighbors, std::string scheme, int num_threads);
-RcppExport SEXP _scrapper_build_snn_graph(SEXP neighborsSEXP, SEXP schemeSEXP, SEXP num_threadsSEXP) {
+SEXP build_snn_graph(Rcpp::IntegerMatrix neighbors, std::string scheme, int num_threads, bool raw);
+RcppExport SEXP _scrapper_build_snn_graph(SEXP neighborsSEXP, SEXP schemeSEXP, SEXP num_threadsSEXP, SEXP rawSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::IntegerMatrix >::type neighbors(neighborsSEXP);
     Rcpp::traits::input_parameter< std::string >::type scheme(schemeSEXP);
     Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(build_snn_graph(neighbors, scheme, num_threads));
+    Rcpp::traits::input_parameter< bool >::type raw(rawSEXP);
+    rcpp_result_gen = Rcpp::wrap(build_snn_graph(neighbors, scheme, num_threads, raw));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -110,45 +111,38 @@ BEGIN_RCPP
 END_RCPP
 }
 // cluster_multilevel
-Rcpp::List cluster_multilevel(int num_vertices, Rcpp::IntegerVector edges, Rcpp::NumericVector weights, double resolution, int seed);
-RcppExport SEXP _scrapper_cluster_multilevel(SEXP num_verticesSEXP, SEXP edgesSEXP, SEXP weightsSEXP, SEXP resolutionSEXP, SEXP seedSEXP) {
+Rcpp::List cluster_multilevel(SEXP graph, double resolution, int seed);
+RcppExport SEXP _scrapper_cluster_multilevel(SEXP graphSEXP, SEXP resolutionSEXP, SEXP seedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< int >::type num_vertices(num_verticesSEXP);
-    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type edges(edgesSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type weights(weightsSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type graph(graphSEXP);
     Rcpp::traits::input_parameter< double >::type resolution(resolutionSEXP);
     Rcpp::traits::input_parameter< int >::type seed(seedSEXP);
-    rcpp_result_gen = Rcpp::wrap(cluster_multilevel(num_vertices, edges, weights, resolution, seed));
+    rcpp_result_gen = Rcpp::wrap(cluster_multilevel(graph, resolution, seed));
     return rcpp_result_gen;
 END_RCPP
 }
 // cluster_leiden
-Rcpp::List cluster_leiden(int num_vertices, Rcpp::IntegerVector edges, Rcpp::NumericVector weights, double resolution, bool use_cpm, int seed);
-RcppExport SEXP _scrapper_cluster_leiden(SEXP num_verticesSEXP, SEXP edgesSEXP, SEXP weightsSEXP, SEXP resolutionSEXP, SEXP use_cpmSEXP, SEXP seedSEXP) {
+Rcpp::List cluster_leiden(SEXP graph, double resolution, bool use_cpm, int seed);
+RcppExport SEXP _scrapper_cluster_leiden(SEXP graphSEXP, SEXP resolutionSEXP, SEXP use_cpmSEXP, SEXP seedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< int >::type num_vertices(num_verticesSEXP);
-    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type edges(edgesSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type weights(weightsSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type graph(graphSEXP);
     Rcpp::traits::input_parameter< double >::type resolution(resolutionSEXP);
     Rcpp::traits::input_parameter< bool >::type use_cpm(use_cpmSEXP);
     Rcpp::traits::input_parameter< int >::type seed(seedSEXP);
-    rcpp_result_gen = Rcpp::wrap(cluster_leiden(num_vertices, edges, weights, resolution, use_cpm, seed));
+    rcpp_result_gen = Rcpp::wrap(cluster_leiden(graph, resolution, use_cpm, seed));
     return rcpp_result_gen;
 END_RCPP
 }
 // cluster_walktrap
-Rcpp::List cluster_walktrap(int num_vertices, Rcpp::IntegerVector edges, Rcpp::NumericVector weights, int steps, int seed);
-RcppExport SEXP _scrapper_cluster_walktrap(SEXP num_verticesSEXP, SEXP edgesSEXP, SEXP weightsSEXP, SEXP stepsSEXP, SEXP seedSEXP) {
+Rcpp::List cluster_walktrap(SEXP graph, int steps);
+RcppExport SEXP _scrapper_cluster_walktrap(SEXP graphSEXP, SEXP stepsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< int >::type num_vertices(num_verticesSEXP);
-    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type edges(edgesSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type weights(weightsSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type graph(graphSEXP);
     Rcpp::traits::input_parameter< int >::type steps(stepsSEXP);
-    Rcpp::traits::input_parameter< int >::type seed(seedSEXP);
-    rcpp_result_gen = Rcpp::wrap(cluster_walktrap(num_vertices, edges, weights, steps, seed));
+    rcpp_result_gen = Rcpp::wrap(cluster_walktrap(graph, steps));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -383,13 +377,13 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_suggest_adt_qc_thresholds", (DL_FUNC) &_scrapper_suggest_adt_qc_thresholds, 4},
     {"_scrapper_filter_adt_qc_metrics", (DL_FUNC) &_scrapper_filter_adt_qc_metrics, 3},
     {"_scrapper_aggregate_across_cells", (DL_FUNC) &_scrapper_aggregate_across_cells, 3},
-    {"_scrapper_build_snn_graph", (DL_FUNC) &_scrapper_build_snn_graph, 3},
+    {"_scrapper_build_snn_graph", (DL_FUNC) &_scrapper_build_snn_graph, 4},
     {"_scrapper_center_size_factors", (DL_FUNC) &_scrapper_center_size_factors, 3},
     {"_scrapper_choose_highly_variable_genes", (DL_FUNC) &_scrapper_choose_highly_variable_genes, 4},
     {"_scrapper_choose_pseudo_count", (DL_FUNC) &_scrapper_choose_pseudo_count, 4},
-    {"_scrapper_cluster_multilevel", (DL_FUNC) &_scrapper_cluster_multilevel, 5},
-    {"_scrapper_cluster_leiden", (DL_FUNC) &_scrapper_cluster_leiden, 6},
-    {"_scrapper_cluster_walktrap", (DL_FUNC) &_scrapper_cluster_walktrap, 5},
+    {"_scrapper_cluster_multilevel", (DL_FUNC) &_scrapper_cluster_multilevel, 3},
+    {"_scrapper_cluster_leiden", (DL_FUNC) &_scrapper_cluster_leiden, 4},
+    {"_scrapper_cluster_walktrap", (DL_FUNC) &_scrapper_cluster_walktrap, 2},
     {"_scrapper_combine_factors", (DL_FUNC) &_scrapper_combine_factors, 3},
     {"_scrapper_compute_crispr_qc_metrics", (DL_FUNC) &_scrapper_compute_crispr_qc_metrics, 2},
     {"_scrapper_suggest_crispr_qc_thresholds", (DL_FUNC) &_scrapper_suggest_crispr_qc_thresholds, 4},
