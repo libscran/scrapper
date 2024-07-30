@@ -1,9 +1,17 @@
 cmake <- "cmake"
 options <- character(0)
 
-options <- c(options, "-DCMAKE_POSITION_INDEPENDENT_CODE=ON")
+options <- c(options, 
+     "-DCMAKE_POSITION_INDEPENDENT_CODE=ON",
+     "-DIGRAPH_WARNINGS_AS_ERRORS=OFF"
+)
+
 if (.Platform$OS.type != "windows") {
     options <- c(options, "-DCMAKE_BUILD_TYPE=Release")
+}
+
+if (Sys.info()[["sysname"]] == "Darwin") {
+     options <- c(options, "-DCMAKE_OSX_DEPLOYMENT_TARGET=\"\"") # avoiding hard-coding of exact OSX version.
 }
 
 # Choosing the right compiler.
@@ -90,5 +98,5 @@ if (!file.exists(install_path)) {
         system2(cmake, c("--build", build_path, "--config", "Release"))
     }
 
-    system2(cmake, c("--install", build_path))
+    system2(cmake, c("--install", build_path), stdout=FALSE)
 }
