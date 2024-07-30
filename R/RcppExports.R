@@ -33,6 +33,18 @@ choose_pseudo_count <- function(size_factors, quantile, max_bias, min_value) {
     .Call('_scrapper_choose_pseudo_count', PACKAGE = 'scrapper', size_factors, quantile, max_bias, min_value)
 }
 
+cluster_multilevel <- function(num_vertices, edges, weights, resolution, seed) {
+    .Call('_scrapper_cluster_multilevel', PACKAGE = 'scrapper', num_vertices, edges, weights, resolution, seed)
+}
+
+cluster_leiden <- function(num_vertices, edges, weights, resolution, use_cpm, seed) {
+    .Call('_scrapper_cluster_leiden', PACKAGE = 'scrapper', num_vertices, edges, weights, resolution, use_cpm, seed)
+}
+
+cluster_walktrap <- function(num_vertices, edges, weights, steps, seed) {
+    .Call('_scrapper_cluster_walktrap', PACKAGE = 'scrapper', num_vertices, edges, weights, steps, seed)
+}
+
 combine_factors <- function(factors, keep_unused, nlevels) {
     .Call('_scrapper_combine_factors', PACKAGE = 'scrapper', factors, keep_unused, nlevels)
 }

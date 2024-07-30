@@ -47,7 +47,8 @@ out <- buildSnnGraph(data)
 str(out)
 
 # We can use this to make an igraph::graph.
-g <- igraph::make_graph(out$edges + 1L, weights=out$weights)
+g <- igraph::make_graph(out$edges + 1L, n = out$vertices)
+igraph::E(g)$weight <- out$weight
 
 }
 \seealso{

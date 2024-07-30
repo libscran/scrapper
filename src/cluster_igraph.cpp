@@ -6,6 +6,7 @@
 #include "Rcpp.h"
 #include "scran_graph_cluster/scran_graph_cluster.hpp"
 
+//[[Rcpp::export(rng=false)]]
 Rcpp::List cluster_multilevel(int num_vertices, Rcpp::IntegerVector edges, Rcpp::NumericVector weights, double resolution, int seed) {
     auto graph = scran_graph_cluster::edges_to_graph(edges.size(), static_cast<const int*>(edges.begin()), num_vertices, false);
 
@@ -18,10 +19,10 @@ Rcpp::List cluster_multilevel(int num_vertices, Rcpp::IntegerVector edges, Rcpp:
     igraph_vector_view(&weight_view, weights.begin(), weights.size());
     scran_graph_cluster::cluster_multilevel(graph.get(), &weight_view, opt, res);
 
-    size_t nlevels = res.levels.ncol();
+    size_t nlevels = res.levels.nrow();
     Rcpp::List levels(nlevels);
     for (size_t l = 0; l < nlevels; ++l) {
-        auto incol = res.levels.column(l);
+        auto incol = res.levels.row(l);
         levels[l] = Rcpp::IntegerVector(incol.begin(), incol.end());
     }
 
@@ -29,10 +30,11 @@ Rcpp::List cluster_multilevel(int num_vertices, Rcpp::IntegerVector edges, Rcpp:
         Rcpp::Named("status") = Rcpp::IntegerVector::create(res.status),
         Rcpp::Named("membership") = Rcpp::IntegerVector(res.membership.begin(), res.membership.end()),
         Rcpp::Named("levels") = levels,
-        Rcpp::Named("modularity") = Rcpp::IntegerVector(res.modularity.begin(), res.modularity.end())
+        Rcpp::Named("modularity") = Rcpp::NumericVector(res.modularity.begin(), res.modularity.end())
     );
 }
 
+//[[Rcpp::export(rng=false)]]
 Rcpp::List cluster_leiden(int num_vertices, Rcpp::IntegerVector edges, Rcpp::NumericVector weights, double resolution, bool use_cpm, int seed) {
     auto graph = scran_graph_cluster::edges_to_graph(edges.size(), static_cast<const int*>(edges.begin()), num_vertices, false);
     igraph_vector_t weight_view;
@@ -51,7 +53,8 @@ Rcpp::List cluster_leiden(int num_vertices, Rcpp::IntegerVector edges, Rcpp::Num
     );
 }
 
-Rcpp::List cluster_leiden(int num_vertices, Rcpp::IntegerVector edges, Rcpp::NumericVector weights, int steps, int seed) {
+//[[Rcpp::export(rng=false)]]
+Rcpp::List cluster_walktrap(int num_vertices, Rcpp::IntegerVector edges, Rcpp::NumericVector weights, int steps, int seed) {
     auto graph = scran_graph_cluster::edges_to_graph(edges.size(), static_cast<const int*>(edges.begin()), num_vertices, false);
     igraph_vector_t weight_view;
     igraph_vector_view(&weight_view, weights.begin(), weights.size());
