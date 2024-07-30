@@ -38,6 +38,7 @@ Rcpp::List build_snn_graph(Rcpp::IntegerMatrix neighbors, std::string scheme, in
     );
 
     return Rcpp::List::create(
+        Rcpp::Named("vertices") = Rcpp::IntegerVector::create(neighbors.cols()),
         Rcpp::Named("edges") = Rcpp::IntegerVector(output.edges.begin(), output.edges.end()),
         Rcpp::Named("weights") = Rcpp::NumericVector(output.weights.begin(), output.weights.end())
     );
