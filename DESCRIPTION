@@ -11,13 +11,15 @@ Imports:
     Rcpp,
     beachmat,
     Matrix,
-    DelayedArray
+    DelayedArray,
+    BiocNeighbors
 Suggests:
     testthat,
     knitr,
     Rmarkdown,
     BiocStyle,
-    MatrixGenerics
+    MatrixGenerics,
+    igraph
 LinkingTo:
     Rcpp,
     assorthead,

@@ -1,0 +1,2 @@
+PKG_CXXFLAGS = $(SHLIB_OPENMP_CXXFLAGS) -I_deps/include/igraph
+PKG_LIBS = _deps/lib/libigraph.a $(SHLIB_OPENMP_CXXFLAGS) $(LAPACK_LIBS) $(BLAS_LIBS)

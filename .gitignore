@@ -2,3 +2,5 @@
 docs/*.html
 src/*.so
 src/*.o
+src/_deps
+igraph_temp
