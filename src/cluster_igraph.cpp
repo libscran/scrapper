@@ -48,6 +48,7 @@ Rcpp::List cluster_leiden(int num_vertices, Rcpp::IntegerVector edges, Rcpp::Num
     scran_graph_cluster::cluster_leiden(graph.get(), &weight_view, opt, res);
 
     return Rcpp::List::create(
+        Rcpp::Named("status") = Rcpp::IntegerVector::create(res.status),
         Rcpp::Named("membership") = Rcpp::IntegerVector(res.membership.begin(), res.membership.end()),
         Rcpp::Named("quality") = Rcpp::NumericVector::create(res.quality)
     );
@@ -73,6 +74,7 @@ Rcpp::List cluster_walktrap(int num_vertices, Rcpp::IntegerVector edges, Rcpp::N
     }
 
     return Rcpp::List::create(
+        Rcpp::Named("status") = Rcpp::IntegerVector::create(res.status),
         Rcpp::Named("membership") = Rcpp::IntegerVector(res.membership.begin(), res.membership.end()),
         Rcpp::Named("merges") = merges,
         Rcpp::Named("modularity") = Rcpp::NumericVector(res.modularity.begin(), res.modularity.end())

@@ -8,17 +8,17 @@ if (.Platform$OS.type != "windows") {
 # Choosing the right compiler.
 r.self <- file.path(R.home("bin"), "R")
 
-c_compiler <- sub(" .*", "", system2(r.self, c("CMD", "CONFIG", "CC"), stdout=TRUE))
+c_compiler <- sub(" .*", "", system2(r.self, c("CMD", "config", "CC"), stdout=TRUE))
 if (Sys.which(c_compiler) != "" || file.exists(c_compiler)) {
     options <- c(options, paste0("-DCMAKE_C_COMPILER=", c_compiler))
 }
 
-cxx_compiler <- sub(" .*", "", system2(r.self, c("CMD", "CONFIG", "CXX"), stdout=TRUE))
+cxx_compiler <- sub(" .*", "", system2(r.self, c("CMD", "config", "CXX"), stdout=TRUE))
 if (Sys.which(cxx_compiler) != "" || file.exists(cxx_compiler)) {
     options <- c(options, paste0("-DCMAKE_CXX_COMPILER=", cxx_compiler))
 }
 
-make <- sub(" .*", "", system2(r.self, c("CMD", "CONFIG", "MAKE"), stdout=TRUE))
+make <- sub(" .*", "", system2(r.self, c("CMD", "config", "MAKE"), stdout=TRUE))
 if (Sys.which(make) != "" || file.exists(make)) {
     options <- c(options, paste0("-DCMAKE_MAKE_PROGRAM=", make))
 }
