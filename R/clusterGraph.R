@@ -72,7 +72,7 @@ clusterGraph <- function(
         )
 
     } else if (method == "walktrap") {
-        out <- cluster_multilevel(
+        out <- cluster_walktrap(
             graph$vertices,
             graph$edges,
             graph$weights, 

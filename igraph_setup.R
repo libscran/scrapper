@@ -1,6 +1,7 @@
 cmake <- "cmake"
 options <- character(0)
 
+options <- c(options, "-DCMAKE_POSITION_INDEPENDENT_CODE=ON")
 if (.Platform$OS.type != "windows") {
     options <- c(options, "-DCMAKE_BUILD_TYPE=Release")
 }
