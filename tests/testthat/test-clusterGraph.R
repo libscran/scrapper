@@ -15,6 +15,12 @@ test_that("clusterGraph works correctly for multilevel", {
     # Something sensible happens with a pointer.
     clust2 <- clusterGraph(ptr, method="multilevel")
     expect_identical(clust, clust2)
+
+    # Works with the graph.
+    g <- igraph::graph(out$edges, n = out$vertices)
+    igraph::E(g)$weight <- out$weights
+    clusti <- clusterGraph(g, method="multilevel")
+    expect_identical(clust, clusti)
 })
 
 test_that("clusterGraph works correctly for Leiden", {

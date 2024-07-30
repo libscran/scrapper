@@ -3,6 +3,7 @@
 #' Identify clusters of cells using a variety of community detection methods from a graph where similar cells are connected.
 #'
 #' @param x List containing graph information or an external pointer to a graph, as returned by \code{\link{buildSnnGraph}}.
+#' Alternatively, an \link[igraph]{igraph} object with edge weights.
 #' @param method String specifying the algorithm to use.
 #' @param multilevel.resolution Numeric scalar specifying the resolution when \code{method="multilevel"}.
 #' @param leiden.resolution Numeric scalar specifying the resolution when \code{method="leiden"}.
@@ -45,6 +46,14 @@ clusterGraph <- function(
     walktrap.steps=4,
     seed=42)
 {
+    if (is(x, "igraph")) {
+        x <- list(
+            igraph::vcount(x),
+            as.vector(t(igraph::get.edgelist(x))),
+            igraph::E(x)$weight
+        )
+    }
+
     method <- match.arg(method)
 
     if (method == "multilevel") {

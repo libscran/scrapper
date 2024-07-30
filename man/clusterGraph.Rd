@@ -5,7 +5,7 @@
 \title{Graph-based clustering of cells}
 \usage{
 clusterGraph(
-  graph,
+  x,
   method = c("multilevel", "leiden", "walktrap"),
   multilevel.resolution = 1,
   leiden.resolution = 1,
@@ -15,7 +15,8 @@ clusterGraph(
 )
 }
 \arguments{
-\item{graph}{List containing graph information, e.g., from \code{\link{buildSnnGraph}}.}
+\item{x}{List containing graph information or an external pointer to a graph, as returned by \code{\link{buildSnnGraph}}.
+Alternatively, an \link[igraph]{igraph} object with edge weights.}
 
 \item{method}{String specifying the algorithm to use.}
 
