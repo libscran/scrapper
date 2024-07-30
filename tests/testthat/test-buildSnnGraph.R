@@ -5,10 +5,14 @@ test_that("buildSnnGraph works correctly", {
     out <- buildSnnGraph(data)
     expect_identical(length(out$edges), 2L * length(out$weights))  
     expect_true(all(out$weights > 0))
-    expect_true(all(out$edges >= 0 & out$edges < ncol(data)))
+    expect_true(all(out$edges >= 1 & out$edges <= ncol(data)))
 
     # Same results when given an index, and throwing in some parallelization.
     idx <- BiocNeighbors::buildIndex(data, transposed=TRUE, BNPARAM=BiocNeighbors::AnnoyParam())
     out2 <- buildSnnGraph(idx, num.threads=2)
     expect_identical(out, out2)
+
+    # Something sensible happens with a pointer.
+    out <- buildSnnGraph(data, as.pointer=TRUE)
+    expect_type(out, "externalptr")
 })
