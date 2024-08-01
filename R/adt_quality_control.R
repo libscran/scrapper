@@ -64,12 +64,14 @@
 #'
 #' @export
 #' @name adt_quality_control
+#' @importFrom beachmat initializeCpp tatami.dim
 computeAdtQcMetrics <- function(x, subsets, num.threads = 1) {
-    subsets <- as.list(subsets)
-    subsets <- lapply(subsets, .toLogical, n=nrow(x), names=rownames(x))
+    ptr <- initializeCpp(x)
 
-    y <- initializeCpp(x)
-    output <- compute_adt_qc_metrics(y, subsets, num_threads=num.threads)
+    subsets <- as.list(subsets)
+    subsets <- lapply(subsets, .toLogical, n=tatami.dim(ptr)[1], names=rownames(x))
+
+    output <- compute_adt_qc_metrics(ptr, subsets, num_threads=num.threads)
     names(output$subsets) <- names(subsets)
     output
 }
