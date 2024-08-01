@@ -105,6 +105,10 @@ score_markers_pairwise <- function(x, groups, num_groups, block, block_weight_po
     .Call('_scrapper_score_markers_pairwise', PACKAGE = 'scrapper', x, groups, num_groups, block, block_weight_policy, variable_block_weight, threshold, num_threads, compute_auc)
 }
 
+subsample_by_neighbors <- function(indices, distances, min_remaining) {
+    .Call('_scrapper_subsample_by_neighbors', PACKAGE = 'scrapper', indices, distances, min_remaining)
+}
+
 summarize_effects <- function(num_genes, num_groups, effects, num_threads) {
     .Call('_scrapper_summarize_effects', PACKAGE = 'scrapper', num_genes, num_groups, effects, num_threads)
 }

@@ -378,6 +378,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// subsample_by_neighbors
+SEXP subsample_by_neighbors(Rcpp::IntegerMatrix indices, Rcpp::NumericMatrix distances, int min_remaining);
+RcppExport SEXP _scrapper_subsample_by_neighbors(SEXP indicesSEXP, SEXP distancesSEXP, SEXP min_remainingSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< Rcpp::IntegerMatrix >::type indices(indicesSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type distances(distancesSEXP);
+    Rcpp::traits::input_parameter< int >::type min_remaining(min_remainingSEXP);
+    rcpp_result_gen = Rcpp::wrap(subsample_by_neighbors(indices, distances, min_remaining));
+    return rcpp_result_gen;
+END_RCPP
+}
 // summarize_effects
 SEXP summarize_effects(int num_genes, int num_groups, Rcpp::NumericVector effects, int num_threads);
 RcppExport SEXP _scrapper_summarize_effects(SEXP num_genesSEXP, SEXP num_groupsSEXP, SEXP effectsSEXP, SEXP num_threadsSEXP) {
@@ -419,6 +431,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_score_gene_set", (DL_FUNC) &_scrapper_score_gene_set, 11},
     {"_scrapper_score_markers_summary", (DL_FUNC) &_scrapper_score_markers_summary, 9},
     {"_scrapper_score_markers_pairwise", (DL_FUNC) &_scrapper_score_markers_pairwise, 9},
+    {"_scrapper_subsample_by_neighbors", (DL_FUNC) &_scrapper_subsample_by_neighbors, 3},
     {"_scrapper_summarize_effects", (DL_FUNC) &_scrapper_summarize_effects, 4},
     {NULL, NULL, 0}
 };
