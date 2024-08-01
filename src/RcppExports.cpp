@@ -322,6 +322,26 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// score_gene_set
+Rcpp::List score_gene_set(SEXP x, int rank, Rcpp::Nullable<Rcpp::IntegerVector> block, std::string block_weight_policy, Rcpp::NumericVector variable_block_weight, bool scale, bool realized, int irlba_work, int irlba_iterations, int irlba_seed, int num_threads);
+RcppExport SEXP _scrapper_score_gene_set(SEXP xSEXP, SEXP rankSEXP, SEXP blockSEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP scaleSEXP, SEXP realizedSEXP, SEXP irlba_workSEXP, SEXP irlba_iterationsSEXP, SEXP irlba_seedSEXP, SEXP num_threadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type rank(rankSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type block(blockSEXP);
+    Rcpp::traits::input_parameter< std::string >::type block_weight_policy(block_weight_policySEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type variable_block_weight(variable_block_weightSEXP);
+    Rcpp::traits::input_parameter< bool >::type scale(scaleSEXP);
+    Rcpp::traits::input_parameter< bool >::type realized(realizedSEXP);
+    Rcpp::traits::input_parameter< int >::type irlba_work(irlba_workSEXP);
+    Rcpp::traits::input_parameter< int >::type irlba_iterations(irlba_iterationsSEXP);
+    Rcpp::traits::input_parameter< int >::type irlba_seed(irlba_seedSEXP);
+    Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(score_gene_set(x, rank, block, block_weight_policy, variable_block_weight, scale, realized, irlba_work, irlba_iterations, irlba_seed, num_threads));
+    return rcpp_result_gen;
+END_RCPP
+}
 // score_markers_summary
 Rcpp::List score_markers_summary(SEXP x, Rcpp::IntegerVector groups, int num_groups, Rcpp::Nullable<Rcpp::IntegerVector> block, std::string block_weight_policy, Rcpp::NumericVector variable_block_weight, double threshold, int num_threads, bool compute_auc);
 RcppExport SEXP _scrapper_score_markers_summary(SEXP xSEXP, SEXP groupsSEXP, SEXP num_groupsSEXP, SEXP blockSEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP thresholdSEXP, SEXP num_threadsSEXP, SEXP compute_aucSEXP) {
@@ -396,6 +416,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_filter_rna_qc_metrics", (DL_FUNC) &_scrapper_filter_rna_qc_metrics, 3},
     {"_scrapper_run_pca", (DL_FUNC) &_scrapper_run_pca, 12},
     {"_scrapper_sanitize_size_factors", (DL_FUNC) &_scrapper_sanitize_size_factors, 5},
+    {"_scrapper_score_gene_set", (DL_FUNC) &_scrapper_score_gene_set, 11},
     {"_scrapper_score_markers_summary", (DL_FUNC) &_scrapper_score_markers_summary, 9},
     {"_scrapper_score_markers_pairwise", (DL_FUNC) &_scrapper_score_markers_pairwise, 9},
     {"_scrapper_summarize_effects", (DL_FUNC) &_scrapper_summarize_effects, 4},
