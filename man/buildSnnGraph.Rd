@@ -2,7 +2,6 @@
 % Please edit documentation in R/buildSnnGraph.R
 \name{buildSnnGraph}
 \alias{buildSnnGraph}
-\alias{buildSnnGraphFromNeighbors}
 \title{Build a shared nearest neighbor graph}
 \usage{
 buildSnnGraph(
@@ -13,21 +12,16 @@ buildSnnGraph(
   num.threads = 1,
   BNPARAM = AnnoyParam()
 )
-
-buildSnnGraphFromNeighbors(
-  x,
-  weight.scheme = "ranked",
-  as.pointer = FALSE,
-  num.threads = 1
-)
 }
 \arguments{
 \item{x}{For \code{buildSnnGraph}, a numeric matrix where rows are dimensions and columns are cells,
 typically containing a low-dimensional representation from, e.g., \code{\link{runPca}}.
-Alternatively, an index constructed by \code{\link{buildIndex}}.
 
-For \code{buildSnnGraphFromNeighbors}, an integer matrix where rows are neighbors and columns are cells.
-Each column contains 1-based indices for the nearest neighbors of the corresponding cell, ordered by increasing distance.}
+Alternatively, a named list of nearest-neighbor search results.
+This should contain \code{index}, an integer matrix where rows are neighbors and columns are cells.
+Each column contains 1-based indices for the nearest neighbors of the corresponding cell, ordered by increasing distance.
+
+Alternatively, an index constructed by \code{\link{buildIndex}}.}
 
 \item{num.neighbors}{Integer scalar specifying the number of neighbors to use to construct the graph.}
 
@@ -37,9 +31,11 @@ This can be \code{"ranked"} (default), \code{"jaccard"} or \code{"number"}.}
 \item{as.pointer}{Logical scalar indicating whether to return a pointer to the graph.
 This avoids an unnecessary serialization to/from R objects in downstream functions like \code{\link{clusterGraph}}.}
 
-\item{num.threads}{Integer scalar specifying the number of threads to use.}
+\item{num.threads}{Integer scalar specifying the number of threads to use.
+Only used if \code{x} is not a list of existing nearest-neighbor search results.}
 
-\item{BNPARAM}{A \linkS4class{BiocNeighborParam} object specifying the algorithm to use.}
+\item{BNPARAM}{A \linkS4class{BiocNeighborParam} object specifying the algorithm to use.
+Only used if \code{x} is not a list of existing nearest-neighbor search results.}
 }
 \value{
 If \code{as.pointer=FALSE}, a list is returned containing:

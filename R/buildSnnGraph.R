@@ -6,17 +6,21 @@
 #'
 #' @param x For \code{buildSnnGraph}, a numeric matrix where rows are dimensions and columns are cells,
 #' typically containing a low-dimensional representation from, e.g., \code{\link{runPca}}.
-#' Alternatively, an index constructed by \code{\link{buildIndex}}.
 #'
-#' For \code{buildSnnGraphFromNeighbors}, an integer matrix where rows are neighbors and columns are cells.
+#' Alternatively, a named list of nearest-neighbor search results.
+#' This should contain \code{index}, an integer matrix where rows are neighbors and columns are cells.
 #' Each column contains 1-based indices for the nearest neighbors of the corresponding cell, ordered by increasing distance.
+#'
+#' Alternatively, an index constructed by \code{\link{buildIndex}}.
 #' @param num.neighbors Integer scalar specifying the number of neighbors to use to construct the graph.
 #' @param weight.scheme String specifying the weighting scheme to use for constructing the SNN graph.
 #' This can be \code{"ranked"} (default), \code{"jaccard"} or \code{"number"}.
 #' @param as.pointer Logical scalar indicating whether to return a pointer to the graph.
 #' This avoids an unnecessary serialization to/from R objects in downstream functions like \code{\link{clusterGraph}}.
 #' @param num.threads Integer scalar specifying the number of threads to use.
+#' Only used if \code{x} is not a list of existing nearest-neighbor search results.
 #' @param BNPARAM A \linkS4class{BiocNeighborParam} object specifying the algorithm to use.
+#' Only used if \code{x} is not a list of existing nearest-neighbor search results.
 #'
 #' @return If \code{as.pointer=FALSE}, a list is returned containing:
 #' \itemize{
@@ -47,12 +51,8 @@
 #' @export 
 #' @importFrom BiocNeighbors findKNN AnnoyParam
 buildSnnGraph <- function(x, num.neighbors=10, weight.scheme="ranked", as.pointer=FALSE, num.threads=1, BNPARAM=AnnoyParam()) {
-    neighbors <- findKNN(x, k=num.neighbors, transposed=TRUE, get.index="transposed", get.distance=FALSE, num.threads=num.threads, BNPARAM=BNPARAM)
-    buildSnnGraphFromNeighbors(neighbors$index, weight.scheme=weight.scheme, as.pointer=as.pointer, num.threads=num.threads)
-}
-
-#' @export
-#' @rdname buildSnnGraph
-buildSnnGraphFromNeighbors <- function(x, weight.scheme="ranked", as.pointer=FALSE, num.threads=1) {
-    build_snn_graph(x, scheme=weight.scheme, num_threads=num.threads, raw=as.pointer)
+    if (!is.list(x)) {
+        x <- findKNN(x, k=num.neighbors, transposed=TRUE, get.index="transposed", get.distance=FALSE, num.threads=num.threads, BNPARAM=BNPARAM)
+    }
+    build_snn_graph(x$index, scheme=weight.scheme, num_threads=num.threads, raw=as.pointer)
 }
