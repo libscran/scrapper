@@ -51,7 +51,7 @@ Rcpp::List run_pca(
     Rcpp::List output;
 
     if (ptr) {
-        if (block_info.size() != static_cast<size_t>(mat->ptr->nrow())) {
+        if (block_info.size() != static_cast<size_t>(mat->ptr->ncol())) {
             throw std::runtime_error("'block' must be the same length as the number of cells");
         }
 

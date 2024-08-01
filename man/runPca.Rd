@@ -27,7 +27,7 @@ Typically, the matrix is expected to contain log-expression values, and the rows
 
 \item{scale}{Logical scalar indicating whether to scale all genes to have the same variance.}
 
-\item{block}{Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{metrics}.
+\item{block}{Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{x}.
 Alternatively \code{NULL} if all cells are from the same block.}
 
 \item{block.weight.policy}{String specifying the policy to use for weighting different blocks when computing the average for each statistic

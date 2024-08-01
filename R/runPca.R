@@ -6,7 +6,7 @@
 #' Typically, the matrix is expected to contain log-expression values, and the rows should be filtered to relevant (e.g., highly variable) genes.
 #' @param number Integer scalar specifying the number of PCs to retain.
 #' @param scale Logical scalar indicating whether to scale all genes to have the same variance.
-#' @param block Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{metrics}.
+#' @param block Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{x}.
 #' Alternatively \code{NULL} if all cells are from the same block.
 #' @param block.weight.policy String specifying the policy to use for weighting different blocks when computing the average for each statistic
 #' (Check out the comments in \url{https://libscran.github.io/scran_blocks} for more details.)
