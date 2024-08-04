@@ -158,6 +158,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// compute_clrm1_factors
+Rcpp::NumericVector compute_clrm1_factors(SEXP x, int num_threads);
+RcppExport SEXP _scrapper_compute_clrm1_factors(SEXP xSEXP, SEXP num_threadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_clrm1_factors(x, num_threads));
+    return rcpp_result_gen;
+END_RCPP
+}
 // compute_crispr_qc_metrics
 Rcpp::List compute_crispr_qc_metrics(SEXP x, int num_threads);
 RcppExport SEXP _scrapper_compute_crispr_qc_metrics(SEXP xSEXP, SEXP num_threadsSEXP) {
@@ -417,6 +428,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_cluster_leiden", (DL_FUNC) &_scrapper_cluster_leiden, 4},
     {"_scrapper_cluster_walktrap", (DL_FUNC) &_scrapper_cluster_walktrap, 2},
     {"_scrapper_combine_factors", (DL_FUNC) &_scrapper_combine_factors, 3},
+    {"_scrapper_compute_clrm1_factors", (DL_FUNC) &_scrapper_compute_clrm1_factors, 2},
     {"_scrapper_compute_crispr_qc_metrics", (DL_FUNC) &_scrapper_compute_crispr_qc_metrics, 2},
     {"_scrapper_suggest_crispr_qc_thresholds", (DL_FUNC) &_scrapper_suggest_crispr_qc_thresholds, 4},
     {"_scrapper_filter_crispr_qc_metrics", (DL_FUNC) &_scrapper_filter_crispr_qc_metrics, 3},

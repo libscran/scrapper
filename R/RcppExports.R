@@ -49,6 +49,10 @@ combine_factors <- function(factors, keep_unused, nlevels) {
     .Call('_scrapper_combine_factors', PACKAGE = 'scrapper', factors, keep_unused, nlevels)
 }
 
+compute_clrm1_factors <- function(x, num_threads) {
+    .Call('_scrapper_compute_clrm1_factors', PACKAGE = 'scrapper', x, num_threads)
+}
+
 compute_crispr_qc_metrics <- function(x, num_threads) {
     .Call('_scrapper_compute_crispr_qc_metrics', PACKAGE = 'scrapper', x, num_threads)
 }
