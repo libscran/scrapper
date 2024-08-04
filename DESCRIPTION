@@ -7,6 +7,7 @@ Description:
     Implements bindings to C++ code for analyzing single-cell (expression) data, mostly from the libscran library. 
     This provides low-level utilities for individual analysis steps from quality control to clustering and marker detection.
     It is intended for other package developers, with only limited support for a user-friendly end-to-end workflow.
+License: MIT + file LICENSE
 Imports:
     Rcpp,
     beachmat,
