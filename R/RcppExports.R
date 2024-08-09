@@ -53,6 +53,10 @@ compute_clrm1_factors <- function(x, num_threads) {
     .Call('_scrapper_compute_clrm1_factors', PACKAGE = 'scrapper', x, num_threads)
 }
 
+correct_mnn <- function(x, block, num_neighbors, num_mads, robust_iterations, robust_trim, num_threads, mass_cap, order, ref_policy, builder) {
+    .Call('_scrapper_correct_mnn', PACKAGE = 'scrapper', x, block, num_neighbors, num_mads, robust_iterations, robust_trim, num_threads, mass_cap, order, ref_policy, builder)
+}
+
 compute_crispr_qc_metrics <- function(x, num_threads) {
     .Call('_scrapper_compute_crispr_qc_metrics', PACKAGE = 'scrapper', x, num_threads)
 }
