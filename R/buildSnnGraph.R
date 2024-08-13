@@ -53,6 +53,8 @@
 buildSnnGraph <- function(x, num.neighbors=10, weight.scheme="ranked", as.pointer=FALSE, num.threads=1, BNPARAM=AnnoyParam()) {
     if (!is.list(x)) {
         x <- findKNN(x, k=num.neighbors, transposed=TRUE, get.index="transposed", get.distance=FALSE, num.threads=num.threads, BNPARAM=BNPARAM)
+    } else {
+        .checkIndices(x$index)
     }
     build_snn_graph(x$index, scheme=weight.scheme, num_threads=num.threads, raw=as.pointer)
 }

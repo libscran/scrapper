@@ -14,5 +14,10 @@ test_that("subsampleByNeighbors works as expected", {
     expect_true(min(keep2) > 0)
     expect_true(max(keep2) <= ncol(x))
 
+    # Same results when given some nearest neighbor results.
+    res <- BiocNeighbors::findKNN(x, k=10, transposed=TRUE, BNPARAM=BiocNeighbors::AnnoyParam(), get.index="transposed", get.distance="transposed")
+    keep.alt <- subsampleByNeighbors(res, num.neighbors=10, min.remaining=2)
+    expect_identical(keep2, keep.alt)
+
     expect_error(subsampleByNeighbors(x, num.neighbors=10, min.remaining=1000), "should not be greater")
 })

@@ -44,6 +44,8 @@
 subsampleByNeighbors <- function(x, num.neighbors=20, min.remaining=10, num.threads=1, BNPARAM=AnnoyParam()) {
     if (!is.list(x)) {
         x <- findKNN(x, k=num.neighbors, transposed=TRUE, get.index="transposed", get.distance="transposed", num.threads=num.threads, BNPARAM=BNPARAM)
+    } else {
+        .checkIndices(x$index)
     }
     subsample_by_neighbors(x$index, x$distance, min_remaining=min.remaining) 
 }

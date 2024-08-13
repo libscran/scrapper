@@ -12,6 +12,11 @@ test_that("buildSnnGraph works correctly", {
     out2 <- buildSnnGraph(idx, num.threads=2)
     expect_identical(out, out2)
 
+    # Same results when given a matrix of indices.
+    res <- BiocNeighbors::findKNN(idx, k=10, get.distance=FALSE, get.index="transposed", BNPARAM=BiocNeighbors::AnnoyParam())
+    out3 <- buildSnnGraph(res) 
+    expect_identical(out, out3)
+
     # Something sensible happens with a pointer.
     out <- buildSnnGraph(data, as.pointer=TRUE)
     expect_type(out, "externalptr")

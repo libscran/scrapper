@@ -21,3 +21,14 @@
     }
     x
 }
+
+.checkIndices <- function(index) {
+    stopifnot(length(dim(index)) == 2L)
+    r <- range(index)
+    if (!is.finite(r[1]) || r[1] < 1L) {
+        stop("'index' should contain finite positive integers")
+    }
+    if (!is.finite(r[2]) || r[2] > ncol(index)) {
+        stop("'index' should contain finite integers no greater than 'ncol(index)'")
+    }
+}
