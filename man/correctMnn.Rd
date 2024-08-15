@@ -9,6 +9,8 @@ correctMnn(
   block,
   num.neighbors = 15,
   num.mads = 3,
+  robust.iterations = 2,
+  robust.trim = 0.25,
   mass.cap = NULL,
   order = NULL,
   reference.policy = c("max-rss", "max-size", "max-variance", "input"),
@@ -25,6 +27,10 @@ typically containing low-dimensional coordinates (e.g., from \code{\link{runPca}
 \item{num.neighbors}{Integer scalar specifying the number of neighbors to use when identifying MNN pairs.}
 
 \item{num.mads}{Numeric scalar specifying the number of median absolute deviations to use for removing outliers in the center-of-mass calculations.}
+
+\item{robust.iterations}{Integer scalar specifying the number of iterations for robust calculation of the center of mass.}
+
+\item{robust.trim}{Numeric scalar in [0, 1) specifying the trimming proportion for robust calculation of the center of mass.}
 
 \item{mass.cap}{Integer scalar specifying the cap on the number of observations to use for center-of-mass calculations on the reference dataset.
 A value of 100,000 may be appropriate for speeding up correction of very large datasets.

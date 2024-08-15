@@ -97,6 +97,14 @@ run_pca <- function(x, number, block, block_weight_policy, variable_block_weight
     .Call('_scrapper_run_pca', PACKAGE = 'scrapper', x, number, block, block_weight_policy, variable_block_weight, components_from_residuals, scale, realized, irlba_work, irlba_iterations, irlba_seed, num_threads)
 }
 
+run_tsne <- function(nnidx, nndist, perplexity, leaf_approx, max_depth, max_iter, seed, num_threads) {
+    .Call('_scrapper_run_tsne', PACKAGE = 'scrapper', nnidx, nndist, perplexity, leaf_approx, max_depth, max_iter, seed, num_threads)
+}
+
+perplexity_to_neighbors <- function(p) {
+    .Call('_scrapper_perplexity_to_neighbors', PACKAGE = 'scrapper', p)
+}
+
 sanitize_size_factors <- function(size_factors, handle_zero, handle_negative, handle_nan, handle_infinite) {
     .Call('_scrapper_sanitize_size_factors', PACKAGE = 'scrapper', size_factors, handle_zero, handle_negative, handle_nan, handle_infinite)
 }
