@@ -37,7 +37,7 @@ Rcpp::List compute_adt_qc_metrics(SEXP x, Rcpp::List subsets, int num_threads) {
     Rcpp::NumericVector sums(nc);
     Rcpp::IntegerVector detected(nc);
     std::vector<Rcpp::NumericVector> out_subsets;
-    for (size_t s = 0; s < subsets.size(); ++s) {
+    for (size_t s = 0; s < nsub; ++s) {
         out_subsets.emplace_back(nc);
     }
 
@@ -71,7 +71,7 @@ public:
         size_t ncells = sums.size();
 
         detected = metrics[1];
-        if (ncells != detected.size()) {
+        if (ncells != static_cast<size_t>(detected.size())) {
             throw std::runtime_error("all 'metrics' vectors should have the same length");
         }
 
@@ -80,7 +80,7 @@ public:
         subsets.reserve(nsubs);
         for (size_t s = 0; s < nsubs; ++s) {
             subsets.emplace_back(tmp[s]);
-            if (subsets.back().size() != ncells) {
+            if (static_cast<size_t>(subsets.back().size()) != ncells) {
                 throw std::runtime_error("all 'metrics' vectors should have the same length");
             }
         }
@@ -180,14 +180,14 @@ Rcpp::LogicalVector filter_adt_qc_metrics(Rcpp::List filters, Rcpp::List metrics
         df.insert(df.end(), detected.begin(), detected.end());
 
         Rcpp::List subsets(filters[1]);
-        if (subsets.size() != nsubs) {
+        if (static_cast<size_t>(subsets.size()) != nsubs) {
             throw std::runtime_error("'filters$subsets' should have the same length as the number of subsets in 'metrics'");
         }
         auto& ssf = filt.get_subset_sum();
         ssf.reserve(nsubs);
         for (size_t s = 0; s < nsubs; ++s) {
             Rcpp::NumericVector cursub(subsets[s]);
-            if (cursub.size() != nblocks) {
+            if (static_cast<size_t>(cursub.size()) != nblocks) {
                 throw std::runtime_error("each entry of 'filters$subsets' should have the same length as 'filters$detected'");
             }
             ssf.emplace_back(cursub.begin(), cursub.end());
@@ -208,7 +208,7 @@ Rcpp::LogicalVector filter_adt_qc_metrics(Rcpp::List filters, Rcpp::List metrics
         filt.get_detected() = detected[0];
 
         Rcpp::NumericVector subsets(filters[1]);
-        if (subsets.size() != nsubs) {
+        if (static_cast<size_t>(subsets.size()) != nsubs) {
             throw std::runtime_error("'filters$subsets' should have the same length as the number of subsets in 'metrics'");
         }
         auto& ssf = filt.get_subset_sum();

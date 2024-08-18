@@ -33,7 +33,7 @@ Rcpp::List combine_factors(Rcpp::List factors, bool keep_unused, Rcpp::IntegerVe
 
     size_t ngenes = ibuffers.front().size();
     for (size_t f = 1; f < nfac; ++f) {
-        if (ibuffers[f].size() != ngenes) {
+        if (static_cast<size_t>(ibuffers[f].size()) != ngenes) {
             throw std::runtime_error("all elements of 'factors' must have the same length");
         }
     }
@@ -42,7 +42,7 @@ Rcpp::List combine_factors(Rcpp::List factors, bool keep_unused, Rcpp::IntegerVe
     Rcpp::List olevels;
 
     if (keep_unused) {
-        if (nlevels.size() != nfac) {
+        if (static_cast<size_t>(nlevels.size()) != nfac) {
             throw std::runtime_error("'nlevels' and 'factors' must have the same length");
         }
 

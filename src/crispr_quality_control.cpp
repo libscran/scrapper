@@ -49,17 +49,17 @@ public:
         size_t ncells = sums.size();
 
         detected = metrics[1];
-        if (ncells != detected.size()) {
+        if (ncells != static_cast<size_t>(detected.size())) {
             throw std::runtime_error("all 'metrics' vectors should have the same length");
         }
 
         max_value = metrics[2];
-        if (ncells != max_value.size()) {
+        if (ncells != static_cast<size_t>(max_value.size())) {
             throw std::runtime_error("all 'metrics' vectors should have the same length");
         }
 
         max_index = metrics[3];
-        if (ncells != max_index.size()) {
+        if (ncells != static_cast<size_t>(max_index.size())) {
             throw std::runtime_error("all 'metrics' vectors should have the same length");
         }
     }

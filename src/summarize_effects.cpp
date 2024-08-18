@@ -12,7 +12,7 @@ SEXP summarize_effects(int num_genes, int num_groups, Rcpp::NumericVector effect
     size_t expected = num_groups;
     expected *= num_groups;
     expected *= num_genes;
-    if (effects.size() != expected) {
+    if (static_cast<size_t>(effects.size()) != expected) {
         throw std::runtime_error("'effects' does not have the expected length");
     }
 

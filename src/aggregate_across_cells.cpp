@@ -16,7 +16,7 @@ SEXP aggregate_across_cells(SEXP x, Rcpp::IntegerVector combined, int nthreads) 
     size_t NC = mat->ncol();
     size_t NR = mat->nrow();
 
-    if (combined.size() != NC) {
+    if (static_cast<size_t>(combined.size()) != NC) {
         throw std::runtime_error("length of 'combined' should be equal to the number of columns in 'x'");
     }
 

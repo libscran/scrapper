@@ -30,7 +30,7 @@ Rcpp::List fit_variance_trend(
     opt.num_threads = num_threads;
 
     size_t n = means.size();
-    if (n != variances.size()) {
+    if (n != static_cast<size_t>(variances.size())) {
         throw std::runtime_error("'means' and 'variances' should have the same length");
     }
 
