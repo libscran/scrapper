@@ -366,6 +366,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// run_umap
+SEXP run_umap(Rcpp::IntegerMatrix nnidx, Rcpp::NumericMatrix nndist, int ndim, double min_dist, int seed, int num_epochs, int num_threads, bool parallel_optimization);
+RcppExport SEXP _scrapper_run_umap(SEXP nnidxSEXP, SEXP nndistSEXP, SEXP ndimSEXP, SEXP min_distSEXP, SEXP seedSEXP, SEXP num_epochsSEXP, SEXP num_threadsSEXP, SEXP parallel_optimizationSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< Rcpp::IntegerMatrix >::type nnidx(nnidxSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type nndist(nndistSEXP);
+    Rcpp::traits::input_parameter< int >::type ndim(ndimSEXP);
+    Rcpp::traits::input_parameter< double >::type min_dist(min_distSEXP);
+    Rcpp::traits::input_parameter< int >::type seed(seedSEXP);
+    Rcpp::traits::input_parameter< int >::type num_epochs(num_epochsSEXP);
+    Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
+    Rcpp::traits::input_parameter< bool >::type parallel_optimization(parallel_optimizationSEXP);
+    rcpp_result_gen = Rcpp::wrap(run_umap(nnidx, nndist, ndim, min_dist, seed, num_epochs, num_threads, parallel_optimization));
+    return rcpp_result_gen;
+END_RCPP
+}
 // sanitize_size_factors
 Rcpp::NumericVector sanitize_size_factors(Rcpp::NumericVector size_factors, bool handle_zero, bool handle_negative, bool handle_nan, bool handle_infinite);
 RcppExport SEXP _scrapper_sanitize_size_factors(SEXP size_factorsSEXP, SEXP handle_zeroSEXP, SEXP handle_negativeSEXP, SEXP handle_nanSEXP, SEXP handle_infiniteSEXP) {
@@ -489,6 +506,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_run_pca", (DL_FUNC) &_scrapper_run_pca, 12},
     {"_scrapper_run_tsne", (DL_FUNC) &_scrapper_run_tsne, 8},
     {"_scrapper_perplexity_to_neighbors", (DL_FUNC) &_scrapper_perplexity_to_neighbors, 1},
+    {"_scrapper_run_umap", (DL_FUNC) &_scrapper_run_umap, 8},
     {"_scrapper_sanitize_size_factors", (DL_FUNC) &_scrapper_sanitize_size_factors, 5},
     {"_scrapper_score_gene_set", (DL_FUNC) &_scrapper_score_gene_set, 11},
     {"_scrapper_score_markers_summary", (DL_FUNC) &_scrapper_score_markers_summary, 9},

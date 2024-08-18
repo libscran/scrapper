@@ -105,6 +105,10 @@ perplexity_to_neighbors <- function(p) {
     .Call('_scrapper_perplexity_to_neighbors', PACKAGE = 'scrapper', p)
 }
 
+run_umap <- function(nnidx, nndist, ndim, min_dist, seed, num_epochs, num_threads, parallel_optimization) {
+    .Call('_scrapper_run_umap', PACKAGE = 'scrapper', nnidx, nndist, ndim, min_dist, seed, num_epochs, num_threads, parallel_optimization)
+}
+
 sanitize_size_factors <- function(size_factors, handle_zero, handle_negative, handle_nan, handle_infinite) {
     .Call('_scrapper_sanitize_size_factors', PACKAGE = 'scrapper', size_factors, handle_zero, handle_negative, handle_nan, handle_infinite)
 }
