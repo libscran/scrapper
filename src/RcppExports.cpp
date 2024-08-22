@@ -397,6 +397,16 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// scale_by_neighbors
+Rcpp::NumericVector scale_by_neighbors(Rcpp::List distances);
+RcppExport SEXP _scrapper_scale_by_neighbors(SEXP distancesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type distances(distancesSEXP);
+    rcpp_result_gen = Rcpp::wrap(scale_by_neighbors(distances));
+    return rcpp_result_gen;
+END_RCPP
+}
 // score_gene_set
 Rcpp::List score_gene_set(SEXP x, int rank, Rcpp::Nullable<Rcpp::IntegerVector> block, std::string block_weight_policy, Rcpp::NumericVector variable_block_weight, bool scale, bool realized, int irlba_work, int irlba_iterations, int irlba_seed, int num_threads);
 RcppExport SEXP _scrapper_score_gene_set(SEXP xSEXP, SEXP rankSEXP, SEXP blockSEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP scaleSEXP, SEXP realizedSEXP, SEXP irlba_workSEXP, SEXP irlba_iterationsSEXP, SEXP irlba_seedSEXP, SEXP num_threadsSEXP) {
@@ -508,6 +518,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_perplexity_to_neighbors", (DL_FUNC) &_scrapper_perplexity_to_neighbors, 1},
     {"_scrapper_run_umap", (DL_FUNC) &_scrapper_run_umap, 8},
     {"_scrapper_sanitize_size_factors", (DL_FUNC) &_scrapper_sanitize_size_factors, 5},
+    {"_scrapper_scale_by_neighbors", (DL_FUNC) &_scrapper_scale_by_neighbors, 1},
     {"_scrapper_score_gene_set", (DL_FUNC) &_scrapper_score_gene_set, 11},
     {"_scrapper_score_markers_summary", (DL_FUNC) &_scrapper_score_markers_summary, 9},
     {"_scrapper_score_markers_pairwise", (DL_FUNC) &_scrapper_score_markers_pairwise, 9},
