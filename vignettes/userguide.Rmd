@@ -1,0 +1,207 @@
+---
+title: Using scrapper to analyze single-cell data
+author: 
+- name: Aaron Lun
+  email: infinite.monkeys.with.keyboards@gmail.com
+date: "Revised: September 8, 2024"
+output:
+  BiocStyle::html_document
+package: scrapper
+vignette: >
+  %\VignetteIndexEntry{Using scrapper to analyze single-cell data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}    
+---
+
+```{r, echo=FALSE, results="hide", message=FALSE}
+require(knitr)
+opts_chunk$set(error=FALSE, message=FALSE, warning=FALSE)
+
+library(BiocStyle)
+self <- Biocpkg("scrapper")
+```
+
+# Overview
+
+`r self` implements bindings to C++ code for analyzing single-cell data, mostly from the [**libscran**](https://github.com/libscran) libraries.
+Each function performs an individual analysis step ranging from quality control to clustering and marker detection.
+`r self` is mostly intended for other Bioconductor package developers to build more user-friendly end-to-end workflows.
+
+# Quick start
+
+Let's fetch a small single-cell RNA-seq dataset for demonstration purposes:
+
+```{r}
+library(scRNAseq)
+sce.z <- ZeiselBrainData()
+sce.z
+```
+
+We run it through all the `r self` functions.
+
+```{r}
+# Wrapping it in a DelayedArray to avoid making unnecessary copies when we
+# do the various subsetting steps.
+library(DelayedArray)
+counts <- DelayedArray(assay(sce.z))
+
+# We can set the number of threads higher in real applications, but
+# we want to avoid stressing out Bioconductor's build system.
+nthreads <- 2
+
+library(scrapper)
+is.mito <- grepl("^mt-", rownames(counts))
+rna.qc.metrics <- computeRnaQcMetrics(counts, subsets=list(mt=is.mito), num.threads=nthreads)
+rna.qc.thresholds <- suggestRnaQcThresholds(rna.qc.metrics)
+rna.qc.filter <- filterRnaQcMetrics(rna.qc.thresholds, rna.qc.metrics)
+
+filtered <- counts[,rna.qc.filter,drop=FALSE]
+size.factors <- centerSizeFactors(rna.qc.metrics$sum[rna.qc.filter])
+normalized <- normalizeCounts(filtered, size.factors)
+
+gene.var <- modelGeneVariances(normalized, num.threads=nthreads)
+top.hvgs <- chooseHighlyVariableGenes(gene.var$statistics$residuals)
+pca <- runPca(normalized[top.hvgs,], num.threads=nthreads)
+
+umap.out <- runUmap(pca$components, num.threads=nthreads)
+tsne.out <- runTsne(pca$components, num.threads=nthreads)
+snn.graph <- buildSnnGraph(pca$components, as.pointer=TRUE, num.threads=nthreads)
+clust.out <- clusterGraph(snn.graph)
+
+markers <- scoreMarkers(normalized, groups=clust.out$membership, num.threads=nthreads)
+```
+
+Now we can have a look at some of the results.
+For example, we can make a t-SNE plot:
+
+```{r}
+plot(tsne.out[,1], tsne.out[,2], pch=clust.out$membership)
+```
+
+We can also have a look at the top markers for each cluster, say, based on the median AUC:
+
+```{r}
+top.markers <- lapply(markers$auc, function(x) {
+    head(rownames(x)[order(x$median, decreasing=TRUE)], 10)
+})
+head(top.markers)
+```
+
+# Dealing with multiple batches
+
+Let's fetch another brain dataset and combine it with the previous one.
+
+```{r}
+sce.t <- TasicBrainData()
+common <- intersect(rownames(sce.z), rownames(sce.t))
+combined <- cbind(
+    DelayedArray(assay(sce.t))[common,],
+    DelayedArray(assay(sce.z))[common,]
+)
+block <- rep(c("tasic", "zeisel"), c(ncol(sce.t), ncol(sce.z)))
+```
+
+We can now perform the analysis while blocking on the dataset of origin.
+
+```{r}
+# No mitochondrial genes in the combined set, so we'll just skip it.
+library(scrapper)
+rna.qc.metrics <- computeRnaQcMetrics(combined, subsets=list(), num.threads=nthreads)
+rna.qc.thresholds <- suggestRnaQcThresholds(rna.qc.metrics, block=block)
+rna.qc.filter <- filterRnaQcMetrics(rna.qc.thresholds, rna.qc.metrics, block=block)
+
+filtered <- combined[,rna.qc.filter,drop=FALSE]
+filtered.block <- block[rna.qc.filter]
+size.factors <- centerSizeFactors(rna.qc.metrics$sum[rna.qc.filter], block=filtered.block)
+normalized <- normalizeCounts(filtered, size.factors)
+
+gene.var <- modelGeneVariances(normalized, num.threads=nthreads, block=filtered.block)
+top.hvgs <- chooseHighlyVariableGenes(gene.var$statistics$residuals)
+pca <- runPca(normalized[top.hvgs,], num.threads=nthreads, block=filtered.block)
+
+# Now we do a MNN correction to get rid of the batch effect.
+corrected <- correctMnn(pca$components, block=filtered.block, num.threads=nthreads)
+
+umap.out <- runUmap(corrected$corrected, num.threads=nthreads)
+tsne.out <- runTsne(corrected$corrected, num.threads=nthreads)
+snn.graph <- buildSnnGraph(corrected$corrected, as.pointer=TRUE, num.threads=nthreads)
+clust.out <- clusterGraph(snn.graph)
+
+markers <- scoreMarkers(normalized, groups=clust.out$membership, block=filtered.block, num.threads=nthreads)
+```
+
+We then check whether the datasets were suitably merged together.
+
+```{r}
+plot(tsne.out[,1], tsne.out[,2], pch=16, col=factor(filtered.block))
+```
+
+# Handling multi-modal data
+
+Let's fetch a single-cell dataset with both RNA-seq and CITE-seq data.
+To keep the run-time short, we'll only consider the first 5000 cells.
+
+```{r}
+sce.s <- StoeckiusHashingData(mode=c("human", "adt1", "adt2"))
+sce.s <- sce.s[,1:5000]
+sce.s
+```
+
+We extract the counts for both the RNA and the ADTs.
+
+```{r}
+rna.counts <- DelayedArray(assay(sce.s))
+adt.counts <- DelayedArray(rbind(
+    assay(altExp(sce.s, "adt1")),
+    assay(altExp(sce.s, "adt2"))
+))
+```
+
+We run through the analysis workflow with both modalities.
+
+```{r}
+# QC in both modalities, only keeping the cells that pass in both.
+library(scrapper)
+is.mito <- grepl("^MT-", rownames(rna.counts))
+rna.qc.metrics <- computeRnaQcMetrics(rna.counts, subsets=list(MT=is.mito), num.threads=nthreads)
+rna.qc.thresholds <- suggestRnaQcThresholds(rna.qc.metrics)
+rna.qc.filter <- filterRnaQcMetrics(rna.qc.thresholds, rna.qc.metrics)
+
+is.igg <- grepl("^IgG", rownames(adt.counts))
+adt.qc.metrics <- computeAdtQcMetrics(adt.counts, subsets=list(IgG=is.igg), num.threads=nthreads)
+adt.qc.thresholds <- suggestAdtQcThresholds(adt.qc.metrics)
+adt.qc.filter <- filterAdtQcMetrics(adt.qc.thresholds, adt.qc.metrics)
+
+keep <- rna.qc.filter & adt.qc.filter
+rna.filtered <- rna.counts[,keep,drop=FALSE]
+adt.filtered <- adt.counts[,keep,drop=FALSE]
+
+rna.size.factors <- centerSizeFactors(rna.qc.metrics$sum[keep])
+rna.normalized <- normalizeCounts(rna.filtered, rna.size.factors)
+
+adt.size.factors <- computeClrm1Factors(adt.filtered, num.threads=nthreads)
+adt.size.factors <- centerSizeFactors(adt.size.factors)
+adt.normalized <- normalizeCounts(adt.filtered, adt.size.factors)
+
+gene.var <- modelGeneVariances(rna.normalized, num.threads=nthreads)
+top.hvgs <- chooseHighlyVariableGenes(gene.var$statistics$residuals)
+rna.pca <- runPca(rna.normalized[top.hvgs,], num.threads=nthreads)
+
+# Combining the RNA-derived PCs with ADT expression. Here, there's very few ADT
+# tags so there's no need for further dimensionality reduction.
+combined <- scaleByNeighbors(list(rna.pca$components, as.matrix(adt.normalized)), num.threads=nthreads)
+
+umap.out <- runUmap(combined$combined, num.threads=nthreads)
+tsne.out <- runTsne(combined$combined, num.threads=nthreads)
+snn.graph <- buildSnnGraph(combined$combined, as.pointer=TRUE, num.threads=nthreads)
+clust.out <- clusterGraph(snn.graph)
+
+rna.markers <- scoreMarkers(rna.normalized, groups=clust.out$membership, num.threads=nthreads)
+adt.markers <- scoreMarkers(adt.normalized, groups=clust.out$membership, num.threads=nthreads)
+```
+
+# Session information {-}
+
+```{r}
+sessionInfo()
+```
