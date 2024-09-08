@@ -2,11 +2,11 @@ Package: scrapper
 Version: 0.99.0
 Date: 2024-07-18
 Authors@R: person("Aaron", "Lun", role=c("cre", "aut"), email="infinite.monkeys.with.keyboards@gmail.com")
-Title: Bindings to C++ Code for Single-Cell Analysis
+Title: Bindings to C++ Libraries for Single-Cell Analysis
 Description: 
-    Implements bindings to C++ code for analyzing single-cell (expression) data, mostly from the libscran library. 
-    This provides low-level utilities for individual analysis steps from quality control to clustering and marker detection.
-    It is intended for other package developers, with only limited support for a user-friendly end-to-end workflow.
+    Implements R bindings to C++ code for analyzing single-cell (expression) data, mostly from various libscran libraries. 
+    Each function performs an individual step in the single-cell analysis workflow, ranging from quality control to clustering and marker detection.
+    It is mostly intended for other Bioconductor package developers to build more user-friendly end-to-end workflows.
 License: MIT + file LICENSE
 Imports:
     Rcpp,
@@ -20,7 +20,8 @@ Suggests:
     Rmarkdown,
     BiocStyle,
     MatrixGenerics,
-    igraph
+    igraph,
+    scRNAseq
 LinkingTo:
     Rcpp,
     assorthead,
