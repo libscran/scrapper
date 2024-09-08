@@ -56,11 +56,12 @@ Only used if \code{use.min.width=TRUE}.}
 \item{num.threads}{Integer scalar specifying the number of threads to use.}
 }
 \value{
-A list containing \code{means}, \code{variances}, \code{fitted} and \code{residuals},
+A list containing \code{statistics}.
+This is a data frame with the columns \code{means}, \code{variances}, \code{fitted} and \code{residuals},
 each of which is a numeric vector containing the statistic of the same name across all genes.
 
-If \code{block} is supplied, each of the vectors contains the average across all blocks.
-The list will also contain \code{per.block}, a list of lists containing the equivalent statistics for each block.
+If \code{block} is supplied, each of the column vectors described above contains the average across all blocks.
+The list will also contain \code{per.block}, a list of data frames containing the equivalent statistics for each block.
 }
 \description{
 Compute the variance in (log-)expression values for each gene,

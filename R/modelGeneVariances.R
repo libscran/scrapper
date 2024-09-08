@@ -17,11 +17,12 @@
 #' @inheritParams fitVarianceTrend
 #' @param num.threads Integer scalar specifying the number of threads to use.
 #'
-#' @return A list containing \code{means}, \code{variances}, \code{fitted} and \code{residuals},
+#' @return A list containing \code{statistics}.
+#' This is a data frame with the columns \code{means}, \code{variances}, \code{fitted} and \code{residuals},
 #' each of which is a numeric vector containing the statistic of the same name across all genes.
 #'
-#' If \code{block} is supplied, each of the vectors contains the average across all blocks.
-#' The list will also contain \code{per.block}, a list of lists containing the equivalent statistics for each block.
+#' If \code{block} is supplied, each of the column vectors described above contains the average across all blocks.
+#' The list will also contain \code{per.block}, a list of data frames containing the equivalent statistics for each block.
 #'
 #' @author Aaron Lun
 #'
@@ -59,7 +60,7 @@ modelGeneVariances <- function(
 {
     block <- .transformFactor(block)
 
-    output <- model_gene_variances(
+    stats <- model_gene_variances(
         initializeCpp(x),
         block=block$index,
         nblocks=length(block$names),
@@ -75,8 +76,30 @@ modelGeneVariances <- function(
         num_threads=num.threads
     )
 
+    output <- list(
+        statistics = data.frame(
+            means = stats$means,
+            variances = stats$variances,
+            fitted = stats$fitted,
+            residuals = stats$residuals,
+            row.names = rownames(x)
+        )
+    )
+
     if (!is.null(block$index)) {
-        names(output$per.block) <- block$names
+        pb <- stats$per.block
+        for (i in seq_along(pb)) {
+            curstats <- pb[[i]]
+            pb[[i]] <- data.frame(
+                means = curstats$means,
+                variances = curstats$variances,
+                fitted = curstats$fitted,
+                residuals = curstats$residuals,
+                row.names = rownames(x)
+            )
+        }
+        names(pb) <- block$names
+        output$per.block <- pb
     }
 
     output
