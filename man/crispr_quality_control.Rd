@@ -16,7 +16,7 @@ suggestCrisprQcThresholds(
   num.mads = 3
 )
 
-filterCrisprQcMetrics(filters, metrics, block = NULL)
+filterCrisprQcMetrics(thresholds, metrics, block = NULL)
 }
 \arguments{
 \item{x}{A matrix-like object where rows are CRISPRs and columns are cells.
@@ -29,13 +29,13 @@ Values are expected to be counts.}
 \item{block}{Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{metrics}.
 Alternatively \code{NULL} if all cells are from the same block.
 
-For \code{filterCrisprQcMetrics}, a blocking factor should be provided if \code{block} was used to construct \code{filters}.}
+For \code{filterCrisprQcMetrics}, a blocking factor should be provided if \code{block} was used to construct \code{thresholds}.}
 
 \item{min.detected.drop}{Minimum drop in the number of detected features from the median, in order to consider a cell to be of low quality.}
 
 \item{num.mads}{Number of median from the median, to define the threshold for outliers in each metric.}
 
-\item{filters}{List with the same structure as produced by \code{suggestCrisprQcFilters}.}
+\item{thresholds}{List with the same structure as produced by \code{suggestCrisprQcThresholds}.}
 }
 \value{
 For \code{computeCrisprQcMetrics}, a list is returned containing:

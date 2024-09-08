@@ -16,7 +16,7 @@ suggestAdtQcThresholds(
   num.mads = 3
 )
 
-filterAdtQcMetrics(filters, metrics, block = NULL)
+filterAdtQcMetrics(thresholds, metrics, block = NULL)
 }
 \arguments{
 \item{x}{A matrix-like object where rows are ADTs and columns are cells.
@@ -32,13 +32,13 @@ Each vector may be logical (whether to keep each row), integer (row indices) or 
 \item{block}{Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{metrics}.
 Alternatively \code{NULL} if all cells are from the same block.
 
-For \code{filterAdtQcMetrics}, a blocking factor should be provided if \code{block} was used to construct \code{filters}.}
+For \code{filterAdtQcMetrics}, a blocking factor should be provided if \code{block} was used to construct \code{thresholds}.}
 
 \item{min.detected.drop}{Minimum drop in the number of detected features from the median, in order to consider a cell to be of low quality.}
 
 \item{num.mads}{Number of median from the median, to define the threshold for outliers in each metric.}
 
-\item{filters}{List with the same structure as produced by \code{suggestAdtQcFilters}.}
+\item{thresholds}{List with the same structure as produced by \code{suggestAdtQcThresholds}.}
 }
 \value{
 For \code{computeAdtQcMetrics}, a list is returned containing:

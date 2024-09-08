@@ -12,9 +12,9 @@
 #' @param block Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{metrics}.
 #' Alternatively \code{NULL} if all cells are from the same block.
 #'
-#' For \code{filterRnaQcMetrics}, a blocking factor should be provided if \code{block} was used to construct \code{filters}. 
+#' For \code{filterRnaQcMetrics}, a blocking factor should be provided if \code{block} was used to construct \code{thresholds}. 
 #' @param num.mads Number of median from the median, to define the threshold for outliers in each metric.
-#' @param filters List with the same structure as produced by \code{suggestRnaQcFilters}.
+#' @param thresholds List with the same structure as produced by \code{suggestRnaQcThresholds}.
 #'
 #' @return For \code{computeRnaQcMetrics}, a list is returned containing:
 #' \itemize{
@@ -81,20 +81,20 @@ computeRnaQcMetrics <- function(x, subsets, num.threads = 1) {
 #' @rdname rna_quality_control
 suggestRnaQcThresholds <- function(metrics, block=NULL, min.detected.drop=0.1, num.mads=3) {
     block <- .transformFactor(block)
-    filters <- suggest_rna_qc_thresholds(metrics, block=block$index, min_detected_drop=min.detected.drop, num_mads=num.mads)
+    thresholds <- suggest_rna_qc_thresholds(metrics, block=block$index, min_detected_drop=min.detected.drop, num_mads=num.mads)
 
-    names(filters$detected) <- block$names
-    names(filters$subsets) <- names(metrics$subsets)
+    names(thresholds$detected) <- block$names
+    names(thresholds$subsets) <- names(metrics$subsets)
     for (i in seq_along(metrics$subsets)) {
-        names(filters$subsets[[i]]) <- block$names
+        names(thresholds$subsets[[i]]) <- block$names
     }
 
-    filters
+    thresholds
 }
 
 #' @export
 #' @rdname rna_quality_control
-filterRnaQcMetrics <- function(filters, metrics, block=NULL) {
+filterRnaQcMetrics <- function(thresholds, metrics, block=NULL) {
     block <- .transformFactor(block)
-    filter_rna_qc_metrics(filters, metrics, block=block$index)
+    filter_rna_qc_metrics(thresholds, metrics, block=block$index)
 }

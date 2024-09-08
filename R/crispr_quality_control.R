@@ -10,10 +10,10 @@
 #' @param block Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{metrics}.
 #' Alternatively \code{NULL} if all cells are from the same block.
 #'
-#' For \code{filterCrisprQcMetrics}, a blocking factor should be provided if \code{block} was used to construct \code{filters}. 
+#' For \code{filterCrisprQcMetrics}, a blocking factor should be provided if \code{block} was used to construct \code{thresholds}. 
 #' @param min.detected.drop Minimum drop in the number of detected features from the median, in order to consider a cell to be of low quality.
 #' @param num.mads Number of median from the median, to define the threshold for outliers in each metric.
-#' @param filters List with the same structure as produced by \code{suggestCrisprQcFilters}.
+#' @param thresholds List with the same structure as produced by \code{suggestCrisprQcThresholds}.
 #'
 #' @return For \code{computeCrisprQcMetrics}, a list is returned containing:
 #' \itemize{
@@ -70,15 +70,15 @@ computeCrisprQcMetrics <- function(x, num.threads = 1) {
 suggestCrisprQcThresholds <- function(metrics, block=NULL, min.detected.drop=0.1, num.mads=3) {
     block <- .transformFactor(block)
     metrics$max.index <- metrics$max.index - 1L # restore 0-based indexing.
-    filters <- suggest_crispr_qc_thresholds(metrics, block=block$index, min_detected_drop=min.detected.drop, num_mads=num.mads)
-    names(filters$max.value) <- block$names
-    filters
+    thresholds <- suggest_crispr_qc_thresholds(metrics, block=block$index, min_detected_drop=min.detected.drop, num_mads=num.mads)
+    names(thresholds$max.value) <- block$names
+    thresholds
 }
 
 #' @export
 #' @rdname crispr_quality_control
-filterCrisprQcMetrics <- function(filters, metrics, block=NULL) {
+filterCrisprQcMetrics <- function(thresholds, metrics, block=NULL) {
     block <- .transformFactor(block)
     metrics$max.index <- metrics$max.index - 1L # restore 0-based indexing.
-    filter_crispr_qc_metrics(filters, metrics, block=block$index)
+    filter_crispr_qc_metrics(thresholds, metrics, block=block$index)
 }
