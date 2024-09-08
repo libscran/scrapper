@@ -73,6 +73,7 @@ scoreMarkers <- function(
     all.pairwise=FALSE, 
     num.threads=1)
 {
+    rn <- rownames(x)
     x <- initializeCpp(x)
     groups <- .transformFactor(groups)
     block <- .transformFactor(block)
@@ -90,19 +91,19 @@ scoreMarkers <- function(
 
     if (all.pairwise) {
         output <- do.call(score_markers_pairwise, c(list(x), args))
-        dimnames(output$mean) <- dimnames(output$detected) <- list(rownames(x), groups$names)
+        dimnames(output$mean) <- dimnames(output$detected) <- list(rn, groups$names)
 
         for (nm in c("cohens.d", "delta.mean", "delta.detected", "auc")) {
             current <- output[[nm]]
             if (length(current)) {
-                dimnames(current) <- list(groups$names, groups$names, rownames(x))
+                dimnames(current) <- list(groups$names, groups$names, rn)
                 output[[nm]] <- current
             }
         }
 
     } else {
         output <- do.call(score_markers_summary, c(list(x), args))
-        dimnames(output$mean) <- dimnames(output$detected) <- list(rownames(x), groups$names)
+        dimnames(output$mean) <- dimnames(output$detected) <- list(rn, groups$names)
 
         for (nm in c("cohens.d", "delta.mean", "delta.detected", "auc")) {
             current <- output[[nm]]
@@ -110,7 +111,7 @@ scoreMarkers <- function(
                 names(current) <- groups$names
                 for (i in seq_along(current)) {
                     df <- data.frame(current[[i]])
-                    rownames(df) <- rownames(x)
+                    rownames(df) <- rn
                     current[[i]] <- df
                 }
                 output[[nm]] <- current
