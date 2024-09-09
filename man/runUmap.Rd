@@ -58,7 +58,7 @@ plot(embedding[,1], embedding[,2], col=iris[,5])
 
 }
 \seealso{
-Documentation for the C++ code at \url{https://libscran.github.io/umappp}.
+\url{https://libscran.github.io/umappp/}, for details on the underlying implementation.
 }
 \author{
 Aaron Lun

@@ -85,8 +85,8 @@ compute_rna_qc_metrics <- function(x, subsets, num_threads) {
     .Call('_scrapper_compute_rna_qc_metrics', PACKAGE = 'scrapper', x, subsets, num_threads)
 }
 
-suggest_rna_qc_thresholds <- function(metrics, block, min_detected_drop, num_mads) {
-    .Call('_scrapper_suggest_rna_qc_thresholds', PACKAGE = 'scrapper', metrics, block, min_detected_drop, num_mads)
+suggest_rna_qc_thresholds <- function(metrics, block, num_mads) {
+    .Call('_scrapper_suggest_rna_qc_thresholds', PACKAGE = 'scrapper', metrics, block, num_mads)
 }
 
 filter_rna_qc_metrics <- function(filters, metrics, block) {

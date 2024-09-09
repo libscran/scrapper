@@ -41,8 +41,7 @@
 #' For \code{filterAdtQcMetrics}, a logical scalar is returned indicating which cells are of high quality. 
 #'
 #' @seealso
-#' The \code{compute_adt_qc_metrics} and \code{compute_adt_qc_filters} functions in \url{https://libscran.github.io/scran_qc},
-#' for the rationale of QC filtering on ADT counts.
+#' \url{https://libscran.github.io/scran_qc/}, for the rationale of QC filtering on ADT counts.
 #'
 #' @author Aaron Lun
 #' @examples

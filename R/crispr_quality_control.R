@@ -38,8 +38,7 @@
 #' For \code{filterCrisprQcMetrics}, a logical scalar is returned indicating which cells are of high quality. 
 #'
 #' @seealso
-#' The \code{compute_crispr_qc_metrics} and \code{compute_crispr_qc_filters} functions in \url{https://libscran.github.io/scran_qc},
-#' for the rationale of QC filtering on CRISPR counts.
+#' \url{https://libscran.github.io/scran_qc/}, for the rationale of QC filtering on CRISPR counts.
 #'
 #' @author Aaron Lun
 #' @examples
@@ -47,7 +46,7 @@
 #' library(Matrix)
 #' x <- round(abs(rsparsematrix(100, 100, 0.1) * 100))
 #'
-#' qc <- computeCrisprQcMetrics(x, sub)
+#' qc <- computeCrisprQcMetrics(x)
 #' str(qc)
 #'
 #' filt <- suggestCrisprQcThresholds(qc)

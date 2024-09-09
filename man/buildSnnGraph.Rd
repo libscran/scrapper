@@ -66,7 +66,7 @@ igraph::E(g)$weight <- out$weight
 
 }
 \seealso{
-The \code{build_snn_graph} function in \url{https://libscran.github.io/scran_graph_cluster}.
+\url{https://libscran.github.io/scran_graph_cluster/}, for details on the underlying implementation.
 }
 \author{
 Aaron Lun

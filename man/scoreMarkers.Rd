@@ -26,12 +26,10 @@ It is typically expected to contain log-expression values, e.g., from \code{\lin
 Alternatively \code{NULL} if all cells are from the same block.}
 
 \item{block.weight.policy}{String specifying the policy to use for weighting different blocks when computing the average for each statistic
-(See documentation at \url{https://libscran.github.io/scran_blocks} for more details.)
 Only used if \code{block} is not \code{NULL}.}
 
 \item{variable.block.weight}{Numeric vector of length 2, specifying the parameters for variable block weighting.
 The first and second values are used as the lower and upper bounds, respectively, for the variable weight calculation.
-(See documentation at \url{https://libscran.github.io/scran_blocks} for more details.)
 Only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.}
 
 \item{compute.auc}{Logical scalar indicating whether to compute the AUC.
@@ -93,7 +91,7 @@ head(scores$cohens.d[["a"]])
 
 }
 \seealso{
-\url{https://libscran.github.io/scran_markers}, in particular 
+\url{https://libscran.github.io/scran_markers/}, in particular 
 the \code{score_markers_summary} function (for \code{all.pairwise=FALSE}),
 the \code{score_markers_pairwise} function (for \code{all.pairwise=TRUE}),
 and their blocked equivalents \code{score_markers_summary_blocked} and \code{score_markers_pairwise_blocked} (when \code{block} is not \code{NULL}).

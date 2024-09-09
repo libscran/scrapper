@@ -25,18 +25,18 @@ Typically, the matrix is expected to contain log-expression values, and the rows
 
 \item{set}{Integer, logical or character vector specifying the rows that belong to the gene set.}
 
+\item{rank}{Integer scalar specifying the rank of the approximation.}
+
 \item{scale}{Logical scalar indicating whether to scale all genes to have the same variance.}
 
 \item{block}{Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{x}.
 Alternatively \code{NULL} if all cells are from the same block.}
 
 \item{block.weight.policy}{String specifying the policy to use for weighting different blocks when computing the average for each statistic
-(Check out the comments in \url{https://libscran.github.io/scran_blocks} for more details.)
 Only used if \code{block} is not \code{NULL}.}
 
 \item{variable.block.weight}{Numeric vector of length 2, specifying the parameters for variable block weighting.
 The first and second values are used as the lower and upper bounds, respectively, for the variable weight calculation.
-(Check out the comments in \url{https://libscran.github.io/scran_blocks} for more details.)
 Only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.}
 
 \item{extra.work}{Integer scalar specifying the extra dimensions for the IRLBA workspace.}
@@ -66,7 +66,7 @@ scoreGeneSet(normed, set=c(1,3,5,10,20,100))
 
 }
 \seealso{
-The \code{compute} and \code{compute_blocked} functions in \url{https://libscran.github.io/gsdecon}.
+\url{https://libscran.github.io/gsdecon/}, for more details on the underlying algorithm.
 }
 \author{
 Aaron Lun

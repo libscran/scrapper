@@ -1,6 +1,7 @@
 *.swp
-docs/*.html
+*.html
 src/*.so
 src/*.o
 src/_deps
 igraph_temp
+_deps/

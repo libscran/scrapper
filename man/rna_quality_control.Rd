@@ -9,12 +9,7 @@
 \usage{
 computeRnaQcMetrics(x, subsets, num.threads = 1)
 
-suggestRnaQcThresholds(
-  metrics,
-  block = NULL,
-  min.detected.drop = 0.1,
-  num.mads = 3
-)
+suggestRnaQcThresholds(metrics, block = NULL, num.mads = 3)
 
 filterRnaQcMetrics(thresholds, metrics, block = NULL)
 }
@@ -87,8 +82,7 @@ summary(keep)
 
 }
 \seealso{
-The \code{compute_rna_qc_metrics} and \code{compute_rna_qc_filters} functions in \url{https://libscran.github.io/scran_qc},
-for the rationale of QC filtering on RNA counts.
+\url{https://libscran.github.io/scran_qc/}, for the rationale of QC filtering on RNA counts.
 }
 \author{
 Aaron Lun

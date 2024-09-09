@@ -9,11 +9,9 @@
 #' @param block Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{x}.
 #' Alternatively \code{NULL} if all cells are from the same block.
 #' @param block.weight.policy String specifying the policy to use for weighting different blocks when computing the average for each statistic
-#' (Check out the comments in \url{https://libscran.github.io/scran_blocks} for more details.)
 #' Only used if \code{block} is not \code{NULL}.
 #' @param variable.block.weight Numeric vector of length 2, specifying the parameters for variable block weighting.
 #' The first and second values are used as the lower and upper bounds, respectively, for the variable weight calculation.
-#' (Check out the comments in \url{https://libscran.github.io/scran_blocks} for more details.)
 #' Only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.
 #' @param components.from.residuals Logical scalar indicating whether to compute the PC scores from the residuals in the presence of a blocking factor.
 #' By default, the residuals are only used to compute the rotation matrix, and the original expression values of the cells are projected onto this new space.
@@ -42,7 +40,9 @@
 #' @author Aaron Lun
 #'
 #' @seealso
-#' The \code{simple_pca} and \code{blocked_pca} functions in \url{https://libscran.github.io/scran_pca}.
+#' \url{https://libscran.github.io/scran_pca/}, for more details on the PCA.
+#'
+#' \url{https://libscran.github.io/scran_blocks/}, for more details on the block weighting.
 #'
 #' @examples
 #' library(Matrix)

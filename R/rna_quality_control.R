@@ -42,8 +42,7 @@
 #' For \code{filterRnaQcMetrics}, a logical scalar is returned indicating which cells are of high quality. 
 #'
 #' @seealso
-#' The \code{compute_rna_qc_metrics} and \code{compute_rna_qc_filters} functions in \url{https://libscran.github.io/scran_qc},
-#' for the rationale of QC filtering on RNA counts.
+#' \url{https://libscran.github.io/scran_qc/}, for the rationale of QC filtering on RNA counts.
 #'
 #' @author Aaron Lun
 #' @examples
@@ -79,9 +78,9 @@ computeRnaQcMetrics <- function(x, subsets, num.threads = 1) {
 
 #' @export
 #' @rdname rna_quality_control
-suggestRnaQcThresholds <- function(metrics, block=NULL, min.detected.drop=0.1, num.mads=3) {
+suggestRnaQcThresholds <- function(metrics, block=NULL, num.mads=3) {
     block <- .transformFactor(block)
-    thresholds <- suggest_rna_qc_thresholds(metrics, block=block$index, min_detected_drop=min.detected.drop, num_mads=num.mads)
+    thresholds <- suggest_rna_qc_thresholds(metrics, block=block$index, num_mads=num.mads)
 
     names(thresholds$detected) <- block$names
     names(thresholds$subsets) <- names(metrics$subsets)

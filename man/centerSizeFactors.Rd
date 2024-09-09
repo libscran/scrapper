@@ -30,8 +30,7 @@ centerSizeFactors(runif(100), block=sample(3, 100, replace=TRUE))
 
 }
 \seealso{
-The \code{center_size_factors} function in \url{https://libscran.github.io/scran_norm},
-for the rationale of centering the size factors.
+\url{https://libscran.github.io/scran_norm/}, for the rationale behind centering the size factors.
 }
 \author{
 Aaron Lun

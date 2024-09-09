@@ -12,8 +12,7 @@
 #' @author Aaron Lun
 #'
 #' @seealso
-#' The \code{choose_pseudo_count} function in \url{https://libscran.github.io/scran_norm},
-#' for the motivation behind calculating a larger pseudo-count.
+#' \url{https://libscran.github.io/scran_norm/}, for the motivation behind calculating a larger pseudo-count.
 #'
 #' @examples
 #' sf <- runif(100)

@@ -24,11 +24,11 @@ Alternatively, an \link[igraph]{igraph} object with edge weights.}
 
 \item{leiden.resolution}{Numeric scalar specifying the resolution when \code{method="leiden"}.}
 
+\item{leiden.objective}{String specifying the objective function when \code{method="leiden"}.}
+
 \item{walktrap.steps}{Integer scalar specifying the number of steps to use when \code{method="walktrap"}.}
 
 \item{seed}{Integer scalar specifying the random seed to use for \code{method="multilevel"} or \code{"leiden"}.}
-
-\item{leiden.object}{String specifying the objective function when \code{method="leiden"}.}
 }
 \value{
 A list containing \code{membership}, an integer vector containing the cluster assignment for each cell;
@@ -56,7 +56,9 @@ str(clusterGraph(gout, method="walktrap"))
 
 }
 \seealso{
-The \code{build_snn_graph} function in \url{https://libscran.github.io/scran_graph_cluster}.
+\url{https://igraph.org}, for the underlying implementation of each clustering method.
+
+\url{https://libscran.github.io/scran_graph_cluster/}, for wrappers around the \pkg{igraph} code.
 }
 \author{
 Aaron Lun

@@ -7,7 +7,7 @@
 #' @param method String specifying the algorithm to use.
 #' @param multilevel.resolution Numeric scalar specifying the resolution when \code{method="multilevel"}.
 #' @param leiden.resolution Numeric scalar specifying the resolution when \code{method="leiden"}.
-#' @param leiden.object String specifying the objective function when \code{method="leiden"}.
+#' @param leiden.objective String specifying the objective function when \code{method="leiden"}.
 #' @param walktrap.steps Integer scalar specifying the number of steps to use when \code{method="walktrap"}.
 #' @param seed Integer scalar specifying the random seed to use for \code{method="multilevel"} or \code{"leiden"}.
 #'
@@ -25,7 +25,9 @@
 #' @author Aaron Lun
 #'
 #' @seealso
-#' The \code{build_snn_graph} function in \url{https://libscran.github.io/scran_graph_cluster}.
+#' \url{https://igraph.org}, for the underlying implementation of each clustering method.
+#'
+#' \url{https://libscran.github.io/scran_graph_cluster/}, for wrappers around the \pkg{igraph} code.
 #'
 #' @examples
 #' data <- matrix(rnorm(10000), ncol=1000)
@@ -37,6 +39,7 @@
 #' str(clusterGraph(gout, method="walktrap"))
 #'
 #' @export
+#' @importFrom methods is
 clusterGraph <- function(
     x,
     method=c("multilevel", "leiden", "walktrap"),
@@ -49,7 +52,7 @@ clusterGraph <- function(
     if (is(x, "igraph")) {
         x <- list(
             igraph::vcount(x),
-            as.vector(t(igraph::get.edgelist(x))),
+            as.vector(t(igraph::as_edgelist(x))),
             igraph::E(x)$weight
         )
     }

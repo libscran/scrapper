@@ -31,7 +31,7 @@
 #' @author Aaron Lun
 #'
 #' @seealso
-#' Explanation of the approximations at \url{https://libscran.github.io/qdtsne}.
+#' \url{https://libscran.github.io/qdtsne/}, for an explanation of the approximations.
 #'
 #' @examples
 #' x <- t(as.matrix(iris[,1:4]))

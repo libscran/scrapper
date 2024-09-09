@@ -20,8 +20,7 @@
 #' If \code{x} is an external pointer produced by \code{\link{initializeCpp}}, a new external pointer is returned containing the normalized expression matrix.
 #'
 #' @seealso
-#' The \code{normalize_counts} function in \url{https://libscran.github.io/scran_norm},
-#' for the rationale behind normalization and log-transformation.
+#' \url{https://libscran.github.io/scran_norm/}, for the rationale behind normalization.
 #'
 #' @author Aaron Lun
 #' @examples
@@ -38,8 +37,8 @@
 #' optr
 #'
 #' @export
-#' @importFrom Matrix t
-#' @importFrom DelayedArray DelayedArray
+#' @importFrom methods is
+#' @importFrom DelayedArray DelayedArray t
 normalizeCounts <- function(x, size.factors, log=TRUE, pseudo.count=1, log.base=2, preserve.sparsity=FALSE) {
     if (is(x, "externalptr")) {
         return(normalize_counts(x, size.factors, log=log, log_base=log.base, pseudo_count=pseudo.count, preserve_sparsity=preserve.sparsity))

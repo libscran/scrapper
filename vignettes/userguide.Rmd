@@ -136,6 +136,12 @@ We then check whether the datasets were suitably merged together.
 plot(tsne.out[,1], tsne.out[,2], pch=16, col=factor(filtered.block))
 ```
 
+We can also compute pseudo-bulk profiles for each cluster-dataset combination, e.g., for differential expression analyses.
+
+```{r}
+aggregates <- aggregateAcrossCells(filtered, list(cluster=clust.out$membership, dataset=filtered.block))
+```
+
 # Handling multi-modal data
 
 Let's fetch a single-cell dataset with both RNA-seq and CITE-seq data.
@@ -199,6 +205,21 @@ clust.out <- clusterGraph(snn.graph)
 rna.markers <- scoreMarkers(rna.normalized, groups=clust.out$membership, num.threads=nthreads)
 adt.markers <- scoreMarkers(adt.normalized, groups=clust.out$membership, num.threads=nthreads)
 ```
+
+# Other useful functions
+
+The `runAllNeighborSteps()` will run `runUmap()`, `runTsne()`, `buildSnnGraph()` and `clusterGraph()` in a single call.
+This runs the UMAP/t-SNE iterations and the clustering in parallel to maximize use of multiple threads.
+
+The `scoreGeneSet()` function will compute a gene set score based on the input expression matrix.
+This can be used to summarize the activity of pathways into a single per-cell score for visualization.
+
+The `subsampleByNeighbors()` function will deterministically select a representative subset of cells based on their local neighborhood.
+This can be used to reduce the compute time of the various steps downstream of the PCA.
+
+For CRISPR data, quality control can be performed using `computeCrisprQcMetrics()`, `suggestCrisprQcThresholds()` and `filterCrisprQcMetrics()`.
+To normalize, we use size factors defined by centering the total sum of guide counts for each cell.
+The resulting matrix can then be directly used in `scaleByNeighbors()`.
 
 # Session information {-}
 

@@ -15,7 +15,7 @@
 #' str(chooseHighlyVariableGenes(resids))
 #'
 #' @seealso
-#' The \code{choose_highly_variable_genes} function from \url{https://libscran.github.io/scran_variances}.
+#' \url{https://libscran.github.io/scran_variances/}, for the underlying implementation.
 #'
 #' @author Aaron Lun
 #' @export

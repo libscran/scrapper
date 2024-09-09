@@ -37,7 +37,7 @@
 #' @author Aaron Lun
 #'
 #' @seealso
-#' The \code{build_snn_graph} function in \url{https://libscran.github.io/scran_graph_cluster}.
+#' \url{https://libscran.github.io/scran_graph_cluster/}, for details on the underlying implementation.
 #'
 #' @examples
 #' data <- matrix(rnorm(10000), ncol=1000)

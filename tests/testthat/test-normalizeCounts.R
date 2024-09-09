@@ -3,7 +3,7 @@
 set.seed(8888)
 library(Matrix)
 x <- round(abs(rsparsematrix(1000, 100, 0.1) * 100))
-sf <- centerSizeFactors(colSums(x))
+sf <- centerSizeFactors(Matrix::colSums(x))
 
 test_that("normalizeCounts gives the same results in all modes", {
     y <- normalizeCounts(x, sf)

@@ -69,7 +69,7 @@ and use the metrics to suggest filter thresholds to retain high-quality cells.
 library(Matrix)
 x <- round(abs(rsparsematrix(100, 100, 0.1) * 100))
 
-qc <- computeCrisprQcMetrics(x, sub)
+qc <- computeCrisprQcMetrics(x)
 str(qc)
 
 filt <- suggestCrisprQcThresholds(qc)
@@ -80,8 +80,7 @@ summary(keep)
 
 }
 \seealso{
-The \code{compute_crispr_qc_metrics} and \code{compute_crispr_qc_filters} functions in \url{https://libscran.github.io/scran_qc},
-for the rationale of QC filtering on CRISPR counts.
+\url{https://libscran.github.io/scran_qc/}, for the rationale of QC filtering on CRISPR counts.
 }
 \author{
 Aaron Lun

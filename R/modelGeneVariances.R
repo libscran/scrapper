@@ -8,11 +8,9 @@
 #' @param block Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{x}.
 #' Alternatively \code{NULL} if all cells are from the same block.
 #' @param block.weight.policy String specifying the policy to use for weighting different blocks when computing the average for each statistic
-#' (See documentation at \url{https://libscran.github.io/scran_blocks} for more details.)
 #' Only used if \code{block} is not \code{NULL}.
 #' @param variable.block.weight Numeric vector of length 2, specifying the parameters for variable block weighting.
 #' The first and second values are used as the lower and upper bounds, respectively, for the variable weight calculation.
-#' (See documentation at \url{https://libscran.github.io/scran_blocks} for more details.)
 #' Only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.
 #' @inheritParams fitVarianceTrend
 #' @param num.threads Integer scalar specifying the number of threads to use.
@@ -27,7 +25,9 @@
 #' @author Aaron Lun
 #'
 #' @seealso
-#' The \code{model_gene_variances} function in \url{https://libscran.github.io/scran_variances}.
+#' \url{https://libscran.github.io/scran_variances/}, for the variance modelling.
+#'
+#' \url{https://libscran.github.io/scran_blocks/}, for details on the blocking.
 #'
 #' \code{\link{fitVarianceTrend}}, which fits the mean-variance trend.
 #'

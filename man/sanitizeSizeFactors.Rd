@@ -43,7 +43,7 @@ sanitizeSizeFactors(sf)
 
 }
 \seealso{
-The \code{sanitize_size_factors} function in \url{https://libscran.github.io/scran_norm}.
+\url{https://libscran.github.io/scran_norm/}, for more details on the sanitization.
 }
 \author{
 Aaron Lun

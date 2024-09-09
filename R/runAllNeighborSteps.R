@@ -29,7 +29,8 @@
 #' @author Aaron Lun
 #' @examples
 #' x <- t(as.matrix(iris[,1:4]))
-#' res <- runAllNeighborSteps(x)
+#' # (Turning down the number of threads so that R CMD check is happy.)
+#' res <- runAllNeighborSteps(x, num.threads=2)
 #' str(res)
 #'
 #' @export
@@ -90,11 +91,11 @@ runAllNeighborSteps <- function(
             curk <- k.choices[[n]]
             curi <- all.res$index
             curd <- all.res$distance
-            if (curk != nrow(index)) {
+            if (curk != nrow(curi)) {
                 curi <- curi[seq_len(curk),,drop=FALSE]
                 curd <- curd[seq_len(curk),,drop=FALSE]
             }
-            nn.res[[n]] <- list(index=index, distance=distance)
+            nn.res[[n]] <- list(index=curi, distance=curd)
         }
 
     } else {

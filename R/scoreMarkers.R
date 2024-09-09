@@ -54,7 +54,7 @@
 #' head(scores$cohens.d[["a"]])
 #'
 #' @seealso
-#' \url{https://libscran.github.io/scran_markers}, in particular 
+#' \url{https://libscran.github.io/scran_markers/}, in particular 
 #' the \code{score_markers_summary} function (for \code{all.pairwise=FALSE}),
 #' the \code{score_markers_pairwise} function (for \code{all.pairwise=TRUE}),
 #' and their blocked equivalents \code{score_markers_summary_blocked} and \code{score_markers_pairwise_blocked} (when \code{block} is not \code{NULL}).

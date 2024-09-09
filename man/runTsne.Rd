@@ -62,7 +62,7 @@ plot(embedding[,1], embedding[,2], col=iris[,5])
 
 }
 \seealso{
-Explanation of the approximations at \url{https://libscran.github.io/qdtsne}.
+\url{https://libscran.github.io/qdtsne/}, for an explanation of the approximations.
 }
 \author{
 Aaron Lun

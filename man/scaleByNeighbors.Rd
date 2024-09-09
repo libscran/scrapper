@@ -42,7 +42,7 @@ pcs <- list(
     guide = matrix(rnorm(2000, sd=5), ncol=200)
 )
 
-out <- scaleByNeighbors.chan(pcs)
+out <- scaleByNeighbors(pcs)
 out$scaling
 dim(out$combined)
 }

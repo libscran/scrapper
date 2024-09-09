@@ -25,7 +25,7 @@
 #' sanitizeSizeFactors(sf)
 #'
 #' @seealso
-#' The \code{sanitize_size_factors} function in \url{https://libscran.github.io/scran_norm}.
+#' \url{https://libscran.github.io/scran_norm/}, for more details on the sanitization.
 #'
 #' @export
 sanitizeSizeFactors <- function(size.factors, replace.zero=TRUE, replace.negative=TRUE, replace.infinite=TRUE, replace.nan=TRUE) {

@@ -31,12 +31,10 @@ Typically, the matrix is expected to contain log-expression values, and the rows
 Alternatively \code{NULL} if all cells are from the same block.}
 
 \item{block.weight.policy}{String specifying the policy to use for weighting different blocks when computing the average for each statistic
-(Check out the comments in \url{https://libscran.github.io/scran_blocks} for more details.)
 Only used if \code{block} is not \code{NULL}.}
 
 \item{variable.block.weight}{Numeric vector of length 2, specifying the parameters for variable block weighting.
 The first and second values are used as the lower and upper bounds, respectively, for the variable weight calculation.
-(Check out the comments in \url{https://libscran.github.io/scran_blocks} for more details.)
 Only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.}
 
 \item{components.from.residuals}{Logical scalar indicating whether to compute the PC scores from the residuals in the presence of a blocking factor.
@@ -88,7 +86,9 @@ str(bout)
 
 }
 \seealso{
-The \code{simple_pca} and \code{blocked_pca} functions in \url{https://libscran.github.io/scran_pca}.
+\url{https://libscran.github.io/scran_pca/}, for more details on the PCA.
+
+\url{https://libscran.github.io/scran_blocks/}, for more details on the block weighting.
 }
 \author{
 Aaron Lun

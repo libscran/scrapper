@@ -2,7 +2,7 @@
 
 library(Matrix)
 x <- round(abs(rsparsematrix(1000, 100, 0.1) * 100))
-normed <- normalizeCounts(x, size.factors=centerSizeFactors(colSums(x)))
+normed <- normalizeCounts(x, size.factors=centerSizeFactors(Matrix::colSums(x)))
 
 test_that("runPCA works more or less as expected", {
     pcs <- runPca(normed)
@@ -11,7 +11,7 @@ test_that("runPCA works more or less as expected", {
     expect_true(all(abs(rm) < 1e-8))
     expect_identical(length(rm), 25L)
 
-    expect_equal(pcs$center, rowMeans(normed))
+    expect_equal(pcs$center, Matrix::rowMeans(normed))
 
     expect_false(is.unsorted(-pcs$variance.explained))
     rv <- apply(pcs$components, 1, var)
@@ -32,9 +32,9 @@ test_that("runPCA works with blocking", {
     expect_true(all(abs(rm) < 1e-8))
     expect_identical(length(rm), 25L)
 
-    expect_equal(pcs$center[1,], rowMeans(normed[,block==1]))
-    expect_equal(pcs$center[2,], rowMeans(normed[,block==2]))
-    expect_equal(pcs$center[3,], rowMeans(normed[,block==3]))
+    expect_equal(pcs$center[1,], Matrix::rowMeans(normed[,block==1]))
+    expect_equal(pcs$center[2,], Matrix::rowMeans(normed[,block==2]))
+    expect_equal(pcs$center[3,], Matrix::rowMeans(normed[,block==3]))
 
     # Variance isn't so easily computed this time, so we just check it's sorted.
     expect_false(is.unsorted(-pcs$variance.explained))

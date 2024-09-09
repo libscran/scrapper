@@ -17,7 +17,7 @@
 #' @author Aaron Lun
 #'
 #' @seealso
-#' Documentation for the C++ code at \url{https://libscran.github.io/umappp}.
+#' \url{https://libscran.github.io/umappp/}, for details on the underlying implementation.
 #'
 #' @examples
 #' x <- t(as.matrix(iris[,1:4]))

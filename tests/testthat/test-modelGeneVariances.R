@@ -6,9 +6,9 @@ library(Matrix)
 x <- abs(rsparsematrix(1000, 100, 0.1) * 10)
 
 test_that("modelGeneVariances works without blocking", {
-    out <- modelGeneVariances(x)
+    out <- modelGeneVariances(x)$statistics
     expect_equal(out$variances, rowVars(x))
-    expect_equal(out$means, rowMeans(x))
+    expect_equal(out$means, Matrix::rowMeans(x))
     expect_equal(out$variances - out$fitted, out$residuals)
 
     fit <- fitVarianceTrend(out$means, out$variances)
@@ -16,7 +16,7 @@ test_that("modelGeneVariances works without blocking", {
     expect_identical(out$residuals, fit$residuals)
 
     # Responds to trend-fitting options. 
-    out2 <- modelGeneVariances(x, span=0.5)
+    out2 <- modelGeneVariances(x, span=0.5)$statistics
     expect_identical(out$variances, out2$variances)
     expect_identical(out$means, out2$means)
     expect_false(identical(out$fitted, out2$fitted))
@@ -34,16 +34,16 @@ test_that("modelGeneVariances works with blocking", {
         sub <- x[,block == b]
         current <- out$per.block[[b]]
         expect_equal(current$variances, rowVars(sub))
-        expect_equal(current$means, rowMeans(sub))
+        expect_equal(current$means, Matrix::rowMeans(sub))
         expect_equal(current$variances - current$fitted, current$residuals)
     }
 
     average.mean <- rowMeans(do.call(cbind, lapply(out$per.block, function(x) x$means)))
-    expect_equal(average.mean, out$means)
+    expect_equal(average.mean, out$statistics$means)
     average.variance <- rowMeans(do.call(cbind, lapply(out$per.block, function(x) x$variances)))
-    expect_equal(average.variance, out$variances)
-    average.fitted <- rowMeans(do.call(cbind, lapply(out$per.block, function(x) x$fitteds)))
-    expect_equal(average.fitted, out$fitteds)
+    expect_equal(average.variance, out$statistics$variances)
+    average.fitted <- rowMeans(do.call(cbind, lapply(out$per.block, function(x) x$fitted)))
+    expect_equal(average.fitted, out$statistics$fitted)
     average.residuals <- rowMeans(do.call(cbind, lapply(out$per.block, function(x) x$residuals)))
-    expect_equal(average.residuals, out$residuals)
+    expect_equal(average.residuals, out$statistics$residuals)
 })

@@ -1,6 +1,6 @@
 Package: scrapper
 Version: 0.99.0
-Date: 2024-07-18
+Date: 2024-09-09
 Authors@R: person("Aaron", "Lun", role=c("cre", "aut"), email="infinite.monkeys.with.keyboards@gmail.com")
 Title: Bindings to C++ Libraries for Single-Cell Analysis
 Description: 
@@ -9,19 +9,20 @@ Description:
     It is mostly intended for other Bioconductor package developers to build more user-friendly end-to-end workflows.
 License: MIT + file LICENSE
 Imports:
+    methods,
     Rcpp,
     beachmat,
-    Matrix,
     DelayedArray,
     BiocNeighbors,
     parallel
 Suggests:
     testthat,
     knitr,
-    Rmarkdown,
+    rmarkdown,
     BiocStyle,
     MatrixGenerics,
     igraph,
+    Matrix,
     scRNAseq
 LinkingTo:
     Rcpp,

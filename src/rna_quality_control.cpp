@@ -112,7 +112,7 @@ public:
 };
 
 // [[Rcpp::export(rng=false)]]
-Rcpp::List suggest_rna_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::IntegerVector> block, double min_detected_drop, double num_mads) {
+Rcpp::List suggest_rna_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::IntegerVector> block, double num_mads) {
     ConvertedRnaQcMetrics all_metrics(metrics);
     auto buffers = all_metrics.to_buffer();
     size_t ncells = all_metrics.size();

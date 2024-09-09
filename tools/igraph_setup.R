@@ -68,7 +68,7 @@ options <- c(options,
 # Downloading the file:
 version <- "0.10.13"
 
-install_path <- file.path("src", "_deps")
+install_path <- "_deps"
 
 if (!file.exists(install_path)) {
     tmp_dir <- "igraph_temp"

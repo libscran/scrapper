@@ -55,7 +55,7 @@ legend('topright', col=c('black', 'red'), legend=c('all', 'subsample'), pch=1)
 
 }
 \seealso{
-The \code{compute} function in \url{https://libscran.github.io/nenesub}.
+\url{https://libscran.github.io/nenesub/}, for more details on the underlying algorithm.
 }
 \author{
 Aaron Lun

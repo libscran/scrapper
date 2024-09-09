@@ -6,6 +6,7 @@
 #' @param x A matrix-like object where rows correspond to genes or genomic features and columns correspond to cells.
 #' Typically, the matrix is expected to contain log-expression values, and the rows should be filtered to relevant (e.g., highly variable) genes.
 #' @param set Integer, logical or character vector specifying the rows that belong to the gene set.
+#' @param rank Integer scalar specifying the rank of the approximation.
 #' @inheritParams runPca
 #'
 #' @return List containing \code{scores}, a numeric vector of per-cell scores for each column in \code{x};
@@ -14,7 +15,7 @@
 #' @author Aaron Lun
 #'
 #' @seealso
-#' The \code{compute} and \code{compute_blocked} functions in \url{https://libscran.github.io/gsdecon}.
+#' \url{https://libscran.github.io/gsdecon/}, for more details on the underlying algorithm.
 #'
 #' @author Aaron Lun
 #' @examples

@@ -23,7 +23,7 @@
 #' @author Aaron Lun
 #'
 #' @seealso
-#' The \code{fit_variance_trend} function in \url{https://libscran.github.io/scran_variances}.
+#' \url{https://libscran.github.io/scran_variances/}, for the underlying implementation.
 #'
 #' @examples
 #' x <- runif(1000)

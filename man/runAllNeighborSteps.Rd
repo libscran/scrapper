@@ -54,7 +54,8 @@ The idea is to build the index once, perform the neighbor search, and run each t
 }
 \examples{
 x <- t(as.matrix(iris[,1:4]))
-res <- runAllNeighborSteps(x)
+# (Turning down the number of threads so that R CMD check is happy.)
+res <- runAllNeighborSteps(x, num.threads=2)
 str(res)
 
 }

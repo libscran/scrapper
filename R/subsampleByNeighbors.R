@@ -30,7 +30,7 @@
 #' @author Aaron Lun
 #'
 #' @seealso
-#' The \code{compute} function in \url{https://libscran.github.io/nenesub}.
+#' \url{https://libscran.github.io/nenesub/}, for more details on the underlying algorithm.
 #'
 #' @examples
 #' x <- matrix(rnorm(10000), nrow=2)

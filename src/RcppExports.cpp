@@ -294,15 +294,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // suggest_rna_qc_thresholds
-Rcpp::List suggest_rna_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::IntegerVector> block, double min_detected_drop, double num_mads);
-RcppExport SEXP _scrapper_suggest_rna_qc_thresholds(SEXP metricsSEXP, SEXP blockSEXP, SEXP min_detected_dropSEXP, SEXP num_madsSEXP) {
+Rcpp::List suggest_rna_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::IntegerVector> block, double num_mads);
+RcppExport SEXP _scrapper_suggest_rna_qc_thresholds(SEXP metricsSEXP, SEXP blockSEXP, SEXP num_madsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type metrics(metricsSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type block(blockSEXP);
-    Rcpp::traits::input_parameter< double >::type min_detected_drop(min_detected_dropSEXP);
     Rcpp::traits::input_parameter< double >::type num_mads(num_madsSEXP);
-    rcpp_result_gen = Rcpp::wrap(suggest_rna_qc_thresholds(metrics, block, min_detected_drop, num_mads));
+    rcpp_result_gen = Rcpp::wrap(suggest_rna_qc_thresholds(metrics, block, num_mads));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -511,7 +510,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_model_gene_variances", (DL_FUNC) &_scrapper_model_gene_variances, 13},
     {"_scrapper_normalize_counts", (DL_FUNC) &_scrapper_normalize_counts, 6},
     {"_scrapper_compute_rna_qc_metrics", (DL_FUNC) &_scrapper_compute_rna_qc_metrics, 3},
-    {"_scrapper_suggest_rna_qc_thresholds", (DL_FUNC) &_scrapper_suggest_rna_qc_thresholds, 4},
+    {"_scrapper_suggest_rna_qc_thresholds", (DL_FUNC) &_scrapper_suggest_rna_qc_thresholds, 3},
     {"_scrapper_filter_rna_qc_metrics", (DL_FUNC) &_scrapper_filter_rna_qc_metrics, 3},
     {"_scrapper_run_pca", (DL_FUNC) &_scrapper_run_pca, 12},
     {"_scrapper_run_tsne", (DL_FUNC) &_scrapper_run_tsne, 8},
