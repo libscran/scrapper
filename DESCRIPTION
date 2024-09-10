@@ -29,6 +29,19 @@ LinkingTo:
     assorthead,
     beachmat,
     BiocNeighbors
+biocViews: 
+    Normalization, 
+    RNASeq, 
+    Software, 
+    GeneExpression,
+    Transcriptomics, 
+    SingleCell, 
+    BatchEffect, 
+    QualityControl,
+    DifferentialExpression,
+    FeatureExtraction,
+    PrincipalComponent,
+    Clustering
 VignetteBuilder: knitr
 Encoding: UTF-8
 RoxygenNote: 7.3.2
