@@ -146,6 +146,27 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// cluster_kmeans
+Rcpp::List cluster_kmeans(Rcpp::NumericMatrix data, int nclusters, std::string init_method, std::string refine_method, bool var_part_optimize_partition, double var_part_size_adjustment, int lloyd_iterations, int hartigan_wong_iterations, int hartigan_wong_quick_transfer_iterations, bool hartigan_wong_quit_quick_transfer_failure, int seed, int nthreads);
+RcppExport SEXP _scrapper_cluster_kmeans(SEXP dataSEXP, SEXP nclustersSEXP, SEXP init_methodSEXP, SEXP refine_methodSEXP, SEXP var_part_optimize_partitionSEXP, SEXP var_part_size_adjustmentSEXP, SEXP lloyd_iterationsSEXP, SEXP hartigan_wong_iterationsSEXP, SEXP hartigan_wong_quick_transfer_iterationsSEXP, SEXP hartigan_wong_quit_quick_transfer_failureSEXP, SEXP seedSEXP, SEXP nthreadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< int >::type nclusters(nclustersSEXP);
+    Rcpp::traits::input_parameter< std::string >::type init_method(init_methodSEXP);
+    Rcpp::traits::input_parameter< std::string >::type refine_method(refine_methodSEXP);
+    Rcpp::traits::input_parameter< bool >::type var_part_optimize_partition(var_part_optimize_partitionSEXP);
+    Rcpp::traits::input_parameter< double >::type var_part_size_adjustment(var_part_size_adjustmentSEXP);
+    Rcpp::traits::input_parameter< int >::type lloyd_iterations(lloyd_iterationsSEXP);
+    Rcpp::traits::input_parameter< int >::type hartigan_wong_iterations(hartigan_wong_iterationsSEXP);
+    Rcpp::traits::input_parameter< int >::type hartigan_wong_quick_transfer_iterations(hartigan_wong_quick_transfer_iterationsSEXP);
+    Rcpp::traits::input_parameter< bool >::type hartigan_wong_quit_quick_transfer_failure(hartigan_wong_quit_quick_transfer_failureSEXP);
+    Rcpp::traits::input_parameter< int >::type seed(seedSEXP);
+    Rcpp::traits::input_parameter< int >::type nthreads(nthreadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(cluster_kmeans(data, nclusters, init_method, refine_method, var_part_optimize_partition, var_part_size_adjustment, lloyd_iterations, hartigan_wong_iterations, hartigan_wong_quick_transfer_iterations, hartigan_wong_quit_quick_transfer_failure, seed, nthreads));
+    return rcpp_result_gen;
+END_RCPP
+}
 // combine_factors
 Rcpp::List combine_factors(Rcpp::List factors, bool keep_unused, Rcpp::IntegerVector nlevels);
 RcppExport SEXP _scrapper_combine_factors(SEXP factorsSEXP, SEXP keep_unusedSEXP, SEXP nlevelsSEXP) {
@@ -500,6 +521,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_cluster_multilevel", (DL_FUNC) &_scrapper_cluster_multilevel, 3},
     {"_scrapper_cluster_leiden", (DL_FUNC) &_scrapper_cluster_leiden, 4},
     {"_scrapper_cluster_walktrap", (DL_FUNC) &_scrapper_cluster_walktrap, 2},
+    {"_scrapper_cluster_kmeans", (DL_FUNC) &_scrapper_cluster_kmeans, 12},
     {"_scrapper_combine_factors", (DL_FUNC) &_scrapper_combine_factors, 3},
     {"_scrapper_compute_clrm1_factors", (DL_FUNC) &_scrapper_compute_clrm1_factors, 2},
     {"_scrapper_correct_mnn", (DL_FUNC) &_scrapper_correct_mnn, 11},
