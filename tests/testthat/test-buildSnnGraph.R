@@ -17,7 +17,7 @@ test_that("buildSnnGraph works correctly", {
     out3 <- buildSnnGraph(res) 
     expect_identical(out, out3)
 
-    # Something sensible happens with a pointer.
-    out <- buildSnnGraph(data, as.pointer=TRUE)
-    expect_type(out, "externalptr")
+#    # Something sensible happens with a pointer.
+#    out <- buildSnnGraph(data, as.pointer=TRUE)
+#    expect_type(out, "externalptr")
 })

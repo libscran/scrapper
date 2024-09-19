@@ -8,7 +8,6 @@ buildSnnGraph(
   x,
   num.neighbors = 10,
   weight.scheme = "ranked",
-  as.pointer = FALSE,
   num.threads = 1,
   BNPARAM = AnnoyParam()
 )
@@ -28,9 +27,6 @@ Alternatively, an index constructed by \code{\link{buildIndex}}.}
 \item{weight.scheme}{String specifying the weighting scheme to use for constructing the SNN graph.
 This can be \code{"ranked"} (default), \code{"jaccard"} or \code{"number"}.}
 
-\item{as.pointer}{Logical scalar indicating whether to return a pointer to the graph.
-This avoids an unnecessary serialization to/from R objects in downstream functions like \code{\link{clusterGraph}}.}
-
 \item{num.threads}{Integer scalar specifying the number of threads to use.
 Only used if \code{x} is not a list of existing nearest-neighbor search results.}
 
@@ -47,8 +43,6 @@ i.e., \code{edges[1:2]} form the first edge, \code{edges[3:4]} form the second e
 \item \code{weights}, a numeric vector of weights for each edge.
 This has length equal to half the length of \code{edges}.
 }
-
-If \code{as.pointer=TRUE}, an external pointer is returned that can be used in \code{\link{clusterGraph}}.
 }
 \description{
 Build a shared nearest neighbor (SNN) graph where each node is a cell.
@@ -61,7 +55,7 @@ out <- buildSnnGraph(data)
 str(out)
 
 # We can use this to make an igraph::graph.
-g <- igraph::make_graph(out$edges, n = out$vertices)
+g <- igraph::make_undirected_graph(out$edges, n = out$vertices)
 igraph::E(g)$weight <- out$weight
 
 }

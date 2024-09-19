@@ -65,7 +65,7 @@ pca <- runPca(normalized[top.hvgs,], num.threads=nthreads)
 
 umap.out <- runUmap(pca$components, num.threads=nthreads)
 tsne.out <- runTsne(pca$components, num.threads=nthreads)
-snn.graph <- buildSnnGraph(pca$components, as.pointer=TRUE, num.threads=nthreads)
+snn.graph <- buildSnnGraph(pca$components, num.threads=nthreads)
 clust.out <- clusterGraph(snn.graph)
 
 markers <- scoreMarkers(normalized, groups=clust.out$membership, num.threads=nthreads)
@@ -124,7 +124,7 @@ corrected <- correctMnn(pca$components, block=filtered.block, num.threads=nthrea
 
 umap.out <- runUmap(corrected$corrected, num.threads=nthreads)
 tsne.out <- runTsne(corrected$corrected, num.threads=nthreads)
-snn.graph <- buildSnnGraph(corrected$corrected, as.pointer=TRUE, num.threads=nthreads)
+snn.graph <- buildSnnGraph(corrected$corrected, num.threads=nthreads)
 clust.out <- clusterGraph(snn.graph)
 
 markers <- scoreMarkers(normalized, groups=clust.out$membership, block=filtered.block, num.threads=nthreads)
@@ -199,7 +199,7 @@ combined <- scaleByNeighbors(list(rna.pca$components, as.matrix(adt.normalized))
 
 umap.out <- runUmap(combined$combined, num.threads=nthreads)
 tsne.out <- runTsne(combined$combined, num.threads=nthreads)
-snn.graph <- buildSnnGraph(combined$combined, as.pointer=TRUE, num.threads=nthreads)
+snn.graph <- buildSnnGraph(combined$combined, num.threads=nthreads)
 clust.out <- clusterGraph(snn.graph)
 
 rna.markers <- scoreMarkers(rna.normalized, groups=clust.out$membership, num.threads=nthreads)

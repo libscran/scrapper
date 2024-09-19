@@ -4,16 +4,17 @@
 #include <stdexcept>
 
 #include "Rcpp.h"
-#include "scran_graph_cluster/scran_graph_cluster.hpp"
+#include "scran_graph_cluster/build_snn_graph.hpp"
 #include "tatami/tatami.hpp"
 
-#include "utils_graph.h"
+//#include "utils_graph.h"
 
 //[[Rcpp::export(rng=false)]]
 SEXP build_snn_graph(Rcpp::IntegerMatrix neighbors, std::string scheme, int num_threads, bool raw) {
     const int* nptr = neighbors.begin();
     size_t nrow = neighbors.rows();
-    scran_graph_cluster::BuildSnnGraphResults<igraph_integer_t, igraph_real_t> output;
+    //scran_graph_cluster::BuildSnnGraphResults<igraph_integer_t, igraph_real_t> output;
+    scran_graph_cluster::BuildSnnGraphResults<int, double> output;
 
     scran_graph_cluster::BuildSnnGraphOptions opt;
     opt.num_threads = num_threads;
@@ -40,10 +41,10 @@ SEXP build_snn_graph(Rcpp::IntegerMatrix neighbors, std::string scheme, int num_
         output
     );
 
-    if (raw) {
-        return BuildSnnGraphPointer(new decltype(output)(std::move(output)), true);
-
-    } else {
+//    if (raw) {
+//        return BuildSnnGraphPointer(new decltype(output)(std::move(output)), true);
+//
+//    } else {
         size_t nedges = output.edges.size();
         Rcpp::IntegerVector edges(nedges);
         int* eptr = edges.begin();
@@ -56,5 +57,5 @@ SEXP build_snn_graph(Rcpp::IntegerMatrix neighbors, std::string scheme, int num_
             Rcpp::Named("edges") = edges,
             Rcpp::Named("weights") = Rcpp::NumericVector(output.weights.begin(), output.weights.end())
         );
-    }
+//    }
 }

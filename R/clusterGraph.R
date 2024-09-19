@@ -49,30 +49,33 @@ clusterGraph <- function(
     walktrap.steps=4,
     seed=42)
 {
-    if (is(x, "igraph")) {
-        x <- list(
-            igraph::vcount(x),
-            as.vector(t(igraph::as_edgelist(x))),
-            igraph::E(x)$weight
-        )
+    if (!is(x, "igraph")) {
+        g <- igraph::make_undirected_graph(x$edges, n=x$vertices)
+        igraph::E(g)$weight <- x$weights
+        x <- g
     }
 
-    method <- match.arg(method)
+    # Some shenanigans to transparently set the seed as in the C igraph library.
+    if (exists(".Random.seed")) {
+        old.seed <- .Random.seed
+        on.exit(set.seed(old.seed))
+    }
+    set.seed(seed)
 
+    # For the time being, we still need to use the igraph R package. This will
+    # change once we can switch to a vendored copy of the igraph C library,
+    # which will eliminate any susceptibility to the end-user R environment.
+    method <- match.arg(method)
     if (method == "multilevel") {
-        out <- cluster_multilevel(x, resolution=multilevel.resolution, seed=seed)
-        for (l in seq_along(out$levels)) {
-            out$levels[[l]] <- out$levels[[l]] + 1L
-        }
+        out <- igraph::cluster_louvain(x, resolution=multilevel.resolution, weights=igraph::E(x)$weight)
 
     } else if (method == "leiden") {
-        leiden.objective <- match.arg(leiden.objective)
-        out <- cluster_leiden(x, use_cpm=(leiden.objective=="cpm"), resolution=leiden.resolution, seed=seed)
+        leiden.objective <- if (match.arg(leiden.objective) == "cpm") "CPM" else "modularity"
+        out <- igraph::cluster_leiden(x, objective_function=leiden.objective, resolution=leiden.resolution, weights=igraph::E(x)$weight)
 
     } else if (method == "walktrap") {
-        out <- cluster_walktrap(x, steps=walktrap.steps)
+        out <- igraph::cluster_walktrap(x, steps=walktrap.steps, weights=igraph::E(x)$weight)
     }
 
-    out$membership <- out$membership + 1L
     out
 }

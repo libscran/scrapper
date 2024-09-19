@@ -33,18 +33,6 @@ choose_pseudo_count <- function(size_factors, quantile, max_bias, min_value) {
     .Call('_scrapper_choose_pseudo_count', PACKAGE = 'scrapper', size_factors, quantile, max_bias, min_value)
 }
 
-cluster_multilevel <- function(graph, resolution, seed) {
-    .Call('_scrapper_cluster_multilevel', PACKAGE = 'scrapper', graph, resolution, seed)
-}
-
-cluster_leiden <- function(graph, resolution, use_cpm, seed) {
-    .Call('_scrapper_cluster_leiden', PACKAGE = 'scrapper', graph, resolution, use_cpm, seed)
-}
-
-cluster_walktrap <- function(graph, steps) {
-    .Call('_scrapper_cluster_walktrap', PACKAGE = 'scrapper', graph, steps)
-}
-
 cluster_kmeans <- function(data, nclusters, init_method, refine_method, var_part_optimize_partition, var_part_size_adjustment, lloyd_iterations, hartigan_wong_iterations, hartigan_wong_quick_transfer_iterations, hartigan_wong_quit_quick_transfer_failure, seed, nthreads) {
     .Call('_scrapper_cluster_kmeans', PACKAGE = 'scrapper', data, nclusters, init_method, refine_method, var_part_optimize_partition, var_part_size_adjustment, lloyd_iterations, hartigan_wong_iterations, hartigan_wong_quick_transfer_iterations, hartigan_wong_quit_quick_transfer_failure, seed, nthreads)
 }

@@ -1,5 +1,6 @@
 //#include "config.h"
 
+/*
 #include <vector>
 #include <stdexcept>
 
@@ -128,3 +129,4 @@ Rcpp::List cluster_walktrap(SEXP graph, int steps) {
         Rcpp::Named("modularity") = Rcpp::NumericVector(res.modularity.begin(), res.modularity.end())
     ); 
 }
+*/

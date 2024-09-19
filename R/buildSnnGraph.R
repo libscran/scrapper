@@ -15,8 +15,6 @@
 #' @param num.neighbors Integer scalar specifying the number of neighbors to use to construct the graph.
 #' @param weight.scheme String specifying the weighting scheme to use for constructing the SNN graph.
 #' This can be \code{"ranked"} (default), \code{"jaccard"} or \code{"number"}.
-#' @param as.pointer Logical scalar indicating whether to return a pointer to the graph.
-#' This avoids an unnecessary serialization to/from R objects in downstream functions like \code{\link{clusterGraph}}.
 #' @param num.threads Integer scalar specifying the number of threads to use.
 #' Only used if \code{x} is not a list of existing nearest-neighbor search results.
 #' @param BNPARAM A \linkS4class{BiocNeighborParam} object specifying the algorithm to use.
@@ -32,8 +30,6 @@
 #' This has length equal to half the length of \code{edges}.
 #' }
 #'
-#' If \code{as.pointer=TRUE}, an external pointer is returned that can be used in \code{\link{clusterGraph}}. 
-#'
 #' @author Aaron Lun
 #'
 #' @seealso
@@ -45,16 +41,16 @@
 #' str(out)
 #'
 #' # We can use this to make an igraph::graph.
-#' g <- igraph::make_graph(out$edges, n = out$vertices)
+#' g <- igraph::make_undirected_graph(out$edges, n = out$vertices)
 #' igraph::E(g)$weight <- out$weight
 #'
 #' @export 
 #' @importFrom BiocNeighbors findKNN AnnoyParam
-buildSnnGraph <- function(x, num.neighbors=10, weight.scheme="ranked", as.pointer=FALSE, num.threads=1, BNPARAM=AnnoyParam()) {
+buildSnnGraph <- function(x, num.neighbors=10, weight.scheme="ranked", num.threads=1, BNPARAM=AnnoyParam()) {
     if (!is.list(x)) {
         x <- findKNN(x, k=num.neighbors, transposed=TRUE, get.index="transposed", get.distance=FALSE, num.threads=num.threads, BNPARAM=BNPARAM)
     } else {
         .checkIndices(x$index)
     }
-    build_snn_graph(x$index, scheme=weight.scheme, num_threads=num.threads, raw=as.pointer)
+    build_snn_graph(x$index, scheme=weight.scheme, num_threads=num.threads, raw=FALSE)
 }

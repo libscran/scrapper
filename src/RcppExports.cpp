@@ -110,42 +110,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// cluster_multilevel
-Rcpp::List cluster_multilevel(SEXP graph, double resolution, int seed);
-RcppExport SEXP _scrapper_cluster_multilevel(SEXP graphSEXP, SEXP resolutionSEXP, SEXP seedSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< SEXP >::type graph(graphSEXP);
-    Rcpp::traits::input_parameter< double >::type resolution(resolutionSEXP);
-    Rcpp::traits::input_parameter< int >::type seed(seedSEXP);
-    rcpp_result_gen = Rcpp::wrap(cluster_multilevel(graph, resolution, seed));
-    return rcpp_result_gen;
-END_RCPP
-}
-// cluster_leiden
-Rcpp::List cluster_leiden(SEXP graph, double resolution, bool use_cpm, int seed);
-RcppExport SEXP _scrapper_cluster_leiden(SEXP graphSEXP, SEXP resolutionSEXP, SEXP use_cpmSEXP, SEXP seedSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< SEXP >::type graph(graphSEXP);
-    Rcpp::traits::input_parameter< double >::type resolution(resolutionSEXP);
-    Rcpp::traits::input_parameter< bool >::type use_cpm(use_cpmSEXP);
-    Rcpp::traits::input_parameter< int >::type seed(seedSEXP);
-    rcpp_result_gen = Rcpp::wrap(cluster_leiden(graph, resolution, use_cpm, seed));
-    return rcpp_result_gen;
-END_RCPP
-}
-// cluster_walktrap
-Rcpp::List cluster_walktrap(SEXP graph, int steps);
-RcppExport SEXP _scrapper_cluster_walktrap(SEXP graphSEXP, SEXP stepsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< SEXP >::type graph(graphSEXP);
-    Rcpp::traits::input_parameter< int >::type steps(stepsSEXP);
-    rcpp_result_gen = Rcpp::wrap(cluster_walktrap(graph, steps));
-    return rcpp_result_gen;
-END_RCPP
-}
 // cluster_kmeans
 Rcpp::List cluster_kmeans(Rcpp::NumericMatrix data, int nclusters, std::string init_method, std::string refine_method, bool var_part_optimize_partition, double var_part_size_adjustment, int lloyd_iterations, int hartigan_wong_iterations, int hartigan_wong_quick_transfer_iterations, bool hartigan_wong_quit_quick_transfer_failure, int seed, int nthreads);
 RcppExport SEXP _scrapper_cluster_kmeans(SEXP dataSEXP, SEXP nclustersSEXP, SEXP init_methodSEXP, SEXP refine_methodSEXP, SEXP var_part_optimize_partitionSEXP, SEXP var_part_size_adjustmentSEXP, SEXP lloyd_iterationsSEXP, SEXP hartigan_wong_iterationsSEXP, SEXP hartigan_wong_quick_transfer_iterationsSEXP, SEXP hartigan_wong_quit_quick_transfer_failureSEXP, SEXP seedSEXP, SEXP nthreadsSEXP) {
@@ -518,9 +482,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_center_size_factors", (DL_FUNC) &_scrapper_center_size_factors, 3},
     {"_scrapper_choose_highly_variable_genes", (DL_FUNC) &_scrapper_choose_highly_variable_genes, 4},
     {"_scrapper_choose_pseudo_count", (DL_FUNC) &_scrapper_choose_pseudo_count, 4},
-    {"_scrapper_cluster_multilevel", (DL_FUNC) &_scrapper_cluster_multilevel, 3},
-    {"_scrapper_cluster_leiden", (DL_FUNC) &_scrapper_cluster_leiden, 4},
-    {"_scrapper_cluster_walktrap", (DL_FUNC) &_scrapper_cluster_walktrap, 2},
     {"_scrapper_cluster_kmeans", (DL_FUNC) &_scrapper_cluster_kmeans, 12},
     {"_scrapper_combine_factors", (DL_FUNC) &_scrapper_combine_factors, 3},
     {"_scrapper_compute_clrm1_factors", (DL_FUNC) &_scrapper_compute_clrm1_factors, 2},

@@ -1,6 +1,6 @@
 Package: scrapper
-Version: 0.99.0
-Date: 2024-09-09
+Version: 0.99.1
+Date: 2024-09-19
 Authors@R: person("Aaron", "Lun", role=c("cre", "aut"), email="infinite.monkeys.with.keyboards@gmail.com")
 Title: Bindings to C++ Libraries for Single-Cell Analysis
 Description: 
@@ -14,6 +14,7 @@ Imports:
     beachmat,
     DelayedArray,
     BiocNeighbors,
+    igraph,
     parallel
 Suggests:
     testthat,
@@ -21,7 +22,6 @@ Suggests:
     rmarkdown,
     BiocStyle,
     MatrixGenerics,
-    igraph,
     Matrix,
     scRNAseq
 LinkingTo:
