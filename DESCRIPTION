@@ -1,6 +1,6 @@
 Package: scrapper
-Version: 0.99.2
-Date: 2024-09-21
+Version: 0.99.3
+Date: 2024-10-09
 Authors@R: person("Aaron", "Lun", role=c("cre", "aut"), email="infinite.monkeys.with.keyboards@gmail.com")
 Title: Bindings to C++ Libraries for Single-Cell Analysis
 Description: 

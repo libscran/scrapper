@@ -86,7 +86,7 @@ correctMnn <- function(
         num_threads=num.threads, 
         order=order, 
         ref_policy=match.arg(reference.policy), 
-        builder=defineBuilder(BNPARAM)
+        builder=defineBuilder(BNPARAM)$builder
     )
 
     output$merge.order <- block$names[output$merge.order + 1L]
