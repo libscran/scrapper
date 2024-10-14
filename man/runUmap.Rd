@@ -23,7 +23,7 @@ typically containing a low-dimensional representation from, e.g., \code{\link{ru
 Alternatively, a named list of nearest-neighbor search results.
 This should contain \code{index}, an integer matrix where rows are neighbors and columns are cells.
 Each column contains 1-based indices for the nearest neighbors of the corresponding cell, ordered by increasing distance.
-The number of neighbors should be the same as \code{tsnePerplexityToNeighbors(perplexity)}.
+The number of neighbors should be the same as \code{num.neighbors}, otherwise a warning is raised.
 
 Alternatively, an index constructed by \code{\link{buildIndex}}.}
 

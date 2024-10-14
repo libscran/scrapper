@@ -10,6 +10,7 @@
 SEXP run_tsne(Rcpp::IntegerMatrix nnidx, Rcpp::NumericMatrix nndist, double perplexity, int leaf_approx, int max_depth, int max_iter, int seed, int num_threads) {
     qdtsne::Options opt;
     opt.perplexity = perplexity;
+    opt.infer_perplexity = false; // rely on the perplexity supplied by the user.
     opt.leaf_approximation = leaf_approx;
     opt.max_depth = max_depth;
     opt.max_iterations = max_iter;

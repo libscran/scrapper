@@ -22,7 +22,7 @@
     x
 }
 
-.checkIndices <- function(index) {
+.checkIndices <- function(index, num.neighbors) {
     stopifnot(length(dim(index)) == 2L)
     r <- range(index)
     if (!is.finite(r[1]) || r[1] < 1L) {
@@ -30,5 +30,8 @@
     }
     if (!is.finite(r[2]) || r[2] > ncol(index)) {
         stop("'index' should contain finite integers no greater than 'ncol(index)'")
+    }
+    if (nrow(index) != num.neighbors) {
+        warning("'nrow(index)' is not consistent with 'num.neighbors'")
     }
 }

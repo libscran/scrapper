@@ -10,6 +10,7 @@
 #' Alternatively, a named list of nearest-neighbor search results.
 #' This should contain \code{index}, an integer matrix where rows are neighbors and columns are cells.
 #' Each column contains 1-based indices for the nearest neighbors of the corresponding cell, ordered by increasing distance.
+#' The number of neighbors for each cell should be equal to \code{num.neighbors}, otherwise a warning is raised.
 #'
 #' Alternatively, an index constructed by \code{\link{buildIndex}}.
 #' @param num.neighbors Integer scalar specifying the number of neighbors to use to construct the graph.
@@ -50,7 +51,7 @@ buildSnnGraph <- function(x, num.neighbors=10, weight.scheme="ranked", num.threa
     if (!is.list(x)) {
         x <- findKNN(x, k=num.neighbors, transposed=TRUE, get.index="transposed", get.distance=FALSE, num.threads=num.threads, BNPARAM=BNPARAM)
     } else {
-        .checkIndices(x$index)
+        .checkIndices(x$index, num.neighbors)
     }
     build_snn_graph(x$index, scheme=weight.scheme, num_threads=num.threads, raw=FALSE)
 }

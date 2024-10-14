@@ -8,10 +8,11 @@
 #' Alternatively, a named list of nearest-neighbor search results.
 #' This should contain \code{index}, an integer matrix where rows are neighbors and columns are cells.
 #' Each column contains 1-based indices for the nearest neighbors of the corresponding cell, ordered by increasing distance.
-#' The number of neighbors should be the same as \code{tsnePerplexityToNeighbors(perplexity)}.
+#' The number of neighbors should be the same as \code{num.neighbors}, otherwise a warning is raised.
 #'
 #' Alternatively, an index constructed by \code{\link{buildIndex}}.
 #' @param perplexity Numeric scalar specifying the perplexity to use in the t-SNE algorithm.
+#' @param num.neighbors Integer scalar specifying the number of neighbors, typically derived from \code{perplexity}.
 #' @param max.depth Integer scalar specifying the maximum depth of the Barnes-Hut quadtree.
 #' Smaller values (7-10) improve speed at the cost of accuracy.
 #' @param leaf.approximation Logical scalar indicating whether to use the \dQuote{leaf approximation} approach,
@@ -40,12 +41,11 @@
 #' 
 #' @export
 #' @importFrom BiocNeighbors findKNN AnnoyParam
-runTsne <- function(x, perplexity=30, max.depth=20, leaf.approximation=FALSE, max.iterations=500, seed=42, num.threads=1, BNPARAM=AnnoyParam()) {
+runTsne <- function(x, perplexity=30, num.neighbors=tsnePerplexityToNeighbors(perplexity), max.depth=20, leaf.approximation=FALSE, max.iterations=500, seed=42, num.threads=1, BNPARAM=AnnoyParam()) {
     if (!is.list(x)) {
-        k <- perplexity_to_neighbors(perplexity)
-        x <- findKNN(x, k=k, transposed=TRUE, get.index="transposed", get.distance="transposed", num.threads=num.threads, BNPARAM=BNPARAM)
+        x <- findKNN(x, k=num.neighbors, transposed=TRUE, get.index="transposed", get.distance="transposed", num.threads=num.threads, BNPARAM=BNPARAM)
     } else {
-        .checkIndices(x$index)
+        .checkIndices(x$index, num.neighbors)
     }
 
     output <- run_tsne(

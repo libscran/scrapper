@@ -15,6 +15,7 @@
 #' \item \code{distance}, a numeric matrix of the same dimensions as \code{index},
 #' containing the distances to each of the nearest neighbors.
 #' }
+#' The number of neighbors should be equal to \code{num.neighbors}, otherwise a warning is raised.
 #' @param num.neighbors Integer scalar specifying the number of neighbors to use.
 #' Larger values result in greater downsampling. 
 #' Only used if \code{x} does not contain existing nearest-neighbor results.
@@ -45,7 +46,7 @@ subsampleByNeighbors <- function(x, num.neighbors=20, min.remaining=10, num.thre
     if (!is.list(x)) {
         x <- findKNN(x, k=num.neighbors, transposed=TRUE, get.index="transposed", get.distance="transposed", num.threads=num.threads, BNPARAM=BNPARAM)
     } else {
-        .checkIndices(x$index)
+        .checkIndices(x$index, num.neighbors)
     }
     subsample_by_neighbors(x$index, x$distance, min_remaining=min.remaining) 
 }

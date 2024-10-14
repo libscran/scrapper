@@ -25,7 +25,8 @@ This should contain:
 Each column contains 1-based indices for the nearest neighbors of the corresponding cell, ordered by increasing distance.
 \item \code{distance}, a numeric matrix of the same dimensions as \code{index},
 containing the distances to each of the nearest neighbors.
-}}
+}
+The number of neighbors should be equal to \code{num.neighbors}, otherwise a warning is raised.}
 
 \item{num.neighbors}{Integer scalar specifying the number of neighbors to use.
 Larger values result in greater downsampling. 

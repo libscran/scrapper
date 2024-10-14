@@ -18,4 +18,8 @@ test_that("runTSNE works in basic mode", {
     res <- findKNN(x, transposed=TRUE, k=tsnePerplexityToNeighbors(30), get.distance="transposed", get.index="transposed", BNPARAM=AnnoyParam())
     nnin <- runTsne(res)
     expect_identical(nnin, embed)
+
+    res <- findKNN(x, transposed=TRUE, k=30, get.distance="transposed", get.index="transposed", BNPARAM=AnnoyParam())
+    expect_warning(runTsne(res), "not consistent with 'num.neighbors'")
+    expect_warning(runTsne(res, num.neighbors=30), NA)
 })
