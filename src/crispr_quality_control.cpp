@@ -31,7 +31,7 @@ Rcpp::List compute_crispr_qc_metrics(SEXP x, int num_threads) {
     scran_qc::compute_crispr_qc_metrics(*mat, buffers, opt);
 
     return Rcpp::List::create(
-        Rcpp::Named("sums") = sums,
+        Rcpp::Named("sum") = sums,
         Rcpp::Named("detected") = detected,
         Rcpp::Named("max.value") = max_value,
         Rcpp::Named("max.index") = max_index

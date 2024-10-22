@@ -54,7 +54,7 @@ Rcpp::List compute_rna_qc_metrics(SEXP x, Rcpp::List subsets, int num_threads) {
     scran_qc::compute_rna_qc_metrics(*mat, sub_ptrs, buffers, opt);
 
     return Rcpp::List::create(
-        Rcpp::Named("sums") = sums,
+        Rcpp::Named("sum") = sums,
         Rcpp::Named("detected") = detected,
         Rcpp::Named("subsets") = Rcpp::List(out_subsets.begin(), out_subsets.end())
     );
