@@ -24,7 +24,8 @@ Alternatively, an index constructed by \code{\link{buildIndex}}.}
 \item{runUmap.args}{Named list of further arguments to pass to \code{\link{runUmap}}.
 This can be set to \code{NULL} to omit the UMAP.}
 
-\item{runTsne.args}{Named list of further arguments to pass to \code{\link{runTsne}}.}
+\item{runTsne.args}{Named list of further arguments to pass to \code{\link{runTsne}}.
+This can be set to \code{NULL} to omit the t-SNE.}
 
 \item{buildSnnGraph.args}{Named list of further arguments to pass to \code{\link{buildSnnGraph}}.}
 
@@ -39,9 +40,6 @@ This is faster but may not give the same results as separate searches for some a
 
 \item{num.threads}{Integer scalar specifying the number of threads to use.
 At least one thread should be available for each step.}
-
-\item{runTsne}{Logical scalar indicating whether to run \code{\link{runTsne}}.
-This can be set to \code{NULL} to omit the t-SNE.}
 }
 \value{
 A named list containing the results of each step.

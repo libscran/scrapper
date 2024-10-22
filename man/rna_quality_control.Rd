@@ -57,7 +57,7 @@ For \code{suggestRnaQcThresholds} with \code{block=NULL}, a list is returned con
 \item \code{subsets}, a numeric vector containing the upper bound on the sum of counts in each feature subset. 
 }
 
-For \code{filterRnaQcMetrics}, a logical scalar is returned indicating which cells are of high quality.
+For \code{filterRnaQcMetrics}, a logical vector of length \code{ncol(x)} is returned indicating which cells are of high quality.
 }
 \description{
 Compute per-cell QC metrics from an initialized matrix of RNA counts,

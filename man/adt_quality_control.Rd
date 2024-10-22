@@ -62,7 +62,7 @@ For \code{suggestAdtQcThresholds} with \code{block=NULL}, a list is returned con
 \item \code{subsets}, a numeric vector containing the upper bound on the sum of counts in each control subset. 
 }
 
-For \code{filterAdtQcMetrics}, a logical scalar is returned indicating which cells are of high quality.
+For \code{filterAdtQcMetrics}, a logical vector of length \code{ncol(x)} is returned indicating which cells are of high quality.
 }
 \description{
 Compute per-cell QC metrics from an initialized matrix of ADT counts,

@@ -55,7 +55,7 @@ This includes the \code{min}, \code{mean}, \code{median}, \code{max} and \code{m
 \item \code{auc}, a list like \code{cohens.d} but containing the summaries of the AUCs from each pairwise comparison.
 Omitted if \code{compute.auc=FALSE}.
 \item \code{delta.mean}, a list like \code{cohens.d} but containing the summaries of the delta-mean from each pairwise comparison.
-\item \code{delta.mean}, a list like \code{cohens.d} but containing the summaries of the delta-detected from each pairwise comparison.
+\item \code{delta.detected}, a list like \code{cohens.d} but containing the summaries of the delta-detected from each pairwise comparison.
 }
 
 If \code{all.pairwise=TRUE}, a list is returned containing:

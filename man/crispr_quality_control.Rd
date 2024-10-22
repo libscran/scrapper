@@ -58,7 +58,7 @@ For \code{suggestCrisprQcThresholds} with \code{block=NULL}, a list is returned 
 \item \code{max.value}, a numeric scalar containing the lower bound on the maximum counts for each blocking level.
 }
 
-For \code{filterCrisprQcMetrics}, a logical scalar is returned indicating which cells are of high quality.
+For \code{filterCrisprQcMetrics}, a logical vector of length \code{ncol(x)} is returned indicating which cells are of high quality.
 }
 \description{
 Compute per-cell QC metrics from an initialized matrix of CRISPR counts,

@@ -38,7 +38,7 @@
 #' \item \code{subsets}, a numeric vector containing the upper bound on the sum of counts in each control subset. 
 #' }
 #'
-#' For \code{filterAdtQcMetrics}, a logical scalar is returned indicating which cells are of high quality. 
+#' For \code{filterAdtQcMetrics}, a logical vector of length \code{ncol(x)} is returned indicating which cells are of high quality. 
 #'
 #' @seealso
 #' \url{https://libscran.github.io/scran_qc/}, for the rationale of QC filtering on ADT counts.

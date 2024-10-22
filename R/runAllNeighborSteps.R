@@ -10,9 +10,8 @@
 #' Alternatively, an index constructed by \code{\link{buildIndex}}.
 #' @param runUmap.args Named list of further arguments to pass to \code{\link{runUmap}}.
 #' This can be set to \code{NULL} to omit the UMAP.
-#' @param runTsne Logical scalar indicating whether to run \code{\link{runTsne}}.
-#' This can be set to \code{NULL} to omit the t-SNE.
 #' @param runTsne.args Named list of further arguments to pass to \code{\link{runTsne}}.
+#' This can be set to \code{NULL} to omit the t-SNE.
 #' @param buildSnnGraph.args Named list of further arguments to pass to \code{\link{buildSnnGraph}}.
 #' @param clusterGraph.args Named list of further arguments to pass to \code{\link{clusterGraph}}.
 #' This can be set to \code{NULL} to omit the clustering.
