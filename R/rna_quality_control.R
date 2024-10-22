@@ -51,7 +51,7 @@
 #' x <- round(abs(rsparsematrix(1000, 100, 0.1) * 100))
 #'
 #' # Mocking up a control set.
-#' sub <- list(IgG=rbinom(nrow(x), 1, 0.1) > 0)
+#' sub <- list(mito=rbinom(nrow(x), 1, 0.1) > 0)
 #'
 #' qc <- computeRnaQcMetrics(x, sub)
 #' str(qc)
