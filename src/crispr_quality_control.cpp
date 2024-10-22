@@ -45,20 +45,20 @@ public:
             throw std::runtime_error("'metrics' should have the same format as the output of 'computeCrisprQcMetrics'");
         }
 
-        sums = metrics[0];
+        sums = metrics["sum"];
         size_t ncells = sums.size();
 
-        detected = metrics[1];
+        detected = metrics["detected"];
         if (ncells != static_cast<size_t>(detected.size())) {
             throw std::runtime_error("all 'metrics' vectors should have the same length");
         }
 
-        max_value = metrics[2];
+        max_value = metrics["max.value"];
         if (ncells != static_cast<size_t>(max_value.size())) {
             throw std::runtime_error("all 'metrics' vectors should have the same length");
         }
 
-        max_index = metrics[3];
+        max_index = metrics["max.index"];
         if (ncells != static_cast<size_t>(max_index.size())) {
             throw std::runtime_error("all 'metrics' vectors should have the same length");
         }
@@ -133,7 +133,7 @@ Rcpp::LogicalVector filter_crispr_qc_metrics(Rcpp::List filters, Rcpp::List metr
 
         scran_qc::CrisprQcBlockedFilters filt;
 
-        Rcpp::NumericVector max_value(filters[0]);
+        Rcpp::NumericVector max_value(filters["max.value"]);
         size_t nblocks = max_value.size();
         auto& mvf = filt.get_max_value();
         mvf.insert(mvf.end(), max_value.begin(), max_value.end());
@@ -146,9 +146,9 @@ Rcpp::LogicalVector filter_crispr_qc_metrics(Rcpp::List filters, Rcpp::List metr
     } else {
         scran_qc::CrisprQcFilters filt;
 
-        Rcpp::NumericVector max_value(filters[0]);
+        Rcpp::NumericVector max_value(filters["max.value"]);
         if (max_value.size() != 1) {
-            throw std::runtime_error("'filters$sum' should contain a single threshold");
+            throw std::runtime_error("'filters$max.value' should contain a single threshold");
         }
         filt.get_max_value() = max_value[0];
 

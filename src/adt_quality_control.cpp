@@ -67,15 +67,15 @@ public:
             throw std::runtime_error("'metrics' should have the same format as the output of 'computeAdtQcMetrics'");
         }
 
-        sums = metrics[0];
+        sums = metrics["sum"];
         size_t ncells = sums.size();
 
-        detected = metrics[1];
+        detected = metrics["detected"];
         if (ncells != static_cast<size_t>(detected.size())) {
             throw std::runtime_error("all 'metrics' vectors should have the same length");
         }
 
-        Rcpp::List tmp(metrics[2]);
+        Rcpp::List tmp(metrics["subsets"]);
         size_t nsubs = tmp.size();
         subsets.reserve(nsubs);
         for (size_t s = 0; s < nsubs; ++s) {
@@ -174,12 +174,12 @@ Rcpp::LogicalVector filter_adt_qc_metrics(Rcpp::List filters, Rcpp::List metrics
 
         scran_qc::AdtQcBlockedFilters filt;
 
-        Rcpp::NumericVector detected(filters[0]);
+        Rcpp::NumericVector detected(filters["detected"]);
         size_t nblocks = detected.size();
         auto& df = filt.get_detected();
         df.insert(df.end(), detected.begin(), detected.end());
 
-        Rcpp::List subsets(filters[1]);
+        Rcpp::List subsets(filters["subsets"]);
         if (static_cast<size_t>(subsets.size()) != nsubs) {
             throw std::runtime_error("'filters$subsets' should have the same length as the number of subsets in 'metrics'");
         }
@@ -201,13 +201,13 @@ Rcpp::LogicalVector filter_adt_qc_metrics(Rcpp::List filters, Rcpp::List metrics
     } else {
         scran_qc::AdtQcFilters filt;
 
-        Rcpp::NumericVector detected(filters[0]);
+        Rcpp::NumericVector detected(filters["detected"]);
         if (detected.size() != 1) {
             throw std::runtime_error("'filters$detected' should contain a single threshold");
         }
         filt.get_detected() = detected[0];
 
-        Rcpp::NumericVector subsets(filters[1]);
+        Rcpp::NumericVector subsets(filters["subsets"]);
         if (static_cast<size_t>(subsets.size()) != nsubs) {
             throw std::runtime_error("'filters$subsets' should have the same length as the number of subsets in 'metrics'");
         }
