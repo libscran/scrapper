@@ -11,7 +11,9 @@
     if (is.logical(x)) {
         stopifnot(identical(length(x), n))
     } else if (is.numeric(x)) {
-        stopifnot(min(x) >= 1 && max(x) <= n)
+        if (length(x)) {
+            stopifnot(min(x) >= 1 && max(x) <= n)
+        }
         tmp <- logical(n)
         tmp[x] <- TRUE
         x <- tmp
