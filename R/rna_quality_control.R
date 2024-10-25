@@ -82,6 +82,7 @@ suggestRnaQcThresholds <- function(metrics, block=NULL, num.mads=3) {
     block <- .transformFactor(block)
     thresholds <- suggest_rna_qc_thresholds(metrics, block=block$index, num_mads=num.mads)
 
+    names(thresholds$sum) <- block$names
     names(thresholds$detected) <- block$names
     names(thresholds$subsets) <- names(metrics$subsets)
     for (i in seq_along(metrics$subsets)) {
