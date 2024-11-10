@@ -1,0 +1,15 @@
+bibentry(
+    bibtype = "article",
+    author = c(
+        person(c("Aaron", "Tin", "Long"), "Lun"),
+        person("Jayaram", "Kancherla")
+    ),
+    title="Powering single-cell analyses in the browser with WebAssembly",
+    journal="Journal of Open Source Software",
+    year="2023",
+    volume="8",
+    number="89",
+    pages="5603",
+    doi = "10.21105/joss.05603"
+)
+
