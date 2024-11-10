@@ -17,6 +17,10 @@ aggregate_across_cells <- function(x, combined, nthreads) {
     .Call('_scrapper_aggregate_across_cells', PACKAGE = 'scrapper', x, combined, nthreads)
 }
 
+aggregate_across_genes <- function(x, sets, average, nthreads) {
+    .Call('_scrapper_aggregate_across_genes', PACKAGE = 'scrapper', x, sets, average, nthreads)
+}
+
 build_snn_graph <- function(neighbors, scheme, num_threads, raw) {
     .Call('_scrapper_build_snn_graph', PACKAGE = 'scrapper', neighbors, scheme, num_threads, raw)
 }

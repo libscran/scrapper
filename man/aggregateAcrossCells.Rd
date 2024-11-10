@@ -50,6 +50,9 @@ agg2 <- aggregateAcrossCells(x, list(cluster=clusters, sample=samples))
 str(agg2)
 
 }
+\seealso{
+\code{\link{aggregateAcrossGenes}}, to aggregate expression values across gene sets.
+}
 \author{
 Aaron Lun
 }

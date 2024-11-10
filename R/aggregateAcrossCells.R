@@ -23,6 +23,9 @@
 #' This specifies the combination in \code{combinations} to which each cell was assigned.
 #' }
 #'
+#' @seealso
+#' \code{\link{aggregateAcrossGenes}}, to aggregate expression values across gene sets.
+#'
 #' @author Aaron Lun
 #' @examples
 #' # Mocking a matrix:
