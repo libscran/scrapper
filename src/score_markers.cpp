@@ -21,6 +21,9 @@ Rcpp::List score_markers_summary(
     Rcpp::NumericVector variable_block_weight,
     double threshold,
     int num_threads,
+    bool compute_delta_mean,
+    bool compute_delta_detected,
+    bool compute_cohens_d,
     bool compute_auc)
 {
     auto raw_mat = Rtatami::BoundNumericPointer(x);
@@ -84,9 +87,15 @@ Rcpp::List score_markers_summary(
         }
     };
 
-    initialize(buffers.cohens_d, cohens_min, cohens_mean, cohens_median, cohens_max, cohens_mr);
-    initialize(buffers.delta_mean, dm_min, dm_mean, dm_median, dm_max, dm_mr);
-    initialize(buffers.delta_detected, dd_min, dd_mean, dd_median, dd_max, dd_mr);
+    if (compute_cohens_d) {
+        initialize(buffers.cohens_d, cohens_min, cohens_mean, cohens_median, cohens_max, cohens_mr);
+    }
+    if (compute_delta_mean) {
+        initialize(buffers.delta_mean, dm_min, dm_mean, dm_median, dm_max, dm_mr);
+    }
+    if (compute_delta_detected) {
+        initialize(buffers.delta_detected, dd_min, dd_mean, dd_median, dd_max, dd_mr);
+    }
     if (compute_auc) {
         initialize(buffers.auc, auc_min, auc_mean, auc_median, auc_max, auc_mr);
     }
@@ -143,6 +152,9 @@ Rcpp::List score_markers_pairwise(
     Rcpp::NumericVector variable_block_weight,
     double threshold,
     int num_threads,
+    bool compute_delta_mean,
+    bool compute_delta_detected,
+    bool compute_cohens_d,
     bool compute_auc)
 {
     auto raw_mat = Rtatami::BoundNumericPointer(x);
@@ -173,10 +185,19 @@ Rcpp::List score_markers_pairwise(
     }
 
     Rcpp::Dimension dim(num_groups, num_groups, NR);
-    Rcpp::NumericVector cohen(dim), auc, delta_mean(dim), delta_detected(dim);
-    buffers.cohens_d = cohen.begin();
-    buffers.delta_mean = delta_mean.begin();
-    buffers.delta_detected = delta_detected.begin();
+    Rcpp::NumericVector cohen, auc, delta_mean, delta_detected;
+    if (compute_cohens_d) {
+        cohen = Rcpp::NumericVector(dim);
+        buffers.cohens_d = cohen.begin();
+    }
+    if (compute_delta_mean) {
+        delta_mean = Rcpp::NumericVector(dim);
+        buffers.delta_mean = delta_mean.begin();
+    }
+    if (compute_delta_detected) {
+        delta_detected = Rcpp::NumericVector(dim);
+        buffers.delta_detected = delta_detected.begin();
+    }
     if (compute_auc) {
         auc = Rcpp::NumericVector(dim);
         buffers.auc = auc.begin();

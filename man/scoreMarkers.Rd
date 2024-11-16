@@ -10,6 +10,9 @@ scoreMarkers(
   block = NULL,
   block.weight.policy = c("variable", "equal", "none"),
   variable.block.weight = c(0, 1000),
+  compute.delta.mean = TRUE,
+  compute.delta.detected = TRUE,
+  compute.cohens.d = TRUE,
   compute.auc = TRUE,
   threshold = 0,
   all.pairwise = FALSE,
@@ -32,6 +35,12 @@ Only used if \code{block} is not \code{NULL}.}
 The first and second values are used as the lower and upper bounds, respectively, for the variable weight calculation.
 Only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.}
 
+\item{compute.delta.mean}{Logical scalar indicating whether to compute the delta-means, i.e., the log-fold change when \code{x} contains log-expression values.}
+
+\item{compute.delta.detected}{Logical scalar indicating whether to compute the delta-detected, i.e., differences in the proportion of cells with detected expression.}
+
+\item{compute.cohens.d}{Logical scalar indicating whether to compute Cohen's d.}
+
 \item{compute.auc}{Logical scalar indicating whether to compute the AUC.
 Setting this to \code{FALSE} can improve speed and memory efficiency.}
 
@@ -52,10 +61,13 @@ Each row is a gene and each column is a group.
 \item \code{cohens.d}, a list of data frames where each data frame corresponds to a group.
 Each row of each data frame represents a gene, while each column contains a summary of Cohen's d from pairwise comparisons to all other groups.
 This includes the \code{min}, \code{mean}, \code{median}, \code{max} and \code{min.rank}.
+Omitted if \code{compute.cohens.d=FALSE}.
 \item \code{auc}, a list like \code{cohens.d} but containing the summaries of the AUCs from each pairwise comparison.
 Omitted if \code{compute.auc=FALSE}.
 \item \code{delta.mean}, a list like \code{cohens.d} but containing the summaries of the delta-mean from each pairwise comparison.
+Omitted if \code{compute.delta.mean=FALSE}.
 \item \code{delta.detected}, a list like \code{cohens.d} but containing the summaries of the delta-detected from each pairwise comparison.
+Omitted if \code{compute.delta.detected=FALSE}.
 }
 
 If \code{all.pairwise=TRUE}, a list is returned containing:
@@ -67,10 +79,13 @@ Each row is a gene and each column is a group.
 \item \code{cohens.d}, a 3-dimensional numeric array containing the Cohen's from each pairwise comparison between groups.
 The first dimension represents the first group, the second dimension represents the second group, and the final dimension represents the gene;
 the entry \code{[i, j, k]} represents Cohen's d for \code{i} minus \code{j} of gene \code{k}.
+Omitted if \code{compute.cohens.d=FALSE}.
 \item \code{auc}, an array like \code{cohens.d} but containing the AUCs from each pairwise comparison.
 Omitted if \code{compute.auc=FALSE}.
 \item \code{delta.mean}, an array like \code{cohens.d} but containing the delta-mean from each pairwise comparison.
+Omitted if \code{compute.delta.mean=FALSE}.
 \item \code{delta.detected}, an array like \code{cohens.d} but containing the delta-detected from each pairwise comparison.
+Omitted if \code{compute.delta.detected=FALSE}.
 }
 }
 \description{

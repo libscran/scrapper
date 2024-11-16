@@ -42,9 +42,13 @@ test_that("scoreMarkers works as expected for simple cases", {
 
     # Works without the AUC.
     aout <- scoreMarkers(x, g, compute.auc=FALSE)
-    expect_null(aout$auc)
+    expect_false("auc" %in% names(aout))
     expect_equal(out$mean, aout$mean)
     expect_equal(out$delta.detected, aout$delta.detected)
+
+    # Works without anything.
+    empty <- scoreMarkers(x, g, compute.auc=FALSE, compute.cohens.d=FALSE, compute.delta.detected=FALSE, compute.delta.mean=FALSE)
+    expect_identical(names(empty), c("mean", "detected"))
 })
 
 test_that("scoreMarkers works with blocking", {
@@ -91,9 +95,13 @@ test_that("scoreMarkers works as expected for the full pairwise statistics", {
 
     # Works without AUCs.
     aout <- scoreMarkers(x, g, all.pairwise=TRUE, compute.auc=FALSE)
-    expect_null(aout$auc)
+    expect_false("auc" %in% names(aout))
     expect_equal(full$detected, aout$detected)
     expect_equal(full$cohens.d, aout$cohens.d)
+
+    # Works without anything.
+    empty <- scoreMarkers(x, g, compute.auc=FALSE, compute.cohens.d=FALSE, compute.delta.detected=FALSE, compute.delta.mean=FALSE)
+    expect_identical(names(empty), c("mean", "detected"))
 
     # Works with blocking.
     b <- rep(1:3, length.out=ncol(x))

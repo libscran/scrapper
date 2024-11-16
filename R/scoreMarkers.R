@@ -7,6 +7,9 @@
 #' @param groups A vector specifying the group assignment for each cell in \code{x}.
 #' @param threshold Non-negative numeric scalar specifying the minimum threshold on the differences in means (i.e., the log-fold change, if \code{x} contains log-expression values). 
 #' This is incorporated into the effect sizes for Cohen's d and the AUC.
+#' @param compute.delta.mean Logical scalar indicating whether to compute the delta-means, i.e., the log-fold change when \code{x} contains log-expression values.
+#' @param compute.delta.detected Logical scalar indicating whether to compute the delta-detected, i.e., differences in the proportion of cells with detected expression.
+#' @param compute.cohens.d Logical scalar indicating whether to compute Cohen's d.
 #' @param compute.auc Logical scalar indicating whether to compute the AUC.
 #' Setting this to \code{FALSE} can improve speed and memory efficiency.
 #' @param all.pairwise Logical scalar indicating whether to report the full effects for every pairwise comparison between groups.
@@ -20,10 +23,13 @@
 #' \item \code{cohens.d}, a list of data frames where each data frame corresponds to a group.
 #' Each row of each data frame represents a gene, while each column contains a summary of Cohen's d from pairwise comparisons to all other groups.
 #' This includes the \code{min}, \code{mean}, \code{median}, \code{max} and \code{min.rank}.
+#' Omitted if \code{compute.cohens.d=FALSE}.
 #' \item \code{auc}, a list like \code{cohens.d} but containing the summaries of the AUCs from each pairwise comparison.
 #' Omitted if \code{compute.auc=FALSE}.
 #' \item \code{delta.mean}, a list like \code{cohens.d} but containing the summaries of the delta-mean from each pairwise comparison.
+#' Omitted if \code{compute.delta.mean=FALSE}.
 #' \item \code{delta.detected}, a list like \code{cohens.d} but containing the summaries of the delta-detected from each pairwise comparison.
+#' Omitted if \code{compute.delta.detected=FALSE}.
 #' }
 #'
 #' If \code{all.pairwise=TRUE}, a list is returned containing:
@@ -35,10 +41,13 @@
 #' \item \code{cohens.d}, a 3-dimensional numeric array containing the Cohen's from each pairwise comparison between groups.
 #' The first dimension represents the first group, the second dimension represents the second group, and the final dimension represents the gene;
 #' the entry \code{[i, j, k]} represents Cohen's d for \code{i} minus \code{j} of gene \code{k}.
+#' Omitted if \code{compute.cohens.d=FALSE}.
 #' \item \code{auc}, an array like \code{cohens.d} but containing the AUCs from each pairwise comparison.
 #' Omitted if \code{compute.auc=FALSE}.
 #' \item \code{delta.mean}, an array like \code{cohens.d} but containing the delta-mean from each pairwise comparison.
+#' Omitted if \code{compute.delta.mean=FALSE}.
 #' \item \code{delta.detected}, an array like \code{cohens.d} but containing the delta-detected from each pairwise comparison.
+#' Omitted if \code{compute.delta.detected=FALSE}.
 #' }
 #'
 #' @examples
@@ -68,6 +77,9 @@ scoreMarkers <- function(
     block=NULL, 
     block.weight.policy=c("variable", "equal", "none"),
     variable.block.weight=c(0, 1000),
+    compute.delta.mean=TRUE,
+    compute.delta.detected=TRUE,
+    compute.cohens.d=TRUE,
     compute.auc=TRUE,
     threshold=0, 
     all.pairwise=FALSE, 
@@ -85,42 +97,52 @@ scoreMarkers <- function(
         block_weight_policy=match.arg(block.weight.policy),
         variable_block_weight=variable.block.weight,
         threshold=threshold,
+        compute_cohens_d=compute.cohens.d,
+        compute_delta_mean=compute.delta.mean,
+        compute_delta_detected=compute.delta.detected,
         compute_auc=compute.auc,
         num_threads=num.threads
     )
+
+    keep.effects <- character(0)
+    if (compute.cohens.d) {
+        keep.effects <- c(keep.effects, "cohens.d")
+    }
+    if (compute.auc) {
+        keep.effects <- c(keep.effects, "auc")
+    }
+    if (compute.delta.mean) {
+        keep.effects <- c(keep.effects, "delta.mean")
+    }
+    if (compute.delta.detected) {
+        keep.effects <- c(keep.effects, "delta.detected")
+    }
 
     if (all.pairwise) {
         output <- do.call(score_markers_pairwise, c(list(x), args))
         dimnames(output$mean) <- dimnames(output$detected) <- list(rn, groups$names)
 
-        for (nm in c("cohens.d", "delta.mean", "delta.detected", "auc")) {
+        for (nm in keep.effects) {
             current <- output[[nm]]
-            if (length(current)) {
-                dimnames(current) <- list(groups$names, groups$names, rn)
-                output[[nm]] <- current
-            }
+            dimnames(current) <- list(groups$names, groups$names, rn)
+            output[[nm]] <- current
         }
 
     } else {
         output <- do.call(score_markers_summary, c(list(x), args))
         dimnames(output$mean) <- dimnames(output$detected) <- list(rn, groups$names)
 
-        for (nm in c("cohens.d", "delta.mean", "delta.detected", "auc")) {
+        for (nm in keep.effects) {
             current <- output[[nm]]
-            if (length(current)) {
-                names(current) <- groups$names
-                for (i in seq_along(current)) {
-                    df <- data.frame(current[[i]])
-                    rownames(df) <- rn
-                    current[[i]] <- df
-                }
-                output[[nm]] <- current
+            names(current) <- groups$names
+            for (i in seq_along(current)) {
+                df <- data.frame(current[[i]])
+                rownames(df) <- rn
+                current[[i]] <- df
             }
+            output[[nm]] <- current
         }
     }
 
-    if (!compute.auc) {
-        output <- output[setdiff(names(output), "auc")]
-    }
-    output
+    output[c("mean", "detected", keep.effects)]
 }
