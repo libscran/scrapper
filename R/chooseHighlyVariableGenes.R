@@ -20,6 +20,6 @@
 #' @author Aaron Lun
 #' @export
 chooseHighlyVariableGenes <- function(stats, top=4000, larger=TRUE, keep.ties=TRUE) {
-    out <- choose_highly_variable_genes(stats, top=top, larger=larger, keep_ties=keep.ties)
+    out <- choose_highly_variable_genes(stats, top=min(length(stats), top), larger=larger, keep_ties=keep.ties)
     out + 1L
 }

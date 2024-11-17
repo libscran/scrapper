@@ -8,6 +8,9 @@ test_that("chooseHighlyVariableGenes works", {
     expect_equal(length(out), 2000)
     expect_gt(min(stats[out]), max(stats[-out]))
 
+    out <- chooseHighlyVariableGenes(stats, top=Inf)
+    expect_identical(out, seq_along(stats))
+
     out <- chooseHighlyVariableGenes(stats, larger=FALSE)
     expect_equal(length(out), 4000)
     expect_lt(max(stats[out]), min(stats[-out]))
