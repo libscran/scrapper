@@ -1,11 +1,11 @@
 #' Summarize pairwise effect sizes for each group
 #'
 #' For each group, summarize the effect sizes for all pairwise comparisons to other groups.
-#' This yields a set of summary statistics that can be used to rank marker genes
+#' This yields a set of summary statistics that can be used to rank marker genes for each group.
 #'
 #' @param effects A 3-dimensional numeric containing the effect sizes from each pairwise comparison between groups.
-#' The first dimension represents the first group, the second dimension represents the second group, and the final dimension represents the gene;
-#' the entry \code{[i, j, k]} represents Cohen's d for \code{i} minus \code{j} of gene \code{k}.
+#' The extents of the first two dimensions are equal to the number of groups, while the extent of the final dimension is equal to the number of genes.
+#' The entry \code{[i, j, k]} represents Cohen's d from the comparison of group \code{j} over group \code{i} for gene \code{k}.
 #' See also the output of \code{\link{scoreMarkers}} with \code{all.pairwise=TRUE}.
 #' @param num.threads Integer scalar specifying the number of threads to use.
 #'

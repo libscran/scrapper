@@ -39,8 +39,8 @@
 #' \item \code{detected}, a numeric matrix containing the proportion of detected cells in each group.
 #' Each row is a gene and each column is a group.
 #' \item \code{cohens.d}, a 3-dimensional numeric array containing the Cohen's from each pairwise comparison between groups.
-#' The first dimension represents the first group, the second dimension represents the second group, and the final dimension represents the gene;
-#' the entry \code{[i, j, k]} represents Cohen's d for \code{i} minus \code{j} of gene \code{k}.
+#' The extents of the first two dimensions are equal to the number of groups, while the extent of the final dimension is equal to the number of genes.
+#' The entry \code{[i, j, k]} represents Cohen's d from the comparison of group \code{j} over group \code{i} for gene \code{k}.
 #' Omitted if \code{compute.cohens.d=FALSE}.
 #' \item \code{auc}, an array like \code{cohens.d} but containing the AUCs from each pairwise comparison.
 #' Omitted if \code{compute.auc=FALSE}.
