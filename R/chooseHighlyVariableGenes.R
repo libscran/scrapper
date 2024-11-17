@@ -11,7 +11,7 @@
 #' @return Integer vector containing the indices of genes in \code{stats} that are considered to be highly variable.
 #' 
 #' @examples
-#' resids <- rexp(1000)
+#' resids <- rexp(10000)
 #' str(chooseHighlyVariableGenes(resids))
 #'
 #' @seealso

@@ -23,7 +23,7 @@ Integer vector containing the indices of genes in \code{stats} that are consider
 Choose highly variable genes based on a variance-related statistic.
 }
 \examples{
-resids <- rexp(1000)
+resids <- rexp(10000)
 str(chooseHighlyVariableGenes(resids))
 
 }
