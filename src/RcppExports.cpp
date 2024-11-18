@@ -98,15 +98,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // choose_highly_variable_genes
-Rcpp::IntegerVector choose_highly_variable_genes(Rcpp::NumericVector stats, int top, bool larger, bool keep_ties);
-RcppExport SEXP _scrapper_choose_highly_variable_genes(SEXP statsSEXP, SEXP topSEXP, SEXP largerSEXP, SEXP keep_tiesSEXP) {
+Rcpp::IntegerVector choose_highly_variable_genes(Rcpp::NumericVector stats, int top, bool larger, bool keep_ties, Rcpp::Nullable<Rcpp::NumericVector> bound);
+RcppExport SEXP _scrapper_choose_highly_variable_genes(SEXP statsSEXP, SEXP topSEXP, SEXP largerSEXP, SEXP keep_tiesSEXP, SEXP boundSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type stats(statsSEXP);
     Rcpp::traits::input_parameter< int >::type top(topSEXP);
     Rcpp::traits::input_parameter< bool >::type larger(largerSEXP);
     Rcpp::traits::input_parameter< bool >::type keep_ties(keep_tiesSEXP);
-    rcpp_result_gen = Rcpp::wrap(choose_highly_variable_genes(stats, top, larger, keep_ties));
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericVector> >::type bound(boundSEXP);
+    rcpp_result_gen = Rcpp::wrap(choose_highly_variable_genes(stats, top, larger, keep_ties, bound));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -500,7 +501,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_aggregate_across_genes", (DL_FUNC) &_scrapper_aggregate_across_genes, 4},
     {"_scrapper_build_snn_graph", (DL_FUNC) &_scrapper_build_snn_graph, 4},
     {"_scrapper_center_size_factors", (DL_FUNC) &_scrapper_center_size_factors, 3},
-    {"_scrapper_choose_highly_variable_genes", (DL_FUNC) &_scrapper_choose_highly_variable_genes, 4},
+    {"_scrapper_choose_highly_variable_genes", (DL_FUNC) &_scrapper_choose_highly_variable_genes, 5},
     {"_scrapper_choose_pseudo_count", (DL_FUNC) &_scrapper_choose_pseudo_count, 4},
     {"_scrapper_cluster_kmeans", (DL_FUNC) &_scrapper_cluster_kmeans, 12},
     {"_scrapper_combine_factors", (DL_FUNC) &_scrapper_combine_factors, 3},

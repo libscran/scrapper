@@ -7,5 +7,6 @@
 
 \item Added \code{compute.cohens.d=}, \code{compute.delta.mean=} and \code{compute.delta.detected=} options to \code{scoreMarkers()}.
 
-\item Allow \code{top=Inf} in \code{chooseHighlyVariableGenes()}.
+\item Support \code{top=Inf} in \code{chooseHighlyVariableGenes()}.
+Also added the \code{bound=} argument to set a hard upper/lower bound.
 }}

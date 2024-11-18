@@ -4,23 +4,35 @@
 \alias{chooseHighlyVariableGenes}
 \title{Choose highly variable genes}
 \usage{
-chooseHighlyVariableGenes(stats, top = 4000, larger = TRUE, keep.ties = TRUE)
+chooseHighlyVariableGenes(
+  stats,
+  top = 4000,
+  larger = TRUE,
+  keep.ties = TRUE,
+  bound = NULL
+)
 }
 \arguments{
 \item{stats}{Numeric vector of variances (or a related statistic) across all genes.
 Typically the residuals from \code{\link{modelGeneVariances}} are used here.}
 
-\item{top}{Integer specifying the number of top genes to retain.}
+\item{top}{Integer specifying the number of top genes to retain.
+Note that the actual number of retained genes may not be equal to \code{top}, depending on the other options.}
 
-\item{larger}{Logical scalar indicating whether larger values of \code{stats} correspond to more variable genes.}
+\item{larger}{Logical scalar indicating whether larger values of \code{stats} correspond to more variable genes.
+If \code{TRUE}, HVGs are defined as those with the largest values of \code{stats}.}
 
 \item{keep.ties}{Logical scalar indicating whether to keep tied values of \code{stats}, even if \code{top} may be exceeded.}
+
+\item{bound}{Numeric scalar specifying the lower bound (if \code{larger=TRUE}) or upper bound (otherwise) to be applied to \code{stats}.
+Genes are not considered to be HVGs if they do not pass this bound, even if they are within the \code{top} genes.
+Ignored if \code{NULL}.}
 }
 \value{
 Integer vector containing the indices of genes in \code{stats} that are considered to be highly variable.
 }
 \description{
-Choose highly variable genes based on a variance-related statistic.
+Choose highly variable genes (HVGs) based on a variance-related statistic.
 }
 \examples{
 resids <- rexp(10000)

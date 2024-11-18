@@ -29,8 +29,8 @@ center_size_factors <- function(size_factors, block, lowest) {
     .Call('_scrapper_center_size_factors', PACKAGE = 'scrapper', size_factors, block, lowest)
 }
 
-choose_highly_variable_genes <- function(stats, top, larger, keep_ties) {
-    .Call('_scrapper_choose_highly_variable_genes', PACKAGE = 'scrapper', stats, top, larger, keep_ties)
+choose_highly_variable_genes <- function(stats, top, larger, keep_ties, bound) {
+    .Call('_scrapper_choose_highly_variable_genes', PACKAGE = 'scrapper', stats, top, larger, keep_ties, bound)
 }
 
 choose_pseudo_count <- function(size_factors, quantile, max_bias, min_value) {
