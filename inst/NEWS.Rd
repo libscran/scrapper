@@ -9,4 +9,6 @@
 
 \item Support \code{top=Inf} in \code{chooseHighlyVariableGenes()}.
 Also added the \code{bound=} argument to set a hard upper/lower bound.
+
+\item Bugfix for correct filtering with \code{block=} in the various \code{filter*QcMetrics()} functions when not all blocking levels are present.
 }}

@@ -93,6 +93,6 @@ suggestAdtQcThresholds <- function(metrics, block=NULL, min.detected.drop=0.1, n
 #' @export
 #' @rdname adt_quality_control
 filterAdtQcMetrics <- function(thresholds, metrics, block=NULL) {
-    block <- .transformFactor(block)
-    filter_adt_qc_metrics(thresholds, metrics, block=block$index)
+    block <- .matchBlock(block, names(thresholds$detected))
+    filter_adt_qc_metrics(thresholds, metrics, block=block)
 }

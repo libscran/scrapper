@@ -7,6 +7,19 @@
     }
 }
 
+.matchBlock <- function(block, levels) {
+    if (is.null(block)) {
+        return(NULL)
+    }
+
+    m <- match(block, levels)
+    if (anyNA(m)) {
+        stop("entries of 'block' are not present in 'thresholds'")
+    }
+
+    m - 1L
+}
+
 .toLogical <- function(x, n, names) {
     if (is.logical(x)) {
         stopifnot(identical(length(x), n))

@@ -48,4 +48,13 @@ test_that("suggestAdtQcThresholds works as expected with blocking", {
     expected <- qc$detected >= thresholds$detected[block] & qc$subsets[[1]] <= thresholds$subsets[[1]][block]
     observed <- filterAdtQcMetrics(thresholds, qc, block=block)
     expect_identical(unname(expected), observed)
+
+    # Same filtering with just the last block.
+    last <- block == 3
+    last_observed <- filterAdtQcMetrics(
+        thresholds,
+        list(sum=qc$sum[last], detected=qc$detected[last], subsets=list(qc$subsets[[1]][last])),
+        block=block[last]
+    )
+    expect_identical(observed[last], last_observed)
 })

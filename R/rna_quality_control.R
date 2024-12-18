@@ -95,6 +95,6 @@ suggestRnaQcThresholds <- function(metrics, block=NULL, num.mads=3) {
 #' @export
 #' @rdname rna_quality_control
 filterRnaQcMetrics <- function(thresholds, metrics, block=NULL) {
-    block <- .transformFactor(block)
-    filter_rna_qc_metrics(thresholds, metrics, block=block$index)
+    block <- .matchBlock(block, names(thresholds$sum))
+    filter_rna_qc_metrics(thresholds, metrics, block=block)
 }

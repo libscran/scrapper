@@ -36,4 +36,13 @@ test_that("suggestCrisprQcFilters works as expected with blocking", {
     expected[is.na(expected)] <- TRUE
     observed <- filterCrisprQcMetrics(thresholds, qc, block=block)
     expect_identical(expected, observed)
+
+    # Same filtering with just the last block.
+    last <- block == 3
+    last_observed <- filterCrisprQcMetrics(
+        thresholds,
+        lapply(qc, function(x) x[last]),
+        block=block[last]
+    )
+    expect_identical(observed[last], last_observed)
 })
