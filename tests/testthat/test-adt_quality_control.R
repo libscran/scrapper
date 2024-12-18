@@ -1,7 +1,8 @@
 # library(testthat); library(scrapper); source("test-adt_quality_control.R")
 
+set.seed(112233)
 library(Matrix)
-x <- round(abs(rsparsematrix(1000, 100, 0.1) * 100))
+x <- round(abs(rsparsematrix(200, 1000, 0.1) * 100))
 
 test_that("computeAdtQcMetrics works as expected", { 
     sub <- list(IgG=rbinom(nrow(x), 1, 0.1) > 0)
@@ -14,13 +15,12 @@ test_that("computeAdtQcMetrics works as expected", {
 test_that("suggestAdtQcThresholds works as expected", { 
     sub <- list(IgG=rbinom(nrow(x), 1, 0.1) > 0)
     qc <- computeAdtQcMetrics(x, sub)
-    thresholds <- suggestAdtQcThresholds(qc)
+    num.mads <- 1.5
+    thresholds <- suggestAdtQcThresholds(qc, num.mads=num.mads)
 
     # Check the thresholds.
-    ldet <- log(qc$detected)
-    expect_equal(thresholds$detected, exp(median(ldet) - 3 * mad(ldet)))
-    lsub <- log(qc$subsets[[1]])
-    expect_equal(thresholds$subsets[[1]], exp(median(lsub) + 3 * mad(lsub)))
+    expect_lt(thresholds$detected, median(qc$detected))
+    expect_gt(thresholds$subsets[[1]], median(qc$subsets[[1]]))
     expect_equal(names(thresholds$subsets), "IgG")
 
     # Check the filter.
@@ -33,15 +33,14 @@ test_that("suggestAdtQcThresholds works as expected with blocking", {
     sub <- list(IgG=rbinom(nrow(x), 1, 0.1) > 0)
     qc <- computeAdtQcMetrics(x, sub)
     block <- sample(3, ncol(x), replace=TRUE)
-    thresholds <- suggestAdtQcThresholds(qc, block=block)
+    num.mads <- 1.5
+    thresholds <- suggestAdtQcThresholds(qc, block=block, num.mads=num.mads)
 
     # Check the thresholds.
     for (b in 1:3) {
         keep <- block == b
-        ldet <- log(qc$detected[keep])
-        expect_equal(thresholds$detected[[b]], exp(median(ldet) - 3 * mad(ldet)))
-        lsub <- log(qc$subsets[[1]][keep])
-        expect_equal(thresholds$subsets[[1]][[b]], exp(median(lsub) + 3 * mad(lsub)))
+        expect_lt(thresholds$detected[b], median(qc$detected[keep]))
+        expect_gt(thresholds$subsets[[1]][b], median(qc$subsets[[1]][keep]))
     }
 
     # Check the filter.

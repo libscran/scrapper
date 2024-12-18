@@ -1,7 +1,8 @@
 # library(testthat); library(scrapper); source("test-crispr_quality_control.R")
 
+set.seed(66667777)
 library(Matrix)
-x <- round(abs(rsparsematrix(25, 100, 0.1) * 100))
+x <- round(abs(rsparsematrix(25, 1000, 0.1) * 100))
 z <- as.matrix(x)
 
 test_that("computeCrisprQcMetrics works as expected", { 
@@ -19,7 +20,8 @@ test_that("computeCrisprQcMetrics works as expected", {
 
 test_that("suggestCrisprQcFilters works as expected", { 
     qc <- computeCrisprQcMetrics(x)
-    thresholds <- suggestCrisprQcThresholds(qc)
+    num.mads <- 1.5
+    thresholds <- suggestCrisprQcThresholds(qc, num.mads=num.mads)
 
     expected <- qc$max.value >= thresholds$max.value
     expected[is.na(expected)] <- TRUE
@@ -30,7 +32,8 @@ test_that("suggestCrisprQcFilters works as expected", {
 test_that("suggestCrisprQcFilters works as expected with blocking", { 
     qc <- computeCrisprQcMetrics(x)
     block <- sample(3, ncol(x), replace=TRUE)
-    thresholds <- suggestCrisprQcThresholds(qc, block=block)
+    num.mads <- 1.5
+    thresholds <- suggestCrisprQcThresholds(qc, block=block, num.mads=num.mads)
 
     expected <- qc$max.value >= unname(thresholds$max.value[block])
     expected[is.na(expected)] <- TRUE
