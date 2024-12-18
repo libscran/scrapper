@@ -8,6 +8,7 @@
 #include "Rtatami.h"
 
 #include "utils_block.h"
+#include "utils_qc.h"
 
 // [[Rcpp::export(rng=false)]]
 Rcpp::List compute_crispr_qc_metrics(SEXP x, int num_threads) {
@@ -123,6 +124,7 @@ Rcpp::LogicalVector filter_crispr_qc_metrics(Rcpp::List filters, Rcpp::List metr
     }
 
     Rcpp::LogicalVector keep(ncells);
+    auto kptr = static_cast<int*>(keep.begin());
 
     auto block_info = MaybeBlock(block);
     auto ptr = block_info.get();
@@ -135,21 +137,14 @@ Rcpp::LogicalVector filter_crispr_qc_metrics(Rcpp::List filters, Rcpp::List metr
 
         Rcpp::NumericVector max_value(filters["max.value"]);
         size_t nblocks = max_value.size();
-        auto& mvf = filt.get_max_value();
-        mvf.insert(mvf.end(), max_value.begin(), max_value.end());
+        copy_filters_blocked(nblocks, max_value, filt.get_max_value());
 
-        filt.filter(ncells, mbuffers, ptr, static_cast<int*>(keep.begin()));
+        filt.filter(ncells, mbuffers, ptr, kptr);
 
     } else {
         scran_qc::CrisprQcFilters filt;
-
-        Rcpp::NumericVector max_value(filters["max.value"]);
-        if (max_value.size() != 1) {
-            throw std::runtime_error("'filters$max.value' should contain a single threshold");
-        }
-        filt.get_max_value() = max_value[0];
-
-        filt.filter(ncells, mbuffers, static_cast<int*>(keep.begin()));
+        filt.get_max_value() = parse_filter_unblocked(filters["max.value"], "filters$max.value");
+        filt.filter(ncells, mbuffers, kptr);
     }
 
     return keep;
