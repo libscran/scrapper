@@ -193,9 +193,6 @@ Rcpp::LogicalVector filter_adt_qc_metrics(Rcpp::List filters, Rcpp::List metrics
             ssf.emplace_back(cursub.begin(), cursub.end());
         }
 
-        if (block_info.number() > nblocks) {
-            throw std::runtime_error("'block' contains out-of-range indices");
-        }
         filt.filter(ncells, mbuffers, ptr, static_cast<int*>(keep.begin()));
 
     } else {

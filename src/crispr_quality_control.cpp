@@ -138,9 +138,6 @@ Rcpp::LogicalVector filter_crispr_qc_metrics(Rcpp::List filters, Rcpp::List metr
         auto& mvf = filt.get_max_value();
         mvf.insert(mvf.end(), max_value.begin(), max_value.end());
 
-        if (block_info.number() > nblocks) {
-            throw std::runtime_error("'block' contains out-of-range indices");
-        }
         filt.filter(ncells, mbuffers, ptr, static_cast<int*>(keep.begin()));
 
     } else {

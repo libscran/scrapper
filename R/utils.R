@@ -8,8 +8,12 @@
 }
 
 .matchBlock <- function(block, levels) {
-    if (is.null(block)) {
+    if (is.null(block) && is.null(levels)) {
         return(NULL)
+    } else if (is.null(block)) {
+        stop("expected 'block=' to be supplied for blocked 'thresholds'")
+    } else if (is.null(levels)) {
+        stop("'block=' should be set to NULL for unblocked 'thresholds'")
     }
 
     m <- match(block, levels)

@@ -50,14 +50,6 @@ public:
         return my_block.size();
     }
 
-    size_t number() const {
-        size_t nblocks = 1;
-        if (my_has_block && my_block.size()){
-            nblocks = *std::max_element(my_block.begin(), my_block.end()) + 1;
-        }
-        return nblocks;
-    }
-
 private:
     bool my_has_block;
     // Need to carry along the vector to avoid garbage 

@@ -30,6 +30,8 @@ test_that("suggestRnaQcThresholds works as expected", {
     expected <- qc$sum >= thresholds$sum & qc$detected >= thresholds$detected & qc$subsets[[1]] <= thresholds$subsets[[1]]
     observed <- filterRnaQcMetrics(thresholds, qc)
     expect_identical(expected, observed)
+
+    expect_error(filterRnaQcMetrics(thresholds, qc, block=1:10), "should be set to NULL")
 })
 
 test_that("suggestRnaQcThresholds works as expected with blocking", { 
@@ -60,4 +62,7 @@ test_that("suggestRnaQcThresholds works as expected with blocking", {
         block=block[last]
     )
     expect_identical(observed[last], last_observed)
+
+    expect_error(filterRnaQcMetrics(thresholds, qc), "expected 'block='")
+    expect_error(filterRnaQcMetrics(thresholds, qc, block=1:10), "not present in 'thresholds'")
 })
