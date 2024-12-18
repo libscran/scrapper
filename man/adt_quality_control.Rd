@@ -49,17 +49,19 @@ For \code{computeAdtQcMetrics}, a list is returned containing:
 }
 Each vector is of length equal to the number of cells.
 
-For \code{suggestAdtQcThresholds} with \code{block!=NULL}, a list is returned containing:
+For \code{suggestAdtQcThresholds}, a named list is returned:
+\itemize{
+\item If \code{block=NULL}, the list contains:
+\itemize{
+\item \code{detected}, a numeric scalar containing the lower bound on the number of detected tags. 
+\item \code{subsets}, a numeric vector containing the upper bound on the sum of counts in each control subset. 
+}
+\item Otherwise, if \code{block} is supplied, the list contains:
 \itemize{
 \item \code{detected}, a numeric vector containing the lower bound on the number of detected tags for each blocking level.
 \item \code{subsets}, a list of numeric vectors containing the upper bound on the sum of counts in each control subset for each blocking level.
 }
-Each vector is of length equal to the number of levels in \code{block}.
-
-For \code{suggestAdtQcThresholds} with \code{block=NULL}, a list is returned containing:
-\itemize{
-\item \code{detected}, a numeric scalar containing the lower bound on the number of detected tags. 
-\item \code{subsets}, a numeric vector containing the upper bound on the sum of counts in each control subset. 
+Each vector is of length equal to the number of levels in \code{block} and is named accordingly.
 }
 
 For \code{filterAdtQcMetrics}, a logical vector of length \code{ncol(x)} is returned indicating which cells are of high quality.

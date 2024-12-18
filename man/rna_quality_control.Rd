@@ -42,19 +42,21 @@ For \code{computeRnaQcMetrics}, a list is returned containing:
 }
 Each vector is of length equal to the number of cells.
 
-For \code{suggestRnaQcThresholds} with \code{block!=NULL}, a list is returned containing:
+For \code{suggestRnaQcThresholds}, a named list is returned.
+\itemize{
+\item If \code{block=NULL}, the list contains:
+\itemize{
+\item \code{sum}, a numeric scalar containing the lower bound on the sum.
+\item \code{detected}, a numeric scalar containing the lower bound on the number of detected genes. 
+\item \code{subsets}, a numeric vector containing the upper bound on the sum of counts in each feature subset. 
+}
+\item Otherwise, if \code{block} is supplied, the list contains:
 \itemize{
 \item \code{sum}, a numeric vector containing the lower bound on the sum for each blocking level.
 \item \code{detected}, a numeric vector containing the lower bound on the number of detected genes for each blocking level.
 \item \code{subsets}, a list of numeric vectors containing the upper bound on the sum of counts in each feature subset for each blocking level.
 }
-Each vector is of length equal to the number of levels in \code{block}.
-
-For \code{suggestRnaQcThresholds} with \code{block=NULL}, a list is returned containing:
-\itemize{
-\item \code{sum}, a numeric scalar containing the lower bound on the sum.
-\item \code{detected}, a numeric scalar containing the lower bound on the number of detected genes. 
-\item \code{subsets}, a numeric vector containing the upper bound on the sum of counts in each feature subset. 
+Each vector is of length equal to the number of levels in \code{block} and is named accordingly.
 }
 
 For \code{filterRnaQcMetrics}, a logical vector of length \code{ncol(x)} is returned indicating which cells are of high quality.

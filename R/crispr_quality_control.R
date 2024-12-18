@@ -24,15 +24,17 @@
 #' }
 #' Each vector is of length equal to the number of cells.
 #'
-#' For \code{suggestCrisprQcThresholds} with \code{block!=NULL}, a list is returned containing:
+#' For \code{suggestCrisprQcThresholds}, a named list is returned.
+#' \itemize{
+#' \item If \code{block=NULL}, the list contains:
+#' \itemize{
+#' \item \code{max.value}, a numeric scalar containing the lower bound on the maximum counts for each blocking level.
+#' }
+#' \item Otherwise, if \code{block} is supplied, the list contains:
 #' \itemize{
 #' \item \code{max.value}, a numeric vector containing the lower bound on the maximum counts for each blocking level.
 #' }
-#' Each vector is of length equal to the number of levels in \code{block}.
-#'
-#' For \code{suggestCrisprQcThresholds} with \code{block=NULL}, a list is returned containing:
-#' \itemize{
-#' \item \code{max.value}, a numeric scalar containing the lower bound on the maximum counts for each blocking level.
+#' Each vector is of length equal to the number of levels in \code{block} and is named accordingly.
 #' }
 #'
 #' For \code{filterCrisprQcMetrics}, a logical vector of length \code{ncol(x)} is returned indicating which cells are of high quality. 
