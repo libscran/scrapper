@@ -27,10 +27,13 @@ Rcpp::List cluster_kmeans(
 
     std::unique_ptr<kmeans::Initialize<> > iptr;
     if (init_method == "random") {
-        iptr.reset(new kmeans::InitializeRandom);
+        auto ptr = new kmeans::InitializeRandom;
+        ptr->get_options().seed = seed;
+        iptr.reset(ptr);
     } else if (init_method == "kmeans++") {
         auto ptr = new kmeans::InitializeKmeanspp;
         ptr->get_options().num_threads = nthreads;
+        ptr->get_options().seed = seed;
         iptr.reset(ptr);;
     } else if (init_method == "var-part") {
         auto ptr = new kmeans::InitializeVariancePartition;
