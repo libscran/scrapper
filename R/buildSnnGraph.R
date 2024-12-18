@@ -12,13 +12,13 @@
 #' Each column contains 1-based indices for the nearest neighbors of the corresponding cell, ordered by increasing distance.
 #' The number of neighbors for each cell should be equal to \code{num.neighbors}, otherwise a warning is raised.
 #'
-#' Alternatively, an index constructed by \code{\link{buildIndex}}.
+#' Alternatively, an index constructed by \code{\link[BiocNeighbors]{buildIndex}}.
 #' @param num.neighbors Integer scalar specifying the number of neighbors to use to construct the graph.
 #' @param weight.scheme String specifying the weighting scheme to use for constructing the SNN graph.
 #' This can be \code{"ranked"} (default), \code{"jaccard"} or \code{"number"}.
 #' @param num.threads Integer scalar specifying the number of threads to use.
 #' Only used if \code{x} is not a list of existing nearest-neighbor search results.
-#' @param BNPARAM A \linkS4class{BiocNeighborParam} object specifying the algorithm to use.
+#' @param BNPARAM A \link[BiocNeighbors]{BiocNeighborParam} object specifying the algorithm to use.
 #' Only used if \code{x} is not a list of existing nearest-neighbor search results.
 #'
 #' @return If \code{as.pointer=FALSE}, a list is returned containing:

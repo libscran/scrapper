@@ -4,7 +4,7 @@
 #'
 #' @param x A matrix-like object where rows correspond to genes or genomic features and columns correspond to cells.
 #' Values are typically expected to be counts.
-#' Alternatively, an external pointer created by \code{\link{initializeCpp}}.
+#' Alternatively, an external pointer created by \code{\link[beachmat]{initializeCpp}}.
 #' @param size.factors A numeric vector of length equal to the number of cells in \code{x},
 #' containing positive size factors for all cells.
 #' @param log Logical scalar indicating whether log-transformation should be performed.
@@ -15,9 +15,9 @@
 #' @param preserve.sparsity Logical scalar indicating whether to preserve sparsity for \code{pseudo.count != 1}.
 #' If \code{TRUE}, users should manually add \code{log(pseudo.count, log.base)} to the returned matrix to obtain the desired log-transformed expression values.
 #'
-#' @return If \code{x} is a matrix-like object, a \linkS4class{DelayedArray} is returned containing the (log-transformed) normalized expression matrix.
+#' @return If \code{x} is a matrix-like object, a \link[DelayedArray]{DelayedArray} is returned containing the (log-transformed) normalized expression matrix.
 #'
-#' If \code{x} is an external pointer produced by \code{\link{initializeCpp}}, a new external pointer is returned containing the normalized expression matrix.
+#' If \code{x} is an external pointer produced by \code{\link[beachmat]{initializeCpp}}, a new external pointer is returned containing the normalized expression matrix.
 #'
 #' @seealso
 #' \url{https://libscran.github.io/scran_norm/}, for the rationale behind normalization.

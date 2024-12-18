@@ -10,7 +10,7 @@
 #' Each column contains 1-based indices for the nearest neighbors of the corresponding cell, ordered by increasing distance.
 #' The number of neighbors should be the same as \code{num.neighbors}, otherwise a warning is raised.
 #'
-#' Alternatively, an index constructed by \code{\link{buildIndex}}.
+#' Alternatively, an index constructed by \code{\link[BiocNeighbors]{buildIndex}}.
 #' @param perplexity Numeric scalar specifying the perplexity to use in the t-SNE algorithm.
 #' @param num.neighbors Integer scalar specifying the number of neighbors, typically derived from \code{perplexity}.
 #' @param max.depth Integer scalar specifying the maximum depth of the Barnes-Hut quadtree.
@@ -21,7 +21,7 @@
 #' @param seed Integer scalar specifying the seed to use for generating the initial coordinates.
 #' @param num.threads Integer scalar specifying the number of threads to use.
 #' @param max.iterations Integer scalar specifying the maximum number of iterations to perform.
-#' @param BNPARAM A \linkS4class{BiocNeighborParam} object specifying the algorithm to use.
+#' @param BNPARAM A \link[BiocNeighbors]{BiocNeighborParam} object specifying the algorithm to use.
 #' Only used if \code{x} is not a list of existing nearest-neighbor search results.
 #' 
 #' @return 

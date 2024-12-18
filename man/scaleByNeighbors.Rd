@@ -25,7 +25,7 @@ All entries should have the same number of columns but may have different number
 Each value represents a multiplier of the within-population variance of its modality, i.e., larger values increase the contribution of that modality in the combined output matrix.
 \code{NULL} is equivalent to an all-1 vector, i.e., all modalities are scaled to have the same within-population variance.}
 
-\item{BNPARAM}{A \linkS4class{BiocNeighborParam} object specifying how to perform the neighbor search.}
+\item{BNPARAM}{A \link[BiocNeighbors]{BiocNeighborParam} object specifying how to perform the neighbor search.}
 }
 \value{
 List containing \code{scaling}, a vector of scaling factors to be aplied to each embedding;

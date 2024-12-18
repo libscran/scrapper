@@ -19,7 +19,7 @@ runAllNeighborSteps(
 \item{x}{Numeric matrix where rows are dimensions and columns are cells,
 typically containing a low-dimensional representation from, e.g., \code{\link{runPca}}.
 
-Alternatively, an index constructed by \code{\link{buildIndex}}.}
+Alternatively, an index constructed by \code{\link[BiocNeighbors]{buildIndex}}.}
 
 \item{runUmap.args}{Named list of further arguments to pass to \code{\link{runUmap}}.
 This can be set to \code{NULL} to omit the UMAP.}
@@ -32,7 +32,7 @@ This can be set to \code{NULL} to omit the t-SNE.}
 \item{clusterGraph.args}{Named list of further arguments to pass to \code{\link{clusterGraph}}.
 This can be set to \code{NULL} to omit the clustering.}
 
-\item{BNPARAM}{A \linkS4class{BiocNeighborParam} instance specifying the nearest-neighbor search algorithm to use.}
+\item{BNPARAM}{A \link[BiocNeighbors]{BiocNeighborParam} instance specifying the nearest-neighbor search algorithm to use.}
 
 \item{collapse.search}{Logical scalar indicating whether to collapse the nearest-neighbor search for each step into a single search.
 Steps that need fewer neighbors will take a subset of the neighbors from the collapsed search.

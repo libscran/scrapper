@@ -25,7 +25,7 @@ This should contain \code{index}, an integer matrix where rows are neighbors and
 Each column contains 1-based indices for the nearest neighbors of the corresponding cell, ordered by increasing distance.
 The number of neighbors should be the same as \code{num.neighbors}, otherwise a warning is raised.
 
-Alternatively, an index constructed by \code{\link{buildIndex}}.}
+Alternatively, an index constructed by \code{\link[BiocNeighbors]{buildIndex}}.}
 
 \item{num.dim}{Integer scalar specifying the number of dimensions of the output embedding.}
 
@@ -42,7 +42,7 @@ If set to -1, an appropriate number of epochs is chosen based on \code{ncol(x)}.
 
 \item{parallel.optimization}{Logical scalar specifying whether to parallelize the optimization step.}
 
-\item{BNPARAM}{A \linkS4class{BiocNeighborParam} object specifying the algorithm to use.
+\item{BNPARAM}{A \link[BiocNeighbors]{BiocNeighborParam} object specifying the algorithm to use.
 Only used if \code{x} is not a list of existing nearest-neighbor search results.}
 }
 \value{

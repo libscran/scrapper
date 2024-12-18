@@ -7,7 +7,7 @@
 #' @param x Numeric matrix where rows are dimensions and columns are cells,
 #' typically containing a low-dimensional representation from, e.g., \code{\link{runPca}}.
 #'
-#' Alternatively, an index constructed by \code{\link{buildIndex}}.
+#' Alternatively, an index constructed by \code{\link[BiocNeighbors]{buildIndex}}.
 #' @param runUmap.args Named list of further arguments to pass to \code{\link{runUmap}}.
 #' This can be set to \code{NULL} to omit the UMAP.
 #' @param runTsne.args Named list of further arguments to pass to \code{\link{runTsne}}.
@@ -15,7 +15,7 @@
 #' @param buildSnnGraph.args Named list of further arguments to pass to \code{\link{buildSnnGraph}}.
 #' @param clusterGraph.args Named list of further arguments to pass to \code{\link{clusterGraph}}.
 #' This can be set to \code{NULL} to omit the clustering.
-#' @param BNPARAM A \linkS4class{BiocNeighborParam} instance specifying the nearest-neighbor search algorithm to use.
+#' @param BNPARAM A \link[BiocNeighbors]{BiocNeighborParam} instance specifying the nearest-neighbor search algorithm to use.
 #' @param collapse.search Logical scalar indicating whether to collapse the nearest-neighbor search for each step into a single search.
 #' Steps that need fewer neighbors will take a subset of the neighbors from the collapsed search.
 #' This is faster but may not give the same results as separate searches for some algorithms (e.g., approximate searches).

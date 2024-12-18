@@ -7,7 +7,7 @@
 #' For each entry, rows are dimensions and columns are cells.
 #' All entries should have the same number of columns but may have different numbers of rows.
 #' @param num.neighbors Integer scalar specifying the number of neighbors to use to define the scaling factor.
-#' @param BNPARAM A \linkS4class{BiocNeighborParam} object specifying how to perform the neighbor search.
+#' @param BNPARAM A \link[BiocNeighbors]{BiocNeighborParam} object specifying how to perform the neighbor search.
 #' @param num.threads Integer scalar specifying the number of threads to use.
 #' @param weights Numeric vector of length equal to that of \code{x}, specifying the weights to apply to each modality.
 #' Each value represents a multiplier of the within-population variance of its modality, i.e., larger values increase the contribution of that modality in the combined output matrix.

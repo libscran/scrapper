@@ -16,7 +16,7 @@ normalizeCounts(
 \arguments{
 \item{x}{A matrix-like object where rows correspond to genes or genomic features and columns correspond to cells.
 Values are typically expected to be counts.
-Alternatively, an external pointer created by \code{\link{initializeCpp}}.}
+Alternatively, an external pointer created by \code{\link[beachmat]{initializeCpp}}.}
 
 \item{size.factors}{A numeric vector of length equal to the number of cells in \code{x},
 containing positive size factors for all cells.}
@@ -33,9 +33,9 @@ Ignored if \code{log=FALSE}.}
 If \code{TRUE}, users should manually add \code{log(pseudo.count, log.base)} to the returned matrix to obtain the desired log-transformed expression values.}
 }
 \value{
-If \code{x} is a matrix-like object, a \linkS4class{DelayedArray} is returned containing the (log-transformed) normalized expression matrix.
+If \code{x} is a matrix-like object, a \link[DelayedArray]{DelayedArray} is returned containing the (log-transformed) normalized expression matrix.
 
-If \code{x} is an external pointer produced by \code{\link{initializeCpp}}, a new external pointer is returned containing the normalized expression matrix.
+If \code{x} is an external pointer produced by \code{\link[beachmat]{initializeCpp}}, a new external pointer is returned containing the normalized expression matrix.
 }
 \description{
 Apply scaling normalization to a count matrix to obtain log-transformed normalized expression values.

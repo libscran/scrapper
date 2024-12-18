@@ -16,7 +16,7 @@ subsampleByNeighbors(
 \item{x}{A numeric matrix where rows are dimensions and columns are cells,
 typically containing a low-dimensional representation from, e.g., \code{\link{runPca}}.
 
-Alternatively, an index constructed by \code{\link{buildIndex}}.
+Alternatively, an index constructed by \code{\link[BiocNeighbors]{buildIndex}}.
 
 Alternatively, a list containing existing nearest-neighbor search results.
 This should contain:
@@ -38,7 +38,7 @@ This should be less than or equal to \code{num.neighbors}.}
 \item{num.threads}{Integer scalar specifying the number of threads to use for the nearest-neighbor search.
 Only used if \code{x} does not contain existing nearest-neighbor results.}
 
-\item{BNPARAM}{A \linkS4class{BiocNeighborParam} object specifying the algorithm to use.
+\item{BNPARAM}{A \link[BiocNeighbors]{BiocNeighborParam} object specifying the algorithm to use.
 Only used if \code{x} does not contain existing nearest-neighbor results.}
 }
 \value{

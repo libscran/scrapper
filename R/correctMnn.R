@@ -21,7 +21,7 @@
 #' the batch with the largest residual sum of squares (\code{"max-rss"}),
 #' or the first specified input (\code{"input"}).
 #' Only used for automatic merges, i.e., when \code{order=NULL}. 
-#' @param BNPARAM A \linkS4class{BiocNeighborParam} object specifying the nearest-neighbor algorithm to use.
+#' @param BNPARAM A \link[BiocNeighbors]{BiocNeighborParam} object specifying the nearest-neighbor algorithm to use.
 #'
 #' @return List containing:
 #' \itemize{

@@ -5,7 +5,7 @@
 #' @param x A numeric matrix where rows are dimensions and columns are cells,
 #' typically containing a low-dimensional representation from, e.g., \code{\link{runPca}}.
 #'
-#' Alternatively, an index constructed by \code{\link{buildIndex}}.
+#' Alternatively, an index constructed by \code{\link[BiocNeighbors]{buildIndex}}.
 #'
 #' Alternatively, a list containing existing nearest-neighbor search results.
 #' This should contain:
@@ -19,7 +19,7 @@
 #' @param num.neighbors Integer scalar specifying the number of neighbors to use.
 #' Larger values result in greater downsampling. 
 #' Only used if \code{x} does not contain existing nearest-neighbor results.
-#' @param BNPARAM A \linkS4class{BiocNeighborParam} object specifying the algorithm to use.
+#' @param BNPARAM A \link[BiocNeighbors]{BiocNeighborParam} object specifying the algorithm to use.
 #' Only used if \code{x} does not contain existing nearest-neighbor results.
 #' @param min.remaining Integer scalar specifying the minimum number of remaining (i.e., unselected) neighbors that a cell must have in order to be considered for selection.
 #' This should be less than or equal to \code{num.neighbors}.
