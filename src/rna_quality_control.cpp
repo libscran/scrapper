@@ -93,7 +93,6 @@ Rcpp::List suggest_rna_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::In
     ConvertedRnaQcMetrics all_metrics(metrics);
     auto buffers = all_metrics.to_buffer();
     size_t ncells = all_metrics.size();
-    size_t nsubs = all_metrics.num_subsets();
 
     scran_qc::ComputeRnaQcFiltersOptions opt;
     opt.sum_num_mads = num_mads;
