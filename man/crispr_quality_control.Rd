@@ -9,12 +9,7 @@
 \usage{
 computeCrisprQcMetrics(x, num.threads = 1)
 
-suggestCrisprQcThresholds(
-  metrics,
-  block = NULL,
-  min.detected.drop = 0.1,
-  num.mads = 3
-)
+suggestCrisprQcThresholds(metrics, block = NULL, num.mads = 3)
 
 filterCrisprQcMetrics(thresholds, metrics, block = NULL)
 }
@@ -30,8 +25,6 @@ Values are expected to be counts.}
 Alternatively \code{NULL} if all cells are from the same block.
 
 For \code{filterCrisprQcMetrics}, a blocking factor should be provided if \code{block} was used to construct \code{thresholds}.}
-
-\item{min.detected.drop}{Minimum drop in the number of detected features from the median, in order to consider a cell to be of low quality.}
 
 \item{num.mads}{Number of median from the median, to define the threshold for outliers in each metric.}
 

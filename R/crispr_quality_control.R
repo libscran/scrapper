@@ -11,7 +11,6 @@
 #' Alternatively \code{NULL} if all cells are from the same block.
 #'
 #' For \code{filterCrisprQcMetrics}, a blocking factor should be provided if \code{block} was used to construct \code{thresholds}. 
-#' @param min.detected.drop Minimum drop in the number of detected features from the median, in order to consider a cell to be of low quality.
 #' @param num.mads Number of median from the median, to define the threshold for outliers in each metric.
 #' @param thresholds List with the same structure as produced by \code{suggestCrisprQcThresholds}.
 #'
@@ -68,10 +67,10 @@ computeCrisprQcMetrics <- function(x, num.threads = 1) {
 
 #' @export
 #' @rdname crispr_quality_control
-suggestCrisprQcThresholds <- function(metrics, block=NULL, min.detected.drop=0.1, num.mads=3) {
+suggestCrisprQcThresholds <- function(metrics, block=NULL, num.mads=3) {
     block <- .transformFactor(block)
     metrics$max.index <- metrics$max.index - 1L # restore 0-based indexing.
-    thresholds <- suggest_crispr_qc_thresholds(metrics, block=block$index, min_detected_drop=min.detected.drop, num_mads=num.mads)
+    thresholds <- suggest_crispr_qc_thresholds(metrics, block=block$index, num_mads=num.mads)
     names(thresholds$max.value) <- block$names
     thresholds
 }

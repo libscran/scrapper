@@ -57,8 +57,8 @@ compute_crispr_qc_metrics <- function(x, num_threads) {
     .Call('_scrapper_compute_crispr_qc_metrics', PACKAGE = 'scrapper', x, num_threads)
 }
 
-suggest_crispr_qc_thresholds <- function(metrics, block, min_detected_drop, num_mads) {
-    .Call('_scrapper_suggest_crispr_qc_thresholds', PACKAGE = 'scrapper', metrics, block, min_detected_drop, num_mads)
+suggest_crispr_qc_thresholds <- function(metrics, block, num_mads) {
+    .Call('_scrapper_suggest_crispr_qc_thresholds', PACKAGE = 'scrapper', metrics, block, num_mads)
 }
 
 filter_crispr_qc_metrics <- function(filters, metrics, block) {
