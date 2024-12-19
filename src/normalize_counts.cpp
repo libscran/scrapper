@@ -17,6 +17,7 @@ SEXP normalize_counts(SEXP x, Rcpp::NumericVector size_factors, bool log, double
     Rtatami::BoundNumericPointer mat(x);
     auto output = Rtatami::new_BoundNumericMatrix();
     output->ptr = scran_norm::normalize_counts(mat->ptr, std::vector<double>(size_factors.begin(), size_factors.end()), opt);
+    output->original = mat->original;
     return output;
 }
 

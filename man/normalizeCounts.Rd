@@ -30,7 +30,8 @@ Ignored if \code{log=FALSE}.}
 Ignored if \code{log=FALSE}.}
 
 \item{preserve.sparsity}{Logical scalar indicating whether to preserve sparsity for \code{pseudo.count != 1}.
-If \code{TRUE}, users should manually add \code{log(pseudo.count, log.base)} to the returned matrix to obtain the desired log-transformed expression values.}
+If \code{TRUE}, users should manually add \code{log(pseudo.count, log.base)} to the returned matrix to obtain the desired log-transformed expression values.
+Ignored if \code{log = FALSE} or \code{pseudo.count = 1}.}
 }
 \value{
 If \code{x} is a matrix-like object, a \link[DelayedArray]{DelayedArray} is returned containing the (log-transformed) normalized expression matrix.
