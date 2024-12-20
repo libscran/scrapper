@@ -13,15 +13,16 @@ centerSizeFactors(size.factors, block = NULL, mode = c("lowest", "per-block"))
 Alternatively \code{NULL}, in which case all cells are assumed to be in the same block.}
 
 \item{mode}{String specifying how to scale size factors across blocks.
-\code{"lowest"} will scale all size factors by the the lowest per-block average. 
-\code{"per-block"} will center the size factors in each block separately.}
+\code{"lowest"} will compute the average size factor in each block, identify the lowest average across all blocks, and then scale all size factors by that value.
+\code{"per-block"} will compute the average size factor in each block, and then scale each size factor by the average of block to which it belongs.
+Only used if \code{block} is provided.}
 }
 \value{
 Numeric vector of length equal to \code{size.factors}, containing the centered size factors.
 }
 \description{
 Scale the size factors so they are centered at unity,
-which ensures that the scale of the counts are preserved (on average) after normalization.
+which ensures that the scale of the counts is preserved (on average) after normalization.
 }
 \examples{
 centerSizeFactors(runif(100))

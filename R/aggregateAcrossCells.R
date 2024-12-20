@@ -47,7 +47,7 @@
 aggregateAcrossCells <- function(x, factors, num.threads = 1) {
     combined <- combineFactors(factors)
 
-    ptr <- initializeCpp(x)
+    ptr <- initializeCpp(x, .check.na=FALSE)
     output <- aggregate_across_cells(ptr, combined$index - 1L, num.threads)
     rownames(output$sums) <- rownames(output$detected) <- rownames(x)
 

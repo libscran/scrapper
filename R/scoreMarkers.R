@@ -86,7 +86,7 @@ scoreMarkers <- function(
     num.threads=1)
 {
     rn <- rownames(x)
-    x <- initializeCpp(x)
+    x <- initializeCpp(x, .check.na=FALSE)
     groups <- .transformFactor(groups)
     block <- .transformFactor(block)
 

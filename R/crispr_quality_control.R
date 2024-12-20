@@ -59,7 +59,7 @@
 #' @export
 #' @name crispr_quality_control
 computeCrisprQcMetrics <- function(x, num.threads = 1) {
-    y <- initializeCpp(x)
+    y <- initializeCpp(x, .check.na=FALSE)
     output <- compute_crispr_qc_metrics(y, num_threads=num.threads)
     output$max.index <- output$max.index + 1L
     output

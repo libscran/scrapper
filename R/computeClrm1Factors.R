@@ -21,6 +21,6 @@
 #' @export
 #' @importFrom beachmat initializeCpp
 computeClrm1Factors <- function(x, num.threads=1) {
-    ptr <- initializeCpp(x)
+    ptr <- initializeCpp(x, .check.na=FALSE)
     compute_clrm1_factors(ptr, num_threads=num.threads)
 }

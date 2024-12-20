@@ -75,7 +75,7 @@ runPca <- function(x,
 {
     block <- .transformFactor(block)
 
-    x <- initializeCpp(x)
+    x <- initializeCpp(x, .check.na=FALSE)
     out <- run_pca(x, 
         number=number,
         scale=scale,

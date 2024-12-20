@@ -41,7 +41,7 @@ scoreGeneSet <- function(
     num.threads=1) 
 {
     block <- .transformFactor(block)
-    ptr <- initializeCpp(x)
+    ptr <- initializeCpp(x, .check.na=FALSE)
 
     nr <- tatami.dim(ptr)[1]
     chosen <- which(.toLogical(set, n=nr, names=rownames(x)))

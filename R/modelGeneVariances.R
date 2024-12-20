@@ -61,7 +61,7 @@ modelGeneVariances <- function(
     block <- .transformFactor(block)
 
     stats <- model_gene_variances(
-        initializeCpp(x),
+        initializeCpp(x, .check.na=FALSE),
         block=block$index,
         nblocks=length(block$names),
         block_weight_policy=match.arg(block.weight.policy),

@@ -42,7 +42,7 @@
 #' @export
 #' @importFrom beachmat initializeCpp
 aggregateAcrossGenes <- function(x, sets, average = FALSE, num.threads = 1) {
-    ptr <- initializeCpp(x)
+    ptr <- initializeCpp(x, .check.na=FALSE)
     output <- aggregate_across_genes(ptr, sets, average, num.threads)
     names(output) <- names(sets)
     output
