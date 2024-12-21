@@ -32,7 +32,7 @@ Typically, the matrix is expected to contain log-expression values, and the rows
 \item{block}{Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{x}.
 Alternatively \code{NULL} if all cells are from the same block.}
 
-\item{block.weight.policy}{String specifying the policy to use for weighting different blocks when computing the average for each statistic
+\item{block.weight.policy}{String specifying the policy to use for weighting different blocks when computing the average for each statistic.
 Only used if \code{block} is not \code{NULL}.}
 
 \item{variable.block.weight}{Numeric vector of length 2, specifying the parameters for variable block weighting.
@@ -41,12 +41,12 @@ Only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "va
 
 \item{extra.work}{Integer scalar specifying the extra dimensions for the IRLBA workspace.}
 
-\item{iterations}{Integer scalar specifying the maximum nunber of restart iterations for IRLBA.}
+\item{iterations}{Integer scalar specifying the maximum number of restart iterations for IRLBA.}
 
 \item{seed}{Integer scalar specifying the seed for the initial random vector in IRLBA.}
 
 \item{realized}{Logical scalar indicating whether to realize \code{x} into an optimal memory layout for IRLBA.
-This improves computation time at the cost of increased memory usage.}
+This speeds up computation at the cost of increased memory usage.}
 
 \item{num.threads}{Number of threads to use.}
 }

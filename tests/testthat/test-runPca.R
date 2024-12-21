@@ -12,6 +12,7 @@ test_that("runPCA works more or less as expected", {
     expect_identical(length(rm), 25L)
 
     expect_equal(pcs$center, Matrix::rowMeans(normed))
+    expect_null(pcs$scale)
 
     expect_false(is.unsorted(-pcs$variance.explained))
     rv <- apply(pcs$components, 1, var)
@@ -22,6 +23,7 @@ test_that("runPCA works more or less as expected", {
 
     # Works with scaling.
     spcs <- runPca(normed, scale=TRUE)
+    expect_identical(length(spcs$scale), 1000L)
 })
 
 test_that("runPCA works with blocking", {
@@ -39,12 +41,12 @@ test_that("runPCA works with blocking", {
     # Variance isn't so easily computed this time, so we just check it's sorted.
     expect_false(is.unsorted(-pcs$variance.explained))
 
-    # This time the PCs are different.
-    ref <- runPca(normed)
-    expect_false(isTRUE(all.equal(ref$components, pcs$components)))
-
     expect_identical(nrow(pcs$rotation), 1000L)
     expect_identical(ncol(pcs$rotation), 25L)
+
+    # Check that the PCs are different from the unblocked case.
+    ref <- runPca(normed)
+    expect_false(isTRUE(all.equal(ref$components, pcs$components)))
 })
 
 test_that("runPCA works with residual components", {
@@ -60,12 +62,12 @@ test_that("runPCA works with residual components", {
     ratio <- rv / pcs$variance.explained
     expect_true(diff(range(ratio)) < 1e-8)
 
+    expect_identical(nrow(pcs$rotation), 1000L)
+    expect_identical(ncol(pcs$rotation), 25L)
+
     # Make sure it's different from the other options.
     ref1 <- runPca(normed)
     expect_false(isTRUE(all.equal(ref1$components, pcs$components)))
     ref2 <- runPca(normed, block=block)
     expect_false(isTRUE(all.equal(ref2$components, pcs$components)))
-
-    expect_identical(nrow(pcs$rotation), 1000L)
-    expect_identical(ncol(pcs$rotation), 25L)
 })
