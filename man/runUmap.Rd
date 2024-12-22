@@ -8,7 +8,7 @@ runUmap(
   x,
   num.dim = 2,
   num.neighbors = 15,
-  num.epochs = -1,
+  num.epochs = NULL,
   min.dist = 0.1,
   seed = 1234567890,
   num.threads = 1,
@@ -20,8 +20,9 @@ runUmap(
 \item{x}{Numeric matrix where rows are dimensions and columns are cells,
 typically containing a low-dimensional representation from, e.g., \code{\link{runPca}}.
 
-Alternatively, a named list of nearest-neighbor search results.
-This should contain \code{index}, an integer matrix where rows are neighbors and columns are cells.
+Alternatively, a named list of nearest-neighbor search results like that returned by \code{\link[BiocNeighbors]{findKNN}}.
+This should contain \code{index}, an integer matrix where rows are neighbors and columns are cells;
+and \code{distance}, a numeric matrix of the same dimensions containing the distances to each neighbor.
 Each column contains 1-based indices for the nearest neighbors of the corresponding cell, ordered by increasing distance.
 The number of neighbors should be the same as \code{num.neighbors}, otherwise a warning is raised.
 
@@ -32,7 +33,7 @@ Alternatively, an index constructed by \code{\link[BiocNeighbors]{buildIndex}}.}
 \item{num.neighbors}{Integer scalar specifying the number of neighbors to use in the UMAP algorithm.}
 
 \item{num.epochs}{Integer scalar specifying the number of epochs to perform.
-If set to -1, an appropriate number of epochs is chosen based on \code{ncol(x)}.}
+If set to \code{NULL}, an appropriate number of epochs is chosen based on \code{ncol(x)}.}
 
 \item{min.dist}{Numeric scalar specifying the minimum distance between points.}
 
@@ -43,7 +44,7 @@ If set to -1, an appropriate number of epochs is chosen based on \code{ncol(x)}.
 \item{parallel.optimization}{Logical scalar specifying whether to parallelize the optimization step.}
 
 \item{BNPARAM}{A \link[BiocNeighbors]{BiocNeighborParam} object specifying the algorithm to use.
-Only used if \code{x} is not a list of existing nearest-neighbor search results.}
+Only used if \code{x} is not a prebuilt index or a list of existing nearest-neighbor search results.}
 }
 \value{
 A numeric matrix where rows are cells and columns are the two dimensions of the embedding.

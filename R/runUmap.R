@@ -8,7 +8,7 @@
 #' @param min.dist Numeric scalar specifying the minimum distance between points.
 #' @param seed Integer scalar specifying the seed to use. 
 #' @param num.epochs Integer scalar specifying the number of epochs to perform.
-#' If set to -1, an appropriate number of epochs is chosen based on \code{ncol(x)}.
+#' If set to \code{NULL}, an appropriate number of epochs is chosen based on \code{ncol(x)}.
 #' @param parallel.optimization Logical scalar specifying whether to parallelize the optimization step.
 #' 
 #' @return 
@@ -29,7 +29,7 @@
 runUmap <- function(x, 
     num.dim=2,
     num.neighbors=15, 
-    num.epochs=-1, 
+    num.epochs=NULL, 
     min.dist=0.1, 
     seed=1234567890, 
     num.threads=1,
@@ -40,6 +40,10 @@ runUmap <- function(x,
         x <- findKNN(x, k=num.neighbors, transposed=TRUE, get.index="transposed", get.distance="transposed", num.threads=num.threads, BNPARAM=BNPARAM)
     } else {
         .checkIndices(x$index, num.neighbors)
+    }
+
+    if (is.null(num.epochs)) {
+        num.epochs <- -1L
     }
 
     output <- run_umap(
