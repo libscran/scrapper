@@ -62,6 +62,11 @@ Rcpp::List model_gene_variances(
         bbuffers.per_block.resize(nblocks);
 
         std::vector<Rcpp::NumericVector> block_mean, block_var, block_fit, block_res;
+        block_mean.reserve(nblocks);
+        block_var.reserve(nblocks);
+        block_fit.reserve(nblocks);
+        block_res.reserve(nblocks);
+
         for (size_t b = 0; b < nblocks; ++b) {
             block_mean.emplace_back(nr);
             bbuffers.per_block[b].means = block_mean.back().begin();
