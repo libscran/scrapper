@@ -30,10 +30,12 @@ variance partitioning (\code{"var-part"}), kmeans++ (\code{"kmeans++"}) or rando
 \item{refine.method}{String specifying the refinement method:
 Lloyd's algorithm (\code{"lloyd"}) or the Hartigan-Wong algorithm (\code{"hartigan-wong"}).}
 
-\item{var.part.optimize.partition}{Logical scalar indicating whether each partition boundary should be optimized to reduce the sum of squares in the child partitions.}
+\item{var.part.optimize.partition}{Logical scalar indicating whether each partition boundary should be optimized to reduce the sum of squares in the child partitions.
+Only used if \code{init.method = "var.part"}.}
 
 \item{var.part.size.adjustment}{Numeric scalar between 0 and 1, specifying the adjustment to the cluster size when prioritizing the next cluster to partition.
-Setting this to 0 will ignore the cluster size while setting this to 1 will generally favor larger clusters.}
+Setting this to 0 will ignore the cluster size while setting this to 1 will generally favor larger clusters.
+Only used if \code{init.method = "var.part"}.}
 
 \item{lloyd.iterations}{Integer scalar specifying the maximmum number of iterations for the Lloyd algorithm.}
 
@@ -52,13 +54,13 @@ By default, a list is returned containing:
 \itemize{
 \item \code{clusters}, a factor containing the cluster assignments for each cell.
 \item \code{centers}, a numeric matrix with the coordinates of the cluster centroids (dimensions in rows, centers in columns).
-\item \code{iterations}, an integer scalar specifying the number of refinement iterations that were performed 
+\item \code{iterations}, an integer scalar specifying the number of refinement iterations that were performed.
 \item \code{status}, an integer scalar specifying the convergence status.
 Any non-zero value indicates a convergence failure though the exact meaning depends on the choice of \code{refine.method}.
 }
 }
 \description{
-Perform k-means clustering using kmeans++ initialization with the Hartigan-Wong algorithm.
+Perform k-means clustering with a variety of different initialization and refinement algorithms.
 }
 \examples{
 x <- t(as.matrix(iris[,1:4]))
