@@ -18,6 +18,7 @@ test_that("runAllNeighborSteps gives the same results as the reference", {
     graph <- buildSnnGraph(x)
     clustering <- clusterGraph(graph)
     expect_identical(res$clusterGraph, clustering)
+    expect_null(res$buildSnnGraph)
     cluster.single <- runAllNeighborSteps(x, runUmap.args=NULL, runTsne.args=NULL)
     expect_identical(cluster.single$clusterGraph, clustering)
 })
@@ -27,4 +28,11 @@ test_that("runAllNeighborSteps works with collapsed neighbors", {
     res <- runAllNeighborSteps(x, BNPARAM=BNPARAM, num.threads=2)
     res.collapse <- runAllNeighborSteps(x, collapse.search=TRUE, BNPARAM=BNPARAM, num.threads=2)
     expect_identical(res, res.collapse)
+})
+
+test_that("runAllNeighborSteps works when returning the graph", {
+    BNPARAM <- BiocNeighbors::KmknnParam()
+    out <- runAllNeighborSteps(x, BNPARAM=BNPARAM, return.graph=TRUE, num.threads=2)
+    expect_identical(ncol(x), out$buildSnnGraph$vertices)
+    expect_identical(ncol(x), length(out$clusterGraph$membership))
 })

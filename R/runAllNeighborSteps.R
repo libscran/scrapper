@@ -19,6 +19,8 @@
 #' @param collapse.search Logical scalar indicating whether to collapse the nearest-neighbor search for each step into a single search.
 #' Steps that need fewer neighbors will take a subset of the neighbors from the collapsed search.
 #' This is faster but may not give the same results as separate searches for some algorithms (e.g., approximate searches).
+#' @param return.graph Logical scalar indicating whether to return the output of \code{\link{buildSnnGraph}}.
+#' By default, only the output of \code{\link{clusterGraph}} is returned.
 #' @param num.threads Integer scalar specifying the number of threads to use.
 #' At least one thread should be available for each step. 
 #'
@@ -42,6 +44,7 @@ runAllNeighborSteps <- function(
     buildSnnGraph.args=list(),
     clusterGraph.args=list(),
     BNPARAM=AnnoyParam(),
+    return.graph=FALSE,
     collapse.search=FALSE,
     num.threads=3) 
 {
@@ -131,7 +134,8 @@ runAllNeighborSteps <- function(
     if ("clusterGraph" %in% names(nn.res)) {
         jobs$clusterGraph <- list(
             buildSnnGraph=c(list(x=nn.res$clusterGraph), buildSnnGraph.args),
-            clusterGraph=clusterGraph.args
+            clusterGraph=clusterGraph.args,
+            return.graph=return.graph
         )
     }
 
@@ -141,7 +145,15 @@ runAllNeighborSteps <- function(
     # Just keep the PSOCK default.
     clust <- makeCluster(min(length(jobs), num.threads))
     on.exit(stopCluster(clust), add=TRUE, after=FALSE)
-    parLapply(clust, jobs, fun=.internal_executor)
+    output <- parLapply(clust, jobs, fun=.internal_executor)
+
+    if (return.graph && "clusterGraph" %in% names(output)) {
+        tmp <- output$clusterGraph
+        output$clusterGraph <- NULL
+        c(output, tmp)
+    } else {
+        output
+    }
 }
 
 .internal_executor <- function(job) {
@@ -151,6 +163,12 @@ runAllNeighborSteps <- function(
         do.call(runTsne, job$runTsne)
     } else {
         snn.graph <- do.call(buildSnnGraph, job$buildSnnGraph)
-        do.call(clusterGraph, c(list(snn.graph), job$clusterGraph))
+        clust <- do.call(clusterGraph, c(list(snn.graph), job$clusterGraph))
+
+        if (job$return.graph) {
+            list(buildSnnGraph=snn.graph, clusterGraph=clust)
+        } else {
+            return(clust)
+        }
     }
 }
