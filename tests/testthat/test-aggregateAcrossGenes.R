@@ -23,7 +23,8 @@ test_that("aggregateAcrossGenes works for unweighted sets", {
         expect_equal(Matrix::colMeans(x[sets[[s]],,drop=FALSE]), agg[[s]])
     }
 
-    expect_error(aggregateAcrossGenes(x, list(-1L)), "out-of-range")
+    expect_error(aggregateAcrossGenes(x, list(-1L)), "out of range")
+    expect_error(aggregateAcrossGenes(x, list(LETTERS)), "unsupported")
 })
 
 test_that("aggregateAcrossGenes works for weighted sets", {

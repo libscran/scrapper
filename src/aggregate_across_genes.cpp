@@ -13,10 +13,10 @@
 SEXP aggregate_across_genes(SEXP x, Rcpp::List sets, bool average, int nthreads) {
     auto raw_mat = Rtatami::BoundNumericPointer(x);
     const auto& mat = raw_mat->ptr;
-    int NR = mat->nrow();
     int NC = mat->ncol();
 
-    // Converting the sets into something nice.
+    // Converting the sets into something nice. We need to make explicit copies
+    // to ensure that we resolve any ALTREPs that might be present.
     size_t nsets = sets.size();
     std::vector<std::vector<int> > indices;
     indices.reserve(nsets);
@@ -47,15 +47,14 @@ SEXP aggregate_across_genes(SEXP x, Rcpp::List sets, bool average, int nthreads)
             indices.emplace_back(idx.begin(), idx.end());
             weights.emplace_back(wt.begin(), wt.end());
             wptr = weights.back().data();
+
+        } else {
+            throw std::runtime_error("unsupported type of 'sets' entry");
         }
 
         for (auto& ii : indices.back()) {
             --ii;
-            if (ii < 0 || ii >= NR) {
-                throw std::runtime_error("detected out-of-range indices in 'sets'");
-            }
         }
-
         converted_sets.emplace_back(indices.back().size(), indices.back().data(), wptr);
     }
 

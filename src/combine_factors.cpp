@@ -46,37 +46,24 @@ Rcpp::List combine_factors(Rcpp::List factors, bool keep_unused, Rcpp::IntegerVe
             throw std::runtime_error("'nlevels' and 'factors' must have the same length");
         }
 
-        if (nfac > 1) {
-            std::vector<std::pair<const int*, int> > buffers;
-            buffers.reserve(nfac);
-            for (size_t f = 0; f < nfac; ++f) {
-                buffers.emplace_back(ibuffers[f].begin(), nlevels[f]);
-            }
-            oindices = Rcpp::IntegerVector(ngenes);
-            auto res = scran_aggregate::combine_factors_unused(ngenes, buffers, static_cast<int*>(oindices.begin()));
-            olevels = convert_to_index_list(res);
-        } else {
-            oindices = ibuffers[0];
-            Rcpp::IntegerVector seq(nlevels[0]);
-            std::iota(seq.begin(), seq.end(), 0);
-            olevels = Rcpp::List::create(seq);
+        std::vector<std::pair<const int*, int> > buffers;
+        buffers.reserve(nfac);
+        for (size_t f = 0; f < nfac; ++f) {
+            buffers.emplace_back(ibuffers[f].begin(), nlevels[f]);
         }
+        oindices = Rcpp::IntegerVector(ngenes);
+        auto res = scran_aggregate::combine_factors_unused(ngenes, buffers, static_cast<int*>(oindices.begin()));
+        olevels = convert_to_index_list(res);
 
     } else {
-        if (nfac > 1) {
-            std::vector<const int*> buffers;
-            buffers.reserve(nfac);
-            for (size_t f = 0; f < nfac; ++f) {
-                buffers.emplace_back(ibuffers[f].begin());
-            }
-            oindices = Rcpp::IntegerVector(ngenes);
-            auto res = scran_aggregate::combine_factors(ngenes, buffers, static_cast<int*>(oindices.begin()));
-            olevels = convert_to_index_list(res);
-        } else {
-            oindices = Rcpp::IntegerVector(ngenes);
-            auto res = scran_aggregate::clean_factor(ngenes, static_cast<const int*>(ibuffers[0].begin()), static_cast<int*>(oindices.begin()));
-            olevels = Rcpp::List::create(Rcpp::IntegerVector(res.begin(), res.end()));
+        std::vector<const int*> buffers;
+        buffers.reserve(nfac);
+        for (size_t f = 0; f < nfac; ++f) {
+            buffers.emplace_back(ibuffers[f].begin());
         }
+        oindices = Rcpp::IntegerVector(ngenes);
+        auto res = scran_aggregate::combine_factors(ngenes, buffers, static_cast<int*>(oindices.begin()));
+        olevels = convert_to_index_list(res);
     }
 
     return Rcpp::List::create(
