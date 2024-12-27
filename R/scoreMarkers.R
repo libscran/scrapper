@@ -14,7 +14,7 @@
 #' Setting this to \code{FALSE} can improve speed and memory efficiency.
 #' @param all.pairwise Logical scalar indicating whether to report the full effects for every pairwise comparison between groups.
 #'
-#' @return If \code{all.pairwise=FALSE}, a list is returned containing:
+#' @return If \code{all.pairwise=FALSE}, a named list is returned containing:
 #' \itemize{
 #' \item \code{mean}, a numeric matrix containing the mean expression for each group.
 #' Each row is a gene and each column is a group.
@@ -22,7 +22,7 @@
 #' Each row is a gene and each column is a group.
 #' \item \code{cohens.d}, a list of data frames where each data frame corresponds to a group.
 #' Each row of each data frame represents a gene, while each column contains a summary of Cohen's d from pairwise comparisons to all other groups.
-#' This includes the \code{min}, \code{mean}, \code{median}, \code{max} and \code{min.rank}.
+#' This includes the \code{min}, \code{mean}, \code{median}, \code{max} and \code{min.rank} - check out \code{?\link{summarizeEffects}} for details.
 #' Omitted if \code{compute.cohens.d=FALSE}.
 #' \item \code{auc}, a list like \code{cohens.d} but containing the summaries of the AUCs from each pairwise comparison.
 #' Omitted if \code{compute.auc=FALSE}.
@@ -38,7 +38,7 @@
 #' Each row is a gene and each column is a group.
 #' \item \code{detected}, a numeric matrix containing the proportion of detected cells in each group.
 #' Each row is a gene and each column is a group.
-#' \item \code{cohens.d}, a 3-dimensional numeric array containing the Cohen's from each pairwise comparison between groups.
+#' \item \code{cohens.d}, a 3-dimensional numeric array containing the Cohen's d from each pairwise comparison between groups.
 #' The extents of the first two dimensions are equal to the number of groups, while the extent of the final dimension is equal to the number of genes.
 #' The entry \code{[i, j, k]} represents Cohen's d from the comparison of group \code{j} over group \code{i} for gene \code{k}.
 #' Omitted if \code{compute.cohens.d=FALSE}.
