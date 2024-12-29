@@ -64,11 +64,7 @@ correctMnn <- function(
     block <- .transformFactor(block)
 
     if (!is.null(order)) {
-        order <- match(order, block$names)
-        if (!identical(sort(order), seq_along(order))) {
-            stop("'order' should contain unique values in 'block'"); 
-        }
-        order <- order - 1L
+        order <- match(order, block$names) - 1L
     }
 
     if (is.null(mass.cap)) {
