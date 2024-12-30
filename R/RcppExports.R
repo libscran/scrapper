@@ -13,8 +13,8 @@ filter_adt_qc_metrics <- function(filters, metrics, block) {
     .Call('_scrapper_filter_adt_qc_metrics', PACKAGE = 'scrapper', filters, metrics, block)
 }
 
-aggregate_across_cells <- function(x, combined, nthreads) {
-    .Call('_scrapper_aggregate_across_cells', PACKAGE = 'scrapper', x, combined, nthreads)
+aggregate_across_cells <- function(x, groups, nthreads) {
+    .Call('_scrapper_aggregate_across_cells', PACKAGE = 'scrapper', x, groups, nthreads)
 }
 
 aggregate_across_genes <- function(x, sets, average, nthreads) {
@@ -131,5 +131,9 @@ subsample_by_neighbors <- function(indices, distances, min_remaining) {
 
 summarize_effects <- function(num_genes, num_groups, effects, num_threads) {
     .Call('_scrapper_summarize_effects', PACKAGE = 'scrapper', num_genes, num_groups, effects, num_threads)
+}
+
+test_enrichment <- function(overlap, num_interest, set_sizes, universe, log, num_threads) {
+    .Call('_scrapper_test_enrichment', PACKAGE = 'scrapper', overlap, num_interest, set_sizes, universe, log, num_threads)
 }
 

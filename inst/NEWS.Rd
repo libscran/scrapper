@@ -15,4 +15,6 @@ Also added the \code{bound=} argument to set a hard upper/lower bound.
 \item Bugfix to \code{clusterKmeans()} to respect the user-supplied \code{seed=} in relevant initialization methods.
 
 \item Added a \code{return.graph=} option to return the SNN graph from \code{runAllNeighborSteps()}.
+
+\item Added a \code{testEnrichment()} function for quick and dirty gene set enrichment testing.
 }}

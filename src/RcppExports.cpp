@@ -48,14 +48,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // aggregate_across_cells
-SEXP aggregate_across_cells(SEXP x, Rcpp::IntegerVector combined, int nthreads);
-RcppExport SEXP _scrapper_aggregate_across_cells(SEXP xSEXP, SEXP combinedSEXP, SEXP nthreadsSEXP) {
+SEXP aggregate_across_cells(SEXP x, Rcpp::IntegerVector groups, int nthreads);
+RcppExport SEXP _scrapper_aggregate_across_cells(SEXP xSEXP, SEXP groupsSEXP, SEXP nthreadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
-    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type combined(combinedSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type groups(groupsSEXP);
     Rcpp::traits::input_parameter< int >::type nthreads(nthreadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(aggregate_across_cells(x, combined, nthreads));
+    rcpp_result_gen = Rcpp::wrap(aggregate_across_cells(x, groups, nthreads));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -491,6 +491,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// test_enrichment
+Rcpp::NumericVector test_enrichment(Rcpp::IntegerVector overlap, int num_interest, Rcpp::IntegerVector set_sizes, int universe, bool log, int num_threads);
+RcppExport SEXP _scrapper_test_enrichment(SEXP overlapSEXP, SEXP num_interestSEXP, SEXP set_sizesSEXP, SEXP universeSEXP, SEXP logSEXP, SEXP num_threadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type overlap(overlapSEXP);
+    Rcpp::traits::input_parameter< int >::type num_interest(num_interestSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type set_sizes(set_sizesSEXP);
+    Rcpp::traits::input_parameter< int >::type universe(universeSEXP);
+    Rcpp::traits::input_parameter< bool >::type log(logSEXP);
+    Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(test_enrichment(overlap, num_interest, set_sizes, universe, log, num_threads));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_compute_adt_qc_metrics", (DL_FUNC) &_scrapper_compute_adt_qc_metrics, 3},
@@ -526,6 +541,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_score_markers_pairwise", (DL_FUNC) &_scrapper_score_markers_pairwise, 12},
     {"_scrapper_subsample_by_neighbors", (DL_FUNC) &_scrapper_subsample_by_neighbors, 3},
     {"_scrapper_summarize_effects", (DL_FUNC) &_scrapper_summarize_effects, 4},
+    {"_scrapper_test_enrichment", (DL_FUNC) &_scrapper_test_enrichment, 6},
     {NULL, NULL, 0}
 };
 
