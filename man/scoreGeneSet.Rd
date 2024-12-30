@@ -21,7 +21,7 @@ scoreGeneSet(
 }
 \arguments{
 \item{x}{A matrix-like object where rows correspond to genes or genomic features and columns correspond to cells.
-Typically, the matrix is expected to contain log-expression values, and the rows should be filtered to relevant (e.g., highly variable) genes.}
+Typically, the matrix is expected to contain log-expression values.}
 
 \item{set}{Integer, logical or character vector specifying the rows that belong to the gene set.}
 
@@ -52,11 +52,11 @@ This speeds up computation at the cost of increased memory usage.}
 }
 \value{
 List containing \code{scores}, a numeric vector of per-cell scores for each column in \code{x};
-and \code{weights}, a numeric vector of per-feature weights for each feature in \code{set}.
+and \code{weights}, a numeric vector of per-gene weights for each gene in \code{set}.
 }
 \description{
-Compute per-cell scores for a gene set, defined as the column sums of a rank-1 approximation to the submatrix for the feature set.
-This uses the same approach implemented in the \pkg{GSDecon} package from Jason Hackney.
+Compute per-cell scores for a gene set, defined as the column sums of a rank-1 approximation to the submatrix for the gene set.
+This uses the same approach implemented in the \pkg{GSDecon} package by Jason Hackney.
 }
 \examples{
 library(Matrix)
