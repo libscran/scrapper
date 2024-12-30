@@ -11,7 +11,8 @@ Rcpp::NumericVector scale_by_neighbors(Rcpp::List distances) {
 
     for (size_t x = 0; x < nmod; ++x) {
         Rcpp::NumericVector dist(distances[x]);
-        values.push_back(mumosa::compute_distance<int, double>(dist.size(), dist.begin()));
+        std::vector<double> copy(dist.begin(), dist.end()); // creating a copy as compute_distance() will shuffle the distances to compute the median.
+        values.push_back(mumosa::compute_distance<int, double>(copy.size(), copy.data()));
     }
 
     auto output = mumosa::compute_scale<double>(values);
