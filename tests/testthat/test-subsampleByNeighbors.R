@@ -5,14 +5,14 @@ x <- matrix(runif(10000), nrow=10)
 
 test_that("subsampleByNeighbors works as expected", {
     keep <- subsampleByNeighbors(x, num.neighbors=5, min.remaining=2)
-    expect_true(length(keep) < ncol(x))
-    expect_true(min(keep) > 0)
-    expect_true(max(keep) <= ncol(x))
+    expect_lt(length(keep), ncol(x))
+    expect_gt(min(keep), 0)
+    expect_lte(max(keep), ncol(x))
 
     keep2 <- subsampleByNeighbors(x, num.neighbors=10, min.remaining=2)
-    expect_true(length(keep2) < length(keep))
-    expect_true(min(keep2) > 0)
-    expect_true(max(keep2) <= ncol(x))
+    expect_lt(length(keep2), length(keep))
+    expect_gt(min(keep2), 0)
+    expect_lte(max(keep2), ncol(x))
 
     # Same results when given some nearest neighbor results.
     res <- BiocNeighbors::findKNN(x, k=10, transposed=TRUE, BNPARAM=BiocNeighbors::AnnoyParam(), get.index="transposed", get.distance="transposed")

@@ -60,7 +60,7 @@ test_that("runPCA works with residual components", {
     expect_false(is.unsorted(-pcs$variance.explained))
     rv <- apply(pcs$components, 1, var)
     ratio <- rv / pcs$variance.explained
-    expect_true(diff(range(ratio)) < 1e-8)
+    expect_lt(diff(range(ratio)), 1e-8)
 
     expect_identical(nrow(pcs$rotation), 1000L)
     expect_identical(ncol(pcs$rotation), 25L)
