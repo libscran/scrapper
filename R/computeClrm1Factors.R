@@ -7,6 +7,7 @@
 #' @param num.threads Number of threads to use.
 #'
 #' @return Numeric vector containing the CLRm1 size factor for each cell.
+#' Note that these size factors are not centered and should be passed through, e.g., \code{\link{centerSizeFactors}} before normalization.
 #'
 #' @author Aaron Lun
 #'

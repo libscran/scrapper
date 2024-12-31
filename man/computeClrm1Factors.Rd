@@ -14,6 +14,7 @@ Rows correspond to tags and columns correspond to cells.}
 }
 \value{
 Numeric vector containing the CLRm1 size factor for each cell.
+Note that these size factors are not centered and should be passed through, e.g., \code{\link{centerSizeFactors}} before normalization.
 }
 \description{
 Compute size factors from an ADT count matrix using the CLRm1 method.
