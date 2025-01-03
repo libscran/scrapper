@@ -47,6 +47,7 @@ Rcpp::List run_pca(
     iopt.extra_work = irlba_work;
     iopt.max_iterations = irlba_iterations;
     iopt.seed = irlba_seed;
+    iopt.cap_number = true;
 
     Rcpp::List output;
 

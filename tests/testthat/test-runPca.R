@@ -71,3 +71,9 @@ test_that("runPCA works with residual components", {
     ref2 <- runPca(normed, block=block)
     expect_false(isTRUE(all.equal(ref2$components, pcs$components)))
 })
+
+test_that("runPCA works when more PCs are requested than available", {
+    pcs <- runPca(normed, number=150)
+    expect_identical(nrow(pcs$components), min(dim(normed)))
+    expect_identical(ncol(pcs$rotation), min(dim(normed)))
+})
