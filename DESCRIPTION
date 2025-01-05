@@ -24,6 +24,7 @@ Suggests:
     MatrixGenerics,
     sparseMatrixStats,
     Matrix,
+    SummarizedExperiment,
     scRNAseq
 LinkingTo:
     Rcpp,

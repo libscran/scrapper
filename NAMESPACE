@@ -2,6 +2,7 @@
 
 export(aggregateAcrossCells)
 export(aggregateAcrossGenes)
+export(analyze)
 export(buildSnnGraph)
 export(centerSizeFactors)
 export(chooseHighlyVariableGenes)
