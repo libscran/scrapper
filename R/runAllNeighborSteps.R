@@ -13,6 +13,7 @@
 #' @param runTsne.args Named list of further arguments to pass to \code{\link{runTsne}}.
 #' This can be set to \code{NULL} to omit the t-SNE.
 #' @param buildSnnGraph.args Named list of further arguments to pass to \code{\link{buildSnnGraph}}.
+#' Ignored if \code{clusterGraph.args=NULL}.
 #' @param clusterGraph.args Named list of further arguments to pass to \code{\link{clusterGraph}}.
 #' This can be set to \code{NULL} to omit the clustering.
 #' @param BNPARAM A \link[BiocNeighbors]{BiocNeighborParam} instance specifying the nearest-neighbor search algorithm to use.

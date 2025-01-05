@@ -28,7 +28,8 @@ This can be set to \code{NULL} to omit the UMAP.}
 \item{runTsne.args}{Named list of further arguments to pass to \code{\link{runTsne}}.
 This can be set to \code{NULL} to omit the t-SNE.}
 
-\item{buildSnnGraph.args}{Named list of further arguments to pass to \code{\link{buildSnnGraph}}.}
+\item{buildSnnGraph.args}{Named list of further arguments to pass to \code{\link{buildSnnGraph}}.
+Ignored if \code{clusterGraph.args=NULL}.}
 
 \item{clusterGraph.args}{Named list of further arguments to pass to \code{\link{clusterGraph}}.
 This can be set to \code{NULL} to omit the clustering.}
