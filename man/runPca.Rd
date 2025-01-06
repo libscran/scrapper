@@ -87,8 +87,7 @@ str(bout)
 }
 \seealso{
 \url{https://libscran.github.io/scran_pca/}, for more details on the PCA.
-
-\url{https://libscran.github.io/scran_blocks/}, for more details on the block weighting.
+In particular, the documentation for the \code{blocked_pca} function explains the blocking strategy.
 }
 \author{
 Aaron Lun

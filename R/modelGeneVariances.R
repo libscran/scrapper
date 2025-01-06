@@ -25,9 +25,7 @@
 #' @author Aaron Lun
 #'
 #' @seealso
-#' \url{https://libscran.github.io/scran_variances/}, for the variance modelling.
-#'
-#' \url{https://libscran.github.io/scran_blocks/}, for details on the blocking.
+#' The \code{model_gene_variances} function in \url{https://libscran.github.io/scran_variances/}, for the underlying implementation.
 #'
 #' \code{\link{fitVarianceTrend}}, which fits the mean-variance trend.
 #'

@@ -29,7 +29,8 @@ choosePseudoCount(sf, max.bias=0.5)
 
 }
 \seealso{
-\url{https://libscran.github.io/scran_norm/}, for the motivation behind calculating a larger pseudo-count.
+The \code{choose_pseudo_count} function in \url{https://libscran.github.io/scran_norm/},
+for the motivation behind calculating a larger pseudo-count.
 }
 \author{
 Aaron Lun

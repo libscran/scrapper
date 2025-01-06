@@ -60,7 +60,7 @@ lines(x[o], out$fitted[o], col="red")
 
 }
 \seealso{
-\url{https://libscran.github.io/scran_variances/}, for the underlying implementation.
+The \code{fit_variance_trend} function in \url{https://libscran.github.io/scran_variances/}, for the underlying implementation.
 }
 \author{
 Aaron Lun

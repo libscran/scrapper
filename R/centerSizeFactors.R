@@ -16,7 +16,8 @@
 #' @author Aaron Lun
 #'
 #' @seealso
-#' \url{https://libscran.github.io/scran_norm/}, for the rationale behind centering the size factors.
+#' The \code{center_size_factors} and \code{center_size_factors_blocked} functions in \url{https://libscran.github.io/scran_norm/},
+#' for the rationale behind centering the size factors.
 #'
 #' @examples
 #' centerSizeFactors(runif(100))

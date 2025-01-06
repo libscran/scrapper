@@ -46,6 +46,9 @@ out <- scaleByNeighbors(pcs)
 out$scaling
 dim(out$combined)
 }
+\seealso{
+\url{https://libscran.github.io/mumosa/}, for the basis and caveats of this approach.
+}
 \author{
 Aaron Lun
 }

@@ -13,6 +13,9 @@
 #' @return List containing \code{levels}, a data frame containing the sorted and unique combinations of levels from \code{factors};
 #' and \code{index}, an integer vector specifying the index into \code{levels} for each observation.
 #'
+#' @seealso
+#' The \code{combine_factors} function in \url{https://libscran.github.io/scran_aggregate/}, which provides the underlying implementation.
+#'
 #' @author Aaron Lun
 #'
 #' @examples

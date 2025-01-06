@@ -40,7 +40,7 @@ str(chooseHighlyVariableGenes(resids))
 
 }
 \seealso{
-\url{https://libscran.github.io/scran_variances/}, for the underlying implementation.
+The \code{choose_highly_variable_genes} function in \url{https://libscran.github.io/scran_variances/}, for the underlying implementation.
 }
 \author{
 Aaron Lun

@@ -67,6 +67,7 @@ scoreGeneSet(normed, set=c(1,3,5,10,20,100))
 }
 \seealso{
 \url{https://libscran.github.io/gsdecon/}, for more details on the underlying algorithm.
+In particular, the documentation for the \code{compute_blocked} function explains the blocking strategy.
 }
 \author{
 Aaron Lun

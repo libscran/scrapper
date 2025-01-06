@@ -67,10 +67,9 @@
 #' reportGroupMarkerStatistics(scores, "b")
 #'
 #' @seealso
-#' \url{https://libscran.github.io/scran_markers/}, in particular 
-#' the \code{score_markers_summary} function (for \code{all.pairwise=FALSE}),
-#' the \code{score_markers_pairwise} function (for \code{all.pairwise=TRUE}),
-#' and their blocked equivalents \code{score_markers_summary_blocked} and \code{score_markers_pairwise_blocked} (when \code{block} is not \code{NULL}).
+#' The \code{score_markers_summary} and the \code{score_markers_pairwise} function (for \code{all.pairwise=FALSE} and \code{TRUE}, respectively) in \url{https://libscran.github.io/scran_markers/},
+#' which describes the rationale behind the choice of effect sizes and summary statistics.
+#' Also see their blocked equivalents \code{score_markers_summary_blocked} and \code{score_markers_pairwise_blocked} when \code{block} is not \code{NULL}.
 #'
 #' \code{\link{summarizeEffects}}, to summarize the pairwise effects returned when \code{all.pairwise=TRUE}.
 #'

@@ -76,6 +76,9 @@ str(corrected)
 lapply(split(colMeans(corrected$corrected), b), mean) # now merged.
 
 }
+\seealso{
+\url{https://libscran.github.io/mnncorrect/}, for more details on the underlying implementation.
+}
 \author{
 Aaron Lun
 }

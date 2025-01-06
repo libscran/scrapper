@@ -32,6 +32,9 @@
 #' This contains the number of MNN pairs at each merge.
 #' }
 #'
+#' @seealso
+#' \url{https://libscran.github.io/mnncorrect/}, for more details on the underlying implementation.
+#'
 #' @author Aaron Lun
 #'
 #' @examples

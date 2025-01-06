@@ -89,7 +89,8 @@ summary(keep)
 
 }
 \seealso{
-\url{https://libscran.github.io/scran_qc/}, for the rationale of QC filtering on ADT counts.
+The \code{compute_adt_qc_metrics}, \code{compute_adt_qc_filters} and \code{compute_adt_qc_filters_blocked} functions in \url{https://libscran.github.io/scran_qc/},
+for the rationale of QC filtering on ADT counts.
 }
 \author{
 Aaron Lun

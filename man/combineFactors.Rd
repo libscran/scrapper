@@ -35,6 +35,9 @@ combineFactors(list(
 ), keep.unused=TRUE)
 
 }
+\seealso{
+The \code{combine_factors} function in \url{https://libscran.github.io/scran_aggregate/}, which provides the underlying implementation.
+}
 \author{
 Aaron Lun
 }

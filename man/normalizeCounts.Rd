@@ -56,7 +56,7 @@ optr
 
 }
 \seealso{
-\url{https://libscran.github.io/scran_norm/}, for the rationale behind normalization.
+The \code{normalize_counts} function in \url{https://libscran.github.io/scran_norm/}, for the rationale behind normalization and log-transformation.
 }
 \author{
 Aaron Lun

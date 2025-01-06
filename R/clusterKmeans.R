@@ -30,6 +30,9 @@
 #' Any non-zero value indicates a convergence failure though the exact meaning depends on the choice of \code{refine.method}.
 #' }
 #'
+#' @seealso
+#' \url{https://ltla.github.io/CppKmeans/}, which describes the various initialization and refinement algorithms in more detail.
+#'
 #' @author Aaron Lun
 #'
 #' @examples

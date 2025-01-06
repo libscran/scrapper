@@ -15,7 +15,7 @@
 #' @author Aaron Lun
 #'
 #' @seealso
-#' \code{\link{phyper}} and \url{https://github.com/libscran/phyper/},
+#' \code{\link{phyper}} and \url{https://libscran.github.io/phyper/},
 #' which is the basis for the underlying calculation.
 #'
 #' @examples

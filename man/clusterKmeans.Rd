@@ -68,6 +68,9 @@ clustering <- clusterKmeans(x, k=3)
 table(clustering$clusters, iris[,"Species"])
 
 }
+\seealso{
+\url{https://ltla.github.io/CppKmeans/}, which describes the various initialization and refinement algorithms in more detail.
+}
 \author{
 Aaron Lun
 }

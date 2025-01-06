@@ -39,7 +39,8 @@
 #' For \code{filterCrisprQcMetrics}, a logical vector of length \code{ncol(x)} is returned indicating which cells are of high quality. 
 #'
 #' @seealso
-#' \url{https://libscran.github.io/scran_qc/}, for the rationale of QC filtering on CRISPR counts.
+#' The \code{compute_crispr_qc_metrics}, \code{compute_crispr_qc_filters} and \code{compute_crispr_qc_filters_blocked} functions in \url{https://libscran.github.io/scran_qc/},
+#' for the rationale of QC filtering on CRISPR counts.
 #'
 #' @author Aaron Lun
 #' @examples

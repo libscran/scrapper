@@ -25,9 +25,9 @@
 #' @author Aaron Lun
 #'
 #' @seealso
-#' \url{https://igraph.org}, for the underlying implementation of each clustering method.
+#' \url{https://igraph.org/c/html/latest/igraph-Community.html}, for the underlying implementation of each clustering method.
 #'
-#' \url{https://libscran.github.io/scran_graph_cluster/}, for wrappers around the \pkg{igraph} code.
+#' The various \code{cluster_*} functions in \url{https://libscran.github.io/scran_graph_cluster/}, for wrappers around the \pkg{igraph} code.
 #'
 #' @examples
 #' data <- matrix(rnorm(10000), ncol=1000)

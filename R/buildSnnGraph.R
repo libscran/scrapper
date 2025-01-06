@@ -34,7 +34,9 @@
 #' @author Aaron Lun
 #'
 #' @seealso
-#' \url{https://libscran.github.io/scran_graph_cluster/}, for details on the underlying implementation.
+#' The \code{build_snn_graph} function in \url{https://libscran.github.io/scran_graph_cluster/}, for details on the weighting scheme.
+#'
+#' \code{\link{clusterGraph}}, to define clusters (i.e., communities) from the graph.
 #'
 #' @examples
 #' data <- matrix(rnorm(10000), ncol=1000)

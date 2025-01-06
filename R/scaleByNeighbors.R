@@ -16,6 +16,9 @@
 #' @return List containing \code{scaling}, a vector of scaling factors to be aplied to each embedding;
 #' and \code{combined}, a numeric matrix formed by scaling each entry of \code{x} and then \code{rbind}ing them together.
 #'
+#' @seealso
+#' \url{https://libscran.github.io/mumosa/}, for the basis and caveats of this approach.
+#'
 #' @examples
 #' pcs <- list(
 #'     gene = matrix(rnorm(10000), ncol=200),

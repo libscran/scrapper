@@ -45,7 +45,7 @@
 #' str(summarized)
 #'
 #' @seealso
-#' \url{https://libscran.github.io/scran_markers/}, for more details on the statistics.
+#' The \code{summarize_effects} function in \url{https://libscran.github.io/scran_markers/}, for more details on the statistics.
 #'
 #' \code{\link{scoreMarkers}}, to compute the pairwise effects in the first place.
 #'

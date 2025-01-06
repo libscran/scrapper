@@ -49,6 +49,8 @@ str(agg2)
 
 }
 \seealso{
+The \code{aggregate_across_genes} function in \url{https://libscran.github.io/scran_aggregate/}, for the underlying implementation.
+
 \code{\link{aggregateAcrossCells}}, to aggregate expression values across groups of cells.
 }
 \author{
