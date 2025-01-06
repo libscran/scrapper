@@ -48,24 +48,24 @@ This should have the same number of columns as the other \code{*.x} arguments.
 
 Alternatively, a \link[SummarizedExperiment]{SummarizedExperiment} instance containing such a matrix in its \code{rna.assay}.
 
-Alternatively NULL, if no RNA counts are available.}
+Alternatively \code{NULL}, if no RNA counts are available.}
 
 \item{adt.x}{Matrix-like object containing ADT counts.
 This should have the same number of columns as the other \code{*.x} arguments.
 
 Alternatively, a \link[SummarizedExperiment]{SummarizedExperiment} instance containing such a matrix in its \code{adt.assay}.
 
-Alternatively NULL, if no ADT counts are available.}
+Alternatively \code{NULL}, if no ADT counts are available.}
 
 \item{crispr.x}{Matrix-like object containing ADT counts.
 This should have the same number of columns as the other \code{*.x} arguments.
 
 Alternatively, a \link[SummarizedExperiment]{SummarizedExperiment} instance containing such a matrix in its \code{crispr.assay}.
 
-Alternatively NULL, if no ADT counts are available.}
+Alternatively \code{NULL}, if no ADT counts are available.}
 
 \item{block}{Factor specifying the block of origin (e.g., batch, sample) for each cell in the \code{*_x} matrices.
-Alternatively NULL, if all cells are from the same block.}
+Alternatively \code{NULL}, if all cells are from the same block.}
 
 \item{rna.subsets}{Gene subsets for quality control, typically used for mitochondrial genes.
 See the \code{subsets} arguments in \code{\link{computeRnaQcMetrics}} for details.}
@@ -113,21 +113,21 @@ Only used if multiple modalities are available and their corresponding \code{use
 Only used if \code{block} is supplied.}
 
 \item{runUmap.args}{Named list of arguments to pass to \code{\link{runUmap}}.
-If NULL, UMAP is not performed.}
+If \code{NULL}, UMAP is not performed.}
 
 \item{runTsne.args}{Named list of arguments to pass to \code{\link{runTsne}}.
-If NULL, t-SNE is not performed.}
+If \code{NULL}, t-SNE is not performed.}
 
 \item{buildSnnGraph.args}{Named list of arguments to pass to \code{\link{buildSnnGraph}}.
 Ignored if \code{clusterGraph.args = NULL}.}
 
 \item{clusterGraph.args}{Named list of arguments to pass to \code{\link{clusterGraph}}.
-If NULL, graph-based clustering is not performed.}
+If \code{NULL}, graph-based clustering is not performed.}
 
 \item{runAllNeighborSteps.args}{Named list of arguments to pass to \code{\link{runAllNeighborSteps}}.}
 
 \item{kmeans.clusters}{Integer scalar specifying the number of clusters to use in k-means clustering.
-If NULL, k-means clustering is not performed.}
+If \code{NULL}, k-means clustering is not performed.}
 
 \item{clusterKmeans.args}{Named list of arguments to pass to \code{\link{clusterKmeans}}.
 Ignored if \code{kmeans.clusters = NULL}.}
@@ -149,80 +149,80 @@ Ignored if no suitable clusterings are available.}
 \item{num.threads}{Integer scalar specifying the number of threads to use in each step.}
 }
 \value{
-A list containing the results of the entire analysis:
+List containing the results of the entire analysis:
 \describe{
 \item{\code{rna.qc.metrics}:}{Results of \code{\link{computeRnaQcMetrics}}.
-If RNA data is not available, this is set to NULL instead.}
+If RNA data is not available, this is set to \code{NULL} instead.}
 \item{\code{rna.qc.thresholds}:}{Results of \code{\link{suggestRnaQcThresholds}}.
-If RNA data is not available, this is set to NULL instead.}
+If RNA data is not available, this is set to \code{NULL} instead.}
 \item{\code{rna.qc.filter}:}{Results of \code{\link{filterRnaQcMetrics}}.
-If RNA data is not available, this is set to NULL instead.}
+If RNA data is not available, this is set to \code{NULL} instead.}
 \item{\code{adt.qc.metrics}:}{Results of \code{\link{computeAdtQcMetrics}}.
-If ADT data is not available, this is set to NULL instead.}
+If ADT data is not available, this is set to \code{NULL} instead.}
 \item{\code{adt.qc.thresholds}:}{Results of \code{\link{suggestAdtQcThresholds}}.
-If ADT data is not available, this is set to NULL instead.}
+If ADT data is not available, this is set to \code{NULL} instead.}
 \item{\code{adt.qc.filter}:}{Results of \code{\link{filterAdtQcMetrics}}.
-If ADT data is not available, this is set to NULL instead.}
+If ADT data is not available, this is set to \code{NULL} instead.}
 \item{\code{crispr.qc.metrics}:}{Results of \code{\link{computeCrisprQcMetrics}}.
-If CRISPR data is not available, this is set to NULL instead.}
+If CRISPR data is not available, this is set to \code{NULL} instead.}
 \item{\code{crispr.qc.thresholds}:}{Results of \code{\link{suggestCrisprQcThresholds}}.
-If CRISPR data is not available, this is set to NULL instead.}
+If CRISPR data is not available, this is set to \code{NULL} instead.}
 \item{\code{crispr.qc.filter}:}{Results of \code{\link{filterCrisprQcMetrics}}.
-If CRISPR data is not available, this is set to NULL instead.}
+If CRISPR data is not available, this is set to \code{NULL} instead.}
 \item{\code{combined.qc.filter}:}{Logical vector indicating which cells are of high quality and should be retained for downstream analyses.}
 \item{\code{rna.filtered}:}{Matrix of RNA counts that has been filtered to only contain the high-quality cells in \code{combined.qc.filter}.
-If RNA data is not available, this is set to NULL instead.}
+If RNA data is not available, this is set to \code{NULL} instead.}
 \item{\code{adt.filtered}:}{Matrix of ADT counts that has been filtered to only contain the high-quality cells in \code{combined.qc.filter}.
-If ADT data is not available, this is set to NULL instead.}
+If ADT data is not available, this is set to \code{NULL} instead.}
 \item{\code{crispr.filtered}:}{Matrix of CRISPR counts that has been filtered to only contain the high-quality cells in \code{combined.qc.filter}.
-If CRISPR data is not available, this is set to NULL instead.}
+If CRISPR data is not available, this is set to \code{NULL} instead.}
 \item{\code{rna.size.factors}:}{Size factors for the RNA count matrix, derived from the sum of counts for each cell and centered with \code{\link{centerSizeFactors}}.
-If RNA data is not available, this is set to NULL instead.}
+If RNA data is not available, this is set to \code{NULL} instead.}
 \item{\code{rna.normalized}:}{Matrix of (log-)normalized expression values derived from RNA counts, as computed by \code{\link{normalizeCounts}} using \code{rna.size.factors}.
-If RNA data is not available, this is set to NULL instead.}
+If RNA data is not available, this is set to \code{NULL} instead.}
 \item{\code{adt.size.factors}:}{Size factors for the ADT count matrix, computed by \code{\link{computeClrm1Factors}} and centered with \code{\link{centerSizeFactors}}.
-If ADT data is not available, this is set to NULL instead.}
+If ADT data is not available, this is set to \code{NULL} instead.}
 \item{\code{adt.normalized}:}{Matrix of (log-)normalized expression values derived from ADT counts, as computed by \code{\link{normalizeCounts}} using \code{adt.size.factors}.
-If ADT data is not available, this is set to NULL instead.}
+If ADT data is not available, this is set to \code{NULL} instead.}
 \item{\code{crispr.size.factors}:}{Size factors for the CRISPR count matrix, derived from the sum of counts for each cell and centered with \code{\link{centerSizeFactors}}.
-If CRISPR data is not available, this is set to NULL instead.}
+If CRISPR data is not available, this is set to \code{NULL} instead.}
 \item{\code{crispr.normalized}:}{Matrix of (log-)normalized expression values derived from CRISPR counts, as computed by \code{\link{normalizeCounts}} using \code{crispr.size.factors}.
-If CRISPR data is not available, this is set to NULL instead.}
+If CRISPR data is not available, this is set to \code{NULL} instead.}
 \item{\code{rna.gene.variances}:}{Results of \code{\link{modelGeneVariances}}.
-If RNA data is not available, this is set to NULL instead.}
+If RNA data is not available, this is set to \code{NULL} instead.}
 \item{\code{rna.highly.variable.genes}:}{Results of \code{\link{chooseHighlyVariableGenes}}.
-If RNA data is not available, this is set to NULL instead.}
+If RNA data is not available, this is set to \code{NULL} instead.}
 \item{\code{rna.pca}:}{Results of calling \code{\link{runPca}} on \code{rna.normalized} with the \code{rna.highly.variable.genes} subset.
-If RNA data is not available, this is set to NULL instead.}
+If RNA data is not available, this is set to \code{NULL} instead.}
 \item{\code{adt.pca}:}{Results of calling \code{\link{runPca}} on \code{adt.normalized}.
-If ADT data is not available, this is set to NULL instead.}
+If ADT data is not available, this is set to \code{NULL} instead.}
 \item{\code{crispr.pca}:}{Results of calling \code{\link{runPca}} on \code{crispr.normalized}.
-If CRISPR data is not available, this is set to NULL instead.}
+If CRISPR data is not available, this is set to \code{NULL} instead.}
 \item{\code{combined.pca}:}{If only one modality is used for the downstream analysis, this is a string specifying the list element containing the components to be used, e.g., \code{"rna.pca"}.
 If multiple modalities are to be combined for downstream analysis, this contains the results of \code{\link{scaleByNeighbors}} on the PCs of those modalities.}
 \item{\code{block}:}{Vector or factor containing the blocking factor for all cells (after filtering, if \code{filter.cells = TRUE}).
-This is set to NULL if no blocking factor was supplied.}
+This is set to \code{NULL} if no blocking factor was supplied.}
 \item{\code{mnn.corrected}:}{Results of \code{\link{correctMnn}} on the PCs in or referenced by \code{combined.pca}.
 If no blocking factor is supplied, this is set to ``None`` instead.}
 \item{\code{tsne}:}{Results of \code{\link{runTsne}}.
-This is NULL if t-SNE was not performed.}
+This is \code{NULL} if t-SNE was not performed.}
 \item{\code{umap}:}{Results of \code{\link{runUmap}}.
-This is NULL if UMAP was not performed.}
+This is \code{NULL} if UMAP was not performed.}
 \item{\code{snn.graph}:}{Results of \code{\link{buildSnnGraph}}.
-This is NULL if graph-based clustering was not performed, or if \code{return.graph=FALSE} in \code{\link{runAllNeighborSteps}}.}
+This is \code{NULL} if graph-based clustering was not performed, or if \code{return.graph=FALSE} in \code{\link{runAllNeighborSteps}}.}
 \item{\code{graph.clusters}:}{Results of \code{\link{clusterGraph}}.
-This is NULL if graph-based clustering was not performed.}
+This is \code{NULL} if graph-based clustering was not performed.}
 \item{\code{kmeans.clusters}:}{Results of \code{\link{clusterKmeans}}.
-This is NULL if k-means clustering was not performed.}
+This is \code{NULL} if k-means clustering was not performed.}
 \item{\code{clusters}:}{Integer vector containing the cluster assignment for each cell (after filtering, if \code{filter.cells = TRUE}).
 This may be derived from \code{graph.clusters} or \code{kmeans.clusters} depending on the choice of \code{clusters.for.markers}.
 If no suitable clusterings are available, this is set to NULL.}
 \item{\code{rna.markers}:}{Results of calling \code{\link{scoreMarkers}} on \code{rna.normalized}.
-This is NULL if RNA data is not available or no suitable clusterings are available.}
+This is \code{NULL} if RNA data is not available or no suitable clusterings are available.}
 \item{\code{adt.markers}:}{Results of calling \code{\link{scoreMarkers}} on \code{adt.normalized}.
-This is NULL if ADT data is not available or no suitable clusterings are available.}
+This is \code{NULL} if ADT data is not available or no suitable clusterings are available.}
 \item{\code{crispr.markers}:}{Results of calling \code{\link{scoreMarkers}} on \code{crispr.normalized}.
-This is NULL if CRISPR data is not available or no suitable clusterings are available.}
+This is \code{NULL} if CRISPR data is not available or no suitable clusterings are available.}
 }
 }
 \description{
@@ -232,17 +232,20 @@ This also supports integration of multiple modalities and correction of batch ef
 \examples{
 library(scRNAseq)
 sce <- fetchDataset("zeisel-brain-2015", "2023-12-14", realize.assays=TRUE)
-sce <- sce[,1:500] # subsetting it to keep R CMD check happy
+sce <- sce[,1:500] # smaller dataset for a faster runtime for R CMD check. 
 res <- analyze(
     sce, 
     rna.subsets=list(mito=grep("^mt-", rownames(sce))),
     num.threads=2 # keep R CMD check happy
 )
 str(res)
+convertAnalyzeResults(res)
 
 }
 \seealso{
 C++ libraries in \code{https://github.com/libscran}, which implement all of these steps.
+
+\code{\link{convertAnalyzeResults}}, to convert the results into a \link[SingleCellExperiment]{SingleCellExperiment}.
 }
 \author{
 Aaron Lun

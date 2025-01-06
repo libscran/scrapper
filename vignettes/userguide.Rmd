@@ -72,6 +72,13 @@ top.markers <- lapply(res$rna.markers$auc, function(x) {
 head(top.markers)
 ```
 
+Finally, we can convert the results into a `SingleCellExperiment` for interoperability with other Bioconductor packages like `r Biocpkg("scater")`:
+
+```{r}
+sce <- convertAnalyzeResults(res)
+sce
+```
+
 # Step-by-step
 
 The `analyze()` function just calls a series of lower-level functions in `r self`.

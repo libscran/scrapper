@@ -146,3 +146,42 @@ scoreMarkers <- function(
 
     output[c("mean", "detected", keep.effects)]
 }
+
+#' @export
+consolidateMarkerStatistics <- function(
+    results,
+    group,
+    effect.sizes = NULL,
+    summaries = NULL,
+    include.mean = TRUE,
+    include.detected = TRUE)
+{
+    if (is.null(effect.sizes)) {
+        effect.sizes <- c("cohens.d", "auc", "delta.mean", "delta.detected")
+    }
+    if (is.null(summaries)) {
+        summaries <- c("min", "mean", "median", "max", "min.rank")
+    }
+
+    current <- data.frame(row.names=rownames(results$mean), matrix(0L, nrow(results$mean), 0L))
+
+    if (include.mean) {
+        current$mean <- results$mean[,g]
+    }
+    if (include.detected) {
+        current$detected <- results$detected[,g]
+    }
+
+    for (eff in effect.sizes) {
+        eff.all <- results[[eff]]
+        if (is.null(eff.all)) {
+            next
+        }
+        eff.df <- eff.all[[g]]
+        for (summ in summaries) {
+            current[[paste0(eff, ".", summ)]] <- eff.df[[summ]]
+        }
+    }
+
+    current
+}

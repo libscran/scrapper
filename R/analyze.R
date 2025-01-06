@@ -8,21 +8,21 @@
 #'
 #' Alternatively, a \link[SummarizedExperiment]{SummarizedExperiment} instance containing such a matrix in its \code{rna.assay}.
 #'
-#' Alternatively NULL, if no RNA counts are available.
+#' Alternatively \code{NULL}, if no RNA counts are available.
 #' @param adt.x Matrix-like object containing ADT counts.
 #' This should have the same number of columns as the other \code{*.x} arguments.
 #'
 #' Alternatively, a \link[SummarizedExperiment]{SummarizedExperiment} instance containing such a matrix in its \code{adt.assay}.
 #'
-#' Alternatively NULL, if no ADT counts are available.
+#' Alternatively \code{NULL}, if no ADT counts are available.
 #' @param crispr.x Matrix-like object containing ADT counts.
 #' This should have the same number of columns as the other \code{*.x} arguments.
 #'
 #' Alternatively, a \link[SummarizedExperiment]{SummarizedExperiment} instance containing such a matrix in its \code{crispr.assay}.
 #'
-#' Alternatively NULL, if no ADT counts are available.
+#' Alternatively \code{NULL}, if no ADT counts are available.
 #' @param block Factor specifying the block of origin (e.g., batch, sample) for each cell in the \code{*_x} matrices.
-#' Alternatively NULL, if all cells are from the same block.
+#' Alternatively \code{NULL}, if all cells are from the same block.
 #' @param rna.subsets Gene subsets for quality control, typically used for mitochondrial genes.
 #' See the \code{subsets} arguments in \code{\link{computeRnaQcMetrics}} for details.
 #' @param adt.subsets ADT subsets for quality control, typically used for IgG controls.
@@ -52,16 +52,16 @@
 #' @param correctMnn.args Named list of arguments to pass to \code{\link{correctMnn}}.
 #' Only used if \code{block} is supplied.
 #' @param runTsne.args Named list of arguments to pass to \code{\link{runTsne}}.
-#' If NULL, t-SNE is not performed.
+#' If \code{NULL}, t-SNE is not performed.
 #' @param runUmap.args Named list of arguments to pass to \code{\link{runUmap}}.
-#' If NULL, UMAP is not performed.
+#' If \code{NULL}, UMAP is not performed.
 #' @param buildSnnGraph.args Named list of arguments to pass to \code{\link{buildSnnGraph}}.
 #' Ignored if \code{clusterGraph.args = NULL}.
 #' @param clusterGraph.args Named list of arguments to pass to \code{\link{clusterGraph}}.
-#' If NULL, graph-based clustering is not performed.
+#' If \code{NULL}, graph-based clustering is not performed.
 #' @param runAllNeighborSteps.args Named list of arguments to pass to \code{\link{runAllNeighborSteps}}.
 #' @param kmeans.clusters Integer scalar specifying the number of clusters to use in k-means clustering.
-#' If NULL, k-means clustering is not performed.
+#' If \code{NULL}, k-means clustering is not performed.
 #' @param clusterKmeans.args Named list of arguments to pass to \code{\link{clusterKmeans}}.
 #' Ignored if \code{kmeans.clusters = NULL}.
 #' @param clusters.for.markers Character vector of clustering algorithms (either \code{"graph"} or \code{"kmeans"}, specifying the clustering to be used for marker detection.
@@ -74,96 +74,99 @@
 #' @param crispr.assay Integer scalar or string specifying the assay to use if \code{crispr.x} is a \link[SummarizedExperiment]{SummarizedExperiment}.
 #' @param num.threads Integer scalar specifying the number of threads to use in each step.
 #'
-#' @return A list containing the results of the entire analysis:
+#' @return List containing the results of the entire analysis:
 #' \describe{
 #' \item{\code{rna.qc.metrics}:}{Results of \code{\link{computeRnaQcMetrics}}.
-#' If RNA data is not available, this is set to NULL instead.}
+#' If RNA data is not available, this is set to \code{NULL} instead.}
 #' \item{\code{rna.qc.thresholds}:}{Results of \code{\link{suggestRnaQcThresholds}}.
-#' If RNA data is not available, this is set to NULL instead.}
+#' If RNA data is not available, this is set to \code{NULL} instead.}
 #' \item{\code{rna.qc.filter}:}{Results of \code{\link{filterRnaQcMetrics}}.
-#' If RNA data is not available, this is set to NULL instead.}
+#' If RNA data is not available, this is set to \code{NULL} instead.}
 #' \item{\code{adt.qc.metrics}:}{Results of \code{\link{computeAdtQcMetrics}}.
-#' If ADT data is not available, this is set to NULL instead.}
+#' If ADT data is not available, this is set to \code{NULL} instead.}
 #' \item{\code{adt.qc.thresholds}:}{Results of \code{\link{suggestAdtQcThresholds}}.
-#' If ADT data is not available, this is set to NULL instead.}
+#' If ADT data is not available, this is set to \code{NULL} instead.}
 #' \item{\code{adt.qc.filter}:}{Results of \code{\link{filterAdtQcMetrics}}.
-#' If ADT data is not available, this is set to NULL instead.}
+#' If ADT data is not available, this is set to \code{NULL} instead.}
 #' \item{\code{crispr.qc.metrics}:}{Results of \code{\link{computeCrisprQcMetrics}}.
-#' If CRISPR data is not available, this is set to NULL instead.}
+#' If CRISPR data is not available, this is set to \code{NULL} instead.}
 #' \item{\code{crispr.qc.thresholds}:}{Results of \code{\link{suggestCrisprQcThresholds}}.
-#' If CRISPR data is not available, this is set to NULL instead.}
+#' If CRISPR data is not available, this is set to \code{NULL} instead.}
 #' \item{\code{crispr.qc.filter}:}{Results of \code{\link{filterCrisprQcMetrics}}.
-#' If CRISPR data is not available, this is set to NULL instead.}
+#' If CRISPR data is not available, this is set to \code{NULL} instead.}
 #' \item{\code{combined.qc.filter}:}{Logical vector indicating which cells are of high quality and should be retained for downstream analyses.}
 #' \item{\code{rna.filtered}:}{Matrix of RNA counts that has been filtered to only contain the high-quality cells in \code{combined.qc.filter}.
-#' If RNA data is not available, this is set to NULL instead.}
+#' If RNA data is not available, this is set to \code{NULL} instead.}
 #' \item{\code{adt.filtered}:}{Matrix of ADT counts that has been filtered to only contain the high-quality cells in \code{combined.qc.filter}.
-#' If ADT data is not available, this is set to NULL instead.}
+#' If ADT data is not available, this is set to \code{NULL} instead.}
 #' \item{\code{crispr.filtered}:}{Matrix of CRISPR counts that has been filtered to only contain the high-quality cells in \code{combined.qc.filter}.
-#' If CRISPR data is not available, this is set to NULL instead.}
+#' If CRISPR data is not available, this is set to \code{NULL} instead.}
 #' \item{\code{rna.size.factors}:}{Size factors for the RNA count matrix, derived from the sum of counts for each cell and centered with \code{\link{centerSizeFactors}}.
-#' If RNA data is not available, this is set to NULL instead.}
+#' If RNA data is not available, this is set to \code{NULL} instead.}
 #' \item{\code{rna.normalized}:}{Matrix of (log-)normalized expression values derived from RNA counts, as computed by \code{\link{normalizeCounts}} using \code{rna.size.factors}.
-#' If RNA data is not available, this is set to NULL instead.}
+#' If RNA data is not available, this is set to \code{NULL} instead.}
 #' \item{\code{adt.size.factors}:}{Size factors for the ADT count matrix, computed by \code{\link{computeClrm1Factors}} and centered with \code{\link{centerSizeFactors}}.
-#' If ADT data is not available, this is set to NULL instead.}
+#' If ADT data is not available, this is set to \code{NULL} instead.}
 #' \item{\code{adt.normalized}:}{Matrix of (log-)normalized expression values derived from ADT counts, as computed by \code{\link{normalizeCounts}} using \code{adt.size.factors}.
-#' If ADT data is not available, this is set to NULL instead.}
+#' If ADT data is not available, this is set to \code{NULL} instead.}
 #' \item{\code{crispr.size.factors}:}{Size factors for the CRISPR count matrix, derived from the sum of counts for each cell and centered with \code{\link{centerSizeFactors}}.
-#' If CRISPR data is not available, this is set to NULL instead.}
+#' If CRISPR data is not available, this is set to \code{NULL} instead.}
 #' \item{\code{crispr.normalized}:}{Matrix of (log-)normalized expression values derived from CRISPR counts, as computed by \code{\link{normalizeCounts}} using \code{crispr.size.factors}.
-#' If CRISPR data is not available, this is set to NULL instead.}
+#' If CRISPR data is not available, this is set to \code{NULL} instead.}
 #' \item{\code{rna.gene.variances}:}{Results of \code{\link{modelGeneVariances}}.
-#' If RNA data is not available, this is set to NULL instead.}
+#' If RNA data is not available, this is set to \code{NULL} instead.}
 #' \item{\code{rna.highly.variable.genes}:}{Results of \code{\link{chooseHighlyVariableGenes}}.
-#' If RNA data is not available, this is set to NULL instead.}
+#' If RNA data is not available, this is set to \code{NULL} instead.}
 #' \item{\code{rna.pca}:}{Results of calling \code{\link{runPca}} on \code{rna.normalized} with the \code{rna.highly.variable.genes} subset.
-#' If RNA data is not available, this is set to NULL instead.}
+#' If RNA data is not available, this is set to \code{NULL} instead.}
 #' \item{\code{adt.pca}:}{Results of calling \code{\link{runPca}} on \code{adt.normalized}.
-#' If ADT data is not available, this is set to NULL instead.}
+#' If ADT data is not available, this is set to \code{NULL} instead.}
 #' \item{\code{crispr.pca}:}{Results of calling \code{\link{runPca}} on \code{crispr.normalized}.
-#' If CRISPR data is not available, this is set to NULL instead.}
+#' If CRISPR data is not available, this is set to \code{NULL} instead.}
 #' \item{\code{combined.pca}:}{If only one modality is used for the downstream analysis, this is a string specifying the list element containing the components to be used, e.g., \code{"rna.pca"}.
 #' If multiple modalities are to be combined for downstream analysis, this contains the results of \code{\link{scaleByNeighbors}} on the PCs of those modalities.}
 #' \item{\code{block}:}{Vector or factor containing the blocking factor for all cells (after filtering, if \code{filter.cells = TRUE}).
-#' This is set to NULL if no blocking factor was supplied.}
+#' This is set to \code{NULL} if no blocking factor was supplied.}
 #' \item{\code{mnn.corrected}:}{Results of \code{\link{correctMnn}} on the PCs in or referenced by \code{combined.pca}.
 #' If no blocking factor is supplied, this is set to ``None`` instead.}
 #' \item{\code{tsne}:}{Results of \code{\link{runTsne}}.
-#' This is NULL if t-SNE was not performed.}
+#' This is \code{NULL} if t-SNE was not performed.}
 #' \item{\code{umap}:}{Results of \code{\link{runUmap}}.
-#' This is NULL if UMAP was not performed.}
+#' This is \code{NULL} if UMAP was not performed.}
 #' \item{\code{snn.graph}:}{Results of \code{\link{buildSnnGraph}}.
-#' This is NULL if graph-based clustering was not performed, or if \code{return.graph=FALSE} in \code{\link{runAllNeighborSteps}}.}
+#' This is \code{NULL} if graph-based clustering was not performed, or if \code{return.graph=FALSE} in \code{\link{runAllNeighborSteps}}.}
 #' \item{\code{graph.clusters}:}{Results of \code{\link{clusterGraph}}.
-#' This is NULL if graph-based clustering was not performed.}
+#' This is \code{NULL} if graph-based clustering was not performed.}
 #' \item{\code{kmeans.clusters}:}{Results of \code{\link{clusterKmeans}}.
-#' This is NULL if k-means clustering was not performed.}
+#' This is \code{NULL} if k-means clustering was not performed.}
 #' \item{\code{clusters}:}{Integer vector containing the cluster assignment for each cell (after filtering, if \code{filter.cells = TRUE}).
 #' This may be derived from \code{graph.clusters} or \code{kmeans.clusters} depending on the choice of \code{clusters.for.markers}.
 #' If no suitable clusterings are available, this is set to NULL.}
 #' \item{\code{rna.markers}:}{Results of calling \code{\link{scoreMarkers}} on \code{rna.normalized}.
-#' This is NULL if RNA data is not available or no suitable clusterings are available.}
+#' This is \code{NULL} if RNA data is not available or no suitable clusterings are available.}
 #' \item{\code{adt.markers}:}{Results of calling \code{\link{scoreMarkers}} on \code{adt.normalized}.
-#' This is NULL if ADT data is not available or no suitable clusterings are available.}
+#' This is \code{NULL} if ADT data is not available or no suitable clusterings are available.}
 #' \item{\code{crispr.markers}:}{Results of calling \code{\link{scoreMarkers}} on \code{crispr.normalized}.
-#' This is NULL if CRISPR data is not available or no suitable clusterings are available.}
+#' This is \code{NULL} if CRISPR data is not available or no suitable clusterings are available.}
 #' }
 #'
 #' @seealso
 #' C++ libraries in \code{https://github.com/libscran}, which implement all of these steps.
 #'
+#' \code{\link{convertAnalyzeResults}}, to convert the results into a \link[SingleCellExperiment]{SingleCellExperiment}.
+#'
 #' @author Aaron Lun
 #' @examples
 #' library(scRNAseq)
 #' sce <- fetchDataset("zeisel-brain-2015", "2023-12-14", realize.assays=TRUE)
-#' sce <- sce[,1:500] # subsetting it to keep R CMD check happy
+#' sce <- sce[,1:500] # smaller dataset for a faster runtime for R CMD check. 
 #' res <- analyze(
 #'     sce, 
 #'     rna.subsets=list(mito=grep("^mt-", rownames(sce))),
 #'     num.threads=2 # keep R CMD check happy
 #' )
 #' str(res)
+#' convertAnalyzeResults(res)
 #'
 #' @export
 #' @importFrom methods is
@@ -473,4 +476,165 @@ analyze <- function(
     }
 
     store
+}
+
+convertQcMetricsToDataFrame <- function(metrics, flatten = TRUE) {
+    nrow <- length(metrics$sum) # all QC functions produce 'sum'.
+    output <- S4Vectors::make_zero_col_DFrame(nrow=nrow)
+
+    for (n in names(metrics)) {
+        current <- metrics[[n]]
+        if (!is.list(current)) {
+            output[[n]] <- current
+        } else {
+            if (is.null(names(current))) {
+                names(current) <- seq_along(current)
+            }
+            if (flatten) {
+                for (x in names(current)) {
+                    output[[paste0(n, ".", x)]] <- current[[x]]
+                }
+            } else {
+                tmp <- S4Vectors::make_zero_col_DFrame(nrow=nrow)
+                for (x in names(current)) {
+                    tmp[[x]] <- current[[x]]
+                }
+                output[[n]] <- tmp
+            }
+        }
+    }
+
+    output
+}
+
+#' Convert analysis results into a SingleCellExperiment
+#'
+#' Convert results from \code{\link{analyze}} into a \link[SingleCellExperiment]{SingleCellExperiment} for further analysis with Bioconductor packages.
+#'
+#' @param results List of results produced by \code{\link{analyze}}.
+#' @param main.modality String specifying the modality to use as the main experiment of a \link[SingleCellExperiment]{SingleCellExperiment}.
+#' @param flatten.qc.subsets Logical scalar indicating whether QC metrics for subsets should be flattened in the column data.
+#' If \code{FALSE}, subset metrics are reported as a nested \link[S4Vectors]{DataFrame}.
+#' @param include.per.block.variances Logical scalar indicating whether the per-block variances should be reported as a nested \link[S4Vectors]{DataFrame} in the row data.
+#'
+#' @return A \link[SingleCellExperiment]{SingleCellExperiment} containing most of the analysis results.
+#' Filtered and normalized matrices are stored in the assays.
+#' QC metrics, size factors and clusterings are stored in the column data.
+#' Gene variances are stored in the row data.
+#' PCA, t-SNE and UMAP results are stored in the reduced dimensions.
+#' Further modalities are stored as alternative experiments.
+#'
+#' @author Aaron Lun
+#' @seealso
+#' \code{\link{analyze}}, to generate \code{results}.
+#'
+#' @export
+convertAnalyzeResults <- function(
+    results,
+    main.modality = NULL,
+    flatten.qc.subsets = TRUE,
+    include.per.block.variances = FALSE)
+{
+    objects <- list()
+
+    maybe.filter <- function(x, ncells) {
+        if (nrow(x) > ncells) {
+            x[results$combined.qc.filter,,drop=FALSE]
+        } else {
+            x
+        }
+    }
+
+    if (!is.null(results$rna.filtered)) {
+        rna.sce <- SingleCellExperiment::SingleCellExperiment(
+            assays=list(filtered=results$rna.filtered, normalized=results$rna.normalized),
+            reducedDims=list(pca=t(results$rna.pca$components))
+        )
+
+        cd <- SummarizedExperiment::colData(rna.sce)
+        qcdf <- convertQcMetricsToDataFrame(results$rna.qc.metrics, flatten=flatten.qc.subsets)
+        cd <- cbind(cd, maybe.filter(qcdf, nrow(cd)))
+        SummarizedExperiment::colData(rna.sce) <- cd
+        SingleCellExperiment::sizeFactors(rna.sce) <- results$rna.size.factors
+
+        rd <- SummarizedExperiment::rowData(rna.sce)
+        rd <- cbind(rd, results$rna.gene.variances$statistics)
+        if (include.per.block.variances) {
+            per.block <- results$rna.gene.variances$per.block
+            if (!is.null(per.block)) {
+                for (i in seq_along(per.block)) {
+                    per.block[[i]] <- S4Vectors::I(S4Vectors::DataFrame(per.block[[i]]))
+                }
+                rd$per.block <- S4Vectors::DataFrame(per.block)
+            }
+        }
+        hvgs <- logical(nrow(rd))
+        hvgs[results$rna.highly.variable.genes] <- TRUE
+        rd$is.highly.variable <- hvgs
+        SummarizedExperiment::rowData(rna.sce) <- rd
+
+        objects$rna <- rna.sce
+    }
+
+    if (!is.null(results$adt.filtered)) {
+        adt.sce <- SingleCellExperiment::SingleCellExperiment(
+            assays=list(filtered=results$adt.filtered, normalized=results$adt.normalized),
+            reducedDims=list(pca=t(results$adt.pca$components))
+        )
+
+        cd <- SummarizedExperiment::colData(adt.sce)
+        qcdf <- convertQcMetricsToDataFrame(results$adt.qc.metrics, flatten=flatten.qc.subsets)
+        cd <- cbind(cd, maybe.filter(qcdf, nrow(cd)))
+        SummarizedExperiment::colData(adt.sce) <- cd
+        SingleCellExperiment::sizeFactors(adt.sce) <- results$adt.size.factors
+
+        objects$adt <- adt.sce
+    }
+
+    if (!is.null(results$crispr.filtered)) {
+        crispr.sce <- SingleCellExperiment::SingleCellExperiment(
+            assays=list(filtered=results$crispr.filtered, normalized=results$crispr.normalized),
+            reducedDims=list(pca=t(results$crispr.pca$components))
+        )
+
+        cd <- SummarizedExperiment::colData(crispr.sce)
+        qcdf <- convertQcMetricsToDataFrame(results$crispr.qc.metrics)
+        cd <- cbind(cd, maybe.filter(qcdf, nrow(cd)))
+        SummarizedExperiment::colData(crispr.sce) <- cd
+        SingleCellExperiment::sizeFactors(crispr.sce) <- results$crispr.size.factors
+
+        objects$crispr <- crispr.sce
+    }
+
+    if (is.null(main.modality)) {
+        main.modality <- names(objects)[1]
+    }
+
+    sce <- objects[[main.modality]]
+    SingleCellExperiment::mainExpName(sce) <- main.modality
+    objects[[main.modality]] <- NULL
+    SingleCellExperiment::altExps(sce) <- objects
+
+    if (!is.character(results$combined.pca)) {
+        SingleCellExperiment::reducedDim(sce, "combined.pca") <- t(results$combined.pca$combined)
+    }
+
+    if (!is.null(results$mnn.corrected)) {
+        sce$block <- results$block
+        SingleCellExperiment::reducedDim(sce, "mnn.corrected") <- t(results$mnn.corrected$corrected)
+    }
+
+    if (!is.null(results$tsne)) {
+        SingleCellExperiment::reducedDim(sce, "tsne") <- results$tsne
+    }
+
+    if (!is.null(results$umap)) {
+        SingleCellExperiment::reducedDim(sce, "umap") <- results$umap
+    }
+
+    if (!is.null(results$clusters)) {
+        sce$clusters <- results$clusters
+    }
+
+    sce
 }

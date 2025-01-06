@@ -5,8 +5,11 @@ zeisel_sce <- fetchDataset("zeisel-brain-2015", "2023-12-14", realize.assays=TRU
 zeisel_sce <- zeisel_sce[,1:500] # only using the first 500 cells for speed.
 
 test_that("analyze works in the simple case", {
-    # Lowering the MADs to check that filtering has some effect.
-    res <- analyze(zeisel_sce, suggestRnaQcThresholds.args=list(num.mads=1), num.threads=2)
+    res <- analyze(zeisel_sce, 
+        rna.subsets=list(mito=grepl("^mt-", rownames(zeisel_sce))),
+        suggestRnaQcThresholds.args=list(num.mads=1), # Lowering the MADs to check that filtering has some effect.
+        num.threads=2
+    )
 
     expect_identical(res$combined.qc.filter, res$rna.qc.filter)
     expect_lt(sum(res$combined.qc.filter), ncol(zeisel_sce))
@@ -38,6 +41,17 @@ test_that("analyze works in the simple case", {
     expect_null(res$crispr.normalized)
     expect_null(res$crispr.size.factors)
     expect_null(res$crispr.pca)
+
+    # Conversion to an SCE works as expected.
+    converted <- convertAnalyzeResults(res)
+    expect_identical(assayNames(converted), c("filtered", "normalized"))
+    expect_identical(reducedDimNames(converted), c("pca", "tsne", "umap"))
+    expect_identical(colnames(colData(converted)), c("sum", "detected", "subsets.mito", "sizeFactor", "clusters"))
+    expect_identical(colnames(rowData(converted)), c("means", "variances", "fitted", "residuals", "is.highly.variable"))
+
+    converted <- convertAnalyzeResults(res, flatten.qc.subsets=FALSE)
+    expect_s4_class(converted$subsets, "DataFrame")
+    expect_type(converted$subsets$mito, "double")
 })
 
 test_that("analyze works with ADT data", {
@@ -68,6 +82,15 @@ test_that("analyze works with ADT data", {
     expect_null(res$crispr.normalized)
     expect_null(res$crispr.size.factors)
     expect_null(res$crispr.pca)
+
+    # Conversion to an SCE works as expected.
+    converted <- convertAnalyzeResults(res)
+    expect_identical(reducedDimNames(converted), c("pca", "combined.pca", "tsne", "umap"))
+    expect_identical(altExpNames(converted), c("adt"))
+    aconverted <- altExp(converted)
+    expect_identical(assayNames(aconverted), c("filtered", "normalized"))
+    expect_identical(reducedDimNames(aconverted), "pca")
+    expect_identical(colnames(colData(aconverted)), c("sum", "detected", "sizeFactor"))
 })
 
 test_that("analyze works with CRISPR data", {
@@ -88,6 +111,12 @@ test_that("analyze works with CRISPR data", {
     expect_null(res$rna.normalized)
     expect_null(res$rna.size.factors)
     expect_null(res$rna.pca)
+
+    # Conversion to an SCE works as expected.
+    converted <- convertAnalyzeResults(res, main.modality="crispr")
+    expect_identical(assayNames(converted), c("filtered", "normalized"))
+    expect_identical(reducedDimNames(converted), c("pca", "combined.pca", "tsne", "umap"))
+    expect_identical(colnames(colData(converted)), c("sum", "detected", "max.value", "max.index", "sizeFactor", "clusters"))
 })
 
 test_that("analyze works with blocking", {
@@ -102,6 +131,14 @@ test_that("analyze works with blocking", {
     expect_identical(nrow(res$rna.pca$center), length(levels))
     expect_identical(length(res$rna.gene.variances$per.block), length(levels))
     expect_false(isTRUE(all.equal(mean(res$rna.size.factors), 1))) # as the size factors are only scaled to a mean of 1 in the lowest-coverage block.
+
+    # Conversion to an SCE works as expected.
+    converted <- convertAnalyzeResults(res)
+    expect_identical(reducedDimNames(converted), c("pca", "mnn.corrected", "tsne", "umap"))
+    expect_true("block" %in% colnames(colData(converted)))
+
+    converted <- convertAnalyzeResults(res, include.per.block.variances=TRUE)
+    expect_s4_class(rowData(converted)$per.block, "DataFrame")
 })
 
 test_that("analyze works without filtering", {
@@ -114,6 +151,10 @@ test_that("analyze works without filtering", {
     )
     expect_lt(sum(res$combined.qc.filter), ncol(zeisel_sce))
     expect_identical(dim(res$rna.filtered), dim(zeisel_sce))
+
+    # Conversion to an SCE works as expected.
+    converted <- convertAnalyzeResults(res)
+    expect_identical(dim(converted), dim(zeisel_sce))
 })
 
 test_that("analyze works with k-means", {
