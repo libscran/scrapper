@@ -21,4 +21,6 @@ Also added the \code{bound=} argument to set a hard upper/lower bound.
 \item Modified \code{runPca()} so that it caps \code{number=} to the maximum number of available PCs.
 
 \item Added an \code{analyze()} function that provides a one-click approach for analyzing single-cell data.
+
+\item Added a \code{reportGroupMarkerStatistics()} function to combine all marker statistics for a single group into one data frame.
 }}

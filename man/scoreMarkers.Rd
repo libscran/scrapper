@@ -98,11 +98,15 @@ library(Matrix)
 x <- round(abs(rsparsematrix(1000, 100, 0.1) * 100))
 normed <- normalizeCounts(x, size.factors=centerSizeFactors(colSums(x)))
 
+# Compute marker summaries for each group:
 g <- sample(letters[1:4], ncol(x), replace=TRUE)
 scores <- scoreMarkers(normed, g)
 names(scores)
 head(scores$mean)
 head(scores$cohens.d[["a"]])
+
+# Report marker statistics for a single group:
+reportGroupMarkerStatistics(scores, "b")
 
 }
 \seealso{
@@ -112,4 +116,6 @@ the \code{score_markers_pairwise} function (for \code{all.pairwise=TRUE}),
 and their blocked equivalents \code{score_markers_summary_blocked} and \code{score_markers_pairwise_blocked} (when \code{block} is not \code{NULL}).
 
 \code{\link{summarizeEffects}}, to summarize the pairwise effects returned when \code{all.pairwise=TRUE}.
+
+\code{\link{reportGroupMarkerStatistics}}, to consolidate the statistics for a single group into its own data frame.
 }

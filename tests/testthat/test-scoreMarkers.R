@@ -109,3 +109,27 @@ test_that("scoreMarkers works as expected for the full pairwise statistics", {
     sbout <- scoreMarkers(x, g, block=b, block.weight.policy="equal")
     expect_identical(bout$mean, sbout$mean)
 })
+
+test_that("reportGroupMarkerStatistics works as expected", {
+    g <- sample(letters[1:4], ncol(x), replace=TRUE)
+    out <- scoreMarkers(x, g)
+
+    df <- reportGroupMarkerStatistics(out, "b")
+    expect_identical(length(df$mean), nrow(x))
+    expect_identical(length(df$detected), nrow(x))
+    expect_identical(length(df$cohens.d.min), nrow(x))
+    expect_identical(length(df$auc.median), nrow(x))
+    expect_identical(length(df$delta.mean.min.rank), nrow(x))
+    expect_identical(length(df$delta.detected.max), nrow(x))
+
+    df <- reportGroupMarkerStatistics(out, 3, include.mean=FALSE, include.detected=FALSE, effect.sizes=character(0), summaries=character(0))
+    expect_identical(nrow(df), nrow(x))
+    expect_identical(ncol(df), 0L)
+
+    # Works with row names and missing statistics.
+    rownames(x) <- sprintf("GENE_%i", seq_len(nrow(x)))
+    out <- scoreMarkers(x, g, compute.auc=FALSE)
+    df <- reportGroupMarkerStatistics(out, 1)
+    expect_identical(rownames(df), rownames(x))
+    expect_null(df$auc.median)
+})

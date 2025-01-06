@@ -63,13 +63,20 @@ tabulate(res$clusters)
 plot(res$tsne[,1], res$tsne[,2], pch=res$clusters)
 ```
 
-We can also have a look at the top markers for each cluster, say, based on the median AUC:
+We can have a look at the markers defining each cluster:
 
 ```{r}
+# Top markers for each cluster, say, based on the median AUC:
 top.markers <- lapply(res$rna.markers$auc, function(x) {
     head(rownames(x)[order(x$median, decreasing=TRUE)], 10)
 })
 head(top.markers)
+
+# Aggregating all marker statistics for the first cluster
+# (delta.mean is the same as the log-fold change in this case).
+df1 <- reportGroupMarkerStatistics(res$rna.markers, 1)
+df1 <- df1[order(df1$auc.median, decreasing=TRUE),]
+head(df1[,c("mean", "detected", "auc.median", "delta.mean.median")])
 ```
 
 Finally, we can convert the results into a `SingleCellExperiment` for interoperability with other Bioconductor packages like `r Biocpkg("scater")`:
