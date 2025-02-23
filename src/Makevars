@@ -1,3 +1,4 @@
-RIGRAPH_LIBS=$(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript" -e 'cat(Rigraphlib::pkgconfig())')
+RIGRAPH_FLAGS=$(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript" -e 'cat(Rigraphlib::pkgconfig("PKG_CPPFLAGS"))')
+PKG_CPPFLAGS=$(RIGRAPH_FLAGS) -Wall -Wpedantic
+RIGRAPH_LIBS=$(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript" -e 'cat(Rigraphlib::pkgconfig("PKG_LIBS"))')
 PKG_LIBS=$(RIGRAPH_LIBS) $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS) 
-PKG_CPPFLAGS=-Wall -Wpedantic
