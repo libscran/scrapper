@@ -32,7 +32,8 @@ LinkingTo:
     Rcpp,
     assorthead,
     beachmat,
-    BiocNeighbors
+    BiocNeighbors,
+    Rigraphlib
 biocViews: 
     Normalization, 
     RNASeq, 

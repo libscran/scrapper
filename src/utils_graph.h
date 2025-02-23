@@ -5,6 +5,13 @@
 
 #include "scran_graph_cluster/scran_graph_cluster.hpp"
 
-typedef Rcpp::XPtr<scran_graph_cluster::BuildSnnGraphResults<igraph_integer_t, igraph_real_t> > BuildSnnGraphPointer;
+struct GraphComponents {
+    size_t vertices;
+    std::vector<igraph_integer_t> edges;
+    bool weighted;
+    std::vector<igraph_real_t> weights;
+};
+
+typedef Rcpp::XPtr<GraphComponents> GraphComponentsPointer;
 
 #endif

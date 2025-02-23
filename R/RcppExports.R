@@ -25,6 +25,14 @@ build_snn_graph <- function(neighbors, scheme, num_threads, raw) {
     .Call('_scrapper_build_snn_graph', PACKAGE = 'scrapper', neighbors, scheme, num_threads, raw)
 }
 
+graph_to_list <- function(ptr0) {
+    .Call('_scrapper_graph_to_list', PACKAGE = 'scrapper', ptr0)
+}
+
+list_to_graph <- function(contents) {
+    .Call('_scrapper_list_to_graph', PACKAGE = 'scrapper', contents)
+}
+
 center_size_factors <- function(size_factors, block, lowest) {
     .Call('_scrapper_center_size_factors', PACKAGE = 'scrapper', size_factors, block, lowest)
 }
@@ -35,6 +43,18 @@ choose_highly_variable_genes <- function(stats, top, larger, keep_ties, bound) {
 
 choose_pseudo_count <- function(size_factors, quantile, max_bias, min_value) {
     .Call('_scrapper_choose_pseudo_count', PACKAGE = 'scrapper', size_factors, quantile, max_bias, min_value)
+}
+
+cluster_multilevel <- function(ptr0, resolution, seed) {
+    .Call('_scrapper_cluster_multilevel', PACKAGE = 'scrapper', ptr0, resolution, seed)
+}
+
+cluster_leiden <- function(ptr0, resolution, use_cpm, seed) {
+    .Call('_scrapper_cluster_leiden', PACKAGE = 'scrapper', ptr0, resolution, use_cpm, seed)
+}
+
+cluster_walktrap <- function(ptr0, steps) {
+    .Call('_scrapper_cluster_walktrap', PACKAGE = 'scrapper', ptr0, steps)
 }
 
 cluster_kmeans <- function(data, nclusters, init_method, refine_method, var_part_optimize_partition, var_part_size_adjustment, lloyd_iterations, hartigan_wong_iterations, hartigan_wong_quick_transfer_iterations, hartigan_wong_quit_quick_transfer_failure, seed, nthreads) {
