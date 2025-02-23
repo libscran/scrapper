@@ -10,7 +10,7 @@
 #include "utils_graph.h"
 
 //[[Rcpp::export(rng=false)]]
-SEXP build_snn_graph(Rcpp::IntegerMatrix neighbors, std::string scheme, int num_threads, bool raw) {
+SEXP build_snn_graph(Rcpp::IntegerMatrix neighbors, std::string scheme, int num_threads) {
     const int* nptr = neighbors.begin();
     size_t nrow = neighbors.rows();
 
@@ -84,6 +84,7 @@ SEXP list_to_graph(Rcpp::List contents) {
     if (vertices.size() != 1 || vertices[0] < 0) {
         throw std::runtime_error("first element of 'x' should be a non-negative integer scalar");
     }
+    output->vertices = vertices[0];
 
     Rcpp::IntegerVector edges_p1(contents[1]);
     size_t nedges = edges_p1.size();

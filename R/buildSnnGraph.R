@@ -20,6 +20,8 @@
 #' Only used if \code{x} is not a list of existing nearest-neighbor search results.
 #' @param BNPARAM A \link[BiocNeighbors]{BiocNeighborParam} object specifying the algorithm to use.
 #' Only used if \code{x} is not a list of existing nearest-neighbor search results.
+#' @param as.pointer Logical scalar indicating whether to return an external pointer for direct use in \code{\link{clusterGraph}}.
+#' This avoids the extra memory usage caused by conversion to/from an R list.
 #'
 #' @return If \code{as.pointer=FALSE}, a list is returned containing:
 #' \itemize{
@@ -30,6 +32,8 @@
 #' \item \code{weights}, a numeric vector of weights for each edge.
 #' This has length equal to half the length of \code{edges}.
 #' }
+#'
+#' If \code{as.pointer=TRUE}, an external pointer to the graph is returned that can be directly used in \code{\link{clusterGraph}}.
 #'
 #' @author Aaron Lun
 #'
@@ -49,11 +53,16 @@
 #'
 #' @export 
 #' @importFrom BiocNeighbors findKNN AnnoyParam
-buildSnnGraph <- function(x, num.neighbors=10, weight.scheme="ranked", num.threads=1, BNPARAM=AnnoyParam()) {
+buildSnnGraph <- function(x, num.neighbors=10, weight.scheme="ranked", num.threads=1, BNPARAM=AnnoyParam(), as.pointer=FALSE) {
     if (!is.list(x)) {
         x <- findKNN(x, k=num.neighbors, transposed=TRUE, get.index="transposed", get.distance=FALSE, num.threads=num.threads, BNPARAM=BNPARAM)
     } else {
         .checkIndices(x$index, num.neighbors)
     }
-    build_snn_graph(x$index, scheme=weight.scheme, num_threads=num.threads, raw=FALSE)
+
+    out <- build_snn_graph(x$index, scheme=weight.scheme, num_threads=num.threads)
+    if (!as.pointer) {
+        out <- graph_to_list(out)
+    }
+    out
 }

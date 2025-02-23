@@ -73,15 +73,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // build_snn_graph
-SEXP build_snn_graph(Rcpp::IntegerMatrix neighbors, std::string scheme, int num_threads, bool raw);
-RcppExport SEXP _scrapper_build_snn_graph(SEXP neighborsSEXP, SEXP schemeSEXP, SEXP num_threadsSEXP, SEXP rawSEXP) {
+SEXP build_snn_graph(Rcpp::IntegerMatrix neighbors, std::string scheme, int num_threads);
+RcppExport SEXP _scrapper_build_snn_graph(SEXP neighborsSEXP, SEXP schemeSEXP, SEXP num_threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::IntegerMatrix >::type neighbors(neighborsSEXP);
     Rcpp::traits::input_parameter< std::string >::type scheme(schemeSEXP);
     Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
-    Rcpp::traits::input_parameter< bool >::type raw(rawSEXP);
-    rcpp_result_gen = Rcpp::wrap(build_snn_graph(neighbors, scheme, num_threads, raw));
+    rcpp_result_gen = Rcpp::wrap(build_snn_graph(neighbors, scheme, num_threads));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -569,7 +568,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_filter_adt_qc_metrics", (DL_FUNC) &_scrapper_filter_adt_qc_metrics, 3},
     {"_scrapper_aggregate_across_cells", (DL_FUNC) &_scrapper_aggregate_across_cells, 3},
     {"_scrapper_aggregate_across_genes", (DL_FUNC) &_scrapper_aggregate_across_genes, 4},
-    {"_scrapper_build_snn_graph", (DL_FUNC) &_scrapper_build_snn_graph, 4},
+    {"_scrapper_build_snn_graph", (DL_FUNC) &_scrapper_build_snn_graph, 3},
     {"_scrapper_graph_to_list", (DL_FUNC) &_scrapper_graph_to_list, 1},
     {"_scrapper_list_to_graph", (DL_FUNC) &_scrapper_list_to_graph, 1},
     {"_scrapper_center_size_factors", (DL_FUNC) &_scrapper_center_size_factors, 3},

@@ -9,7 +9,8 @@ buildSnnGraph(
   num.neighbors = 10,
   weight.scheme = "ranked",
   num.threads = 1,
-  BNPARAM = AnnoyParam()
+  BNPARAM = AnnoyParam(),
+  as.pointer = FALSE
 )
 }
 \arguments{
@@ -33,6 +34,9 @@ Only used if \code{x} is not a list of existing nearest-neighbor search results.
 
 \item{BNPARAM}{A \link[BiocNeighbors]{BiocNeighborParam} object specifying the algorithm to use.
 Only used if \code{x} is not a list of existing nearest-neighbor search results.}
+
+\item{as.pointer}{Logical scalar indicating whether to return an external pointer for direct use in \code{\link{clusterGraph}}.
+This avoids the extra memory usage caused by conversion to/from an R list.}
 }
 \value{
 If \code{as.pointer=FALSE}, a list is returned containing:
@@ -44,6 +48,8 @@ i.e., \code{edges[1:2]} form the first edge, \code{edges[3:4]} form the second e
 \item \code{weights}, a numeric vector of weights for each edge.
 This has length equal to half the length of \code{edges}.
 }
+
+If \code{as.pointer=TRUE}, an external pointer to the graph is returned that can be directly used in \code{\link{clusterGraph}}.
 }
 \description{
 Build a shared nearest neighbor (SNN) graph where each node is a cell.
