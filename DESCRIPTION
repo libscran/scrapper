@@ -47,6 +47,7 @@ biocViews:
     FeatureExtraction,
     PrincipalComponent,
     Clustering
+SystemRequirements: C++17, GNU make
 VignetteBuilder: knitr
 Encoding: UTF-8
 RoxygenNote: 7.3.2
