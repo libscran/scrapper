@@ -60,7 +60,7 @@ For example, we can make a t-SNE plot:
 
 ```{r}
 tabulate(res$clusters)
-plot(res$tsne[,1], res$tsne[,2], pch=res$clusters)
+plot(res$tsne[,1], res$tsne[,2], col=res$clusters)
 ```
 
 We can have a look at the markers defining each cluster:
