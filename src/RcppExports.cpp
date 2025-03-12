@@ -73,15 +73,34 @@ BEGIN_RCPP
 END_RCPP
 }
 // build_snn_graph
-SEXP build_snn_graph(Rcpp::IntegerMatrix neighbors, std::string scheme, int num_threads, bool raw);
-RcppExport SEXP _scrapper_build_snn_graph(SEXP neighborsSEXP, SEXP schemeSEXP, SEXP num_threadsSEXP, SEXP rawSEXP) {
+SEXP build_snn_graph(Rcpp::IntegerMatrix neighbors, std::string scheme, int num_threads);
+RcppExport SEXP _scrapper_build_snn_graph(SEXP neighborsSEXP, SEXP schemeSEXP, SEXP num_threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::IntegerMatrix >::type neighbors(neighborsSEXP);
     Rcpp::traits::input_parameter< std::string >::type scheme(schemeSEXP);
     Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
-    Rcpp::traits::input_parameter< bool >::type raw(rawSEXP);
-    rcpp_result_gen = Rcpp::wrap(build_snn_graph(neighbors, scheme, num_threads, raw));
+    rcpp_result_gen = Rcpp::wrap(build_snn_graph(neighbors, scheme, num_threads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// graph_to_list
+Rcpp::List graph_to_list(SEXP ptr0);
+RcppExport SEXP _scrapper_graph_to_list(SEXP ptr0SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type ptr0(ptr0SEXP);
+    rcpp_result_gen = Rcpp::wrap(graph_to_list(ptr0));
+    return rcpp_result_gen;
+END_RCPP
+}
+// list_to_graph
+SEXP list_to_graph(Rcpp::List contents);
+RcppExport SEXP _scrapper_list_to_graph(SEXP contentsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type contents(contentsSEXP);
+    rcpp_result_gen = Rcpp::wrap(list_to_graph(contents));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -121,6 +140,42 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type max_bias(max_biasSEXP);
     Rcpp::traits::input_parameter< double >::type min_value(min_valueSEXP);
     rcpp_result_gen = Rcpp::wrap(choose_pseudo_count(size_factors, quantile, max_bias, min_value));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cluster_multilevel
+Rcpp::List cluster_multilevel(SEXP ptr0, double resolution, int seed);
+RcppExport SEXP _scrapper_cluster_multilevel(SEXP ptr0SEXP, SEXP resolutionSEXP, SEXP seedSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type ptr0(ptr0SEXP);
+    Rcpp::traits::input_parameter< double >::type resolution(resolutionSEXP);
+    Rcpp::traits::input_parameter< int >::type seed(seedSEXP);
+    rcpp_result_gen = Rcpp::wrap(cluster_multilevel(ptr0, resolution, seed));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cluster_leiden
+Rcpp::List cluster_leiden(SEXP ptr0, double resolution, bool use_cpm, int seed);
+RcppExport SEXP _scrapper_cluster_leiden(SEXP ptr0SEXP, SEXP resolutionSEXP, SEXP use_cpmSEXP, SEXP seedSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type ptr0(ptr0SEXP);
+    Rcpp::traits::input_parameter< double >::type resolution(resolutionSEXP);
+    Rcpp::traits::input_parameter< bool >::type use_cpm(use_cpmSEXP);
+    Rcpp::traits::input_parameter< int >::type seed(seedSEXP);
+    rcpp_result_gen = Rcpp::wrap(cluster_leiden(ptr0, resolution, use_cpm, seed));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cluster_walktrap
+Rcpp::List cluster_walktrap(SEXP ptr0, int steps);
+RcppExport SEXP _scrapper_cluster_walktrap(SEXP ptr0SEXP, SEXP stepsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type ptr0(ptr0SEXP);
+    Rcpp::traits::input_parameter< int >::type steps(stepsSEXP);
+    rcpp_result_gen = Rcpp::wrap(cluster_walktrap(ptr0, steps));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -513,10 +568,15 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_filter_adt_qc_metrics", (DL_FUNC) &_scrapper_filter_adt_qc_metrics, 3},
     {"_scrapper_aggregate_across_cells", (DL_FUNC) &_scrapper_aggregate_across_cells, 3},
     {"_scrapper_aggregate_across_genes", (DL_FUNC) &_scrapper_aggregate_across_genes, 4},
-    {"_scrapper_build_snn_graph", (DL_FUNC) &_scrapper_build_snn_graph, 4},
+    {"_scrapper_build_snn_graph", (DL_FUNC) &_scrapper_build_snn_graph, 3},
+    {"_scrapper_graph_to_list", (DL_FUNC) &_scrapper_graph_to_list, 1},
+    {"_scrapper_list_to_graph", (DL_FUNC) &_scrapper_list_to_graph, 1},
     {"_scrapper_center_size_factors", (DL_FUNC) &_scrapper_center_size_factors, 3},
     {"_scrapper_choose_highly_variable_genes", (DL_FUNC) &_scrapper_choose_highly_variable_genes, 5},
     {"_scrapper_choose_pseudo_count", (DL_FUNC) &_scrapper_choose_pseudo_count, 4},
+    {"_scrapper_cluster_multilevel", (DL_FUNC) &_scrapper_cluster_multilevel, 3},
+    {"_scrapper_cluster_leiden", (DL_FUNC) &_scrapper_cluster_leiden, 4},
+    {"_scrapper_cluster_walktrap", (DL_FUNC) &_scrapper_cluster_walktrap, 2},
     {"_scrapper_cluster_kmeans", (DL_FUNC) &_scrapper_cluster_kmeans, 12},
     {"_scrapper_combine_factors", (DL_FUNC) &_scrapper_combine_factors, 3},
     {"_scrapper_compute_clrm1_factors", (DL_FUNC) &_scrapper_compute_clrm1_factors, 2},

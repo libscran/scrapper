@@ -1,6 +1,6 @@
 Package: scrapper
-Version: 1.1.12
-Date: 2025-01-06
+Version: 1.1.13
+Date: 2025-03-11
 Authors@R: person("Aaron", "Lun", role=c("cre", "aut"), email="infinite.monkeys.with.keyboards@gmail.com")
 Title: Bindings to C++ Libraries for Single-Cell Analysis
 Description: 
@@ -14,7 +14,7 @@ Imports:
     beachmat (>= 2.21.6),
     DelayedArray,
     BiocNeighbors (>= 1.99.0),
-    igraph,
+    Rigraphlib,
     parallel
 Suggests:
     testthat,
@@ -27,7 +27,8 @@ Suggests:
     S4Vectors,
     SummarizedExperiment,
     SingleCellExperiment,
-    scRNAseq
+    scRNAseq,
+    igraph
 LinkingTo:
     Rcpp,
     assorthead,
@@ -46,6 +47,7 @@ biocViews:
     FeatureExtraction,
     PrincipalComponent,
     Clustering
+SystemRequirements: C++17, GNU make
 VignetteBuilder: knitr
 Encoding: UTF-8
 RoxygenNote: 7.3.2

@@ -31,7 +31,7 @@ Alternatively, an \link[igraph]{igraph} object with edge weights.}
 \item{seed}{Integer scalar specifying the random seed to use for \code{method="multilevel"} or \code{"leiden"}.}
 }
 \value{
-A list containing \code{membership}, an integer vector containing the cluster assignment for each cell;
+A list containing \code{membership}, a factor containing the cluster assignment for each cell;
 and \code{status}, an integer scalar indicating whether the algorithm completed successfully (0) or not (non-zero).
 Additional fields may be present depending on the \code{method}:
 \itemize{

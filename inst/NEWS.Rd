@@ -23,4 +23,7 @@ Also added the \code{bound=} argument to set a hard upper/lower bound.
 \item Added an \code{analyze()} function that provides a one-click approach for analyzing single-cell data.
 
 \item Added a \code{reportGroupMarkerStatistics()} function to combine all marker statistics for a single group into one data frame.
+
+\item Switch \code{clusterGraph()} to use C++ wrappers around the igraph community detection algorithms via \pkg{Rigraphlib}.
+This replaces the dependency on the igraph R package.
 }}
