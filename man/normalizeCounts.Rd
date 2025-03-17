@@ -10,7 +10,8 @@ normalizeCounts(
   log = TRUE,
   pseudo.count = 1,
   log.base = 2,
-  preserve.sparsity = FALSE
+  preserve.sparsity = FALSE,
+  delayed = TRUE
 )
 }
 \arguments{
@@ -32,9 +33,12 @@ Ignored if \code{log=FALSE}.}
 \item{preserve.sparsity}{Logical scalar indicating whether to preserve sparsity for \code{pseudo.count != 1}.
 If \code{TRUE}, users should manually add \code{log(pseudo.count, log.base)} to the returned matrix to obtain the desired log-transformed expression values.
 Ignored if \code{log = FALSE} or \code{pseudo.count = 1}.}
+
+\item{delayed}{Logical scalar indicating whether operations on a matrix-like \code{x} should be delayed.}
 }
 \value{
-If \code{x} is a matrix-like object, a \link[DelayedArray]{DelayedArray} is returned containing the (log-transformed) normalized expression matrix.
+If \code{x} is a matrix-like object and \code{delayed=TRUE}, a \link[DelayedArray]{DelayedArray} is returned containing the (log-transformed) normalized expression matrix.
+If \code{delayed=FALSE}, the type of the (log-)normalized matrix will depend on the operations applied to \code{x}.
 
 If \code{x} is an external pointer produced by \code{\link[beachmat]{initializeCpp}}, a new external pointer is returned containing the normalized expression matrix.
 }

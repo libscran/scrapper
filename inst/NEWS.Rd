@@ -26,4 +26,6 @@ Also added the \code{bound=} argument to set a hard upper/lower bound.
 
 \item Switch \code{clusterGraph()} to use C++ wrappers around the igraph community detection algorithms via \pkg{Rigraphlib}.
 This replaces the dependency on the igraph R package.
+
+\item Added a \code{delayed=} option to avoid wrapping the matrix in a \code{DelayedArray} in \code{normalizeCounts()}.
 }}

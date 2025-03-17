@@ -7,6 +7,8 @@
 #' Alternatively, an external pointer created by \code{\link[beachmat]{initializeCpp}}.
 #' @param size.factors A numeric vector of length equal to the number of cells in \code{x},
 #' containing positive size factors for all cells.
+#' @param delayed Logical scalar indicating whether operations on a matrix-like \code{x} should be delayed.
+#' This improves memory efficiency at the cost of some speed in downstream operations.
 #' @param log Logical scalar indicating whether log-transformation should be performed.
 #' @param pseudo.count Numeric scalar specifying the positive pseudo-count to add before any log-transformation.
 #' Ignored if \code{log=FALSE}.
@@ -16,7 +18,8 @@
 #' If \code{TRUE}, users should manually add \code{log(pseudo.count, log.base)} to the returned matrix to obtain the desired log-transformed expression values.
 #' Ignored if \code{log = FALSE} or \code{pseudo.count = 1}.
 #'
-#' @return If \code{x} is a matrix-like object, a \link[DelayedArray]{DelayedArray} is returned containing the (log-transformed) normalized expression matrix.
+#' @return If \code{x} is a matrix-like object and \code{delayed=TRUE}, a \link[DelayedArray]{DelayedArray} is returned containing the (log-transformed) normalized expression matrix.
+#' If \code{delayed=FALSE}, the type of the (log-)normalized matrix will depend on the operations applied to \code{x}.
 #'
 #' If \code{x} is an external pointer produced by \code{\link[beachmat]{initializeCpp}}, a new external pointer is returned containing the normalized expression matrix.
 #'
@@ -40,7 +43,7 @@
 #' @export
 #' @importFrom methods is
 #' @importFrom DelayedArray DelayedArray t
-normalizeCounts <- function(x, size.factors, log=TRUE, pseudo.count=1, log.base=2, preserve.sparsity=FALSE) {
+normalizeCounts <- function(x, size.factors, log=TRUE, pseudo.count=1, log.base=2, preserve.sparsity=FALSE, delayed=TRUE) {
     if (is(x, "externalptr")) {
         return(normalize_counts(x, size.factors, log=log, log_base=log.base, pseudo_count=pseudo.count, preserve_sparsity=preserve.sparsity))
     }
@@ -50,7 +53,10 @@ normalizeCounts <- function(x, size.factors, log=TRUE, pseudo.count=1, log.base=
         pseudo.count <- 1
     }
 
-    x <- DelayedArray(x)
+    if (delayed) {
+        x <- DelayedArray(x)
+    }
+
     normalized <- t(t(x) / size.factors)
     if (!log) {
         return(normalized)
