@@ -75,6 +75,12 @@ runAllNeighborSteps <- function(
         k.choices$clusterGraph <- snn.k
     }
 
+    if (length(k.choices) == 0L) {
+        output <- list()
+        names(output) <- character(0)
+        return(output)
+    }
+
     if (is.matrix(x)) {
         index <- buildIndex(x, BNPARAM=BNPARAM, transposed=TRUE)
     } else {

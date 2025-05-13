@@ -36,3 +36,9 @@ test_that("runAllNeighborSteps works when returning the graph", {
     expect_identical(ncol(x), out$buildSnnGraph$vertices)
     expect_identical(ncol(x), length(out$clusterGraph$membership))
 })
+
+test_that("runAllNeighborSteps returns sensibly when nothing is requested", {
+    res <- runAllNeighborSteps(x, runUmap.args=NULL, runTsne.args=NULL, clusterGraph.args=NULL)
+    expect_type(res, "list")
+    expect_identical(length(res), 0L)
+})

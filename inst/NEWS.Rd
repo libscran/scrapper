@@ -2,7 +2,11 @@
 \title{scrapper News}
 \encoding{UTF-8}
 
-\section{Version 1.2}{\itemize{
+\section{Version 1.3.1}{\itemize{
+\item Bugfix to \code{runAllNeighborSteps()} to return an empty list when no step is requested.
+}}
+
+\section{Version 1.2.0}{\itemize{
 \item Added the \code{aggregateAcrossGenes()} function, to compute an aggregate expression value for gene sets.
 
 \item Added \code{compute.cohens.d=}, \code{compute.delta.mean=} and \code{compute.delta.detected=} options to \code{scoreMarkers()}.
