@@ -224,22 +224,18 @@ BEGIN_RCPP
 END_RCPP
 }
 // correct_mnn
-Rcpp::List correct_mnn(Rcpp::NumericMatrix x, Rcpp::IntegerVector block, int num_neighbors, double num_mads, int robust_iterations, double robust_trim, int num_threads, int mass_cap, Rcpp::Nullable<Rcpp::IntegerVector> order, std::string ref_policy, SEXP builder);
-RcppExport SEXP _scrapper_correct_mnn(SEXP xSEXP, SEXP blockSEXP, SEXP num_neighborsSEXP, SEXP num_madsSEXP, SEXP robust_iterationsSEXP, SEXP robust_trimSEXP, SEXP num_threadsSEXP, SEXP mass_capSEXP, SEXP orderSEXP, SEXP ref_policySEXP, SEXP builderSEXP) {
+Rcpp::List correct_mnn(Rcpp::NumericMatrix x, Rcpp::IntegerVector block, int num_neighbors, int num_steps, int num_threads, std::string merge_policy, SEXP builder);
+RcppExport SEXP _scrapper_correct_mnn(SEXP xSEXP, SEXP blockSEXP, SEXP num_neighborsSEXP, SEXP num_stepsSEXP, SEXP num_threadsSEXP, SEXP merge_policySEXP, SEXP builderSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type x(xSEXP);
     Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type block(blockSEXP);
     Rcpp::traits::input_parameter< int >::type num_neighbors(num_neighborsSEXP);
-    Rcpp::traits::input_parameter< double >::type num_mads(num_madsSEXP);
-    Rcpp::traits::input_parameter< int >::type robust_iterations(robust_iterationsSEXP);
-    Rcpp::traits::input_parameter< double >::type robust_trim(robust_trimSEXP);
+    Rcpp::traits::input_parameter< int >::type num_steps(num_stepsSEXP);
     Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
-    Rcpp::traits::input_parameter< int >::type mass_cap(mass_capSEXP);
-    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type order(orderSEXP);
-    Rcpp::traits::input_parameter< std::string >::type ref_policy(ref_policySEXP);
+    Rcpp::traits::input_parameter< std::string >::type merge_policy(merge_policySEXP);
     Rcpp::traits::input_parameter< SEXP >::type builder(builderSEXP);
-    rcpp_result_gen = Rcpp::wrap(correct_mnn(x, block, num_neighbors, num_mads, robust_iterations, robust_trim, num_threads, mass_cap, order, ref_policy, builder));
+    rcpp_result_gen = Rcpp::wrap(correct_mnn(x, block, num_neighbors, num_steps, num_threads, merge_policy, builder));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -580,7 +576,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_cluster_kmeans", (DL_FUNC) &_scrapper_cluster_kmeans, 12},
     {"_scrapper_combine_factors", (DL_FUNC) &_scrapper_combine_factors, 3},
     {"_scrapper_compute_clrm1_factors", (DL_FUNC) &_scrapper_compute_clrm1_factors, 2},
-    {"_scrapper_correct_mnn", (DL_FUNC) &_scrapper_correct_mnn, 11},
+    {"_scrapper_correct_mnn", (DL_FUNC) &_scrapper_correct_mnn, 7},
     {"_scrapper_compute_crispr_qc_metrics", (DL_FUNC) &_scrapper_compute_crispr_qc_metrics, 2},
     {"_scrapper_suggest_crispr_qc_thresholds", (DL_FUNC) &_scrapper_suggest_crispr_qc_thresholds, 3},
     {"_scrapper_filter_crispr_qc_metrics", (DL_FUNC) &_scrapper_filter_crispr_qc_metrics, 3},

@@ -8,12 +8,14 @@ correctMnn(
   x,
   block,
   num.neighbors = 15,
-  num.mads = 3,
-  robust.iterations = 2,
-  robust.trim = 0.25,
+  num.steps = 1,
+  merge.policy = c("rss", "size", "variance", "input"),
+  num.mads = NULL,
+  robust.iterations = NULL,
+  robust.trim = NULL,
   mass.cap = NULL,
   order = NULL,
-  reference.policy = c("max-rss", "max-size", "max-variance", "input"),
+  reference.policy = NULL,
   BNPARAM = AnnoyParam(),
   num.threads = 1
 )
@@ -26,39 +28,28 @@ typically containing low-dimensional coordinates (e.g., from \code{\link{runPca}
 
 \item{num.neighbors}{Integer scalar specifying the number of neighbors to use when identifying MNN pairs.}
 
-\item{num.mads}{Numeric scalar specifying the number of median absolute deviations to use for removing outliers in the center-of-mass calculations.}
+\item{merge.policy}{String specifying the policy to use to choose the order of batches to merge.
+This can be based on the size of the batch (\code{"size"}),
+the variance within each batch (\code{"variance"}), 
+the residual sum of squares of each batch (\code{"rss"}),
+or the input order (\code{"input"}).}
 
-\item{robust.iterations}{Integer scalar specifying the number of iterations for robust calculation of the center of mass.}
+\item{num.mads}{Deprecated and ignored.}
 
-\item{robust.trim}{Numeric scalar in [0, 1) specifying the trimming proportion for robust calculation of the center of mass.}
+\item{robust.iterations}{Deprecated and ignored.}
 
-\item{mass.cap}{Integer scalar specifying the cap on the number of observations to use for center-of-mass calculations on the reference dataset.
-A value of 100,000 may be appropriate for speeding up correction of very large datasets.
-If \code{NULL}, no cap is used.}
+\item{robust.trim}{Deprecated and ignored.}
 
-\item{order}{Vector containing levels of \code{batch} in the desired merge order.
-If \code{NULL}, a suitable merge order is automatically determined.}
+\item{mass.cap}{Deprecated and ignored.}
 
-\item{reference.policy}{String specifying the policy to use to choose the first reference batch.
-This can be based on the largest batch (\code{"max-size"}),
-the most variable batch (\code{"max-variance"}), 
-the batch with the largest residual sum of squares (\code{"max-rss"}),
-or the first specified input (\code{"input"}).
-Only used for automatic merges, i.e., when \code{order=NULL}.}
+\item{order}{Deprecated and ignored, the merge order is now always automatically determined.}
 
 \item{BNPARAM}{A \link[BiocNeighbors]{BiocNeighborParam} object specifying the nearest-neighbor algorithm to use.}
 
 \item{num.threads}{Integer scalar specifying the number of threads to use.}
 }
 \value{
-List containing:
-\itemize{
-\item \code{corrected}, a numeric matrix of the same dimensions as \code{x}, containing the corrected values.
-\item \code{merge.order}, character vector containing the unique levels of \code{batch} in the automatically determined merge order.
-The first level in this vector is used as the reference batch; all other batches are iteratively merged to it.
-\item \code{num.pairs}, integer vector of length equal to the number of batches minus 1.
-This contains the number of MNN pairs at each merge.
-}
+List containing \code{corrected}, a numeric matrix of the same dimensions as \code{x}, containing the corrected values.
 }
 \description{
 Apply mutual nearest neighbor (MNN) correction to remove batch effects from a low-dimensional matrix.

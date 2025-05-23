@@ -126,7 +126,6 @@ test_that("analyze works with blocking", {
     res <- analyze(rna.x=assay(zeisel_sce), block=block, num.threads=2)
 
     expect_true(!is.null(res$mnn.corrected))
-    expect_identical(sort(res$mnn.corrected$merge.order), levels)
     expect_identical(length(res$rna.qc.thresholds$sum), length(levels))
     expect_identical(nrow(res$rna.pca$center), length(levels))
     expect_identical(length(res$rna.gene.variances$per.block), length(levels))

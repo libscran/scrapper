@@ -34,7 +34,8 @@ Ignored if \code{log=FALSE}.}
 If \code{TRUE}, users should manually add \code{log(pseudo.count, log.base)} to the returned matrix to obtain the desired log-transformed expression values.
 Ignored if \code{log = FALSE} or \code{pseudo.count = 1}.}
 
-\item{delayed}{Logical scalar indicating whether operations on a matrix-like \code{x} should be delayed.}
+\item{delayed}{Logical scalar indicating whether operations on a matrix-like \code{x} should be delayed.
+This improves memory efficiency at the cost of some speed in downstream operations.}
 }
 \value{
 If \code{x} is a matrix-like object and \code{delayed=TRUE}, a \link[DelayedArray]{DelayedArray} is returned containing the (log-transformed) normalized expression matrix.

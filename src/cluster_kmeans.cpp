@@ -25,18 +25,18 @@ Rcpp::List cluster_kmeans(
     auto center_ptr = static_cast<double*>(centers.begin());
     auto cluster_ptr = static_cast<int*>(clusters.begin());
 
-    std::unique_ptr<kmeans::Initialize<> > iptr;
+    std::unique_ptr<kmeans::Initialize<int, double, int, double> > iptr;
     if (init_method == "random") {
-        auto ptr = new kmeans::InitializeRandom;
+        auto ptr = new kmeans::InitializeRandom<int, double, int, double>;
         ptr->get_options().seed = seed;
         iptr.reset(ptr);
     } else if (init_method == "kmeans++") {
-        auto ptr = new kmeans::InitializeKmeanspp;
+        auto ptr = new kmeans::InitializeKmeanspp<int, double, int, double>;
         ptr->get_options().num_threads = nthreads;
         ptr->get_options().seed = seed;
         iptr.reset(ptr);;
     } else if (init_method == "var-part") {
-        auto ptr = new kmeans::InitializeVariancePartition;
+        auto ptr = new kmeans::InitializeVariancePartition<int, double, int, double>;
         ptr->get_options().optimize_partition = var_part_optimize_partition;
         ptr->get_options().size_adjustment = var_part_size_adjustment;
         iptr.reset(ptr);
@@ -44,14 +44,14 @@ Rcpp::List cluster_kmeans(
         throw std::runtime_error("unknown init_method '" + init_method + "'");
     }
 
-    std::unique_ptr<kmeans::Refine<> > rptr;
+    std::unique_ptr<kmeans::Refine<int, double, int, double> > rptr;
     if (refine_method == "lloyd") {
-        auto ptr = new kmeans::RefineLloyd;
+        auto ptr = new kmeans::RefineLloyd<int, double, int, double>;
         ptr->get_options().max_iterations = lloyd_iterations;
         ptr->get_options().num_threads = nthreads;
         rptr.reset(ptr);
     } else if (refine_method == "hartigan-wong") {
-        auto ptr = new kmeans::RefineHartiganWong;
+        auto ptr = new kmeans::RefineHartiganWong<int, double, int, double>;
         ptr->get_options().max_iterations = hartigan_wong_iterations;
         ptr->get_options().max_quick_transfer_iterations = hartigan_wong_quick_transfer_iterations;
         ptr->get_options().quit_on_quick_transfer_convergence_failure = hartigan_wong_quit_quick_transfer_failure;
@@ -59,7 +59,7 @@ Rcpp::List cluster_kmeans(
         rptr.reset(ptr);
     }
 
-    auto out = kmeans::compute(kmeans::SimpleMatrix<double, int, int>(ndim, nobs, ptr), *iptr, *rptr, nclusters, center_ptr, cluster_ptr);
+    auto out = kmeans::compute(kmeans::SimpleMatrix<int, double>(ndim, nobs, ptr), *iptr, *rptr, nclusters, center_ptr, cluster_ptr);
     return Rcpp::List::create(
         Rcpp::Named("clusters") = clusters, 
         Rcpp::Named("centers") = centers,
