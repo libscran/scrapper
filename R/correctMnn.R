@@ -6,12 +6,14 @@
 #' typically containing low-dimensional coordinates (e.g., from \code{\link{runPca}}).
 #' @param block Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{x}.
 #' @param num.neighbors Integer scalar specifying the number of neighbors to use when identifying MNN pairs.
+#' @param num.steps Integer scalar specifying the number of steps for the recursive neighbor search to compute the center of mass.
 #' @param num.mads Deprecated and ignored.
 #' @param robust.iterations Deprecated and ignored.
 #' @param robust.trim Deprecated and ignored.
 #' @param mass.cap Deprecated and ignored.
 #' @param num.threads Integer scalar specifying the number of threads to use.
 #' @param order Deprecated and ignored, the merge order is now always automatically determined.
+#' @param reference.policy Deprecated, use \code{merge.policy} instead. 
 #' @param merge.policy String specifying the policy to use to choose the order of batches to merge.
 #' This can be based on the size of the batch (\code{"size"}),
 #' the variance within each batch (\code{"variance"}), 
@@ -74,12 +76,10 @@ correctMnn <- function(
     }
 
     if (!is.null(reference.policy)) {
-        reference.policy <- match.arg(reference.policy)
         merge.policy <- sub("^max-", "", reference.policy)
         .Deprecated(old=sprintf("reference.policy=%s", deparse(reference.policy)), new=sprintf("merge.policy=%s", deparse(merge.policy)))
-    } else {
-        merge.policy <- match.arg(merge.policy)
     }
+    merge.policy <- match.arg(merge.policy)
 
     output <- correct_mnn(
         x, 

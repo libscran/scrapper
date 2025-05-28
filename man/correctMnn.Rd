@@ -28,6 +28,8 @@ typically containing low-dimensional coordinates (e.g., from \code{\link{runPca}
 
 \item{num.neighbors}{Integer scalar specifying the number of neighbors to use when identifying MNN pairs.}
 
+\item{num.steps}{Integer scalar specifying the number of steps for the recursive neighbor search to compute the center of mass.}
+
 \item{merge.policy}{String specifying the policy to use to choose the order of batches to merge.
 This can be based on the size of the batch (\code{"size"}),
 the variance within each batch (\code{"variance"}), 
@@ -43,6 +45,8 @@ or the input order (\code{"input"}).}
 \item{mass.cap}{Deprecated and ignored.}
 
 \item{order}{Deprecated and ignored, the merge order is now always automatically determined.}
+
+\item{reference.policy}{Deprecated, use \code{merge.policy} instead.}
 
 \item{BNPARAM}{A \link[BiocNeighbors]{BiocNeighborParam} object specifying the nearest-neighbor algorithm to use.}
 
