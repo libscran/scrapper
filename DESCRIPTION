@@ -1,6 +1,6 @@
 Package: scrapper
-Version: 1.3.3
-Date: 2025-05-28
+Version: 1.3.4
+Date: 2025-06-04
 Authors@R: person("Aaron", "Lun", role=c("cre", "aut"), email="infinite.monkeys.with.keyboards@gmail.com")
 Title: Bindings to C++ Libraries for Single-Cell Analysis
 Description: 
@@ -11,7 +11,7 @@ License: MIT + file LICENSE
 Imports:
     methods,
     Rcpp,
-    beachmat (>= 2.21.6),
+    beachmat (>= 2.25.1),
     DelayedArray,
     BiocNeighbors (>= 1.99.0),
     Rigraphlib,
