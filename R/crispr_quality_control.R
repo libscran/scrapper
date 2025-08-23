@@ -17,8 +17,13 @@
 #' @return For \code{computeCrisprQcMetrics}, a list is returned containing:
 #' \itemize{
 #' \item \code{sum}, a numeric vector containing the total CRISPR count for each cell.
+#' Low counts indicate that the cell was not successfully transfected with a construct or that library preparation and sequencing failed.
 #' \item \code{detected}, an integer vector containing the number of detected guides per cell.
+#' In theory, this should be 1, as each cell should express no more than one guide construct.
+#' However, ambient contamination may introduce non-zero counts for multiple guides, without necessarily interfering with downstream analyses.
+#' As such, this metric is less useful for guide data, though we compute it anyway.
 #' \item \code{max.value}, a numeric vector containing the count for the most abundant guide in cell.
+#' Low values indicate that the cell was not successfully transfected or that library preparation and sequencing failed.
 #' \item \code{max.index}, an integer vector containing the row index of the most abundant guide in cell.
 #' }
 #' Each vector is of length equal to the number of cells.
@@ -27,20 +32,43 @@
 #' \itemize{
 #' \item If \code{block=NULL}, the list contains:
 #' \itemize{
-#' \item \code{max.value}, a numeric scalar containing the lower bound on the maximum counts for each blocking level.
+#' \item \code{max.value}, a numeric scalar containing the lower bound on the maximum count. 
+#' This is defined as \code{num.mads} MADs below the median of the log-transformed metrics across cells with high maximum proportions (see Details).
 #' }
 #' \item Otherwise, if \code{block} is supplied, the list contains:
 #' \itemize{
 #' \item \code{max.value}, a numeric vector containing the lower bound on the maximum counts for each blocking level.
+#' Here, the threshold is computed independently for each block, using the same method as the unblocked case.
 #' }
 #' Each vector is of length equal to the number of levels in \code{block} and is named accordingly.
 #' }
 #'
 #' For \code{filterCrisprQcMetrics}, a logical vector of length \code{ncol(x)} is returned indicating which cells are of high quality. 
+#' High-quality cells are defined as those with maximum counts above the \code{max.value} threshold.
+#'
+#' @details
+#' In CRISPR data, a cell is considered to be of low quality if it has a low count for its most abundant guide.
+#' However, directly defining a MAD-based outlier threshold on the maximum count is somewhat tricky as unsuccessful transfection can be common.
+#' This often results in a large subpopulation with low maximum counts, inflating the MAD and compromising the threshold calculation.
+#' Instead, we use the following approach:
+#' \itemize{
+#' \item Compute the proportion of counts in the most abundant guide (i.e., the maximum proportion) in each cell.
+#' Cells that were successfully transfected should have high maximum proportions.
+#' In contrast, unsuccessfully transfected cells will be dominated by ambient contamination and have low proportions.
+#' \item Subset the dataset to only retain those cells with maximum proportions above the median.
+#' This assumes that at least 50% of cells were successfully transfected.
+#' Thus, we remove all of the unsucessful transfections and enrich for mostly-high-quality cells.
+#' \item Define a MAD-based threshold for low outliers on the log-transformed maximum count within the subset (see `choose_filter_thresholds()` for details).
+#' This is now possible as we can assume that most of the remaining cells are of high quality.
+#' }
+#' Note that the maximum proportion is only used to define the subset for threshold calculation.
+#' Once the maximum count threshold is computed, it is applied to all cells regardless of their maximum proportions.
+#' This ensures that we correctly remove cells with low coverage, even if the proportion is high.
+#' It also allows us to retain cells transfected with multiple guides, as long as the maximum is high enough -
+#' such cells are not necessarily uninteresting, e.g., for examining interaction effects, so we will err on the side of caution and leave them in.
 #'
 #' @seealso
-#' The \code{compute_crispr_qc_metrics}, \code{compute_crispr_qc_filters} and \code{compute_crispr_qc_filters_blocked} functions in \url{https://libscran.github.io/scran_qc/},
-#' for the rationale of QC filtering on CRISPR counts.
+#' \code{compute_crispr_qc_metrics}, \code{compute_crispr_qc_filters} and \code{compute_crispr_qc_filters_blocked} functions in \url{https://libscran.github.io/scran_qc/}.
 #'
 #' @author Aaron Lun
 #' @examples

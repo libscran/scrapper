@@ -19,8 +19,15 @@
 #' @return For \code{computeRnaQcMetrics}, a list is returned containing:
 #' \itemize{
 #' \item \code{sum}, a numeric vector containing the total RNA count for each cell.
+#' This represents the efficiency of library preparation and sequencing.
+#' Low totals indicate that the library was not successfully captured.
 #' \item \code{detected}, an integer vector containing the number of detected genes per cell.
+#' This also quantifies library preparation efficiency but with greater focus on capturing transcriptional complexity.
 #' \item \code{subsets}, a list of numeric vectors containing the proportion of counts in each feature subset.
+#' The exact interpretation of which depends on the nature of the subset.
+#' For example, if one subset contains all genes on the mitochondrial chromosome, higher proportions are representative of cell damage;
+#' the assumption is that cytoplasmic transcripts leak through tears in the cell membrane while the mitochondria are still trapped inside.
+#' The proportion of spike-in transcripts can be interpreted in a similar manner, where the loss of endogenous transcripts results in higher spike-in proportions.
 #' }
 #' Each vector is of length equal to the number of cells.
 #'
@@ -29,23 +36,29 @@
 #' \item If \code{block=NULL}, the list contains:
 #' \itemize{
 #' \item \code{sum}, a numeric scalar containing the lower bound on the sum.
+#' This is defined as \code{num.mads} MADs below the median of the log-transformed metrics across all cells.
 #' \item \code{detected}, a numeric scalar containing the lower bound on the number of detected genes. 
+#' This is defined as \code{num.mads} MADs below the median of the log-transformed metrics across all cells.
 #' \item \code{subsets}, a numeric vector containing the upper bound on the sum of counts in each feature subset. 
+#' This is defined as \code{num.mads} MADs above the median across all cells.
 #' }
 #' \item Otherwise, if \code{block} is supplied, the list contains:
 #' \itemize{
 #' \item \code{sum}, a numeric vector containing the lower bound on the sum for each blocking level.
+#' Here, the threshold is computed independently for each block, using the same method as the unblocked case.
 #' \item \code{detected}, a numeric vector containing the lower bound on the number of detected genes for each blocking level.
+#' Here, the threshold is computed independently for each block, using the same method as the unblocked case.
 #' \item \code{subsets}, a list of numeric vectors containing the upper bound on the sum of counts in each feature subset for each blocking level.
+#' Here, the threshold is computed independently for each block, using the same method as the unblocked case.
 #' }
 #' Each vector is of length equal to the number of levels in \code{block} and is named accordingly.
 #' }
 #'
 #' For \code{filterRnaQcMetrics}, a logical vector of length \code{ncol(x)} is returned indicating which cells are of high quality. 
+#' High-quality cells are defined as those with sums and detected genes above their respective thresholds and subset proportions below the \code{subsets} threshold.
 #'
 #' @seealso
-#' The \code{compute_rna_qc_metrics}, \code{compute_rna_qc_filters} and \code{compute_rna_qc_filters_blocked} functions in \url{https://libscran.github.io/scran_qc/},
-#' for the rationale of QC filtering on ADT counts.
+#' \code{compute_rna_qc_metrics}, \code{compute_rna_qc_filters} and \code{compute_rna_qc_filters_blocked} functions in \url{https://libscran.github.io/scran_qc/}.
 #'
 #' @author Aaron Lun
 #' @examples
