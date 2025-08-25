@@ -68,7 +68,7 @@
 #' such cells are not necessarily uninteresting, e.g., for examining interaction effects, so we will err on the side of caution and leave them in.
 #'
 #' @seealso
-#' \code{compute_crispr_qc_metrics}, \code{compute_crispr_qc_filters} and \code{compute_crispr_qc_filters_blocked} functions in \url{https://libscran.github.io/scran_qc/}.
+#' The \code{compute_crispr_qc_metrics}, \code{compute_crispr_qc_filters} and \code{compute_crispr_qc_filters_blocked} functions in \url{https://libscran.github.io/scran_qc/}.
 #'
 #' @author Aaron Lun
 #' @examples

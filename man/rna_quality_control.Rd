@@ -98,7 +98,7 @@ summary(keep)
 
 }
 \seealso{
-\code{compute_rna_qc_metrics}, \code{compute_rna_qc_filters} and \code{compute_rna_qc_filters_blocked} functions in \url{https://libscran.github.io/scran_qc/}.
+The \code{compute_rna_qc_metrics}, \code{compute_rna_qc_filters} and \code{compute_rna_qc_filters_blocked} functions in \url{https://libscran.github.io/scran_qc/}.
 }
 \author{
 Aaron Lun

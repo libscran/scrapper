@@ -60,7 +60,7 @@
 #' High-quality cells are defined as those with numbers of detected tags above the \code{detected} threshold and control subset sums below the \code{subsets} threshold.
 #' 
 #' @seealso
-#' \code{compute_adt_qc_metrics}, \code{compute_adt_qc_filters} and \code{compute_adt_qc_filters_blocked} functions in \url{https://libscran.github.io/scran_qc/}.
+#' The \code{compute_adt_qc_metrics}, \code{compute_adt_qc_filters} and \code{compute_adt_qc_filters_blocked} functions in \url{https://libscran.github.io/scran_qc/}.
 #'
 #' @author Aaron Lun
 #' @examples
