@@ -36,7 +36,7 @@ Genes with zero variance are ignored.}
 The PCA will be performed on the residuals after regressing out the block effect, ensuring that differences between block do not dominate the variation in the dataset.
 Alternatively \code{NULL} if all cells are from the same block.}
 
-\item{block.weight.policy}{String specifying the policy to use for weighting different blocks when computing the average for each statistic.
+\item{block.weight.policy}{String specifying the policy to use for weighting the contribution of different blocks to the PCA.
 This should be one of:
 \itemize{
 \item \code{"none"}: the contribution of each block is proportional to its size.
