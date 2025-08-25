@@ -27,21 +27,35 @@ Typically, the matrix is expected to contain log-expression values.}
 
 \item{rank}{Integer scalar specifying the rank of the approximation.}
 
-\item{scale}{Logical scalar indicating whether to scale all genes to have the same variance.}
+\item{scale}{Logical scalar indicating whether to scale all genes to have the same variance.
+This ensures that each gene contributes equally to the PCA, favoring consistent variation across many genes rather than large variation in a few genes.
+If \code{block} is specified, each gene's variance is calculated as a weighted sum of the variances from each block. 
+Genes with zero variance are ignored.}
 
 \item{block}{Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{x}.
+The PCA will be performed on the residuals after regressing out the block effect, ensuring that differences between block do not dominate the variation in the dataset.
 Alternatively \code{NULL} if all cells are from the same block.}
 
 \item{block.weight.policy}{String specifying the policy to use for weighting different blocks when computing the average for each statistic.
+\itemize{
+\item \code{"none"}: the contribution of each block is proportional to its size.
+\item \code{"equal"}: blocks are equally weighted regardless of their size.
+\item \code{"variable"}: blocks are equally weighted past a certain threshold size.
+Below that size, the contribution of each block is proportional to its size.
+This avoids outsized contributions from very large blocks.
+}
 Only used if \code{block} is not \code{NULL}.}
 
 \item{variable.block.weight}{Numeric vector of length 2, specifying the parameters for variable block weighting.
-The first and second values are used as the lower and upper bounds, respectively, for the variable weight calculation.
+The first value is usually zero and defines the threshold on the size at or below which a block receives zero weight.
+The second value is the upper threshold on the size above which all blocks have the same weight.
 Only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.}
 
-\item{extra.work}{Integer scalar specifying the extra dimensions for the IRLBA workspace.}
+\item{extra.work}{Integer scalar specifying the extra dimensions for the IRLBA workspace.
+Larger values improve accuracy at the cost of compute time.}
 
-\item{iterations}{Integer scalar specifying the maximum number of restart iterations for IRLBA.}
+\item{iterations}{Integer scalar specifying the maximum number of restart iterations for IRLBA.
+Larger values improve accuracy at the cost of compute time.}
 
 \item{seed}{Integer scalar specifying the seed for the initial random vector in IRLBA.}
 

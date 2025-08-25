@@ -1,23 +1,40 @@
 #' Principal components analysis
 #'
-#' Run a PCA on the gene-by-cell log-expression matrix to obtain a low-dimensional representation for downstream analyses.
+#' Run a PCA on the gene-by-cell log-expression matrix and extract the top principal components (PCs).
+#' This yields a low-dimensional representation that reduces noise and compute time in downstream analyses.
 #'
 #' @param x A matrix-like object where rows correspond to genes or genomic features and columns correspond to cells.
 #' Typically, the matrix is expected to contain log-expression values, and the rows should be filtered to relevant (e.g., highly variable) genes.
-#' @param number Integer scalar specifying the number of PCs to retain.
+#' @param number Integer scalar specifying the number of top PCs to retain.
+#' More PCs will capture more biological signal at the cost of increasing noise and compute time.
+#' If this is greater than the maximum number of PCs (i.e., the smaller dimension of \code{x}), only the maximum number of PCs will be reported in the results.
 #' @param scale Logical scalar indicating whether to scale all genes to have the same variance.
+#' This ensures that each gene contributes equally to the PCA, favoring consistent variation across many genes rather than large variation in a few genes.
+#' If \code{block} is specified, each gene's variance is calculated as a weighted sum of the variances from each block. 
+#' Genes with zero variance are ignored.
 #' @param block Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{x}.
+#' The PCA will be performed on the residuals after regressing out the block effect, ensuring that differences between block do not dominate the variation in the dataset.
 #' Alternatively \code{NULL} if all cells are from the same block.
 #' @param block.weight.policy String specifying the policy to use for weighting different blocks when computing the average for each statistic.
+#' \itemize{
+#' \item \code{"none"}: the contribution of each block is proportional to its size.
+#' \item \code{"equal"}: blocks are equally weighted regardless of their size.
+#' \item \code{"variable"}: blocks are equally weighted past a certain threshold size.
+#' Below that size, the contribution of each block is proportional to its size.
+#' This avoids outsized contributions from very large blocks.
+#' }
 #' Only used if \code{block} is not \code{NULL}.
 #' @param variable.block.weight Numeric vector of length 2, specifying the parameters for variable block weighting.
-#' The first and second values are used as the lower and upper bounds, respectively, for the variable weight calculation.
+#' The first value is usually zero and defines the threshold on the size at or below which a block receives zero weight.
+#' The second value is the upper threshold on the size above which all blocks have the same weight.
 #' Only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.
 #' @param components.from.residuals Logical scalar indicating whether to compute the PC scores from the residuals in the presence of a blocking factor.
-#' By default, the residuals are only used to compute the rotation matrix, and the original expression values of the cells are projected onto this new space.
+#' By default, the residuals are only used to compute the rotation matrix, and the original expression values of the cells are projected onto this new space (see Details).
 #' Only used if \code{block} is not \code{NULL}.
 #' @param extra.work Integer scalar specifying the extra dimensions for the IRLBA workspace.
+#' Larger values improve accuracy at the cost of compute time.
 #' @param iterations Integer scalar specifying the maximum number of restart iterations for IRLBA.
+#' Larger values improve accuracy at the cost of compute time.
 #' @param seed Integer scalar specifying the seed for the initial random vector in IRLBA.
 #' @param realized Logical scalar indicating whether to realize \code{x} into an optimal memory layout for IRLBA.
 #' This speeds up computation at the cost of increased memory usage.
@@ -31,17 +48,31 @@
 #' Rows are genes and columns are dimensions.
 #' \item \code{variance.explained}, the vector of variances explained by each PC.
 #' \item \code{total.variance}, the total variance in the dataset.
+#' This can be used to divide \code{variance.explained} to obtain the proportion of variance explained by each PC.
 #' \item \code{center}, a numeric vector containing the mean for each gene.
 #' If \code{block} is provided, this is instead a matrix containing the mean for each gene (column) in each block (row).
 #' \item \code{scale}, a numeric vector containing the scaling for each gene.
 #' Only reported if \code{scale=TRUE}.
 #' }
 #'
+#' @details
+#' When \code{block} is specified, the nature of the reported PC scores depends on the choice of \code{components.from.residuals}:
+#' \itemize{
+#' \item If \code{TRUE}, the PC scores are computed from the matrix of residuals.
+#' This yields a low-dimensional space where inter-block differences have been removed,
+#' assuming that all blocks have the same subpopulation composition and the inter-block differences are consistent for all cell subpopulations.
+#' Under these assumptions, we could use these components for downstream analysis without any concern for block-wise effects.
+#' \item If \code{FALSE}, the rotation vectors are first computed from the matrix of residuals.
+#' To obtain PC scores, each cell is then projected onto the associated subspace using its original expression values.
+#' This approach ensures that inter-block differences do not contribute to the PCA but does not attempt to explicitly remove them.
+#' }
+#' In complex datasets, the assumptions mentioned for \code{TRUE} not hold and more sophisticated batch correction methods like MNN correction are required.
+#' Functions like \code{\code{correctMnn}} will a low-dimensional embedding of cells that can be created as described above with \code{FALSE}.
+#'
 #' @author Aaron Lun
 #'
 #' @seealso
-#' \url{https://libscran.github.io/scran_pca/}, for more details on the PCA.
-#' In particular, the documentation for the \code{blocked_pca} function explains the blocking strategy.
+#' The \code{simple_pca} and \code{blocked_pca} functions for \url{https://libscran.github.io/scran_pca/}. 
 #'
 #' @examples
 #' library(Matrix)
