@@ -24,46 +24,76 @@ modelGeneVariances(
 It is typically expected to contain log-expression values, e.g., from \code{\link{normalizeCounts}}.}
 
 \item{block}{Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{x}.
-Alternatively \code{NULL} if all cells are from the same block.}
+If provided, calculation of means/variances and trend fitting are performed within each block to ensure that block effects do not confound the estimates.
+Alternatively, \code{NULL} if all cells are from the same block.}
 
 \item{block.weight.policy}{String specifying the policy to use for weighting different blocks when computing the average for each statistic
+This should be one of:
+\itemize{
+\item \code{"none"}: the contribution of each block is proportional to its size.
+\item \code{"equal"}: blocks are equally weighted regardless of their size.
+\item \code{"variable"}: blocks are equally weighted past a certain threshold size.
+Below that size, the contribution of each block is proportional to its size.
+This avoids outsized contributions from very large blocks.
+}
 Only used if \code{block} is not \code{NULL}.}
 
 \item{variable.block.weight}{Numeric vector of length 2, specifying the parameters for variable block weighting.
-The first and second values are used as the lower and upper bounds, respectively, for the variable weight calculation.
+The first value is usually zero and defines the threshold on the size at or below which a block receives zero weight.
+The second value is the upper threshold on the size above which all blocks have the same weight.
 Only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.}
 
-\item{mean.filter}{Logical scalar indicating whether to filter on the means before trend fitting.}
+\item{mean.filter}{Logical scalar indicating whether to filter on the means before trend fitting.
+The assumption is that there is a bulk of low-abundance genes that are uninteresting and should be removed to avoid skewing the windows of the LOWESS smoother.}
 
 \item{min.mean}{Numeric scalar specifying the minimum mean of genes to use in trend fitting.
+Genes with lower means do not participate in the LOWESS fit, to ensure that windows are not skewed towards the majority of low-abundance genes.
+Instead, the fitted values for these genes are defined by extrapolating the left edge of the fitted trend is extrapolated to the origin.
+The default value is chosen based on the typical distribution of means of log-expression values across genes.
 Only used if \code{mean.filter=TRUE}.}
 
-\item{transform}{Logical scalar indicating whether a quarter-root transformation should be applied before trend fitting.}
+\item{transform}{Logical scalar indicating whether a quarter-root transformation should be applied before trend fitting.
+This transformation is copied from \code{limma::voom} and shrinks all values towards 1, flattening any sharp gradients in the trend for an easier fit.
+The default of \code{TRUE} assumes that the variances are computed from log-expression values, in which case there is typically a strong \dQuote{hump} in the mean-variance relationship.}
 
-\item{span}{Numeric scalar specifying the span of the LOWESS smoother.
+\item{span}{Numeric scalar specifying the span of the LOWESS smoother, as a proportion of the total number of points.
+Larger values improve stability at the cost of sensitivity to changes in low-density regions.
 Ignored if \code{use.min.width=TRUE}.}
 
 \item{use.min.width}{Logical scalar indicating whether a minimum width constraint should be applied to the LOWESS smoother.
-Useful to avoid overfitting in high-density intervals.}
+This replaces the proportion-based span for defining each window.
+Instead, the window for each point must be of a minimum width and is extended until it contains a minimum number of points. 
+Setting this to `TRUE` ensures that sensitivity is maintained in the trend fit at low-density regions for the distribution of means, e.g., at high abundances.
+It also avoids overfitting from very small windows in high-density intervals.}
 
-\item{min.width}{Minimum width of the window to use when \code{use.min.width=TRUE}.}
+\item{min.width}{Minimum width of the window to use when \code{use.min.width=TRUE}.
+The default value is chosen based on the typical range of means in single-cell RNA-seq data.}
 
 \item{min.window.count}{Minimum number of observations in each window.
+This ensures that each window contains at least a given number of observations for a stable fit.
+If the minimum width window contains fewer observations, it is extended using the standard LOWESS logic until the minimum number is achieved.
 Only used if \code{use.min.width=TRUE}.}
 
 \item{num.threads}{Integer scalar specifying the number of threads to use.}
 }
 \value{
-A list containing \code{statistics}.
-This is a data frame with the columns \code{means}, \code{variances}, \code{fitted} and \code{residuals},
+A list containing \code{statistics}, a data frame with number of rows equal to the number of genes.
+This contains the columns \code{means}, \code{variances}, \code{fitted} and \code{residuals},
 each of which is a numeric vector containing the statistic of the same name across all genes.
 
 If \code{block} is supplied, each of the column vectors described above contains the average across all blocks.
 The list will also contain \code{per.block}, a list of data frames containing the equivalent statistics for each block.
 }
 \description{
-Compute the variance in (log-)expression values for each gene,
-and model the trend in the variances with respect to the mean.
+Model the per-gene variances as a function of the mean in single-cell expression data.
+Highly variable genes can then be selected for downstream analyses.
+}
+\details{
+We compute the mean and variance for each gene and fit a trend to the variances with respect to the means using \code{\link{fitVarianceTrend}}.
+We assume that most genes at any given abundance are not highly variable, such that the fitted value of the trend is interpreted as the \dQuote{uninteresting} variance - 
+this is mostly attributed to technical variation like sequencing noise, but can also represent constitutive biological noise like transcriptional bursting.
+Under this assumption, the residual can be treated as a measure of biologically interesting variation.
+Genes with large residuals can then be selected for downstream analyses, e.g., with \code{\link{chooseHighlyVariableGenes}}.
 }
 \examples{
 library(Matrix)
@@ -78,9 +108,7 @@ str(out)
 
 }
 \seealso{
-The \code{model_gene_variances} function in \url{https://libscran.github.io/scran_variances/}, for the underlying implementation.
-
-\code{\link{fitVarianceTrend}}, which fits the mean-variance trend.
+The \code{model_gene_variances} function in \url{https://libscran.github.io/scran_variances/}.
 }
 \author{
 Aaron Lun

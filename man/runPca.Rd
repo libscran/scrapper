@@ -21,7 +21,7 @@ runPca(
 }
 \arguments{
 \item{x}{A matrix-like object where rows correspond to genes or genomic features and columns correspond to cells.
-Typically, the matrix is expected to contain log-expression values, and the rows should be filtered to relevant (e.g., highly variable) genes.}
+Typically, the matrix is expected to contain log-expression values (see \code{\link{normalizeCounts}}) for \dQuote{interesting} genes (see \code{\link{chooseHighlyVariableGenes}}).}
 
 \item{number}{Integer scalar specifying the number of top PCs to retain.
 More PCs will capture more biological signal at the cost of increasing noise and compute time.
@@ -37,6 +37,7 @@ The PCA will be performed on the residuals after regressing out the block effect
 Alternatively \code{NULL} if all cells are from the same block.}
 
 \item{block.weight.policy}{String specifying the policy to use for weighting different blocks when computing the average for each statistic.
+This should be one of:
 \itemize{
 \item \code{"none"}: the contribution of each block is proportional to its size.
 \item \code{"equal"}: blocks are equally weighted regardless of their size.

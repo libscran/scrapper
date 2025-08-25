@@ -26,13 +26,23 @@ It is typically expected to contain log-expression values, e.g., from \code{\lin
 \item{groups}{A vector specifying the group assignment for each cell in \code{x}.}
 
 \item{block}{Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{x}.
-Alternatively \code{NULL} if all cells are from the same block.}
+If provided, calculation of means/variances and trend fitting are performed within each block to ensure that block effects do not confound the estimates.
+Alternatively, \code{NULL} if all cells are from the same block.}
 
 \item{block.weight.policy}{String specifying the policy to use for weighting different blocks when computing the average for each statistic
+This should be one of:
+\itemize{
+\item \code{"none"}: the contribution of each block is proportional to its size.
+\item \code{"equal"}: blocks are equally weighted regardless of their size.
+\item \code{"variable"}: blocks are equally weighted past a certain threshold size.
+Below that size, the contribution of each block is proportional to its size.
+This avoids outsized contributions from very large blocks.
+}
 Only used if \code{block} is not \code{NULL}.}
 
 \item{variable.block.weight}{Numeric vector of length 2, specifying the parameters for variable block weighting.
-The first and second values are used as the lower and upper bounds, respectively, for the variable weight calculation.
+The first value is usually zero and defines the threshold on the size at or below which a block receives zero weight.
+The second value is the upper threshold on the size above which all blocks have the same weight.
 Only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.}
 
 \item{compute.delta.mean}{Logical scalar indicating whether to compute the delta-means, i.e., the log-fold change when \code{x} contains log-expression values.}

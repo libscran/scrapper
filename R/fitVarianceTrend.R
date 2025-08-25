@@ -1,29 +1,44 @@
 #' Fit a mean-variance trend
 #'
-#' Fit a trend to the per-cell variances with respect to the mean.
+#' Fit a trend to the per-gene variances with respect to their means, typically from normalized and log-transformed expression values.
 #'
 #' @param means Numeric vector containing the mean (log-)expression for each gene.
 #' @param variances Numeric vector containing the variance in the (log-)expression for each gene.
 #' @param mean.filter Logical scalar indicating whether to filter on the means before trend fitting.
+#' The assumption is that there is a bulk of low-abundance genes that are uninteresting and should be removed to avoid skewing the windows of the LOWESS smoother.
 #' @param min.mean Numeric scalar specifying the minimum mean of genes to use in trend fitting.
+#' Genes with lower means do not participate in the LOWESS fit, to ensure that windows are not skewed towards the majority of low-abundance genes.
+#' Instead, the fitted values for these genes are defined by extrapolating the left edge of the fitted trend is extrapolated to the origin.
+#' The default value is chosen based on the typical distribution of means of log-expression values across genes.
 #' Only used if \code{mean.filter=TRUE}.
 #' @param transform Logical scalar indicating whether a quarter-root transformation should be applied before trend fitting.
-#' @param span Numeric scalar specifying the span of the LOWESS smoother.
+#' This transformation is copied from \code{limma::voom} and shrinks all values towards 1, flattening any sharp gradients in the trend for an easier fit.
+#' The default of \code{TRUE} assumes that the variances are computed from log-expression values, in which case there is typically a strong \dQuote{hump} in the mean-variance relationship.
+#' @param span Numeric scalar specifying the span of the LOWESS smoother, as a proportion of the total number of points.
+#' Larger values improve stability at the cost of sensitivity to changes in low-density regions.
 #' Ignored if \code{use.min.width=TRUE}.
 #' @param use.min.width Logical scalar indicating whether a minimum width constraint should be applied to the LOWESS smoother.
-#' Useful to avoid overfitting in high-density intervals.
+#' This replaces the proportion-based span for defining each window.
+#' Instead, the window for each point must be of a minimum width and is extended until it contains a minimum number of points. 
+#' Setting this to `TRUE` ensures that sensitivity is maintained in the trend fit at low-density regions for the distribution of means, e.g., at high abundances.
+#' It also avoids overfitting from very small windows in high-density intervals. 
 #' @param min.width Minimum width of the window to use when \code{use.min.width=TRUE}.
+#' The default value is chosen based on the typical range of means in single-cell RNA-seq data.
 #' @param min.window.count Minimum number of observations in each window.
+#' This ensures that each window contains at least a given number of observations for a stable fit.
+#' If the minimum width window contains fewer observations, it is extended using the standard LOWESS logic until the minimum number is achieved.
 #' Only used if \code{use.min.width=TRUE}.
 #' @param num.threads Number of threads to use.
 #'
-#' @return List containing \code{fitted}, the fitted values of the trend for each gene;
-#' and \code{residuals}, the residuals from the trend.
+#' @return List containing \code{fitted}, a numeric vector containing the fitted values of the trend for each gene;
+#' and \code{residuals}, a numeric vector containing the residuals from the trend.
 #'
 #' @author Aaron Lun
 #'
 #' @seealso
-#' The \code{fit_variance_trend} function in \url{https://libscran.github.io/scran_variances/}, for the underlying implementation.
+#' \code{\link{modelGeneVariances}}, to compute the means and variances.
+#'
+#' The \code{fit_variance_trend} function in \url{https://libscran.github.io/scran_variances/}.
 #'
 #' @examples
 #' x <- runif(1000)

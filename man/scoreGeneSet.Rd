@@ -37,6 +37,7 @@ The PCA will be performed on the residuals after regressing out the block effect
 Alternatively \code{NULL} if all cells are from the same block.}
 
 \item{block.weight.policy}{String specifying the policy to use for weighting different blocks when computing the average for each statistic.
+This should be one of:
 \itemize{
 \item \code{"none"}: the contribution of each block is proportional to its size.
 \item \code{"equal"}: blocks are equally weighted regardless of their size.
