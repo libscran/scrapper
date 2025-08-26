@@ -8,7 +8,7 @@ aggregateAcrossGenes(x, sets, average = FALSE, num.threads = 1)
 }
 \arguments{
 \item{x}{A matrix-like object where rows correspond to genes or genomic features and columns correspond to cells.
-Values are typically expected to be counts.}
+Values are usually normalized expression values, possibly log-transformed depending on the application.}
 
 \item{sets}{A list of integer vectors containing the row indices of genes in each set.
 Alternatively, each entry may be a list of length 2, containing an integer vector (row indices) and a numeric vector (weights).}
@@ -49,7 +49,7 @@ str(agg2)
 
 }
 \seealso{
-The \code{aggregate_across_genes} function in \url{https://libscran.github.io/scran_aggregate/}, for the underlying implementation.
+The \code{aggregate_across_genes} function in \url{https://libscran.github.io/scran_aggregate/}. 
 
 \code{\link{aggregateAcrossCells}}, to aggregate expression values across groups of cells.
 }

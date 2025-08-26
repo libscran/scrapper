@@ -1,6 +1,6 @@
 #' Combine multiple factors 
 #'
-#' Combine multiple categorical factors based on the unique combinations of levels from each factor.
+#' Combine multiple factors into a single factor where each level of the latter is a unique combination of levels from the former.
 #'
 #' @param factors List of vectors or factors of the same length.
 #' Corresponding elements across all vectors/factors represent the combination of levels for a single observation.
@@ -12,11 +12,12 @@
 #'
 #' @return List containing \code{levels}, a data frame containing the sorted and unique combinations of levels from \code{factors};
 #' and \code{index}, an integer vector specifying the index into \code{levels} for each observation.
-#'
-#' @seealso
-#' The \code{combine_factors} function in \url{https://libscran.github.io/scran_aggregate/}, which provides the underlying implementation.
+#' In other words, for observation \code{i} and factor \code{j}, \code{levels[[[j]][index[i]]} will recover \code{factors[[j]][i]}.
 #'
 #' @author Aaron Lun
+#'
+#' @seealso
+#' The \code{combine_to_factor} function in \url{https://ltla.github.io/factorize/}. 
 #'
 #' @examples
 #' combineFactors(list(
