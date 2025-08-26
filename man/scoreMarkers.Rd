@@ -26,8 +26,9 @@ It is typically expected to contain log-expression values, e.g., from \code{\lin
 \item{groups}{A vector specifying the group assignment for each cell in \code{x}.}
 
 \item{block}{Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{x}.
-If provided, calculation of means/variances and trend fitting are performed within each block to ensure that block effects do not confound the estimates.
-Alternatively, \code{NULL} if all cells are from the same block.}
+If provided, comparisons are performed within each block to ensure that block effects do not confound the estimates.
+The weighted average of the effect sizes across all blocks is reported for each gene.
+Alternatively \code{NULL}, if all cells are from the same block.}
 
 \item{block.weight.policy}{String specifying the policy to use for weighting different blocks when computing the average for each statistic.
 This should be one of:
@@ -40,11 +41,6 @@ This avoids outsized contributions from very large blocks.
 }
 Only used if \code{block} is not \code{NULL}.}
 
-\item{variable.block.weight}{Numeric vector of length 2, specifying the parameters for variable block weighting.
-The first value is usually zero and defines the threshold on the size at or below which a block receives zero weight.
-The second value is the upper threshold on the size above which all blocks have the same weight.
-Only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.}
-
 \item{compute.delta.mean}{Logical scalar indicating whether to compute the delta-means, i.e., the log-fold change when \code{x} contains log-expression values.}
 
 \item{compute.delta.detected}{Logical scalar indicating whether to compute the delta-detected, i.e., differences in the proportion of cells with detected expression.}
@@ -55,11 +51,11 @@ Only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "va
 Setting this to \code{FALSE} can improve speed and memory efficiency.}
 
 \item{threshold}{Non-negative numeric scalar specifying the minimum threshold on the differences in means (i.e., the log-fold change, if \code{x} contains log-expression values). 
-This is incorporated into the effect sizes for Cohen's d and the AUC.}
+This is incorporated into the effect sizes for Cohen's d and the AUC.
+Larger thresholds will favor genes with large differences at the expense of genes with low variance that would otherwise have comparable effect sizes.}
 
-\item{all.pairwise}{Logical scalar indicating whether to report the full effects for every pairwise comparison between groups.}
-
-\item{num.threads}{Integer scalar specifying the number of threads to use.}
+\item{all.pairwise}{Logical scalar indicating whether to report the effect sizes for every pairwise comparison between groups.
+If \code{FALSE}, only the summary statistics are reported.}
 }
 \value{
 If \code{all.pairwise=FALSE}, a named list is returned containing:
@@ -101,7 +97,51 @@ Omitted if \code{compute.delta.detected=FALSE}.
 \description{
 Score marker genes for each group using a variety of effect sizes from pairwise comparisons between groups.
 This includes Cohen's d, the area under the curve (AUC), the difference in the means (delta-mean) and the difference in the proportion of detected cells (delta-detected).
+For each group, the strongest markers are those genes with the largest effect sizes (i.e., upregulated) when compared to all other groups.
 }
+\section{Choice of effect size}{
+
+The delta-mean is the difference in the mean expression between groups.
+This is fairly straightforward to interpret - a positive delta-mean corresponds to increased expression in the first group compared to the second. 
+The delta-mean can also be treated as the log-fold change if the input matrix contains log-transformed normalized expression values.
+
+The delta-detected is the difference in the proportion of cells with detected expression between groups.
+This lies between 1 and -1, with the extremes occurring when a gene is silent in one group and detected in all cells of the other group.
+For this interpretation, we assume that the input matrix contains non-negative expression values, where a value of zero corresponds to lack of detectable expression.
+
+Cohen's d is the standardized difference between two groups.
+This is defined as the difference in the mean for each group scaled by the average standard deviation across the two groups.
+(Technically, we should use the pooled variance; however, this introduces some unintuitive asymmetry depending on the variance of the larger group, so we take a simple average instead.)
+A positive value indicates that the gene has increased expression in the first group compared to the second.
+Cohen's d is analogous to the t-statistic in a two-sample t-test and avoids spuriously large effect sizes from comparisons between highly variable groups.
+We can also interpret Cohen's d as the number of standard deviations between the two group means.
+
+The area under the curve (AUC) is the probability that a randomly chosen observation in one group is greater than a randomly chosen observation in the other group. 
+Values greater than 0.5 indicate that a gene is upregulated in the first group.
+The AUC is closely related to the U-statistic used in the Wilcoxon rank sum test. 
+The key difference between the AUC and Cohen's d is that the former is less sensitive to the variance within each group, e.g.,
+if two distributions exhibit no overlap, the AUC is the same regardless of the variance of each distribution. 
+This may or may not be desirable as it improves robustness to outliers but reduces the information available to obtain a fine-grained ranking.
+}
+
+\section{With a minimum change threshold}{
+
+Setting a minimum change threshold (i.e., \code{threshold}) prioritizes genes with large shifts in expression instead of those with low variances.
+Currently, only positive thresholds are supported, which focuses on genes that are upregulated in the first group compared to the second.
+The effect size definitions are generalized when testing against a non-zero threshold:
+\itemize{
+\item Cohen's d is redefined as the standardized difference between the difference in means and the specified threshold,
+analogous to the TREAT method from the \pkg{limma} package.
+Large positive values are only obtained when the observed difference in means is significantly greater than the threshold.
+For example, if we had a threshold of 2 and we obtained a Cohen's d of 3, this means that the observed difference in means was 3 standard deviations greater than 2.
+Note that a negative Cohen's d cannot be intepreted as downregulation, as the difference in means may still be positive but less than the threshold.
+\item The AUC is generalized to the probability of obtaining a random observation in one group that is greater than a random observation plus the threshold in the other group.
+For example, if we had a threshold of 2 and we obtained an AUC of 0.8, this means that, 80% of the time,
+the random observation from the first group would be greater than a random observation from the second group by 2 or more.
+Again, AUCs below 0.5 cannot be interpreted as downregulation, as it may be caused by a positive shift that is less than the threshold.
+}
+}
+
 \examples{
 # Mocking a matrix:
 library(Matrix)
@@ -120,9 +160,8 @@ reportGroupMarkerStatistics(scores, "b")
 
 }
 \seealso{
-The \code{score_markers_summary} and the \code{score_markers_pairwise} function (for \code{all.pairwise=FALSE} and \code{TRUE}, respectively) in \url{https://libscran.github.io/scran_markers/},
-which describes the rationale behind the choice of effect sizes and summary statistics.
-Also see their blocked equivalents \code{score_markers_summary_blocked} and \code{score_markers_pairwise_blocked} when \code{block} is not \code{NULL}.
+The \code{score_markers_summary} and the \code{score_markers_pairwise} functions (for \code{all.pairwise=FALSE} and \code{TRUE}, respectively) in \url{https://libscran.github.io/scran_markers/}.
+See their blocked equivalents \code{score_markers_summary_blocked} and \code{score_markers_pairwise_blocked} when \code{block} is specified.
 
 \code{\link{summarizeEffects}}, to summarize the pairwise effects returned when \code{all.pairwise=TRUE}.
 

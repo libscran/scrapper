@@ -7,7 +7,8 @@
 #' It is typically expected to contain log-expression values, e.g., from \code{\link{normalizeCounts}}.
 #' @param block Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{x}.
 #' If provided, calculation of means/variances and trend fitting are performed within each block to ensure that block effects do not confound the estimates.
-#' Alternatively, \code{NULL} if all cells are from the same block.
+#' The weighted average of each statistic across all blocks is reported for each gene.
+#' Alternatively \code{NULL}, if all cells are from the same block.
 #' @param block.weight.policy String specifying the policy to use for weighting different blocks when computing the average for each statistic.
 #' This should be one of:
 #' \itemize{

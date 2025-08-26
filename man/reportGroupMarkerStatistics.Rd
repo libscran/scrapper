@@ -35,9 +35,12 @@ Effect size summary columns are named as \code{<EFFECT>.<SUMMARY>}.
 }
 \description{
 Combine all marker statistics for a single group into a data frame for easy inspection.
+Users can pick one of the columns for sorting potential marker genes.
 }
 \seealso{
 \code{\link{scoreMarkers}}, to generate \code{results}.
+
+\code{\link{summarizeEffects}}, for the trade-offs between effect size summaries.
 }
 \author{
 Aaron Lun
