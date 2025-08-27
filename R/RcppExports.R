@@ -65,6 +65,10 @@ combine_factors <- function(factors, keep_unused, nlevels) {
     .Call('_scrapper_combine_factors', PACKAGE = 'scrapper', factors, keep_unused, nlevels)
 }
 
+compute_block_weights <- function(sizes, policy, variable_block_weight) {
+    .Call('_scrapper_compute_block_weights', PACKAGE = 'scrapper', sizes, policy, variable_block_weight)
+}
+
 compute_clrm1_factors <- function(x, num_threads) {
     .Call('_scrapper_compute_clrm1_factors', PACKAGE = 'scrapper', x, num_threads)
 }

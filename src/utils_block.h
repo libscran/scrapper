@@ -11,7 +11,7 @@
 
 inline scran_blocks::WeightPolicy parse_block_weight_policy(const std::string& block_weight_policy) {
     scran_blocks::WeightPolicy output  = scran_blocks::WeightPolicy::NONE;
-    if (block_weight_policy == "none") {
+    if (block_weight_policy == "none" || block_weight_policy == "size") {
     } else if (block_weight_policy == "equal") {
         output = scran_blocks::WeightPolicy::EQUAL;
     } else if (block_weight_policy == "variable") {
