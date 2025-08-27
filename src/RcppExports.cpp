@@ -212,6 +212,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// compute_block_weights
+Rcpp::NumericVector compute_block_weights(Rcpp::NumericVector sizes, std::string policy, Rcpp::NumericVector variable_block_weight);
+RcppExport SEXP _scrapper_compute_block_weights(SEXP sizesSEXP, SEXP policySEXP, SEXP variable_block_weightSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type sizes(sizesSEXP);
+    Rcpp::traits::input_parameter< std::string >::type policy(policySEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type variable_block_weight(variable_block_weightSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_block_weights(sizes, policy, variable_block_weight));
+    return rcpp_result_gen;
+END_RCPP
+}
 // compute_clrm1_factors
 Rcpp::NumericVector compute_clrm1_factors(SEXP x, int num_threads);
 RcppExport SEXP _scrapper_compute_clrm1_factors(SEXP xSEXP, SEXP num_threadsSEXP) {
@@ -585,6 +597,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_cluster_walktrap", (DL_FUNC) &_scrapper_cluster_walktrap, 2},
     {"_scrapper_cluster_kmeans", (DL_FUNC) &_scrapper_cluster_kmeans, 12},
     {"_scrapper_combine_factors", (DL_FUNC) &_scrapper_combine_factors, 3},
+    {"_scrapper_compute_block_weights", (DL_FUNC) &_scrapper_compute_block_weights, 3},
     {"_scrapper_compute_clrm1_factors", (DL_FUNC) &_scrapper_compute_clrm1_factors, 2},
     {"_scrapper_correct_mnn", (DL_FUNC) &_scrapper_correct_mnn, 7},
     {"_scrapper_compute_crispr_qc_metrics", (DL_FUNC) &_scrapper_compute_crispr_qc_metrics, 2},
