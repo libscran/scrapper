@@ -12,15 +12,11 @@
 #' The weighted average of the effect sizes across all blocks is reported for each gene.
 #' Alternatively \code{NULL}, if all cells are from the same block.
 #' @param block.weight.policy String specifying the policy to use for weighting different blocks when computing the average for each statistic.
-#' This should be one of:
-#' \itemize{
-#' \item \code{"none"}: the contribution of each block is proportional to its size.
-#' \item \code{"equal"}: blocks are equally weighted regardless of their size.
-#' \item \code{"variable"}: blocks are equally weighted past a certain threshold size.
-#' Below that size, the contribution of each block is proportional to its size.
-#' This avoids outsized contributions from very large blocks.
-#' }
+#' See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
 #' Only used if \code{block} is not \code{NULL}.
+#' @param variable.block.weight Numeric vector of length 2, specifying the parameters for variable block weighting.
+#' See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
+#' Only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.
 #' @param threshold Non-negative numeric scalar specifying the minimum threshold on the differences in means (i.e., the log-fold change, if \code{x} contains log-expression values). 
 #' This is incorporated into the effect sizes for Cohen's d and the AUC.
 #' Larger thresholds will favor genes with large differences at the expense of genes with low variance that would otherwise have comparable effect sizes.

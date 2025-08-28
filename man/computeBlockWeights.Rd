@@ -42,6 +42,9 @@ computeBlockWeights(c(1, 10, 100, 1000, 10000), block.weight.policy="equal")
 computeBlockWeights(c(1, 10, 100, 1000, 10000), variable.block.weight=c(50, 5000))
 
 }
+\seealso{
+The \code{compute_weights} function from \url{https://libscran.github.io/scran_blocks/}.
+}
 \author{
 Aaron Lun
 }

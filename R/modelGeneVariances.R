@@ -10,18 +10,10 @@
 #' The weighted average of each statistic across all blocks is reported for each gene.
 #' Alternatively \code{NULL}, if all cells are from the same block.
 #' @param block.weight.policy String specifying the policy to use for weighting different blocks when computing the average for each statistic.
-#' This should be one of:
-#' \itemize{
-#' \item \code{"none"}: the contribution of each block is proportional to its size.
-#' \item \code{"equal"}: blocks are equally weighted regardless of their size.
-#' \item \code{"variable"}: blocks are equally weighted past a certain threshold size.
-#' Below that size, the contribution of each block is proportional to its size.
-#' This avoids outsized contributions from very large blocks.
-#' }
+#' See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
 #' Only used if \code{block} is not \code{NULL}.
 #' @param variable.block.weight Numeric vector of length 2, specifying the parameters for variable block weighting.
-#' The first value is usually zero and defines the threshold on the size at or below which a block receives zero weight.
-#' The second value is the upper threshold on the size above which all blocks have the same weight.
+#' See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
 #' Only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.
 #' @inheritParams fitVarianceTrend
 #' @param num.threads Integer scalar specifying the number of threads to use.

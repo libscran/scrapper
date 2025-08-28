@@ -16,18 +16,10 @@
 #' The PCA will be performed on the residuals after regressing out the block effect, ensuring that differences between block do not dominate the variation in the dataset.
 #' Alternatively \code{NULL} if all cells are from the same block.
 #' @param block.weight.policy String specifying the policy to use for weighting the contribution of different blocks to the PCA.
-#' This should be one of:
-#' \itemize{
-#' \item \code{"none"}: the contribution of each block is proportional to its size.
-#' \item \code{"equal"}: blocks are equally weighted regardless of their size.
-#' \item \code{"variable"}: blocks are equally weighted past a certain threshold size.
-#' Below that size, the contribution of each block is proportional to its size.
-#' This avoids outsized contributions from very large blocks.
-#' }
+#' See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
 #' Only used if \code{block} is not \code{NULL}.
 #' @param variable.block.weight Numeric vector of length 2, specifying the parameters for variable block weighting.
-#' The first value is usually zero and defines the threshold on the size at or below which a block receives zero weight.
-#' The second value is the upper threshold on the size above which all blocks have the same weight.
+#' See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
 #' Only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.
 #' @param components.from.residuals Logical scalar indicating whether to compute the PC scores from the residuals in the presence of a blocking factor.
 #' By default, the residuals are only used to compute the rotation matrix, and the original expression values of the cells are projected onto this new space (see Details).
