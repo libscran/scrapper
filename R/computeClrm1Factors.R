@@ -1,6 +1,7 @@
 #' Compute size factors for ADT counts
 #'
 #' Compute size factors from an ADT count matrix using the CLRm1 method.
+#' This is a variant of the centered log-ratio (CLR) method, where the size factors are defined from the geometric mean of counts within each cell.
 #'
 #' @param x A matrix-like object containing ADT count data.
 #' Rows correspond to tags and columns correspond to cells.

@@ -18,6 +18,7 @@ Note that these size factors are not centered and should be passed through, e.g.
 }
 \description{
 Compute size factors from an ADT count matrix using the CLRm1 method.
+This is a variant of the centered log-ratio (CLR) method, where the size factors are defined from the geometric mean of counts within each cell.
 }
 \examples{
 library(Matrix)

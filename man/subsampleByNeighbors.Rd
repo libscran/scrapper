@@ -29,11 +29,12 @@ containing the distances to each of the nearest neighbors.
 The number of neighbors should be equal to \code{num.neighbors}, otherwise a warning is raised.}
 
 \item{num.neighbors}{Integer scalar specifying the number of neighbors to use.
-Larger values result in greater downsampling. 
+Larger values result in stronger downsampling. 
 Only used if \code{x} does not contain existing nearest-neighbor results.}
 
-\item{min.remaining}{Integer scalar specifying the minimum number of remaining (i.e., unselected) neighbors that a cell must have in order to be considered for selection.
-This should be less than or equal to \code{num.neighbors}.}
+\item{min.remaining}{Integer scalar specifying the minimum number of remaining neighbors that a cell must have in order to be considered for selection.
+This should be less than or equal to \code{num.neighbors}.
+Larger values result in stronger downsampling.}
 
 \item{num.threads}{Integer scalar specifying the number of threads to use for the nearest-neighbor search.
 Only used if \code{x} does not contain existing nearest-neighbor results.}
@@ -46,6 +47,17 @@ Integer vector with the indices of the selected cells in the subsample.
 }
 \description{
 Subsample a dataset by selecting cells to represent all of their nearest neighbors.
+The aim is to preserve the relative density of the original dataset while guaranteeing representation of low-frequency subpopulations.
+}
+\details{
+Starting from the densest region in the high-dimensional space, we select an observation for inclusion into the subsampled dataset.
+Every time we select an observation, we remove it and all of its nearest neighbors from the dataset.
+We then select the next observation with the most remaining neighbors, with ties broken by density; this is repeated until there are no more observations.
+
+The premise is that each selected observation serves as a representative for its nearest neighbors.
+This ensures that the subsampled points are well-distributed across the original dataset.
+Low-frequency subpopulations will always have at least a few representatives if they are sufficiently distant from other subpopulations.
+We also preserve the relative density of the original dataset as more representatives will be generated from high-density regions.
 }
 \examples{
 x <- matrix(rnorm(10000), nrow=2)
