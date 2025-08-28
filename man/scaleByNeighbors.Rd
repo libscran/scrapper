@@ -29,11 +29,12 @@ Each value represents a multiplier of the within-population variance of its moda
 }
 \value{
 List containing \code{scaling}, a vector of scaling factors to be aplied to each embedding;
-and \code{combined}, a numeric matrix formed by scaling each entry of \code{x} and then \code{rbind}ing them together.
+and \code{combined}, a numeric matrix creating by scaling each entry of \code{x} by \code{scaling} and then \code{rbind}ing them together.
 }
 \description{
-Scale multiple embeddings (usually derived from different modalities across the same set of cells) so that their within-population variances are comparable,
-and then combine them into a single embedding matrix for combined downstream analysis.
+Scale multiple embeddings (usually derived from different modalities for the same cells) so that their within-population variances are comparable,
+and then combine them into a single embedding matrix for further analyses like clustering, t-SNE, etc.
+The aim is to equalize uninteresting variance across modalities so that high technical variance in one modality does not drown out interesting biology in another modality.
 }
 \examples{
 pcs <- list(
