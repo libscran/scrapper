@@ -18,15 +18,27 @@ clusterGraph(
 \item{x}{List containing graph information or an external pointer to a graph, as returned by \code{\link{buildSnnGraph}}.
 Alternatively, an \link[igraph]{igraph} object with edge weights.}
 
-\item{method}{String specifying the algorithm to use.}
+\item{method}{String specifying the algorithm to use.
+\itemize{
+\item \code{"multilevel"} uses multi-level modularity optimization, also known as the Louvain algorithm,
+see \url{https://igraph.org/c/doc/igraph-Community.html#igraph_community_multilevel} for details.
+\item \code{"walktrap"} uses the Walktrap community finding algorithm,
+see \url{https://igraph.org/c/doc/igraph-Community.html#igraph_community_walktrap} for details.
+\item \code{"leiden"} uses the Leiden algorithm,
+see \url{https://igraph.org/c/doc/igraph-Community.html#igraph_community_leiden} for details.
+}}
 
-\item{multilevel.resolution}{Numeric scalar specifying the resolution when \code{method="multilevel"}.}
+\item{multilevel.resolution}{Numeric scalar specifying the resolution when \code{method="multilevel"}.
+Lower values favor fewer, larger communities; higher values favor more, smaller communities.}
 
-\item{leiden.resolution}{Numeric scalar specifying the resolution when \code{method="leiden"}.}
+\item{leiden.resolution}{Numeric scalar specifying the resolution when \code{method="leiden"}.
+Lower values favor fewer, larger communities; higher values favor more, smaller communities.}
 
-\item{leiden.objective}{String specifying the objective function when \code{method="leiden"}.}
+\item{leiden.objective}{String specifying the objective function when \code{method="leiden"}.
+\code{"cpm"} uses the Constant Potts Model, which typically yields more fine-grained clusters at the same \code{leiden.resolution}.}
 
-\item{walktrap.steps}{Integer scalar specifying the number of steps to use when \code{method="walktrap"}.}
+\item{walktrap.steps}{Integer scalar specifying the number of steps to use when \code{method="walktrap"}.
+This determines the ability of the Walktrap algorithm to distinguish highly interconnected communities from the rest of the graph.}
 
 \item{seed}{Integer scalar specifying the random seed to use for \code{method="multilevel"} or \code{"leiden"}.}
 }
@@ -43,7 +55,8 @@ A \code{modularity} numeric scalar also contains the modularity of the final par
 }
 }
 \description{
-Identify clusters of cells using a variety of community detection methods from a graph where similar cells are connected.
+Identify clusters by applying community detection algorithms to a graph.
+This assumes that that the nodes on the graph represent cells and weighted edges are formed between related cells.
 }
 \examples{
 data <- matrix(rnorm(10000), ncol=1000)
@@ -56,9 +69,7 @@ str(clusterGraph(gout, method="walktrap"))
 
 }
 \seealso{
-\url{https://igraph.org/c/html/latest/igraph-Community.html}, for the underlying implementation of each clustering method.
-
-The various \code{cluster_*} functions in \url{https://libscran.github.io/scran_graph_cluster/}, for wrappers around the \pkg{igraph} code.
+The various \code{cluster_*} functions in \url{https://libscran.github.io/scran_graph_cluster/}.
 }
 \author{
 Aaron Lun
