@@ -31,18 +31,21 @@ The number of neighbors should be the same as \code{num.neighbors}, otherwise a 
 
 Alternatively, an index constructed by \code{\link[BiocNeighbors]{buildIndex}}.}
 
-\item{perplexity}{Numeric scalar specifying the perplexity to use in the t-SNE algorithm.}
+\item{perplexity}{Numeric scalar specifying the perplexity to use in the t-SNE algorithm.
+Higher perplexities will focus on global structure, at the cost of increased runtime and decreased local resolution.}
 
 \item{num.neighbors}{Integer scalar specifying the number of neighbors, typically derived from \code{perplexity}.}
 
 \item{max.depth}{Integer scalar specifying the maximum depth of the Barnes-Hut quadtree.
-Smaller values (7-10) improve speed at the cost of accuracy.}
+If neighboring cells cannot be separated before the maximum depth is reached, they will be assigned to the same leaf node of the quadtree.
+Smaller values (7-10) improve speed by bounding the recursion depth at the cost of accuracy.}
 
-\item{leaf.approximation}{Logical scalar indicating whether to use the \dQuote{leaf approximation} approach,
-which sacrifices some accuracy for greater speed.
-Only effective when \code{max.depth} is small enough for multiple cells to be assigned to the same leaf node of the quadtree.}
+\item{leaf.approximation}{Logical scalar indicating whether to use the \dQuote{leaf approximation}.
+If \code{TRUE}, repulsive forces are computed between leaf nodes and re-used across all cells assigned to that leaf node. 
+This sacrifices some accuracy for greater speed, assuming that \code{max.depth} is small enough for multiple cells to be assigned to the same leaf.}
 
-\item{max.iterations}{Integer scalar specifying the maximum number of iterations to perform.}
+\item{max.iterations}{Integer scalar specifying the maximum number of iterations to perform.
+Larger values improve convergence at the cost of compute time.}
 
 \item{seed}{Integer scalar specifying the seed to use for generating the initial coordinates.}
 
@@ -64,6 +67,15 @@ x <- t(as.matrix(iris[,1:4]))
 embedding <- runTsne(x)
 plot(embedding[,1], embedding[,2], col=iris[,5])
 
+}
+\references{
+van der Maaten LJP and Hinton GE (2008). 
+Visualizing high-dimensional data using t-SNE. 
+\emph{Journal of Machine Learning Research_} 9, 2579-2605.
+
+van der Maaten LJP (2014). 
+Accelerating t-SNE using tree-based algorithms. 
+\emph{Journal of Machine Learning Research} 15, 3221-3245.
 }
 \seealso{
 \url{https://libscran.github.io/qdtsne/}, for an explanation of the approximations.
