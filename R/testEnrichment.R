@@ -1,13 +1,16 @@
 #' Test for gene set enrichment 
 #'
-#' Perform a hypergeometric test for enrichment of interesting genes (e.g., markers) in one or more pre-defined gene sets.
+#' Perform a hypergeometric test for enrichment of gene sets in a list of interesting genes (e.g., markers).
 #'
-#' @param x Vector of identifiers for the interesting genes.
+#' @param x Vector of identifiers for some interesting genes, e.g., symbols or Ensembl IDs.
+#' This is usually derived from a selection of top markers, e.g., from \code{\link{scoreMarkers}}.
 #' @param sets List of vectors of identifiers for the pre-defined gene sets.
+#' Each inner vector corresponds to a gene set and should contain the same type of identifiers as \code{x}.
 #' @param universe Vector of identifiers for the universe of genes in the dataset.
-#' It is expected that \code{x} is a subset of \code{universe}.
+#' It is expected that \code{x} and each vector in \code{sets} is a subset of \code{universe}.
 #' Alternatively, an integer scalar specifying the size of the universe.
-#' @param log Logical scalar indicating whether to report the log-transformed p-values.
+#' @param log Logical scalar indicating whether to report log-transformed p-values.
+#' This may be desirable to avoid underflow at near-zero p-values.
 #' @param num.threads Integer scalar specifying the number of threads to use.
 #'
 #' @return Numeric vector of (log-transformed) p-values to test for significant enrichment of \code{x} in each entry of \code{sets}.
