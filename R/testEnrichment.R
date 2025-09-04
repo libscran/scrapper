@@ -33,17 +33,26 @@
 #' )
 #' 
 #' @export
-testEnrichment <- function(x, sets, universe, log=FALSE, num.threads=1) {
+testEnrichment <- function(x, sets, universe=NULL, log=FALSE, num.threads=1) {
+    num.sets <- length(sets)
     all.genes <- unlist(sets)
     set.sizes <- lengths(sets)
     set.ids <- rep(seq_along(sets), set.sizes)
 
-    overlap <- tabulate(set.ids[all.genes %in% x], nbins=length(sets))
-    if (!is.numeric(universe) && length(universe) != 1) {
-        set.sizes <- tabulate(set.ids[all.genes %in% universe], nbins=length(sets))
+    if (is.null(universe)) {
+        universe <- length(unique(c(x, all.genes)))
+    } else if (!is.numeric(universe) || length(universe) != 1) {
+        x <- intersect(x, universe)
+        keep <- all.genes %in% universe
+        if (!all(keep)) {
+            all.genes <- all.genes[keep]
+            set.ids <- set.ids[keep]
+            set.sizes <- tabulate(set.ids, nbins=num.sets)
+        }
         universe <- length(universe)
     }
 
+    overlap <- tabulate(set.ids[all.genes %in% x], nbins=num.sets)
     out <- test_enrichment(overlap, length(x), set.sizes, universe, log=log, num_threads=num.threads)
     names(out) <- names(sets)
     out

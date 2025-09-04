@@ -28,6 +28,27 @@ test_that("testEnrichment works with a truncated universe", {
     out <- testEnrichment(x=LETTERS[1:5], sets, universe=setdiff(LETTERS, "G"))
     expected <- phyper(5 - 1L, 9, 25 - 9, 5, lower.tail=FALSE)
     expect_equal(out, expected)
+
+    sets <- list(LETTERS[1:10])
+    out <- testEnrichment(x=LETTERS[1:5], sets, universe=setdiff(LETTERS, "A"))
+    expected <- phyper(4 - 1L, 9, 25 - 9, 4, lower.tail=FALSE)
+    expect_equal(out, expected)
+})
+
+test_that("testEnrichment works with a NULL universe", {
+    sets <- list(
+        first=LETTERS[1:10],
+        second=LETTERS[1:5 * 2],
+        third=LETTERS[10:20]
+    )
+
+    ref <- testEnrichment(x=LETTERS[1:5], sets, universe=LETTERS[1:20])
+    out <- testEnrichment(x=LETTERS[1:5], sets, universe=NULL)
+    expect_identical(ref, out)
+
+    ref <- testEnrichment(x=LETTERS[c(1:4, 22:26)], sets, universe=LETTERS[-21])
+    out <- testEnrichment(x=LETTERS[c(1:4, 22:26)], sets, universe=NULL)
+    expect_identical(ref, out)
 })
 
 test_that("testEnrichment works with an integer universe", {
