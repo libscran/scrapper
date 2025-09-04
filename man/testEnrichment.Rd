@@ -4,7 +4,7 @@
 \alias{testEnrichment}
 \title{Test for gene set enrichment}
 \usage{
-testEnrichment(x, sets, universe, log = FALSE, num.threads = 1)
+testEnrichment(x, sets, universe = NULL, log = FALSE, num.threads = 1)
 }
 \arguments{
 \item{x}{Vector of identifiers for some interesting genes, e.g., symbols or Ensembl IDs.
@@ -14,8 +14,11 @@ This is usually derived from a selection of top markers, e.g., from \code{\link{
 Each inner vector corresponds to a gene set and should contain the same type of identifiers as \code{x}.}
 
 \item{universe}{Vector of identifiers for the universe of genes in the dataset.
-It is expected that \code{x} and each vector in \code{sets} is a subset of \code{universe}.
-Alternatively, an integer scalar specifying the size of the universe.}
+\code{x} and each vector in \code{sets} will be subsetted to only include those genes in \code{universe}.
+If \code{NULL}, the universe is defined as the union of all genes in \code{x} and \code{sets}. 
+
+Alternatively, an integer scalar specifying the number of genes in the universe.
+This is assumed to be greater than or equal to the number of unique genes in \code{x} and \code{sets}.}
 
 \item{log}{Logical scalar indicating whether to report log-transformed p-values.
 This may be desirable to avoid underflow at near-zero p-values.}
