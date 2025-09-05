@@ -7,10 +7,32 @@
 #include "utils_neighbors.h"
 
 //[[Rcpp::export(rng=false)]]
-SEXP run_tsne(Rcpp::IntegerMatrix nnidx, Rcpp::NumericMatrix nndist, double perplexity, int leaf_approx, int max_depth, int max_iter, int seed, int num_threads) {
+SEXP run_tsne(
+    Rcpp::IntegerMatrix nnidx,
+    Rcpp::NumericMatrix nndist,
+    double perplexity,
+    double theta,
+    int early_exaggeration_iterations,
+    double exaggeration_factor,
+    int momentum_switch_iterations,
+    double start_momentum,
+    double final_momentum,
+    double eta,
+    int max_depth,
+    int leaf_approx,
+    int max_iter,
+    int seed,
+    int num_threads)
+{
     qdtsne::Options opt;
     opt.perplexity = perplexity;
     opt.infer_perplexity = false; // rely on the perplexity supplied by the user.
+    opt.theta = theta;
+    opt.stop_lying_iter = early_exaggeration_iterations;
+    opt.exaggeration_factor = exaggeration_factor;
+    opt.mom_switch_iter = momentum_switch_iterations;
+    opt.start_momentum = start_momentum;
+    opt.final_momentum = final_momentum;
     opt.leaf_approximation = leaf_approx;
     opt.max_depth = max_depth;
     opt.max_iterations = max_iter;
