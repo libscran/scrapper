@@ -9,6 +9,13 @@ runTsne(
   x,
   perplexity = 30,
   num.neighbors = tsnePerplexityToNeighbors(perplexity),
+  theta = 1,
+  early.exaggeration.iterations = 250,
+  exaggeration.factor = 12,
+  momentum.switch.iterations = 250,
+  start.momentum = 0.5,
+  final.momentum = 0.8,
+  eta = 200,
   max.depth = 20,
   leaf.approximation = FALSE,
   max.iterations = 500,
@@ -35,6 +42,29 @@ Alternatively, an index constructed by \code{\link[BiocNeighbors]{buildIndex}}.}
 Higher perplexities will focus on global structure, at the cost of increased runtime and decreased local resolution.}
 
 \item{num.neighbors}{Integer scalar specifying the number of neighbors, typically derived from \code{perplexity}.}
+
+\item{theta}{Numeric scalar specifying the approximation level for the Barnes-Hut calculation of repulsive forces.
+Lower values increase accuracy at the cost of increased compute time.
+All values should be non-negative.}
+
+\item{early.exaggeration.iterations}{Integer scalar specifying the number of iterations of the early exaggeration phase,
+where clusters are artificially compacted to leave more empty space so that cells can easily relocate to find a good global organization.
+Larger values improve convergence within this phase at the cost of reducing the remaining iterations in \code{max.iterations}.}
+
+\item{exaggeration.factor}{Numeric scalar containing the exaggeration factor for the early exaggeration phase (see \code{early.exaggeration.iterations}).
+Larger values increase the attraction between nearest neighbors to favor local structure.}
+
+\item{momentum.switch.iterations}{Integer scalar specifying the number of iterations to perform before switching from the starting momentum to the final momentum.
+Higher momentums can improve convergence by increasing the step size and smoothing over local oscillations, at the risk of potentially skipping over relevant minima.}
+
+\item{start.momentum}{Numeric scalar containing the starting momentum, to be used in the iterations before the momentum switch at \code{momentum.switch.iterations}.
+This is usually lower than \code{final.momentum} to avoid skipping over suitable local minima.}
+
+\item{final.momentum}{Numeric scalar containing the final momentum, to be used in the iterations after the momentum switch at \code{momentum.switch.iterations}.
+This is usually higher than \code{start.momentum} to accelerate convergence to the local minima once the observations are moderately well-organized.}
+
+\item{eta}{Numeric scalar containing the learning rate, used to scale the updates for each cell.
+Larger values can speed up convergence at the cost of skipping over local minima.}
 
 \item{max.depth}{Integer scalar specifying the maximum depth of the Barnes-Hut quadtree.
 If neighboring cells cannot be separated before the maximum depth is reached, they will be assigned to the same leaf node of the quadtree.

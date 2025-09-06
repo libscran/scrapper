@@ -400,19 +400,26 @@ BEGIN_RCPP
 END_RCPP
 }
 // run_tsne
-SEXP run_tsne(Rcpp::IntegerMatrix nnidx, Rcpp::NumericMatrix nndist, double perplexity, int leaf_approx, int max_depth, int max_iter, int seed, int num_threads);
-RcppExport SEXP _scrapper_run_tsne(SEXP nnidxSEXP, SEXP nndistSEXP, SEXP perplexitySEXP, SEXP leaf_approxSEXP, SEXP max_depthSEXP, SEXP max_iterSEXP, SEXP seedSEXP, SEXP num_threadsSEXP) {
+SEXP run_tsne(Rcpp::IntegerMatrix nnidx, Rcpp::NumericMatrix nndist, double perplexity, double theta, int early_exaggeration_iterations, double exaggeration_factor, int momentum_switch_iterations, double start_momentum, double final_momentum, double eta, int max_depth, int leaf_approx, int max_iter, int seed, int num_threads);
+RcppExport SEXP _scrapper_run_tsne(SEXP nnidxSEXP, SEXP nndistSEXP, SEXP perplexitySEXP, SEXP thetaSEXP, SEXP early_exaggeration_iterationsSEXP, SEXP exaggeration_factorSEXP, SEXP momentum_switch_iterationsSEXP, SEXP start_momentumSEXP, SEXP final_momentumSEXP, SEXP etaSEXP, SEXP max_depthSEXP, SEXP leaf_approxSEXP, SEXP max_iterSEXP, SEXP seedSEXP, SEXP num_threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::IntegerMatrix >::type nnidx(nnidxSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type nndist(nndistSEXP);
     Rcpp::traits::input_parameter< double >::type perplexity(perplexitySEXP);
-    Rcpp::traits::input_parameter< int >::type leaf_approx(leaf_approxSEXP);
+    Rcpp::traits::input_parameter< double >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< int >::type early_exaggeration_iterations(early_exaggeration_iterationsSEXP);
+    Rcpp::traits::input_parameter< double >::type exaggeration_factor(exaggeration_factorSEXP);
+    Rcpp::traits::input_parameter< int >::type momentum_switch_iterations(momentum_switch_iterationsSEXP);
+    Rcpp::traits::input_parameter< double >::type start_momentum(start_momentumSEXP);
+    Rcpp::traits::input_parameter< double >::type final_momentum(final_momentumSEXP);
+    Rcpp::traits::input_parameter< double >::type eta(etaSEXP);
     Rcpp::traits::input_parameter< int >::type max_depth(max_depthSEXP);
+    Rcpp::traits::input_parameter< int >::type leaf_approx(leaf_approxSEXP);
     Rcpp::traits::input_parameter< int >::type max_iter(max_iterSEXP);
     Rcpp::traits::input_parameter< int >::type seed(seedSEXP);
     Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(run_tsne(nnidx, nndist, perplexity, leaf_approx, max_depth, max_iter, seed, num_threads));
+    rcpp_result_gen = Rcpp::wrap(run_tsne(nnidx, nndist, perplexity, theta, early_exaggeration_iterations, exaggeration_factor, momentum_switch_iterations, start_momentum, final_momentum, eta, max_depth, leaf_approx, max_iter, seed, num_threads));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -610,7 +617,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_suggest_rna_qc_thresholds", (DL_FUNC) &_scrapper_suggest_rna_qc_thresholds, 3},
     {"_scrapper_filter_rna_qc_metrics", (DL_FUNC) &_scrapper_filter_rna_qc_metrics, 3},
     {"_scrapper_run_pca", (DL_FUNC) &_scrapper_run_pca, 12},
-    {"_scrapper_run_tsne", (DL_FUNC) &_scrapper_run_tsne, 8},
+    {"_scrapper_run_tsne", (DL_FUNC) &_scrapper_run_tsne, 15},
     {"_scrapper_perplexity_to_neighbors", (DL_FUNC) &_scrapper_perplexity_to_neighbors, 1},
     {"_scrapper_run_umap", (DL_FUNC) &_scrapper_run_umap, 8},
     {"_scrapper_sanitize_size_factors", (DL_FUNC) &_scrapper_sanitize_size_factors, 5},
