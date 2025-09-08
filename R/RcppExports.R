@@ -125,8 +125,8 @@ perplexity_to_neighbors <- function(p) {
     .Call('_scrapper_perplexity_to_neighbors', PACKAGE = 'scrapper', p)
 }
 
-run_umap <- function(nnidx, nndist, ndim, min_dist, seed, num_epochs, num_threads, parallel_optimization) {
-    .Call('_scrapper_run_umap', PACKAGE = 'scrapper', nnidx, nndist, ndim, min_dist, seed, num_epochs, num_threads, parallel_optimization)
+run_umap <- function(nnidx, nndist, num_dim, local_connectivity, bandwidth, mix_ratio, spread, min_dist, a, b, repulsion_strength, initialize_method, initial_coordinates, initialize_random_on_spectral_fail, initialize_spectral_scale, initialize_spectral_jitter, initialize_spectral_jitter_sd, initialize_random_scale, initialize_seed, num_epochs, learning_rate, negative_sample_rate, optimize_seed, num_threads, parallel_optimization) {
+    .Call('_scrapper_run_umap', PACKAGE = 'scrapper', nnidx, nndist, num_dim, local_connectivity, bandwidth, mix_ratio, spread, min_dist, a, b, repulsion_strength, initialize_method, initial_coordinates, initialize_random_on_spectral_fail, initialize_spectral_scale, initialize_spectral_jitter, initialize_spectral_jitter_sd, initialize_random_scale, initialize_seed, num_epochs, learning_rate, negative_sample_rate, optimize_seed, num_threads, parallel_optimization)
 }
 
 sanitize_size_factors <- function(size_factors, handle_zero, handle_negative, handle_nan, handle_infinite) {
