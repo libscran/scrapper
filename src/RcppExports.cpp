@@ -434,19 +434,36 @@ BEGIN_RCPP
 END_RCPP
 }
 // run_umap
-SEXP run_umap(Rcpp::IntegerMatrix nnidx, Rcpp::NumericMatrix nndist, int ndim, double min_dist, int seed, int num_epochs, int num_threads, bool parallel_optimization);
-RcppExport SEXP _scrapper_run_umap(SEXP nnidxSEXP, SEXP nndistSEXP, SEXP ndimSEXP, SEXP min_distSEXP, SEXP seedSEXP, SEXP num_epochsSEXP, SEXP num_threadsSEXP, SEXP parallel_optimizationSEXP) {
+SEXP run_umap(Rcpp::IntegerMatrix nnidx, Rcpp::NumericMatrix nndist, int num_dim, double local_connectivity, double bandwidth, double mix_ratio, double spread, double min_dist, Rcpp::Nullable<Rcpp::NumericVector> a, Rcpp::Nullable<Rcpp::NumericVector> b, double repulsion_strength, std::string initialize_method, Rcpp::Nullable<Rcpp::NumericMatrix> initial_coordinates, bool initialize_random_on_spectral_fail, double initialize_spectral_scale, bool initialize_spectral_jitter, double initialize_spectral_jitter_sd, double initialize_random_scale, double initialize_seed, Rcpp::Nullable<Rcpp::IntegerVector> num_epochs, double learning_rate, double negative_sample_rate, double optimize_seed, int num_threads, bool parallel_optimization);
+RcppExport SEXP _scrapper_run_umap(SEXP nnidxSEXP, SEXP nndistSEXP, SEXP num_dimSEXP, SEXP local_connectivitySEXP, SEXP bandwidthSEXP, SEXP mix_ratioSEXP, SEXP spreadSEXP, SEXP min_distSEXP, SEXP aSEXP, SEXP bSEXP, SEXP repulsion_strengthSEXP, SEXP initialize_methodSEXP, SEXP initial_coordinatesSEXP, SEXP initialize_random_on_spectral_failSEXP, SEXP initialize_spectral_scaleSEXP, SEXP initialize_spectral_jitterSEXP, SEXP initialize_spectral_jitter_sdSEXP, SEXP initialize_random_scaleSEXP, SEXP initialize_seedSEXP, SEXP num_epochsSEXP, SEXP learning_rateSEXP, SEXP negative_sample_rateSEXP, SEXP optimize_seedSEXP, SEXP num_threadsSEXP, SEXP parallel_optimizationSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::IntegerMatrix >::type nnidx(nnidxSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type nndist(nndistSEXP);
-    Rcpp::traits::input_parameter< int >::type ndim(ndimSEXP);
+    Rcpp::traits::input_parameter< int >::type num_dim(num_dimSEXP);
+    Rcpp::traits::input_parameter< double >::type local_connectivity(local_connectivitySEXP);
+    Rcpp::traits::input_parameter< double >::type bandwidth(bandwidthSEXP);
+    Rcpp::traits::input_parameter< double >::type mix_ratio(mix_ratioSEXP);
+    Rcpp::traits::input_parameter< double >::type spread(spreadSEXP);
     Rcpp::traits::input_parameter< double >::type min_dist(min_distSEXP);
-    Rcpp::traits::input_parameter< int >::type seed(seedSEXP);
-    Rcpp::traits::input_parameter< int >::type num_epochs(num_epochsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericVector> >::type a(aSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericVector> >::type b(bSEXP);
+    Rcpp::traits::input_parameter< double >::type repulsion_strength(repulsion_strengthSEXP);
+    Rcpp::traits::input_parameter< std::string >::type initialize_method(initialize_methodSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericMatrix> >::type initial_coordinates(initial_coordinatesSEXP);
+    Rcpp::traits::input_parameter< bool >::type initialize_random_on_spectral_fail(initialize_random_on_spectral_failSEXP);
+    Rcpp::traits::input_parameter< double >::type initialize_spectral_scale(initialize_spectral_scaleSEXP);
+    Rcpp::traits::input_parameter< bool >::type initialize_spectral_jitter(initialize_spectral_jitterSEXP);
+    Rcpp::traits::input_parameter< double >::type initialize_spectral_jitter_sd(initialize_spectral_jitter_sdSEXP);
+    Rcpp::traits::input_parameter< double >::type initialize_random_scale(initialize_random_scaleSEXP);
+    Rcpp::traits::input_parameter< double >::type initialize_seed(initialize_seedSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type num_epochs(num_epochsSEXP);
+    Rcpp::traits::input_parameter< double >::type learning_rate(learning_rateSEXP);
+    Rcpp::traits::input_parameter< double >::type negative_sample_rate(negative_sample_rateSEXP);
+    Rcpp::traits::input_parameter< double >::type optimize_seed(optimize_seedSEXP);
     Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
     Rcpp::traits::input_parameter< bool >::type parallel_optimization(parallel_optimizationSEXP);
-    rcpp_result_gen = Rcpp::wrap(run_umap(nnidx, nndist, ndim, min_dist, seed, num_epochs, num_threads, parallel_optimization));
+    rcpp_result_gen = Rcpp::wrap(run_umap(nnidx, nndist, num_dim, local_connectivity, bandwidth, mix_ratio, spread, min_dist, a, b, repulsion_strength, initialize_method, initial_coordinates, initialize_random_on_spectral_fail, initialize_spectral_scale, initialize_spectral_jitter, initialize_spectral_jitter_sd, initialize_random_scale, initialize_seed, num_epochs, learning_rate, negative_sample_rate, optimize_seed, num_threads, parallel_optimization));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -619,7 +636,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_run_pca", (DL_FUNC) &_scrapper_run_pca, 12},
     {"_scrapper_run_tsne", (DL_FUNC) &_scrapper_run_tsne, 15},
     {"_scrapper_perplexity_to_neighbors", (DL_FUNC) &_scrapper_perplexity_to_neighbors, 1},
-    {"_scrapper_run_umap", (DL_FUNC) &_scrapper_run_umap, 8},
+    {"_scrapper_run_umap", (DL_FUNC) &_scrapper_run_umap, 25},
     {"_scrapper_sanitize_size_factors", (DL_FUNC) &_scrapper_sanitize_size_factors, 5},
     {"_scrapper_scale_by_neighbors", (DL_FUNC) &_scrapper_scale_by_neighbors, 1},
     {"_scrapper_score_gene_set", (DL_FUNC) &_scrapper_score_gene_set, 11},
