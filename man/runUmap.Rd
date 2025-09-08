@@ -81,6 +81,8 @@ Larger values increase repulsion and favor local structure.}
 This should be one of:
 \itemize{
 \item \code{SPECTRAL}: spectral decomposition of the normalized graph Laplacian.
+Specifically, the initial coordinates are defined from the eigenvectors corresponding to the smallest non-zero eigenvalues.
+This fails in the presence of multiple graph components or if the approximate SVD fails to converge.
 \item \code{RANDOM}: fills the embedding with random draws from a normal distribution.
 \item \code{NONE}: uses initial values from \code{initial.coordinates}.
 }}
@@ -92,22 +94,24 @@ or \code{initialize.method = "SPECTRAL"} and spectral initialization fails and \
 \item{initialize.random.on.spectral.fail}{Logical scalar indicating whether to fall back to random sampling (i.e., same as \code{RANDOM})
 if spectral initialization fails due to the presence of multiple components in the graph.
 If \code{FALSE}, the values in \code{initial.coordinates} will be used instead, i.e., same as \code{NONE}.
-Only relevant if \code{initialize.method = "SPECTRAL"}.}
+Only relevant if \code{initialize.method = "SPECTRAL"} and spectral initialization fails.}
 
 \item{initialize.spectral.scale}{Numeric scalar specifying the maximum absolute magnitude of the coordinates after spectral initialization.
 All initial coordinates are scaled such that the maximum of the absolute values is equal to \code{initialize.spectral.scale}.
 This ensures that outlier observations will not have large absolute distances that may interfere with optimization.
-Only relevant if \code{initialize.method = "SPECTRAL"}.}
+Only relevant if \code{initialize.method = "SPECTRAL"} and spectral initialization does not fail.}
 
 \item{initialize.spectral.jitter}{Logical scalar indicating whether to jitter coordinates after spectral initialization to separate duplicate observations (e.g., to avoid overplotting).
 This is done using normally-distributed noise of mean zero and standard deviation of \code{initialize.spectral.jitter.sd}.
-Only relevant if \code{initialize.method = "SPECTRAL"}.}
+Only relevant if \code{initialize.method = "SPECTRAL"} and spectral initialization does not fail.}
 
 \item{initialize.spectral.jitter.sd}{Numeric scalar specifying the standard deviation of the jitter to apply after spectral initialization.
-Only relevant if \code{initialize.method = "SPECTRAL"} and \code{initialize.spectral.jitter = TRUE}.}
+Only relevant if \code{initialize.method = "SPECTRAL"} and spectral initialization does not fail and \code{initialize.spectral.jitter = TRUE}.}
 
-\item{initialize.random.scale}{Numeric scalar specifying the scale of the randomly generated coordinates when \code{initialize.method = "RANDOM"}.
-Coordinates are sampled from a uniform distribution from \eqn{[-x, x)} where \eqn{x} is \code{initialize.random.scale}.}
+\item{initialize.random.scale}{Numeric scalar specifying the scale of the randomly generated initial coordinates.
+Coordinates are sampled from a uniform distribution from \eqn{[-x, x)} where \eqn{x} is \code{initialize.random.scale}.
+Only relevant if \code{initialize.method = "RANDOM"},
+or \code{initialize.method = "SPECTRAL"} and spectral initialization fails and \code{initialize.random.on.spectral.fail = TRUE}.}
 
 \item{initialize.seed}{Numeric scalar specifying the seed for the random number generation during initialization.
 Only relevant if \code{initialize.method = "RANDOM"},
