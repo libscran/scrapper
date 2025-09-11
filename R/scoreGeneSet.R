@@ -16,7 +16,7 @@
 #' @author Aaron Lun
 #'
 #' @seealso
-#' \url{https://libscran.github.io/gsdecon/}, for more details on the underlying algorithm.
+#' The \code{compute} and \code{compute_blocked} functions in \url{https://libscran.github.io/gsdecon/}.
 #'
 #' @author Aaron Lun
 #' @examples

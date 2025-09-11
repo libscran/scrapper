@@ -74,7 +74,7 @@ scoreGeneSet(normed, set=c(1,3,5,10,20,100))
 
 }
 \seealso{
-\url{https://libscran.github.io/gsdecon/}, for more details on the underlying algorithm.
+The \code{compute} and \code{compute_blocked} functions in \url{https://libscran.github.io/gsdecon/}.
 }
 \author{
 Aaron Lun

@@ -36,7 +36,7 @@
 #' @return List containing \code{corrected}, a numeric matrix of the same dimensions as \code{x}, containing the corrected values.
 #'
 #' @seealso
-#' \url{https://libscran.github.io/mnncorrect/}, for more details on the underlying implementation.
+#' The \code{compute} function in \url{https://libscran.github.io/mnncorrect/}.
 #'
 #' @references 
 #' Haghverdi L, Lun ATL, Morgan MD, Marioni JC (2018).

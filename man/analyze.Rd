@@ -203,7 +203,7 @@ If multiple modalities are to be combined for downstream analysis, this contains
 \item{\code{block}:}{Vector or factor containing the blocking factor for all cells (after filtering, if \code{filter.cells = TRUE}).
 This is set to \code{NULL} if no blocking factor was supplied.}
 \item{\code{mnn.corrected}:}{Results of \code{\link{correctMnn}} on the PCs in or referenced by \code{combined.pca}.
-If no blocking factor is supplied, this is set to ``None`` instead.}
+If no blocking factor is supplied, this is set to \code{NULL} instead.}
 \item{\code{tsne}:}{Results of \code{\link{runTsne}}.
 This is \code{NULL} if t-SNE was not performed.}
 \item{\code{umap}:}{Results of \code{\link{runUmap}}.
@@ -243,8 +243,6 @@ convertAnalyzeResults(res)
 
 }
 \seealso{
-C++ libraries in \code{https://github.com/libscran}, which implement all of these steps.
-
 \code{\link{convertAnalyzeResults}}, to convert the results into a \link[SingleCellExperiment]{SingleCellExperiment}.
 }
 \author{
