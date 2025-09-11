@@ -4,14 +4,10 @@
 
 \section{Version 1.4.0}{\itemize{
 \item Setting \code{universe=NULL} in \code{testEnrichment()} will automatically define the universe as the union of all genes.
-}}
 
-\section{Version 1.3.2}{\itemize{
 \item Updated \code{correctMnn()} to the new algorithm used by the \pkg{mnncorrect} C++ library.
 This aims to improve correction accuracy and reduce sensitivity to the choice of reference.
-}}
 
-\section{Version 1.3.1}{\itemize{
 \item Bugfix to \code{runAllNeighborSteps()} to return an empty list when no step is requested.
 }}
 
