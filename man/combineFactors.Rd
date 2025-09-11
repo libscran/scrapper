@@ -19,9 +19,10 @@ Alternatively, a data frame where each column is a vector or factor and each row
 \value{
 List containing \code{levels}, a data frame containing the sorted and unique combinations of levels from \code{factors};
 and \code{index}, an integer vector specifying the index into \code{levels} for each observation.
+In other words, for observation \code{i} and factor \code{j}, \code{levels[[[j]][index[i]]} will recover \code{factors[[j]][i]}.
 }
 \description{
-Combine multiple categorical factors based on the unique combinations of levels from each factor.
+Combine multiple factors into a single factor where each level of the latter is a unique combination of levels from the former.
 }
 \examples{
 combineFactors(list(
@@ -36,7 +37,7 @@ combineFactors(list(
 
 }
 \seealso{
-The \code{combine_factors} function in \url{https://libscran.github.io/scran_aggregate/}, which provides the underlying implementation.
+The \code{combine_to_factor} function in \url{https://ltla.github.io/factorize/}.
 }
 \author{
 Aaron Lun

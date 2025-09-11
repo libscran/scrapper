@@ -1,12 +1,13 @@
 #' Score gene set activity for each cell
 #'
 #' Compute per-cell scores for a gene set, defined as the column sums of a rank-1 approximation to the submatrix for the gene set.
-#' This uses the same approach implemented in the \pkg{GSDecon} package by Jason Hackney.
+#' This uses the same approach as the \pkg{GSDecon} package by Jason Hackney, adapted to use an approximate PCA (via IRLBA) and to support blocking.
 #'
 #' @param x A matrix-like object where rows correspond to genes or genomic features and columns correspond to cells.
 #' Typically, the matrix is expected to contain log-expression values.
 #' @param set Integer, logical or character vector specifying the rows that belong to the gene set.
 #' @param rank Integer scalar specifying the rank of the approximation.
+#' The default value of 1 assumes that each gene set only describes a single coordinated biological function.
 #' @inheritParams runPca
 #'
 #' @return List containing \code{scores}, a numeric vector of per-cell scores for each column in \code{x};
@@ -15,8 +16,7 @@
 #' @author Aaron Lun
 #'
 #' @seealso
-#' \url{https://libscran.github.io/gsdecon/}, for more details on the underlying algorithm.
-#' In particular, the documentation for the \code{compute_blocked} function explains the blocking strategy.
+#' The \code{compute} and \code{compute_blocked} functions in \url{https://libscran.github.io/gsdecon/}.
 #'
 #' @author Aaron Lun
 #' @examples

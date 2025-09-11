@@ -14,18 +14,20 @@ chooseHighlyVariableGenes(
 }
 \arguments{
 \item{stats}{Numeric vector of variances (or a related statistic) across all genes.
-Typically the residuals from \code{\link{modelGeneVariances}} are used here.}
+Typically, the residuals from \code{\link{modelGeneVariances}} are used here.}
 
 \item{top}{Integer specifying the number of top genes to retain.
 Note that the actual number of retained genes may not be equal to \code{top}, depending on the other options.}
 
 \item{larger}{Logical scalar indicating whether larger values of \code{stats} correspond to more variable genes.
-If \code{TRUE}, HVGs are defined as those with the largest values of \code{stats}.}
+If \code{TRUE}, HVGs are defined as those with the largest values of \code{stats}.
+This is typically the case for variances or related statistics, e.g., residuals.}
 
 \item{keep.ties}{Logical scalar indicating whether to keep tied values of \code{stats}, even if \code{top} may be exceeded.}
 
 \item{bound}{Numeric scalar specifying the lower bound (if \code{larger=TRUE}) or upper bound (otherwise) to be applied to \code{stats}.
-Genes are not considered to be HVGs if they do not pass this bound, even if they are within the \code{top} genes.
+Genes are not considered to be HVGs if they do not satisfy this bound, even if they are within the \code{top} genes.
+For example, residuals from the fitted trend should be positive, which can be enforced by setting \code{bound} to zero.
 Ignored if \code{NULL}.}
 }
 \value{
@@ -33,6 +35,7 @@ Integer vector containing the indices of genes in \code{stats} that are consider
 }
 \description{
 Choose highly variable genes (HVGs) based on a variance-related statistic.
+This is typically used to subset the gene-cell matrix prior to calling \code{\link{runPca}}.
 }
 \examples{
 resids <- rexp(10000)
@@ -40,7 +43,7 @@ str(chooseHighlyVariableGenes(resids))
 
 }
 \seealso{
-The \code{choose_highly_variable_genes} function in \url{https://libscran.github.io/scran_variances/}, for the underlying implementation.
+The \code{choose_highly_variable_genes} function in \url{https://libscran.github.io/scran_variances/}.
 }
 \author{
 Aaron Lun

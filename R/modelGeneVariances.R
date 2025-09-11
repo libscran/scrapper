@@ -1,22 +1,32 @@
 #' Model per-gene variances in expression
 #'
-#' Compute the variance in (log-)expression values for each gene,
-#' and model the trend in the variances with respect to the mean.
+#' Model the per-gene variances as a function of the mean in single-cell expression data.
+#' Highly variable genes can then be selected for downstream analyses. 
 #'
 #' @param x A matrix-like object where rows correspond to genes or genomic features and columns correspond to cells.
 #' It is typically expected to contain log-expression values, e.g., from \code{\link{normalizeCounts}}.
 #' @param block Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{x}.
-#' Alternatively \code{NULL} if all cells are from the same block.
-#' @param block.weight.policy String specifying the policy to use for weighting different blocks when computing the average for each statistic
+#' If provided, calculation of means/variances and trend fitting are performed within each block to ensure that block effects do not confound the estimates.
+#' The weighted average of each statistic across all blocks is reported for each gene.
+#' Alternatively \code{NULL}, if all cells are from the same block.
+#' @param block.weight.policy String specifying the policy to use for weighting different blocks when computing the average for each statistic.
+#' See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
 #' Only used if \code{block} is not \code{NULL}.
 #' @param variable.block.weight Numeric vector of length 2, specifying the parameters for variable block weighting.
-#' The first and second values are used as the lower and upper bounds, respectively, for the variable weight calculation.
+#' See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
 #' Only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.
 #' @inheritParams fitVarianceTrend
 #' @param num.threads Integer scalar specifying the number of threads to use.
 #'
-#' @return A list containing \code{statistics}.
-#' This is a data frame with the columns \code{means}, \code{variances}, \code{fitted} and \code{residuals},
+#' @details
+#' We compute the mean and variance for each gene and fit a trend to the variances with respect to the means using \code{\link{fitVarianceTrend}}.
+#' We assume that most genes at any given abundance are not highly variable, such that the fitted value of the trend is interpreted as the \dQuote{uninteresting} variance - 
+#' this is mostly attributed to technical variation like sequencing noise, but can also represent constitutive biological noise like transcriptional bursting.
+#' Under this assumption, the residual can be treated as a measure of biologically interesting variation.
+#' Genes with large residuals can then be selected for downstream analyses, e.g., with \code{\link{chooseHighlyVariableGenes}}.
+#'
+#' @return A list containing \code{statistics}, a data frame with number of rows equal to the number of genes.
+#' This contains the columns \code{means}, \code{variances}, \code{fitted} and \code{residuals},
 #' each of which is a numeric vector containing the statistic of the same name across all genes.
 #'
 #' If \code{block} is supplied, each of the column vectors described above contains the average across all blocks.
@@ -25,9 +35,7 @@
 #' @author Aaron Lun
 #'
 #' @seealso
-#' The \code{model_gene_variances} function in \url{https://libscran.github.io/scran_variances/}, for the underlying implementation.
-#'
-#' \code{\link{fitVarianceTrend}}, which fits the mean-variance trend.
+#' The \code{model_gene_variances} function in \url{https://libscran.github.io/scran_variances/}.
 #'
 #' @examples
 #' library(Matrix)

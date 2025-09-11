@@ -25,23 +25,31 @@ Typically, the matrix is expected to contain log-expression values.}
 
 \item{set}{Integer, logical or character vector specifying the rows that belong to the gene set.}
 
-\item{rank}{Integer scalar specifying the rank of the approximation.}
+\item{rank}{Integer scalar specifying the rank of the approximation.
+The default value of 1 assumes that each gene set only describes a single coordinated biological function.}
 
-\item{scale}{Logical scalar indicating whether to scale all genes to have the same variance.}
+\item{scale}{Logical scalar indicating whether to scale all genes to have the same variance.
+This ensures that each gene contributes equally to the PCA, favoring consistent variation across many genes rather than large variation in a few genes.
+If \code{block} is specified, each gene's variance is calculated as a weighted sum of the variances from each block. 
+Genes with zero variance are ignored.}
 
 \item{block}{Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{x}.
+The PCA will be performed on the residuals after regressing out the block effect, ensuring that differences between block do not dominate the variation in the dataset.
 Alternatively \code{NULL} if all cells are from the same block.}
 
-\item{block.weight.policy}{String specifying the policy to use for weighting different blocks when computing the average for each statistic.
+\item{block.weight.policy}{String specifying the policy to use for weighting the contribution of different blocks to the PCA.
+See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
 Only used if \code{block} is not \code{NULL}.}
 
 \item{variable.block.weight}{Numeric vector of length 2, specifying the parameters for variable block weighting.
-The first and second values are used as the lower and upper bounds, respectively, for the variable weight calculation.
+See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
 Only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.}
 
-\item{extra.work}{Integer scalar specifying the extra dimensions for the IRLBA workspace.}
+\item{extra.work}{Integer scalar specifying the extra dimensions for the IRLBA workspace.
+Larger values improve accuracy at the cost of compute time.}
 
-\item{iterations}{Integer scalar specifying the maximum number of restart iterations for IRLBA.}
+\item{iterations}{Integer scalar specifying the maximum number of restart iterations for IRLBA.
+Larger values improve accuracy at the cost of compute time.}
 
 \item{seed}{Integer scalar specifying the seed for the initial random vector in IRLBA.}
 
@@ -56,7 +64,7 @@ and \code{weights}, a numeric vector of per-gene weights for each gene in \code{
 }
 \description{
 Compute per-cell scores for a gene set, defined as the column sums of a rank-1 approximation to the submatrix for the gene set.
-This uses the same approach implemented in the \pkg{GSDecon} package by Jason Hackney.
+This uses the same approach as the \pkg{GSDecon} package by Jason Hackney, adapted to use an approximate PCA (via IRLBA) and to support blocking.
 }
 \examples{
 library(Matrix)
@@ -66,8 +74,7 @@ scoreGeneSet(normed, set=c(1,3,5,10,20,100))
 
 }
 \seealso{
-\url{https://libscran.github.io/gsdecon/}, for more details on the underlying algorithm.
-In particular, the documentation for the \code{compute_blocked} function explains the blocking strategy.
+The \code{compute} and \code{compute_blocked} functions in \url{https://libscran.github.io/gsdecon/}.
 }
 \author{
 Aaron Lun

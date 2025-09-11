@@ -38,7 +38,8 @@ The number of neighbors should be the same as \code{num.neighbors}, otherwise a 
 
 Alternatively, an index constructed by \code{\link[BiocNeighbors]{buildIndex}}.}
 
-\item{perplexity}{Numeric scalar specifying the perplexity to use in the t-SNE algorithm.}
+\item{perplexity}{Numeric scalar specifying the perplexity to use in the t-SNE algorithm.
+Higher perplexities will focus on global structure, at the cost of increased runtime and decreased local resolution.}
 
 \item{num.neighbors}{Integer scalar specifying the number of neighbors, typically derived from \code{perplexity}.}
 
@@ -46,18 +47,15 @@ Alternatively, an index constructed by \code{\link[BiocNeighbors]{buildIndex}}.}
 Lower values increase accuracy at the cost of increased compute time.
 All values should be non-negative.}
 
-\item{early.exaggeration.iterations}{Integer scalar specifying the number of iterations of the early exaggeration phase.
-In this phase, the attractive forces between neighboring observations are scaled up by \code{exaggeration.factor} to encourage the algorithm to put nearest neighbors next to each other. 
-As a result, the embedding will have a lot of empty space so that clusters can easily relocate to find a good global organization.
+\item{early.exaggeration.iterations}{Integer scalar specifying the number of iterations of the early exaggeration phase,
+where clusters are artificially compacted to leave more empty space so that cells can easily relocate to find a good global organization.
 Larger values improve convergence within this phase at the cost of reducing the remaining iterations in \code{max.iterations}.}
 
-\item{exaggeration.factor}{Numeric scalar containing the exaggeration factor for the early exaggeration phase (\code{early.exaggeration.iterations}).
+\item{exaggeration.factor}{Numeric scalar containing the exaggeration factor for the early exaggeration phase (see \code{early.exaggeration.iterations}).
 Larger values increase the attraction between nearest neighbors to favor local structure.}
 
 \item{momentum.switch.iterations}{Integer scalar specifying the number of iterations to perform before switching from the starting momentum to the final momentum.
-At each iteration, the update to each observation's position includes a small step in the direction of its previous update, i.e., some "momentum" is preserved.
-Greater momentum can improve convergence by increasing the step size and smoothing over local oscillations, at the risk of potentially skipping over relevant minima.
-The magnitude of this momentum switches from \code{start.momentum} to \code{final.momentum} at the specified number of iterations.}
+Higher momentums can improve convergence by increasing the step size and smoothing over local oscillations, at the risk of potentially skipping over relevant minima.}
 
 \item{start.momentum}{Numeric scalar containing the starting momentum, to be used in the iterations before the momentum switch at \code{momentum.switch.iterations}.
 This is usually lower than \code{final.momentum} to avoid skipping over suitable local minima.}
@@ -69,13 +67,15 @@ This is usually higher than \code{start.momentum} to accelerate convergence to t
 Larger values can speed up convergence at the cost of skipping over local minima.}
 
 \item{max.depth}{Integer scalar specifying the maximum depth of the Barnes-Hut quadtree.
-Smaller values (7-10) improve speed at the cost of accuracy.}
+If neighboring cells cannot be separated before the maximum depth is reached, they will be assigned to the same leaf node of the quadtree.
+Smaller values (7-10) improve speed by bounding the recursion depth at the cost of accuracy.}
 
-\item{leaf.approximation}{Logical scalar indicating whether to use the \dQuote{leaf approximation} approach,
-which sacrifices some accuracy for greater speed.
-Only effective when \code{max.depth} is small enough for multiple cells to be assigned to the same leaf node of the quadtree.}
+\item{leaf.approximation}{Logical scalar indicating whether to use the \dQuote{leaf approximation}.
+If \code{TRUE}, repulsive forces are computed between leaf nodes and re-used across all cells assigned to that leaf node. 
+This sacrifices some accuracy for greater speed, assuming that \code{max.depth} is small enough for multiple cells to be assigned to the same leaf.}
 
-\item{max.iterations}{Integer scalar specifying the maximum number of iterations to perform.}
+\item{max.iterations}{Integer scalar specifying the maximum number of iterations to perform.
+Larger values improve convergence at the cost of compute time.}
 
 \item{seed}{Integer scalar specifying the seed to use for generating the initial coordinates.}
 
@@ -97,6 +97,15 @@ x <- t(as.matrix(iris[,1:4]))
 embedding <- runTsne(x)
 plot(embedding[,1], embedding[,2], col=iris[,5])
 
+}
+\references{
+van der Maaten LJP and Hinton GE (2008). 
+Visualizing high-dimensional data using t-SNE. 
+\emph{Journal of Machine Learning Research_} 9, 2579-2605.
+
+van der Maaten LJP (2014). 
+Accelerating t-SNE using tree-based algorithms. 
+\emph{Journal of Machine Learning Research} 15, 3221-3245.
 }
 \seealso{
 \url{https://libscran.github.io/qdtsne/}, for an explanation of the approximations.

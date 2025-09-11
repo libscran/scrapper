@@ -1,7 +1,8 @@
 #' Aggregate expression across cells
 #'
 #' Aggregate expression values across cells based on one or more grouping factors.
-#' This is primarily used to create pseudo-bulk profiles for each cluster/sample combination.
+#' This is usually applied to a count matrix to create pseudo-bulk profiles for each cluster/sample combination.
+#' These profiles can then be used as if they were counts from bulk data, e.g., for differential analyses with \pkg{edgeR}.
 #'
 #' @param x A matrix-like object where rows correspond to genes or genomic features and columns correspond to cells.
 #' Values are typically expected to be counts.
@@ -10,13 +11,12 @@
 #'
 #' @return A list containing:
 #' \itemize{
-#' \item \code{sums}, a numeric matrix where each row corresponds to a gene and each column corresponds to a unique combination of grouping levels.
+#' \item \code{sums}, a numeric matrix where each row corresponds to a gene and each column corresponds to a unique combination of levels from \code{factors}.
 #' Each entry contains the summed expression across all cells with that combination. 
-#' \item \code{detected}, an integer matrix where each row corresponds to a gene and each column corresponds to a unique combination of grouping levels.
+#' \item \code{detected}, an integer matrix where each row corresponds to a gene and each column corresponds to a unique combination of levels from \code{factors}.
 #' Each entry contains the number of cells with detected expression in that combination.
-#' \item \code{combinations}, a data frame describing the levels for each unique combination of factors.
-#' Rows of this data frame correspond to columns of \code{sums} and \code{detected},
-#' while columns correspond to the factors in \code{factors}.
+#' \item \code{combinations}, a data frame containing the unique combination of levels from \code{factors}.
+#' Rows of this data frame correspond to columns of \code{sums} and \code{detected}, while columns correspond to the factors in \code{factors}.
 #' \item \code{counts}, the number of cells associated with each combination.
 #' Each entry corresponds to a row of \code{combinations}.
 #' \item \code{index}, an integer vector of length equal to the number of cells in \code{x}.
@@ -24,7 +24,7 @@
 #' }
 #'
 #' @seealso
-#' The \code{aggregate_across_cells} function in \url{https://libscran.github.io/scran_aggregate/}, for the underlying implementation.
+#' The \code{aggregate_across_cells} function in \url{https://libscran.github.io/scran_aggregate/}.
 #'
 #' \code{\link{aggregateAcrossGenes}}, to aggregate expression values across gene sets.
 #'

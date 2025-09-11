@@ -1,23 +1,38 @@
 #' Center size factors
 #'
-#' Scale the size factors so they are centered at unity,
-#' which ensures that the scale of the counts is preserved (on average) after normalization.
+#' Scale the size factors so they are centered at unity.
+#' This ensures that the original scale of the counts is preserved in the normalized values from \code{\link{normalizeCounts}},
+#' which simplifies interpretation and ensures that any pseudo-count added prior to log-transformation has a predictable shrinkage effect.
 #'
 #' @param size.factors Numeric vector of size factors across cells.
+#' Invalid size factors (e.g., non-positive, non-finite) will be ignored.
 #' @param block Vector or factor of length equal to \code{size.factors}, specifying the block of origin for each cell.
 #' Alternatively \code{NULL}, in which case all cells are assumed to be in the same block.
 #' @param mode String specifying how to scale size factors across blocks.
-#' \code{"lowest"} will compute the average size factor in each block, identify the lowest average across all blocks, and then scale all size factors by that value.
-#' \code{"per-block"} will compute the average size factor in each block, and then scale each size factor by the average of block to which it belongs.
+#' This can be either \code{"lowest"} or \code{"per-block"}, see Details.
 #' Only used if \code{block} is provided.
 #' 
 #' @return Numeric vector of length equal to \code{size.factors}, containing the centered size factors.
 #'
+#' @details
+#' \code{"lowest"} will compute the average size factor in each block, identify the lowest average across all blocks, and then scale all size factors by that value.
+#' Here, our normalization strategy involves downscaling all blocks to match the coverage of the lowest-coverage block.
+#' This is useful for datasets with big differences in coverage between blocks as it avoids egregious upscaling of low-coverage blocks.
+#' Specifically, strong upscaling allows the log-transformation to ignore any shrinkage from the pseudo-count.
+#' This is problematic as it inflates differences between cells at log-values derived from low counts, increasing noise and overstating log-fold changes. 
+#' Downscaling is safer as it allows the pseudo-count to shrink the log-differences between cells towards zero at low counts,
+#' effectively sacrificing some information in the higher-coverage batches so that they can be compared to the low-coverage batches
+#' (which is preferable to exaggerating the informativeness of the latter for comparison to the former).
+#'
+#' \code{"per-block"} will compute the average size factor in each block, and then scale each size factor by the average of block to which it belongs.
+#' The scaled size factors are identical to those obtained by separate invocations of `center_size_factors()` on the size factors for each block.
+#' This can be desirable to ensure consistency with independent analyses of each block - otherwise, the centering would depend on the size factors in other blocks.
+#' However, any systematic differences in the size factors between blocks are lost, i.e., systematic changes in coverage between blocks will not be normalized.
+#'
 #' @author Aaron Lun
 #'
 #' @seealso
-#' The \code{center_size_factors} and \code{center_size_factors_blocked} functions in \url{https://libscran.github.io/scran_norm/},
-#' for the rationale behind centering the size factors.
+#' The \code{center_size_factors} and \code{center_size_factors_blocked} functions in \url{https://libscran.github.io/scran_norm/}.
 #'
 #' @examples
 #' centerSizeFactors(runif(100))

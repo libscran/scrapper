@@ -16,15 +16,19 @@ normalizeCounts(
 }
 \arguments{
 \item{x}{A matrix-like object where rows correspond to genes or genomic features and columns correspond to cells.
-Values are typically expected to be counts.
+Values are expected to be non-negative counts.
 Alternatively, an external pointer created by \code{\link[beachmat]{initializeCpp}}.}
 
-\item{size.factors}{A numeric vector of length equal to the number of cells in \code{x},
-containing positive size factors for all cells.}
+\item{size.factors}{A numeric vector of length equal to the number of cells in \code{x}, containing positive size factors for all cells.
+Any invalid values should be replaced with \code{\link{sanitizeSizeFactors}}.
+For most applications, these size factors should also be centered with \code{\link{centerSizeFactors}}.}
 
-\item{log}{Logical scalar indicating whether log-transformation should be performed.}
+\item{log}{Logical scalar indicating whether log-transformation should be performed.
+This ensures that downstream analyses like t-tests and distance calculations focus on relative fold-changes rather than absolute differences.
+The log-transformation also provides some measure of variance stabilization so that the downstream analyses are not dominated by sampling noise at large counts.}
 
 \item{pseudo.count}{Numeric scalar specifying the positive pseudo-count to add before any log-transformation.
+Larger values shrink the differences between cells towards zero, reducing spurious differences (but also signal) at low counts - see \code{\link{choosePseudoCount}} for comments.
 Ignored if \code{log=FALSE}.}
 
 \item{log.base}{Numeric scalar specifying the base of the log-transformation.
@@ -44,7 +48,8 @@ If \code{delayed=FALSE}, the type of the (log-)normalized matrix will depend on 
 If \code{x} is an external pointer produced by \code{\link[beachmat]{initializeCpp}}, a new external pointer is returned containing the normalized expression matrix.
 }
 \description{
-Apply scaling normalization to a count matrix to obtain log-transformed normalized expression values.
+Apply scaling normalization and log-transformation to a count matrix.
+This yields normalized expression values that can be used in downstream procedures like PCA.
 }
 \examples{
 # Mocking a matrix:
@@ -61,7 +66,7 @@ optr
 
 }
 \seealso{
-The \code{normalize_counts} function in \url{https://libscran.github.io/scran_norm/}, for the rationale behind normalization and log-transformation.
+The \code{normalize_counts} function in \url{https://libscran.github.io/scran_norm/}.
 }
 \author{
 Aaron Lun
