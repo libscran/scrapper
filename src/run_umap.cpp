@@ -63,15 +63,11 @@ SEXP run_umap(
     opt.repulsion_strength = repulsion_strength;
 
     if (initialize_method == "spectral") {
-        if (initialize_random_on_spectral_fail) {
-            opt.initialize = umappp::InitializeMethod::SPECTRAL;
-        } else {
-            opt.initialize = umappp::InitializeMethod::SPECTRAL_ONLY;
-        }
+        opt.initialize_method = umappp::InitializeMethod::SPECTRAL;
     } else if (initialize_method == "random") {
-        opt.initialize = umappp::InitializeMethod::RANDOM;
+        opt.initialize_method = umappp::InitializeMethod::RANDOM;
     } else if (initialize_method == "none") {
-        opt.initialize = umappp::InitializeMethod::NONE;
+        opt.initialize_method = umappp::InitializeMethod::NONE;
     } else {
         throw std::runtime_error("unknown value for 'initialize_method'");
     }
@@ -84,13 +80,12 @@ SEXP run_umap(
         throw std::runtime_error("expected initial coordinates to be supplied");
     }
 
-    // TODO: restore these in umappp 4.0.0.
-    //opt.initialize_random_on_spectral_fail = initialize_random_on_spectral_fail;
-    //opt.initialize_spectral_scale = initialize_spectral_scale;
-    //opt.initialize_spectral_jitter = initialize_spectral_jitter;
-    //opt.initialize_spectral_jitter_sd = initialize_spectral_jitter_sd;
-    //opt.initialize_random_scale = initialize_random_scale;
-    //opt.initialize_seed = sanisizer::from_float<decltype(opt.initialize_seed)>(initialize_seed);
+    opt.initialize_random_on_spectral_fail = initialize_random_on_spectral_fail;
+    opt.initialize_spectral_scale = initialize_spectral_scale;
+    opt.initialize_spectral_jitter = initialize_spectral_jitter;
+    opt.initialize_spectral_jitter_sd = initialize_spectral_jitter_sd;
+    opt.initialize_random_scale = initialize_random_scale;
+    opt.initialize_seed = sanisizer::from_float<decltype(opt.initialize_seed)>(initialize_seed);
 
     if (!num_epochs.isNull()) {
         Rcpp::IntegerVector realized(num_epochs);
@@ -102,12 +97,12 @@ SEXP run_umap(
 
     opt.learning_rate = learning_rate;
     opt.negative_sample_rate = negative_sample_rate;
-    opt.seed = optimize_seed; // TODO: use sanisizer::from_float.
+    opt.optimize_seed = sanisizer::from_float<decltype(opt.optimize_seed)>(optimize_seed);
     opt.num_threads = num_threads;
     opt.parallel_optimization = parallel_optimization;
 
     auto status = umappp::initialize(std::move(neighbors), num_dim, embedding.data(), opt);
-    status.run();
+    status.run(embedding.data());
 
     Rcpp::NumericMatrix output(num_dim, nobs);
     std::copy(embedding.begin(), embedding.end(), output.begin());
