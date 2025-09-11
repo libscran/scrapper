@@ -27,6 +27,7 @@
 #' Setting this to \code{FALSE} can improve speed and memory efficiency.
 #' @param all.pairwise Logical scalar indicating whether to report the effect sizes for every pairwise comparison between groups.
 #' If \code{FALSE}, only the summary statistics are reported.
+#' @param num.threads Integer scalar specifying the number of threads to use.
 #'
 #' @return If \code{all.pairwise=FALSE}, a named list is returned containing:
 #' \itemize{

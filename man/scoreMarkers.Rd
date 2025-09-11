@@ -53,6 +53,8 @@ Larger thresholds will favor genes with large differences at the expense of gene
 
 \item{all.pairwise}{Logical scalar indicating whether to report the effect sizes for every pairwise comparison between groups.
 If \code{FALSE}, only the summary statistics are reported.}
+
+\item{num.threads}{Integer scalar specifying the number of threads to use.}
 }
 \value{
 If \code{all.pairwise=FALSE}, a named list is returned containing:

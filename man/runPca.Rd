@@ -94,7 +94,7 @@ To obtain PC scores, each cell is then projected onto the associated subspace us
 This approach ensures that inter-block differences do not contribute to the PCA but does not attempt to explicitly remove them.
 }
 In complex datasets, the assumptions mentioned for \code{TRUE} not hold and more sophisticated batch correction methods like MNN correction are required.
-Functions like \code{\code{correctMnn}} will a low-dimensional embedding of cells that can be created as described above with \code{FALSE}.
+Functions like \code{\link{correctMnn}} will accept a low-dimensional embedding of cells that can be created as described above with \code{FALSE}.
 }
 \examples{
 library(Matrix)
