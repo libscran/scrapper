@@ -80,6 +80,7 @@ Only reported if \code{scale=TRUE}.
 \description{
 Run a PCA on the gene-by-cell log-expression matrix and extract the top principal components (PCs).
 This yields a low-dimensional representation that reduces noise and compute time in downstream analyses.
+For efficiency, the PCA itself is approximated using IRLBA.
 }
 \details{
 When \code{block} is specified, the nature of the reported PC scores depends on the choice of \code{components.from.residuals}:

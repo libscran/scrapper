@@ -2,6 +2,7 @@
 #'
 #' Run a PCA on the gene-by-cell log-expression matrix and extract the top principal components (PCs).
 #' This yields a low-dimensional representation that reduces noise and compute time in downstream analyses.
+#' For efficiency, the PCA itself is approximated using IRLBA.
 #'
 #' @param x A matrix-like object where rows correspond to genes or genomic features and columns correspond to cells.
 #' Typically, the matrix is expected to contain log-expression values (see \code{\link{normalizeCounts}}) for \dQuote{interesting} genes (see \code{\link{chooseHighlyVariableGenes}}).

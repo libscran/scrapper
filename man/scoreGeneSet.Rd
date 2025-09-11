@@ -25,7 +25,8 @@ Typically, the matrix is expected to contain log-expression values.}
 
 \item{set}{Integer, logical or character vector specifying the rows that belong to the gene set.}
 
-\item{rank}{Integer scalar specifying the rank of the approximation.}
+\item{rank}{Integer scalar specifying the rank of the approximation.
+The default value of 1 assumes that each gene set only describes a single coordinated biological function.}
 
 \item{scale}{Logical scalar indicating whether to scale all genes to have the same variance.
 This ensures that each gene contributes equally to the PCA, favoring consistent variation across many genes rather than large variation in a few genes.
@@ -63,7 +64,7 @@ and \code{weights}, a numeric vector of per-gene weights for each gene in \code{
 }
 \description{
 Compute per-cell scores for a gene set, defined as the column sums of a rank-1 approximation to the submatrix for the gene set.
-This uses the same approach implemented in the \pkg{GSDecon} package by Jason Hackney.
+This uses the same approach as the \pkg{GSDecon} package by Jason Hackney, adapted to use an approximate PCA (via IRLBA) and to support blocking.
 }
 \examples{
 library(Matrix)
@@ -74,7 +75,6 @@ scoreGeneSet(normed, set=c(1,3,5,10,20,100))
 }
 \seealso{
 \url{https://libscran.github.io/gsdecon/}, for more details on the underlying algorithm.
-In particular, the documentation for the \code{compute_blocked} function explains the blocking strategy.
 }
 \author{
 Aaron Lun
