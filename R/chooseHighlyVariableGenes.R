@@ -27,7 +27,7 @@
 #'
 #' @author Aaron Lun
 #' @export
-chooseHighlyVariableGenes <- function(stats, top=4000, larger=TRUE, keep.ties=TRUE, bound=NULL) {
+chooseHighlyVariableGenes <- function(stats, top=4000, larger=TRUE, keep.ties=TRUE, bound=0) {
     top <- min(length(stats), top) # protect against top=Inf, which Rcpp can't cast to an int.
     out <- choose_highly_variable_genes(stats, top=top, larger=larger, keep_ties=keep.ties, bound=bound)
     out + 1L

@@ -9,7 +9,7 @@ chooseHighlyVariableGenes(
   top = 4000,
   larger = TRUE,
   keep.ties = TRUE,
-  bound = NULL
+  bound = 0
 )
 }
 \arguments{

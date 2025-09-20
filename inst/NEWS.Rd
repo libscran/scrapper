@@ -9,6 +9,8 @@
 This aims to improve correction accuracy and reduce sensitivity to the choice of reference.
 
 \item Bugfix to \code{runAllNeighborSteps()} to return an empty list when no step is requested.
+
+\item Set \code{bound=0} by default in \code{chooseHighlyVariableGenes()}, for more convenient use with residuals.
 }}
 
 \section{Version 1.2.0}{\itemize{
