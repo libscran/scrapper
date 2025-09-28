@@ -11,6 +11,8 @@ This aims to improve correction accuracy and reduce sensitivity to the choice of
 \item Bugfix to \code{runAllNeighborSteps()} to return an empty list when no step is requested.
 
 \item Set \code{bound=0} by default in \code{chooseHighlyVariableGenes()}, for more convenient use with residuals.
+
+\item Modified \code{testEnrichment()} to return a data frame with the number of overlapping genes and the size of each gene set.
 }}
 
 \section{Version 1.2.0}{\itemize{
