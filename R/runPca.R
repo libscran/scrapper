@@ -99,8 +99,8 @@ runPca <- function(x,
 {
     block <- .transformFactor(block)
 
-    x <- initializeCpp(x, .check.na=FALSE)
-    out <- run_pca(x, 
+    out <- run_pca(
+        initializeCpp(x, .check.na=FALSE),
         number=number,
         scale=scale,
         block=block$index,
@@ -116,11 +116,18 @@ runPca <- function(x,
 
     if (!is.null(block$index)) {
         rownames(out$center) <- block$names
+        colnames(out$center) <- rownames(x)
+    } else {
+        names(out$center) <- rownames(x)
     }
 
     if (!scale) {
         out <- out[setdiff(names(out), "scale")]
+    } else {
+        names(out$scale) <- rownames(x)
     }
+
+    rownames(out$rotation) <- rownames(x)
 
     out
 }
