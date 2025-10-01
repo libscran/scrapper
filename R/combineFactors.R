@@ -66,7 +66,7 @@ combineFactors <- function(factors, keep.unused=FALSE) {
     if (is.null(names(combined$levels))) {
         names(combined$levels) <- make.names(seq_len(nfac))
     }
-    combined$levels <- data.frame(combined$levels)
+    combined$levels <- data.frame(combined$levels, check.names=FALSE)
 
     combined 
 }
