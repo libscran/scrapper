@@ -16,7 +16,7 @@ runTsne(
   start.momentum = 0.5,
   final.momentum = 0.8,
   eta = 200,
-  max.depth = 20,
+  max.depth = 7,
   leaf.approximation = FALSE,
   max.iterations = 500,
   seed = 42,
