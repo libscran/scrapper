@@ -28,9 +28,9 @@ SEXP run_tsne(
     opt.perplexity = perplexity;
     opt.infer_perplexity = false; // rely on the perplexity supplied by the user.
     opt.theta = theta;
-    opt.stop_lying_iter = early_exaggeration_iterations;
+    opt.early_exaggeration_iterations = early_exaggeration_iterations;
     opt.exaggeration_factor = exaggeration_factor;
-    opt.mom_switch_iter = momentum_switch_iterations;
+    opt.momentum_switch_iterations = momentum_switch_iterations;
     opt.start_momentum = start_momentum;
     opt.final_momentum = final_momentum;
     opt.leaf_approximation = leaf_approx;
