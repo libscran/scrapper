@@ -40,10 +40,11 @@ test_that("scoreMarkers works as expected for simple cases", {
     pout <- scoreMarkers(x, g, num.threads=2)
     expect_identical(out, pout)
 
-    # Works without the AUC.
-    aout <- scoreMarkers(x, g, compute.auc=FALSE)
+    # Works without the AUC and the groupwise stats.
+    aout <- scoreMarkers(x, g, compute.auc=FALSE, compute.group.mean=FALSE, compute.group.detected=FALSE)
     expect_false("auc" %in% names(aout))
-    expect_equal(out$mean, aout$mean)
+    expect_false("mean" %in% names(aout))
+    expect_false("detected" %in% names(aout))
     expect_equal(out$delta.detected, aout$delta.detected)
 
     # Works without anything.
@@ -93,10 +94,11 @@ test_that("scoreMarkers works as expected for the full pairwise statistics", {
     expect_true(all(full$auc >= 0))
     expect_true(all(full$auc <= 1))
 
-    # Works without AUCs.
-    aout <- scoreMarkers(x, g, all.pairwise=TRUE, compute.auc=FALSE)
+    # Works without AUCs and the groupwise stats.
+    aout <- scoreMarkers(x, g, all.pairwise=TRUE, compute.auc=FALSE, compute.group.mean=FALSE, compute.group.detected=FALSE)
     expect_false("auc" %in% names(aout))
-    expect_equal(full$detected, aout$detected)
+    expect_false("mean" %in% names(aout))
+    expect_false("detected" %in% names(aout))
     expect_equal(full$cohens.d, aout$cohens.d)
 
     # Works without anything.
@@ -106,6 +108,55 @@ test_that("scoreMarkers works as expected for the full pairwise statistics", {
     # Works with blocking.
     b <- rep(1:3, length.out=ncol(x))
     bout <- scoreMarkers(x, g, block=b, block.weight.policy="equal", all.pairwise=TRUE)
+    sbout <- scoreMarkers(x, g, block=b, block.weight.policy="equal")
+    expect_identical(bout$mean, sbout$mean)
+})
+
+test_that("scoreMarkers works as expected for the best pairwise statistics", {
+    convert_to_best <- function(pairwise, n, bound) {
+        all.labels <- dimnames(pairwise)[[1]]
+        all.genes <- dimnames(pairwise)[[3]]
+        output <- vector("list", length(all.labels))
+        names(output) <- all.labels
+        for (g1 in all.labels) {
+            current <- vector("list", length(all.labels))
+            names(current) <- all.labels
+            for (g2 in all.labels) {
+                if (g1 == g2) {
+                    next
+                }
+                stats <- pairwise[g2, g1,] # remember, second dimension is the first group in the comparison.
+                keep <- which(stats > bound)
+                o <- order(stats[keep], decreasing=TRUE)
+                indices <- keep[head(o, n)]
+                current[[g2]] <- data.frame(index=indices, effect=stats[indices])
+            }
+            output[[g1]] <- current
+        }
+        output
+    }
+
+    g <- sample(4, ncol(x), replace=TRUE)
+    full <- scoreMarkers(x, g, all.pairwise=TRUE)
+    best <- scoreMarkers(x, g, all.pairwise=10)
+
+    expect_equal(full$mean, best$mean)
+    expect_equal(full$detected, best$detected)
+    expect_identical(convert_to_best(full$cohens.d, 10, 0), best$cohens.d)
+    expect_identical(convert_to_best(full$auc, 10, 0.5), best$auc)
+    expect_identical(convert_to_best(full$delta.mean, 10, 0), best$delta.mean)
+    expect_identical(convert_to_best(full$delta.detected, 10, 0), best$delta.detected)
+
+    # Works without AUCs and the groupwise means.
+    aout <- scoreMarkers(x, g, all.pairwise=10, compute.auc=FALSE, compute.group.mean=FALSE, compute.group.detected=FALSE)
+    expect_false("auc" %in% names(aout))
+    expect_false("mean" %in% names(aout))
+    expect_false("detected" %in% names(aout))
+    expect_equal(best$cohens.d, aout$cohens.d)
+
+    # Works with blocking.
+    b <- rep(1:3, length.out=ncol(x))
+    bout <- scoreMarkers(x, g, block=b, block.weight.policy="equal", all.pairwise=10)
     sbout <- scoreMarkers(x, g, block=b, block.weight.policy="equal")
     expect_identical(bout$mean, sbout$mean)
 })

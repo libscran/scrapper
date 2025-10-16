@@ -20,21 +20,23 @@
 #' @param threshold Non-negative numeric scalar specifying the minimum threshold on the differences in means (i.e., the log-fold change, if \code{x} contains log-expression values). 
 #' This is incorporated into the effect sizes for Cohen's d and the AUC.
 #' Larger thresholds will favor genes with large differences at the expense of genes with low variance that would otherwise have comparable effect sizes.
+#' @param compute.group.mean Logical scalar indicating whether to compute the group-wise mean expression for each gene.
+#' @param compute.group.detected Logical scalar indicating whether to compute the group-wise proportion of detected cells for each gene.
 #' @param compute.delta.mean Logical scalar indicating whether to compute the delta-means, i.e., the log-fold change when \code{x} contains log-expression values.
 #' @param compute.delta.detected Logical scalar indicating whether to compute the delta-detected, i.e., differences in the proportion of cells with detected expression.
 #' @param compute.cohens.d Logical scalar indicating whether to compute Cohen's d.
 #' @param compute.auc Logical scalar indicating whether to compute the AUC.
 #' Setting this to \code{FALSE} can improve speed and memory efficiency.
 #' @param all.pairwise Logical scalar indicating whether to report the effect sizes for every pairwise comparison between groups.
+#' Alternatively, an integer scalar indicating the number of top markers to report from each pairwise comparison between groups.
 #' If \code{FALSE}, only the summary statistics are reported.
+#' @param min.rank.limit Integer scalar specifying the maximum value of the min-rank to report.
+#' Lower values improve memory efficiency at the cost of discarding information about lower-ranked genes.
+#' Only used if \code{all.pairwise=FALSE}.
 #' @param num.threads Integer scalar specifying the number of threads to use.
 #'
 #' @return If \code{all.pairwise=FALSE}, a named list is returned containing:
 #' \itemize{
-#' \item \code{mean}, a numeric matrix containing the mean expression for each group.
-#' Each row is a gene and each column is a group.
-#' \item \code{detected}, a numeric matrix containing the proportion of detected cells in each group.
-#' Each row is a gene and each column is a group.
 #' \item \code{cohens.d}, a list of data frames where each data frame corresponds to a group.
 #' Each row of each data frame represents a gene, while each column contains a summary of Cohen's d from pairwise comparisons to all other groups.
 #' This includes the \code{min}, \code{mean}, \code{median}, \code{max} and \code{min.rank} - check out \code{?\link{summarizeEffects}} for details.
@@ -47,12 +49,8 @@
 #' Omitted if \code{compute.delta.detected=FALSE}.
 #' }
 #'
-#' If \code{all.pairwise=TRUE}, a list is returned containing:
+#' If \code{all.pairwise=TRUE}, a named list is returned containing:
 #' \itemize{
-#' \item \code{mean}, a numeric matrix containing the mean expression for each group.
-#' Each row is a gene and each column is a group.
-#' \item \code{detected}, a numeric matrix containing the proportion of detected cells in each group.
-#' Each row is a gene and each column is a group.
 #' \item \code{cohens.d}, a 3-dimensional numeric array containing the Cohen's d from each pairwise comparison between groups.
 #' The extents of the first two dimensions are equal to the number of groups, while the extent of the final dimension is equal to the number of genes.
 #' The entry \code{[i, j, k]} represents Cohen's d from the comparison of group \code{j} over group \code{i} for gene \code{k}.
@@ -63,6 +61,30 @@
 #' Omitted if \code{compute.delta.mean=FALSE}.
 #' \item \code{delta.detected}, an array like \code{cohens.d} but containing the delta-detected from each pairwise comparison.
 #' Omitted if \code{compute.delta.detected=FALSE}.
+#' }
+#'
+#' If \code{all.pairwise} is an integer, a named list is returned containing:
+#' \itemize{
+#' \item \code{cohens.d}, a list of list of data frames containing the top genes with the largest Cohen's d for each pairwise comparison.
+#' Specifically, \code{cohens.d[[i]][[j]]} is a data frame contains the top \code{all.pairwise} genes from the comparison of group \code{i} over group \code{j}. 
+#' Each data frame contains \code{index}, the row index of the gene; and \code{effect}, the Cohen's d for that gene.
+#' Omitted if \code{compute.cohens.d=FALSE}.
+#' \item \code{auc}, a list of list of data frames like \code{cohens.d} but containing the AUCs from each pairwise comparison.
+#' Omitted if \code{compute.auc=FALSE}.
+#' \item \code{delta.mean}, a list of list of data frames like \code{cohens.d} but containing the delta-mean from each pairwise comparison.
+#' Omitted if \code{compute.delta.mean=FALSE}.
+#' \item \code{delta.detected}, a list of list of data frames like \code{cohens.d} but containing the delta-detected from each pairwise comparison.
+#' Omitted if \code{compute.delta.detected=FALSE}.
+#' }
+#'
+#' All returned lists will also contain:
+#' \itemize{
+#' \item \code{mean}, a numeric matrix containing the mean expression for each group.
+#' Each row is a gene and each column is a group.
+#' Omitted if \code{compute.group.mean=FALSE}.
+#' \item \code{detected}, a numeric matrix containing the proportion of detected cells in each group.
+#' Each row is a gene and each column is a group.
+#' Omitted if \code{compute.group.detected=FALSE}.
 #' }
 #'
 #' @section Choice of effect size:
@@ -121,8 +143,8 @@
 #' reportGroupMarkerStatistics(scores, "b")
 #'
 #' @seealso
-#' The \code{score_markers_summary} and the \code{score_markers_pairwise} functions (for \code{all.pairwise=FALSE} and \code{TRUE}, respectively) in \url{https://libscran.github.io/scran_markers/}.
-#' See their blocked equivalents \code{score_markers_summary_blocked} and \code{score_markers_pairwise_blocked} when \code{block} is specified.
+#' The \code{score_markers_summary}, \code{score_markers_pairwise} and \code{score_markers_best} functions in \url{https://libscran.github.io/scran_markers/}.
+#' See their blocked equivalents (e.g., \code{score_markers_summary_blocked}) when \code{block} is specified.
 #'
 #' \code{\link{summarizeEffects}}, to summarize the pairwise effects returned when \code{all.pairwise=TRUE}.
 #'
@@ -135,14 +157,17 @@ scoreMarkers <- function(
     block=NULL, 
     block.weight.policy=c("variable", "equal", "none"),
     variable.block.weight=c(0, 1000),
+    compute.group.mean=TRUE,
+    compute.group.detected=TRUE,
     compute.delta.mean=TRUE,
     compute.delta.detected=TRUE,
     compute.cohens.d=TRUE,
     compute.auc=TRUE,
     threshold=0, 
     all.pairwise=FALSE, 
-    num.threads=1)
-{
+    min.rank.limit=500,
+    num.threads=1
+) {
     rn <- rownames(x)
     x <- initializeCpp(x, .check.na=FALSE)
     groups <- .transformFactor(groups)
@@ -155,6 +180,8 @@ scoreMarkers <- function(
         block_weight_policy=match.arg(block.weight.policy),
         variable_block_weight=variable.block.weight,
         threshold=threshold,
+        compute_group_mean=compute.group.mean,
+        compute_group_detected=compute.group.detected,
         compute_cohens_d=compute.cohens.d,
         compute_delta_mean=compute.delta.mean,
         compute_delta_detected=compute.delta.detected,
@@ -176,20 +203,16 @@ scoreMarkers <- function(
         keep.effects <- c(keep.effects, "delta.detected")
     }
 
-    if (all.pairwise) {
+    if (isTRUE(all.pairwise)) {
         output <- do.call(score_markers_pairwise, c(list(x), args))
-        dimnames(output$mean) <- dimnames(output$detected) <- list(rn, groups$names)
-
         for (nm in keep.effects) {
             current <- output[[nm]]
             dimnames(current) <- list(groups$names, groups$names, rn)
             output[[nm]] <- current
         }
 
-    } else {
-        output <- do.call(score_markers_summary, c(list(x), args))
-        dimnames(output$mean) <- dimnames(output$detected) <- list(rn, groups$names)
-
+    } else if (isFALSE(all.pairwise)) {
+        output <- do.call(score_markers_summary, c(list(x, min_rank_limit=min.rank.limit), args))
         for (nm in keep.effects) {
             current <- output[[nm]]
             names(current) <- groups$names
@@ -200,9 +223,30 @@ scoreMarkers <- function(
             }
             output[[nm]] <- current
         }
+
+    } else {
+        output <- do.call(score_markers_best, c(list(x, top=all.pairwise), args))
+        for (nm in keep.effects) {
+            current <- output[[nm]]
+            names(current) <- groups$names
+            for (i in seq_along(current)) {
+                names(current[[i]]) <- groups$names
+            }
+            output[[nm]] <- current
+        }
     }
 
-    output[c("mean", "detected", keep.effects)]
+    keep.stats <- character()
+    if (compute.group.mean) {
+        dimnames(output$mean) <- list(rn, groups$names)
+        keep.stats <- c(keep.stats, "mean")
+    }
+    if (compute.group.detected) {
+        dimnames(output$detected) <- list(rn, groups$names)
+        keep.stats <- c(keep.stats, "detected")
+    }
+
+    output[c(keep.stats, keep.effects)]
 }
 
 #' Report marker statistics for a single group

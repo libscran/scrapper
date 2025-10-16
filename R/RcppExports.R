@@ -141,12 +141,16 @@ score_gene_set <- function(x, rank, block, block_weight_policy, variable_block_w
     .Call('_scrapper_score_gene_set', PACKAGE = 'scrapper', x, rank, block, block_weight_policy, variable_block_weight, scale, realized, irlba_work, irlba_iterations, irlba_seed, num_threads)
 }
 
-score_markers_summary <- function(x, groups, num_groups, block, block_weight_policy, variable_block_weight, threshold, num_threads, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc) {
-    .Call('_scrapper_score_markers_summary', PACKAGE = 'scrapper', x, groups, num_groups, block, block_weight_policy, variable_block_weight, threshold, num_threads, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc)
+score_markers_summary <- function(x, groups, num_groups, block, block_weight_policy, variable_block_weight, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc, min_rank_limit) {
+    .Call('_scrapper_score_markers_summary', PACKAGE = 'scrapper', x, groups, num_groups, block, block_weight_policy, variable_block_weight, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc, min_rank_limit)
 }
 
-score_markers_pairwise <- function(x, groups, num_groups, block, block_weight_policy, variable_block_weight, threshold, num_threads, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc) {
-    .Call('_scrapper_score_markers_pairwise', PACKAGE = 'scrapper', x, groups, num_groups, block, block_weight_policy, variable_block_weight, threshold, num_threads, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc)
+score_markers_pairwise <- function(x, groups, num_groups, block, block_weight_policy, variable_block_weight, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc) {
+    .Call('_scrapper_score_markers_pairwise', PACKAGE = 'scrapper', x, groups, num_groups, block, block_weight_policy, variable_block_weight, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc)
+}
+
+score_markers_best <- function(x, top, groups, num_groups, block, block_weight_policy, variable_block_weight, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc) {
+    .Call('_scrapper_score_markers_best', PACKAGE = 'scrapper', x, top, groups, num_groups, block, block_weight_policy, variable_block_weight, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc)
 }
 
 set_executor <- function(ptr) {

@@ -3,6 +3,15 @@
 \encoding{UTF-8}
 
 \section{Version 1.4.0}{\itemize{
+\item Multiple changes to \code{scoreMarkers()}:
+\itemize{
+\item Setting \code{all.pairwise=} to an integer will now return the top markers by effect size for each pairwise comparison.
+This is more efficient than creating the 3D array of effects and then ranking the genes in each comparison.
+\item The min-rank summary is now limited to the top \code{min.rank.limit=} genes, for efficiency.
+All other genes will have their reported min-rank set to a maximum placeholder.
+\item Added \code{compute.group.mean=} and \code{compute.group.detected=} options to disable reporting of the group-wise means.
+}
+
 \item Setting \code{universe=NULL} in \code{testEnrichment()} will automatically define the universe as the union of all genes.
 
 \item Updated \code{correctMnn()} to the new algorithm used by the \pkg{mnncorrect} C++ library.

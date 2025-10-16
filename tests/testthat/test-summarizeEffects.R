@@ -7,7 +7,7 @@ x@x <- jitter(x@x)
 
 test_that("summarizeEffects works as expected", {
     g <- sample(4, ncol(x), replace=TRUE)
-    summ <- scoreMarkers(x, g)
+    summ <- scoreMarkers(x, g, min.rank.limit=nrow(x))
     full <- scoreMarkers(x, g, all.pairwise=TRUE)
     expect_equal(summarizeEffects(full$cohens.d), summ$cohens.d)
     expect_equal(summarizeEffects(full$auc), summ$auc)
