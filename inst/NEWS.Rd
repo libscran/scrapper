@@ -12,7 +12,11 @@ All other genes will have their reported min-rank set to a maximum placeholder.
 \item Added \code{compute.group.mean=} and \code{compute.group.detected=} options to disable reporting of the group-wise means.
 }
 
-\item Setting \code{universe=NULL} in \code{testEnrichment()} will automatically define the universe as the union of all genes.
+\item Multiple changes to \code{testEnrichment()}:
+\itemize{
+\item Setting \code{universe=NULL} will automatically define the universe as the union of all genes.
+\item Return value is now a data frame with the number of overlapping genes and the size of each gene set.
+}
 
 \item Updated \code{correctMnn()} to the new algorithm used by the \pkg{mnncorrect} C++ library.
 This aims to improve correction accuracy and reduce sensitivity to the choice of reference.
@@ -20,8 +24,6 @@ This aims to improve correction accuracy and reduce sensitivity to the choice of
 \item Bugfix to \code{runAllNeighborSteps()} to return an empty list when no step is requested.
 
 \item Set \code{bound=0} by default in \code{chooseHighlyVariableGenes()}, for more convenient use with residuals.
-
-\item Modified \code{testEnrichment()} to return a data frame with the number of overlapping genes and the size of each gene set.
 
 \item Modified \code{scoreGeneSet()} to return \code{weights} as a data frame containing the row indices of the genes in the set.
 }}
