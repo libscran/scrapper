@@ -59,8 +59,12 @@ This speeds up computation at the cost of increased memory usage.}
 \item{num.threads}{Number of threads to use.}
 }
 \value{
-List containing \code{scores}, a numeric vector of per-cell scores for each column in \code{x};
-and \code{weights}, a numeric vector of per-gene weights for each gene in \code{set}.
+List containing:
+\itemize{
+\item \code{scores}, a numeric vector of per-cell scores for each column in \code{x}.
+\item \code{weights}, a data frame containing \code{row}, an integer vector of ordered and unique row indices corresponding to the genes in \code{set};
+and \code{weight}, a numeric vector of per-gene weights for each gene in \code{row}. 
+}
 }
 \description{
 Compute per-cell scores for a gene set, defined as the column sums of a rank-1 approximation to the submatrix for the gene set.

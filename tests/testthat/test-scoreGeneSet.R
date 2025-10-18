@@ -7,10 +7,10 @@ normed <- normalizeCounts(x, size.factors=centerSizeFactors(Matrix::colSums(x)))
 test_that("scoreGeneSet works more or less as expected", {
     pcs <- scoreGeneSet(normed, 1:50)
     expect_identical(length(pcs$scores), ncol(x))
-    expect_identical(length(pcs$weights), 50L)
+    expect_identical(nrow(pcs$weights), 50L)
 
     # Now with blocking. 
     pcs <- scoreGeneSet(normed, block=sample(3, ncol(x), replace=TRUE), 1:50)
     expect_identical(length(pcs$scores), ncol(x))
-    expect_identical(length(pcs$weights), 50L)
+    expect_identical(nrow(pcs$weights), 50L)
 })

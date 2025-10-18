@@ -10,8 +10,12 @@
 #' The default value of 1 assumes that each gene set only describes a single coordinated biological function.
 #' @inheritParams runPca
 #'
-#' @return List containing \code{scores}, a numeric vector of per-cell scores for each column in \code{x};
-#' and \code{weights}, a numeric vector of per-gene weights for each gene in \code{set}. 
+#' @return List containing:
+#' \itemize{
+#' \item \code{scores}, a numeric vector of per-cell scores for each column in \code{x}.
+#' \item \code{weights}, a data frame containing \code{row}, an integer vector of ordered and unique row indices corresponding to the genes in \code{set};
+#' and \code{weight}, a numeric vector of per-gene weights for each gene in \code{row}. 
+#' }
 #'
 #' @author Aaron Lun
 #'
@@ -48,7 +52,7 @@ scoreGeneSet <- function(
     chosen <- which(.toLogical(set, n=nr, names=rownames(x)))
     ptr <- tatami.subset(ptr, chosen, by.row=TRUE)
 
-    score_gene_set(
+    out <- score_gene_set(
         ptr,
         block=block$index,
         rank=rank,
@@ -61,4 +65,7 @@ scoreGeneSet <- function(
         irlba_seed=seed,
         num_threads=num.threads
     )
+
+    out$weights <- data.frame(row=chosen, weight=out$weights)
+    out
 }
