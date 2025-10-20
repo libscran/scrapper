@@ -7,41 +7,7 @@
     }
 }
 
-.matchBlock <- function(block, levels) {
-    if (is.null(block) && is.null(levels)) {
-        return(NULL)
-    } else if (is.null(block)) {
-        stop("expected 'block=' to be supplied for blocked 'thresholds'")
-    } else if (is.null(levels)) {
-        stop("'block=' should be set to NULL for unblocked 'thresholds'")
-    }
-
-    m <- match(block, levels)
-    if (anyNA(m)) {
-        stop("entries of 'block' are not present in 'thresholds'")
-    }
-
-    m - 1L
-}
-
-.toLogical <- function(x, n, names) {
-    if (is.logical(x)) {
-        stopifnot(identical(length(x), n))
-    } else if (is.numeric(x)) {
-        if (length(x)) {
-            stopifnot(min(x) >= 1 && max(x) <= n)
-        }
-        tmp <- logical(n)
-        tmp[x] <- TRUE
-        x <- tmp
-    } else if (is.character(x)) {
-        stopifnot(!is.null(names))
-        x <- names %in% x
-    }
-    x
-}
-
-.checkIndices <- function(index, num.neighbors) {
+.checkNeighborIndices <- function(index, num.neighbors) {
     stopifnot(length(dim(index)) == 2L)
     r <- range(index)
     if (!is.finite(r[1]) || r[1] < 1L) {

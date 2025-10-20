@@ -129,7 +129,7 @@ runUmap <- function(
     if (!is.list(x)) {
         x <- findKNN(x, k=num.neighbors, transposed=TRUE, get.index="transposed", get.distance="transposed", num.threads=num.threads, BNPARAM=BNPARAM)
     } else {
-        .checkIndices(x$index, num.neighbors)
+        .checkNeighborIndices(x$index, num.neighbors)
     }
 
     if (!is.null(initial.coordinates)) {

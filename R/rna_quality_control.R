@@ -85,7 +85,7 @@ computeRnaQcMetrics <- function(x, subsets, num.threads = 1) {
     ptr <- initializeCpp(x, .check.na=FALSE)
 
     subsets <- as.list(subsets)
-    subsets <- lapply(subsets, .toLogical, n=tatami.dim(ptr)[1], names=rownames(x))
+    subsets <- lapply(subsets, .subsetToLogical, n=tatami.dim(ptr)[1], names=rownames(x))
 
     output <- compute_rna_qc_metrics(ptr, subsets, num_threads=num.threads)
     names(output$subsets) <- names(subsets)
@@ -111,6 +111,46 @@ suggestRnaQcThresholds <- function(metrics, block=NULL, num.mads=3) {
 #' @export
 #' @rdname rna_quality_control
 filterRnaQcMetrics <- function(thresholds, metrics, block=NULL) {
-    block <- .matchBlock(block, names(thresholds$sum))
+    block <- .matchBlockThresholds(block, names(thresholds$sum))
     filter_rna_qc_metrics(thresholds, metrics, block=block)
+}
+
+.subsetToLogical <- function(x, n, names) {
+    if (is.logical(x)) {
+        if (length(x) != n) {
+            stop("length of a 'subsets' entry must be equal to the number of rows")
+        }
+    } else if (is.numeric(x)) {
+        if (length(x)) {
+            if (anyNA(x) || min(x) < 1 || max(x) > n) {
+                stop("'subsets' entry contains out-of-range indices")
+            }
+        }
+        tmp <- logical(n)
+        tmp[x] <- TRUE
+        x <- tmp
+    } else if (is.character(x)) {
+        if (is.null(names)) {
+            stop("no row names available for matching a 'subsets' entry")
+        }
+        x <- names %in% x
+    }
+    x
+}
+
+.matchBlockThresholds <- function(block, levels) {
+    if (is.null(block) && is.null(levels)) {
+        return(NULL)
+    } else if (is.null(block)) {
+        stop("expected 'block=' to be supplied for blocked 'thresholds'")
+    } else if (is.null(levels)) {
+        stop("'block=' should be set to NULL for unblocked 'thresholds'")
+    }
+
+    m <- match(block, levels)
+    if (anyNA(m)) {
+        stop("entries of 'block' are not present in 'thresholds'")
+    }
+
+    m - 1L
 }

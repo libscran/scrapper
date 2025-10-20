@@ -107,7 +107,7 @@ suggestCrisprQcThresholds <- function(metrics, block=NULL, num.mads=3) {
 #' @export
 #' @rdname crispr_quality_control
 filterCrisprQcMetrics <- function(thresholds, metrics, block=NULL) {
-    block <- .matchBlock(block, names(thresholds$max.value))
+    block <- .matchBlockThresholds(block, names(thresholds$max.value))
     metrics$max.index <- metrics$max.index - 1L # restore 0-based indexing.
     filter_crispr_qc_metrics(thresholds, metrics, block=block)
 }

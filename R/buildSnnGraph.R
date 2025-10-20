@@ -68,7 +68,7 @@ buildSnnGraph <- function(x, num.neighbors=10, weight.scheme="ranked", num.threa
     if (!is.list(x)) {
         x <- findKNN(x, k=num.neighbors, transposed=TRUE, get.index="transposed", get.distance=FALSE, num.threads=num.threads, BNPARAM=BNPARAM)
     } else {
-        .checkIndices(x$index, num.neighbors)
+        .checkNeighborIndices(x$index, num.neighbors)
     }
 
     out <- build_snn_graph(x$index, scheme=weight.scheme, num_threads=num.threads)

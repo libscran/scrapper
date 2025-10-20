@@ -87,7 +87,7 @@ computeAdtQcMetrics <- function(x, subsets, num.threads = 1) {
     ptr <- initializeCpp(x, .check.na=FALSE)
 
     subsets <- as.list(subsets)
-    subsets <- lapply(subsets, .toLogical, n=tatami.dim(ptr)[1], names=rownames(x))
+    subsets <- lapply(subsets, .subsetToLogical, n=tatami.dim(ptr)[1], names=rownames(x))
 
     output <- compute_adt_qc_metrics(ptr, subsets, num_threads=num.threads)
     names(output$subsets) <- names(subsets)
@@ -112,6 +112,6 @@ suggestAdtQcThresholds <- function(metrics, block=NULL, min.detected.drop=0.1, n
 #' @export
 #' @rdname adt_quality_control
 filterAdtQcMetrics <- function(thresholds, metrics, block=NULL) {
-    block <- .matchBlock(block, names(thresholds$detected))
+    block <- .matchBlockThresholds(block, names(thresholds$detected))
     filter_adt_qc_metrics(thresholds, metrics, block=block)
 }
