@@ -23,7 +23,9 @@ scoreGeneSet(
 \item{x}{A matrix-like object where rows correspond to genes or genomic features and columns correspond to cells.
 Typically, the matrix is expected to contain log-expression values.}
 
-\item{set}{Integer, logical or character vector specifying the rows that belong to the gene set.}
+\item{set}{Vector specifying the rows of \code{x} that belong to the gene set.
+This may be an integer vector of row indices, a logical vector of length equal to the number of rows, or a character vector of row names.
+For integer and character vectors, duplicate entries are ignored.}
 
 \item{rank}{Integer scalar specifying the rank of the approximation.
 The default value of 1 assumes that each gene set only describes a single coordinated biological function.}

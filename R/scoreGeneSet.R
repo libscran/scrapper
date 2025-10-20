@@ -5,7 +5,9 @@
 #'
 #' @param x A matrix-like object where rows correspond to genes or genomic features and columns correspond to cells.
 #' Typically, the matrix is expected to contain log-expression values.
-#' @param set Integer, logical or character vector specifying the rows that belong to the gene set.
+#' @param set Vector specifying the rows of \code{x} that belong to the gene set.
+#' This may be an integer vector of row indices, a logical vector of length equal to the number of rows, or a character vector of row names.
+#' For integer and character vectors, duplicate entries are ignored.
 #' @param rank Integer scalar specifying the rank of the approximation.
 #' The default value of 1 assumes that each gene set only describes a single coordinated biological function.
 #' @inheritParams runPca
@@ -49,7 +51,7 @@ scoreGeneSet <- function(
     ptr <- initializeCpp(x, .check.na=FALSE)
 
     nr <- tatami.dim(ptr)[1]
-    chosen <- which(.toLogical(set, n=nr, names=rownames(x)))
+    chosen <- .sanitizeGeneSet(set, n=nr, names=rownames(x))
     ptr <- tatami.subset(ptr, chosen, by.row=TRUE)
 
     out <- score_gene_set(
@@ -68,4 +70,41 @@ scoreGeneSet <- function(
 
     out$weights <- data.frame(row=chosen, weight=out$weights)
     out
+}
+
+.sanitizeGeneSet <- function(set, n, names) {
+    # Make sure we obtain unique and sorted indices so that
+    # the slicing operations in tatami.subset are efficient.
+    if (is.numeric(set)) {
+        set <- as.integer(set)
+        if (anyDuplicated(set)) {
+            set <- unique(set)
+        }
+        if (anyNA(set) || min(set) < 1 || max(set) > n) {
+            stop("'set' contains out-of-range indices")
+        }
+        if (is.unsorted(set)) {
+            set <- sort(set)
+        }
+        return(set)
+
+    } else if (is.logical(set)) {
+        if (length(set) != n) {
+            stop("length of 'set' should be equal to the number of rows")
+        }
+        return(which(set))
+
+    } else {
+        if (anyDuplicated(set)) {
+            set <- unique(set)
+        }
+        set <- match(set, names)
+        if (anyNA(set)) {
+            stop("all elements of 'set' should be present in the row names")
+        }
+        if (is.unsorted(set)) {
+            set <- sort(set)
+        }
+        return(set)
+    }
 }
