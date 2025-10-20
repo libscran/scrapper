@@ -2,6 +2,8 @@
 
 library(Matrix)
 
+set.seed(9999)
+
 test_that("aggregateAcrossGenes works for unweighted sets", {
     x <- round(abs(rsparsematrix(1000, 100, 0.1) * 100))
 
@@ -23,8 +25,8 @@ test_that("aggregateAcrossGenes works for unweighted sets", {
         expect_equal(Matrix::colMeans(x[sets[[s]],,drop=FALSE]), agg[[s]])
     }
 
-    expect_error(aggregateAcrossGenes(x, list(-1L)), "out of range")
-    expect_error(aggregateAcrossGenes(x, list(LETTERS)), "unsupported")
+    expect_error(aggregateAcrossGenes(x, list(-1L)), "out-of-range")
+    expect_error(aggregateAcrossGenes(x, list(LETTERS)), "present in the row names")
 })
 
 test_that("aggregateAcrossGenes works for weighted sets", {
@@ -50,6 +52,30 @@ test_that("aggregateAcrossGenes works for weighted sets", {
         expect_equal(Matrix::colSums(x[current[[1]],,drop=FALSE] * current[[2]]) / sum(current[[2]]), agg[[s]])
     }
 
-    expect_error(aggregateAcrossGenes(x, list(list(1L, 2, 3))), "length 2")
-    expect_error(aggregateAcrossGenes(x, list(list(1L, numeric(0)))), "equal length")
+    expect_error(aggregateAcrossGenes(x, list(list(1L, 2, 3))), "contain two vectors")
+    expect_error(aggregateAcrossGenes(x, list(list(1L, numeric(0)))), "same length")
+    expect_error(aggregateAcrossGenes(x, list(list(c(1L,1L), c(2,3)))), "duplicate")
+    expect_error(aggregateAcrossGenes(x, list(list(-1L, 2))), "out-of-range")
+    expect_error(aggregateAcrossGenes(x, list(list(c("foo","foo"), c(2,3)))), "duplicate")
+    expect_error(aggregateAcrossGenes(x, list(list("foo", 2))), "should be present")
+})
+
+test_that("aggregateAcrossGenes works for other vector types", {
+    x <- round(abs(rsparsematrix(1000, 100, 0.1) * 100))
+    rownames(x) <- sprintf("GENE_%s", seq_len(nrow(x)))
+
+    sets <- list(
+       foo = rbinom(nrow(x), 1, 0.2) == 1,
+       bar = sample(rownames(x), 20),
+       stuff = list(sample(rownames(x), 50), runif(50))
+    )
+    agg <- aggregateAcrossGenes(x, sets)
+
+    refsets <- sets
+    refsets$foo <- which(sets$foo)
+    refsets$bar <- match(sets$bar, rownames(x))
+    refsets$stuff[[1]] <- match(sets$stuff[[1]], rownames(x))
+    refagg <- aggregateAcrossGenes(x, refsets)
+
+    expect_identical(agg, refagg)
 })

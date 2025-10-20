@@ -5,9 +5,16 @@
 #'
 #' @param x A matrix-like object where rows correspond to genes or genomic features and columns correspond to cells.
 #' Values are usually normalized expression values, possibly log-transformed depending on the application.
-#' @param sets A list of integer vectors containing the row indices of genes in each set.
-#' Alternatively, each entry may be a list of length 2, containing an integer vector (row indices) and a numeric vector (weights).
+#' @param sets List of vectors where each entry corresponds to a gene set.
+#' Each entry may be an integer vector of row indices, a logical vector of length equal to the number of rows, or a character vector of row names.
+#' For integer and character vectors, duplicate elements are ignored.
+#'
+#' Alternatively, each entry may be a list of two vectors.
+#' The first vector should be either integer (row indices) or character (row names), specifying the genes in the set with no duplicates.
+#' The second vector should be numeric and of the same length as the first vector, specifying the weight associated with each gene.
 #' @param average Logical scalar indicating whether to compute the average rather than the sum.
+#' @param convert Logical scalar indicating whether to convert gene identities to non-duplicate row indices in each entry of \code{sets}.
+#' Can be set to \code{FALSE} for greater efficiency if the \code{sets} already contains non-duplicated integer vectors. 
 #' @param num.threads Integer specifying the number of threads to be used for aggregation.
 #'
 #' @return A list of length equal to that of \code{sets}.
@@ -43,9 +50,58 @@
 #' 
 #' @export
 #' @importFrom beachmat initializeCpp
-aggregateAcrossGenes <- function(x, sets, average = FALSE, num.threads = 1) {
+aggregateAcrossGenes <- function(x, sets, average = FALSE, check = TRUE, num.threads = 1) {
+    if (convert) {
+        nr <- nrow(x)
+        rn <- rownames(x)
+        for (i in seq_along(sets)) {
+            curset <- sets[[i]]
+            if (!is.list(curset)) {
+                sets[[i]] <- .sanitizeGeneSet(curset, n=nr, names=rn, arg=sprintf("sets[[%i]]", i))
+            } else {
+                if (length(curset) != 2L) {
+                    stop("expected 'sets[[", i, "]]' to contain two vectors")
+                }
+                sets[[i]] <- .sanitizeGeneSetWithWeights(curset[[1]], curset[[2]], n=nr, names=rn, index=i)
+            }
+        }
+    }
+
     ptr <- initializeCpp(x, .check.na=FALSE)
     output <- aggregate_across_genes(ptr, sets, average, num.threads)
     names(output) <- names(sets)
     output
 }
+
+.sanitizeGeneSetWithWeights <- function(genes, weights, n, names, index) {
+    if (length(genes) != length(weights)) {
+        stop("expected all vectors of 'sets[[", index, "]]' to have the same length")
+    }
+
+    if (is.numeric(genes)) {
+        genes <- as.integer(genes)
+        if (anyDuplicated(genes)) {
+            stop("duplicate entries present in 'sets[[", index, "]][[1]]")
+        }
+        if (anyNA(genes) || min(genes) < 1 || max(genes) > n) {
+            stop("'sets[[", index, "]]' contains out-of-range indices")
+        }
+
+    } else {
+        if (anyDuplicated(genes)) {
+            stop("duplicate entries present in 'sets[[", index, "]][[1]]")
+        }
+        genes <- match(genes, names)
+        if (anyNA(genes)) {
+            stop("all elements of 'sets[[", index, "]][[1]]' should be present in the row names")
+        }
+    }
+
+    if (is.unsorted(genes)) {
+        o <- order(genes)
+        genes <- genes[o]
+        weights <- weights[o]
+    }
+    list(genes, weights)
+}
+

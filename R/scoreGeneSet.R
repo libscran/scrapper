@@ -72,7 +72,7 @@ scoreGeneSet <- function(
     out
 }
 
-.sanitizeGeneSet <- function(set, n, names) {
+.sanitizeGeneSet <- function(set, n, names, arg = "set") {
     # Make sure we obtain unique and sorted indices so that
     # the slicing operations in tatami.subset are efficient.
     if (is.numeric(set)) {
@@ -81,7 +81,7 @@ scoreGeneSet <- function(
             set <- unique(set)
         }
         if (anyNA(set) || min(set) < 1 || max(set) > n) {
-            stop("'set' contains out-of-range indices")
+            stop("'", arg, "' contains out-of-range indices")
         }
         if (is.unsorted(set)) {
             set <- sort(set)
@@ -90,7 +90,7 @@ scoreGeneSet <- function(
 
     } else if (is.logical(set)) {
         if (length(set) != n) {
-            stop("length of 'set' should be equal to the number of rows")
+            stop("length of '", arg, "' should be equal to the number of rows")
         }
         return(which(set))
 
@@ -100,7 +100,7 @@ scoreGeneSet <- function(
         }
         set <- match(set, names)
         if (anyNA(set)) {
-            stop("all elements of 'set' should be present in the row names")
+            stop("all elements of '", arg, "' should be present in the row names")
         }
         if (is.unsorted(set)) {
             set <- sort(set)

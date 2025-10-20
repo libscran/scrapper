@@ -4,18 +4,26 @@
 \alias{aggregateAcrossGenes}
 \title{Aggregate expression across genes}
 \usage{
-aggregateAcrossGenes(x, sets, average = FALSE, num.threads = 1)
+aggregateAcrossGenes(x, sets, average = FALSE, check = TRUE, num.threads = 1)
 }
 \arguments{
 \item{x}{A matrix-like object where rows correspond to genes or genomic features and columns correspond to cells.
 Values are usually normalized expression values, possibly log-transformed depending on the application.}
 
-\item{sets}{A list of integer vectors containing the row indices of genes in each set.
-Alternatively, each entry may be a list of length 2, containing an integer vector (row indices) and a numeric vector (weights).}
+\item{sets}{List of vectors where each entry corresponds to a gene set.
+Each entry may be an integer vector of row indices, a logical vector of length equal to the number of rows, or a character vector of row names.
+For integer and character vectors, duplicate elements are ignored.
+
+Alternatively, each entry may be a list of two vectors.
+The first vector should be either integer (row indices) or character (row names), specifying the genes in the set with no duplicates.
+The second vector should be numeric and of the same length as the first vector, specifying the weight associated with each gene.}
 
 \item{average}{Logical scalar indicating whether to compute the average rather than the sum.}
 
 \item{num.threads}{Integer specifying the number of threads to be used for aggregation.}
+
+\item{convert}{Logical scalar indicating whether to convert gene identities to non-duplicate row indices in each entry of \code{sets}.
+Can be set to \code{FALSE} for greater efficiency if the \code{sets} already contains non-duplicated integer vectors.}
 }
 \value{
 A list of length equal to that of \code{sets}.

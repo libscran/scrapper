@@ -26,6 +26,8 @@ This aims to improve correction accuracy and reduce sensitivity to the choice of
 \item Set \code{bound=0} by default in \code{chooseHighlyVariableGenes()}, for more convenient use with residuals.
 
 \item Modified \code{scoreGeneSet()} to return \code{weights} as a data frame containing the row indices of the genes in the set.
+
+\item Support character and logical vectors in \code{sets=} for \code{aggregateAcrossGenes()}.
 }}
 
 \section{Version 1.2.0}{\itemize{
