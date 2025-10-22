@@ -4,7 +4,7 @@
 \alias{aggregateAcrossGenes}
 \title{Aggregate expression across genes}
 \usage{
-aggregateAcrossGenes(x, sets, average = FALSE, check = TRUE, num.threads = 1)
+aggregateAcrossGenes(x, sets, average = FALSE, convert = TRUE, num.threads = 1)
 }
 \arguments{
 \item{x}{A matrix-like object where rows correspond to genes or genomic features and columns correspond to cells.
@@ -20,10 +20,10 @@ The second vector should be numeric and of the same length as the first vector, 
 
 \item{average}{Logical scalar indicating whether to compute the average rather than the sum.}
 
-\item{num.threads}{Integer specifying the number of threads to be used for aggregation.}
-
 \item{convert}{Logical scalar indicating whether to convert gene identities to non-duplicate row indices in each entry of \code{sets}.
 Can be set to \code{FALSE} for greater efficiency if the \code{sets} already contains non-duplicated integer vectors.}
+
+\item{num.threads}{Integer specifying the number of threads to be used for aggregation.}
 }
 \value{
 A list of length equal to that of \code{sets}.

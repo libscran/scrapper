@@ -50,7 +50,7 @@
 #' 
 #' @export
 #' @importFrom beachmat initializeCpp
-aggregateAcrossGenes <- function(x, sets, average = FALSE, check = TRUE, num.threads = 1) {
+aggregateAcrossGenes <- function(x, sets, average = FALSE, convert = TRUE, num.threads = 1) {
     if (convert) {
         nr <- nrow(x)
         rn <- rownames(x)
