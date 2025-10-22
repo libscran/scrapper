@@ -100,7 +100,7 @@ scoreGeneSet <- function(
         }
         set <- match(set, names)
         if (anyNA(set)) {
-            stop("all elements of '", arg, "' should be present in the row names")
+            set <- set[!is.na(set)]
         }
         if (is.unsorted(set)) {
             set <- sort(set)

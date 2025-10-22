@@ -15,8 +15,10 @@ Each entry may be an integer vector of row indices, a logical vector of length e
 For integer and character vectors, duplicate elements are ignored.
 
 Alternatively, each entry may be a list of two vectors.
-The first vector should be either integer (row indices) or character (row names), specifying the genes in the set with no duplicates.
-The second vector should be numeric and of the same length as the first vector, specifying the weight associated with each gene.}
+The first vector should be either integer (row indices) or character (row names), specifying the genes in the set. 
+The second vector should be numeric and of the same length as the first vector, specifying the weight associated with each gene.
+If duplicate genes are present, only the first occurrence is used.
+If the first vector contains gene names not present in \code{x}, those genes are ignored.}
 
 \item{average}{Logical scalar indicating whether to compute the average rather than the sum.}
 

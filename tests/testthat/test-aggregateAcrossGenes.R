@@ -26,7 +26,6 @@ test_that("aggregateAcrossGenes works for unweighted sets", {
     }
 
     expect_error(aggregateAcrossGenes(x, list(-1L)), "out-of-range")
-    expect_error(aggregateAcrossGenes(x, list(LETTERS)), "present in the row names")
 })
 
 test_that("aggregateAcrossGenes works for weighted sets", {
@@ -45,19 +44,28 @@ test_that("aggregateAcrossGenes works for weighted sets", {
         expect_equal(Matrix::colSums(x[current[[1]],,drop=FALSE] * current[[2]]), agg[[s]])
     }
 
-    agg <- aggregateAcrossGenes(x, sets, average=TRUE)
-    expect_identical(names(agg), names(sets))
+    avagg <- aggregateAcrossGenes(x, sets, average=TRUE)
+    expect_identical(names(avagg), names(sets))
     for (s in names(sets)) {
         current <- sets[[s]]
-        expect_equal(Matrix::colSums(x[current[[1]],,drop=FALSE] * current[[2]]) / sum(current[[2]]), agg[[s]])
+        expect_equal(Matrix::colSums(x[current[[1]],,drop=FALSE] * current[[2]]) / sum(current[[2]]), avagg[[s]])
     }
 
     expect_error(aggregateAcrossGenes(x, list(list(1L, 2, 3))), "contain two vectors")
     expect_error(aggregateAcrossGenes(x, list(list(1L, numeric(0)))), "same length")
-    expect_error(aggregateAcrossGenes(x, list(list(c(1L,1L), c(2,3)))), "duplicate")
     expect_error(aggregateAcrossGenes(x, list(list(-1L, 2))), "out-of-range")
-    expect_error(aggregateAcrossGenes(x, list(list(c("foo","foo"), c(2,3)))), "duplicate")
-    expect_error(aggregateAcrossGenes(x, list(list("foo", 2))), "should be present")
+
+    # Duplicated indices are just ignored.
+    sets2 <- lapply(sets,
+        function(x) {
+            first <- x[[1]]
+            list(
+                rep(first, 2),
+                c(x[[2]], runif(length(first)))
+            )
+        }
+    )
+    expect_identical(aggregateAcrossGenes(x, sets2), agg)
 })
 
 test_that("aggregateAcrossGenes works for other vector types", {
@@ -78,4 +86,15 @@ test_that("aggregateAcrossGenes works for other vector types", {
     refagg <- aggregateAcrossGenes(x, refsets)
 
     expect_identical(agg, refagg)
+
+    # Duplicated and missing names are just ignored.
+    sets2 <- sets
+    sets2$stuff <- local({
+        first <- sets$stuff[[1]]
+        list(
+            c(rep(first, 2), "absent"),
+            c(sets$stuff[[2]], runif(length(first)), pi)
+        )
+    })
+    expect_identical(aggregateAcrossGenes(x, sets2), agg)
 })

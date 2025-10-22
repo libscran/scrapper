@@ -10,8 +10,10 @@
 #' For integer and character vectors, duplicate elements are ignored.
 #'
 #' Alternatively, each entry may be a list of two vectors.
-#' The first vector should be either integer (row indices) or character (row names), specifying the genes in the set with no duplicates.
+#' The first vector should be either integer (row indices) or character (row names), specifying the genes in the set. 
 #' The second vector should be numeric and of the same length as the first vector, specifying the weight associated with each gene.
+#' If duplicate genes are present, only the first occurrence is used.
+#' If the first vector contains gene names not present in \code{x}, those genes are ignored.
 #' @param average Logical scalar indicating whether to compute the average rather than the sum.
 #' @param convert Logical scalar indicating whether to convert gene identities to non-duplicate row indices in each entry of \code{sets}.
 #' Can be set to \code{FALSE} for greater efficiency if the \code{sets} already contains non-duplicated integer vectors. 
@@ -81,7 +83,9 @@ aggregateAcrossGenes <- function(x, sets, average = FALSE, convert = TRUE, num.t
     if (is.numeric(genes)) {
         genes <- as.integer(genes)
         if (anyDuplicated(genes)) {
-            stop("duplicate entries present in 'sets[[", index, "]][[1]]")
+            keep <- !duplicated(genes)
+            genes <- genes[keep]
+            weights <- weights[keep]
         }
         if (anyNA(genes) || min(genes) < 1 || max(genes) > n) {
             stop("'sets[[", index, "]]' contains out-of-range indices")
@@ -89,11 +93,15 @@ aggregateAcrossGenes <- function(x, sets, average = FALSE, convert = TRUE, num.t
 
     } else {
         if (anyDuplicated(genes)) {
-            stop("duplicate entries present in 'sets[[", index, "]][[1]]")
+            keep <- !duplicated(genes)
+            genes <- genes[keep]
+            weights <- weights[keep]
         }
         genes <- match(genes, names)
         if (anyNA(genes)) {
-            stop("all elements of 'sets[[", index, "]][[1]]' should be present in the row names")
+            keep <- !is.na(genes)
+            genes <- genes[keep]
+            weights <- weights[keep]
         }
     }
 
@@ -104,4 +112,3 @@ aggregateAcrossGenes <- function(x, sets, average = FALSE, convert = TRUE, num.t
     }
     list(genes, weights)
 }
-

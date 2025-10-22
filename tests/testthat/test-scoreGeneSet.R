@@ -29,5 +29,5 @@ test_that("sanitizeGeneSet works as expected", {
     expect_identical(scrapper:::.sanitizeGeneSet(LETTERS, n=100, names=LETTERS), 1:26)
     expect_identical(scrapper:::.sanitizeGeneSet(rev(LETTERS), n=100, names=LETTERS), 1:26) # handles sorting
     expect_identical(scrapper:::.sanitizeGeneSet(rep(LETTERS, each=2), n=100, names=LETTERS), 1:26)  # removes duplicates
-    expect_error(scrapper:::.sanitizeGeneSet(LETTERS, n=10, names=NULL), "all elements")
+    expect_identical(scrapper:::.sanitizeGeneSet(LETTERS[2:5], n=10, names=LETTERS[1:4]), c(2L, 3L, 4L)) # ignores missing values
 })
