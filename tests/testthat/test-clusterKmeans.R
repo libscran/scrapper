@@ -13,6 +13,15 @@ test_that("clusterKmeans works in basic mode", {
     expect_identical(clustering, again)
 })
 
+test_that("clusterKmeans automatically ignores too many clusters", {
+    clustering <- clusterKmeans(x, 10000)
+    num.unique <- nrow(unique(iris))
+    expect_identical(length(clustering$clusters), ncol(x))
+    expect_identical(length(unique(clustering$clusters)), num.unique)
+    expect_identical(ncol(clustering$centers), num.unique)
+    expect_equal(clustering$centers[,clustering$clusters], x)
+})
+
 test_that("clusterKmeans works with different methods", {
     clustering <- clusterKmeans(x, 5, init.method="random")
     expect_identical(length(clustering$clusters), ncol(x))

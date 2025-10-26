@@ -16,8 +16,8 @@ Rcpp::List cluster_kmeans(
     int seed,
     int nthreads)
 {
-    int ndim = data.nrow();
-    size_t nobs = data.ncol();
+    const auto ndim = sanisizer::cast<std::size_t>(data.nrow());
+    const auto nobs = sanisizer::cast<int>(data.ncol());
     auto ptr = static_cast<const double*>(data.begin());
 
     Rcpp::NumericMatrix centers(ndim, nclusters);
@@ -60,6 +60,14 @@ Rcpp::List cluster_kmeans(
     }
 
     auto out = kmeans::compute(kmeans::SimpleMatrix<int, double>(ndim, nobs, ptr), *iptr, *rptr, nclusters, center_ptr, cluster_ptr);
+
+    const auto actual_k = kmeans::remove_unused_centers(ndim, nobs, cluster_ptr, nclusters, center_ptr, out.sizes);
+    if (actual_k != nclusters) {
+        Rcpp::NumericMatrix new_centers(ndim, actual_k);
+        std::copy_n(centers.begin(), new_centers.size(), new_centers.begin());
+        centers = new_centers;
+    }
+
     return Rcpp::List::create(
         Rcpp::Named("clusters") = clusters, 
         Rcpp::Named("centers") = centers,

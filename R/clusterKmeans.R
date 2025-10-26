@@ -53,6 +53,8 @@
 #' \item \code{clusters}, a factor containing the cluster assignment for each cell.
 #' The number of levels is no greater than \code{k}, where each level is an integer that refer to a column of \code{centers}.
 #' \item \code{centers}, a numeric matrix with the coordinates of the cluster centroids (dimensions in rows, centers in columns).
+#' The number of columns is no greater than \code{k}.
+#' Empty clusters are automatically removed.
 #' \item \code{iterations}, an integer scalar specifying the number of refinement iterations that were performed.
 #' \item \code{status}, an integer scalar specifying the completion status of the algorithm.
 #' A value of zero indicates success while the meaning of any non-zero value depends on the choice of \code{refine.method}:
@@ -115,6 +117,9 @@ clusterKmeans <- function(
         seed=seed, 
         nthreads=num.threads
     )
+
     output$clusters <- factor(output$clusters + 1L)
+    rownames(output$centers) <- rownames(x)
+
     output 
 }
