@@ -27,3 +27,37 @@ test_that("scaleByNeighbors works as expected", {
     expect_identical(ncol(out$combined), ncol(pcs[[1]]))
     expect_identical(nrow(out$combined), sum(vapply(pcs, nrow, 0L)))
 })
+
+test_that("scaleByNeighbors works as expected with blocking", {
+    # Same results with duplicated blocks.
+    {
+        shuffle <- sample(200)
+        block <- rep(LETTERS[1:3], each=200)[shuffle]
+        pcs3 <- lapply(pcs, function(x) {
+            cbind(x, x, x)[,shuffle,drop=FALSE]
+        })
+
+        ref <- scaleByNeighbors(pcs, BNPARAM=BiocNeighbors::VptreeParam())
+        out <- scaleByNeighbors(pcs3, block=block, BNPARAM=BiocNeighbors::VptreeParam())
+        expect_identical(out$scaling, ref$scaling)
+    }
+
+    # Manual comparison using a randomly sampled block.
+    {
+        set.seed(20001)
+        block <- sample(LETTERS[1:3], 200, replace=TRUE)
+        out <- scaleByNeighbors(pcs, block=block, block.weight.policy="equal", BNPARAM=BiocNeighbors::VptreeParam())
+
+        references <- lapply(pcs, function(x) {
+            cur.d <- numeric()
+            for (b in LETTERS[1:3]) {
+                cur.d <- append(cur.d, manual_knn_distance(x[,b == block,drop=FALSE]))
+            }
+            mean(cur.d)
+        })
+
+        references <- 1/unlist(references)
+        normalized <- references / (references[1] / out$scaling[1])
+        expect_equal(normalized, out$scaling)
+    }
+})

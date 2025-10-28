@@ -30,6 +30,8 @@ This aims to improve correction accuracy and reduce sensitivity to the choice of
 \item Support character and logical vectors in \code{sets=} for \code{aggregateAcrossGenes()}.
 
 \item Automatically remove empty clusters from the output of \code{clusterKmeans()}.
+
+\item Supported blocking and related arguments for weighted averages of distances in \code{scaleByNeighbors()}.
 }}
 
 \section{Version 1.2.0}{\itemize{

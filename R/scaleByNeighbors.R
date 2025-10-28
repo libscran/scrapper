@@ -7,6 +7,15 @@
 #' @param x List of numeric matrices of principal components or other embeddings, one for each modality.
 #' For each entry, rows are dimensions and columns are cells.
 #' All entries should have the same number of columns but may have different numbers of rows.
+#' @param block Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{x}.
+#' If provided, the scaling factor is computed as a weighted average across blocks to ensure that block effects do not inflate the within-population variance.
+#' Alternatively \code{NULL}, if all cells are from the same block.
+#' @param block.weight.policy String specifying the policy to use for weighting different blocks when computing the average scaling factor.
+#' See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
+#' Only used if \code{block} is not \code{NULL}.
+#' @param variable.block.weight Numeric vector of length 2, specifying the parameters for variable block weighting.
+#' See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
+#' Only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.
 #' @param num.neighbors Integer scalar specifying the number of neighbors to use to define the scaling factor.
 #' @param BNPARAM A \link[BiocNeighbors]{BiocNeighborParam} object specifying how to perform the neighbor search.
 #' @param num.threads Integer scalar specifying the number of threads to use.
@@ -32,21 +41,40 @@
 #' dim(out$combined)
 #' @author Aaron Lun
 #' @export
-#' @importFrom BiocNeighbors findDistance AnnoyParam
-scaleByNeighbors <- function(x, num.neighbors=20, num.threads=1, weights=NULL, BNPARAM=AnnoyParam()) {
+#' @importFrom BiocNeighbors defineBuilder AnnoyParam
+scaleByNeighbors <- function(
+    x,
+    num.neighbors=20, 
+    block=NULL,
+    block.weight.policy=c("variable", "equal", "none"),
+    variable.block.weight=c(0, 1000),
+    num.threads=1,
+    weights=NULL,
+    BNPARAM=AnnoyParam()
+) {
+    x <- as.list(x)
     nmod <- length(x)
-
-    ncols <- lapply(x, ncol)
-    if (length(unique(ncols)) != 1L) {
-        stop("all entries of 'x' should have the same number of columns")
-    }
-
-    distances <- vector("list", nmod)
+    ref.ncol <- ncol(x[[1]])
     for (i in seq_along(x)) {
-        distances[[i]] <- findDistance(x[[i]], transposed=TRUE, k=num.neighbors, num.threads=num.threads, BNPARAM=BNPARAM)
+        x[[i]] <- as.matrix(x[[i]])
+        if (ncol(x[[i]]) != ref.ncol) {
+            stop("all entries of 'x' should have the same number of columns")
+        }
     }
 
-    scaling <- scale_by_neighbors(distances)
+    block <- .transformFactor(block)
+
+    scaling <- scale_by_neighbors(
+        num_cells=ref.ncol,
+        embedding=x,
+        num_neighbors=num.neighbors,
+        block=block$index,
+        block_weight_policy=match.arg(block.weight.policy),
+        variable_block_weight=variable.block.weight,
+        nn_builder=defineBuilder(BNPARAM)$builder,
+        num_threads=num.threads
+    )
+
     if (!is.null(weights)) {
         scaling <- scaling * sqrt(weights)
     }

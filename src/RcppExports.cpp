@@ -482,12 +482,19 @@ BEGIN_RCPP
 END_RCPP
 }
 // scale_by_neighbors
-Rcpp::NumericVector scale_by_neighbors(Rcpp::List distances);
-RcppExport SEXP _scrapper_scale_by_neighbors(SEXP distancesSEXP) {
+Rcpp::NumericVector scale_by_neighbors(int num_cells, Rcpp::List embedding, int num_neighbors, Rcpp::Nullable<Rcpp::IntegerVector> block, std::string block_weight_policy, Rcpp::NumericVector variable_block_weight, int num_threads, SEXP nn_builder);
+RcppExport SEXP _scrapper_scale_by_neighbors(SEXP num_cellsSEXP, SEXP embeddingSEXP, SEXP num_neighborsSEXP, SEXP blockSEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP num_threadsSEXP, SEXP nn_builderSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< Rcpp::List >::type distances(distancesSEXP);
-    rcpp_result_gen = Rcpp::wrap(scale_by_neighbors(distances));
+    Rcpp::traits::input_parameter< int >::type num_cells(num_cellsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type embedding(embeddingSEXP);
+    Rcpp::traits::input_parameter< int >::type num_neighbors(num_neighborsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type block(blockSEXP);
+    Rcpp::traits::input_parameter< std::string >::type block_weight_policy(block_weight_policySEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type variable_block_weight(variable_block_weightSEXP);
+    Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type nn_builder(nn_builderSEXP);
+    rcpp_result_gen = Rcpp::wrap(scale_by_neighbors(num_cells, embedding, num_neighbors, block, block_weight_policy, variable_block_weight, num_threads, nn_builder));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -667,7 +674,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_perplexity_to_neighbors", (DL_FUNC) &_scrapper_perplexity_to_neighbors, 1},
     {"_scrapper_run_umap", (DL_FUNC) &_scrapper_run_umap, 25},
     {"_scrapper_sanitize_size_factors", (DL_FUNC) &_scrapper_sanitize_size_factors, 5},
-    {"_scrapper_scale_by_neighbors", (DL_FUNC) &_scrapper_scale_by_neighbors, 1},
+    {"_scrapper_scale_by_neighbors", (DL_FUNC) &_scrapper_scale_by_neighbors, 8},
     {"_scrapper_score_gene_set", (DL_FUNC) &_scrapper_score_gene_set, 11},
     {"_scrapper_score_markers_summary", (DL_FUNC) &_scrapper_score_markers_summary, 15},
     {"_scrapper_score_markers_pairwise", (DL_FUNC) &_scrapper_score_markers_pairwise, 14},
