@@ -1,7 +1,5 @@
 *.swp
-*.html
+vignettes/*.html
+vignettes/*_files
 src/*.so
 src/*.o
-src/_deps
-igraph_temp
-_deps/

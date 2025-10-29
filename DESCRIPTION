@@ -14,7 +14,6 @@ Imports:
     beachmat (>= 2.25.1),
     DelayedArray,
     BiocNeighbors (>= 1.99.0),
-    Rigraphlib,
     parallel
 Suggests:
     testthat,
@@ -33,7 +32,8 @@ LinkingTo:
     Rcpp,
     assorthead (>= 1.3.10),
     beachmat,
-    BiocNeighbors
+    BiocNeighbors,
+    Rigraphlib
 biocViews: 
     Normalization, 
     RNASeq, 
