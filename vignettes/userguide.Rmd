@@ -3,7 +3,7 @@ title: Using scrapper to analyze single-cell data
 author: 
 - name: Aaron Lun
   email: infinite.monkeys.with.keyboards@gmail.com
-date: "Revised: January 4, 2025"
+date: "Revised: October 29, 2025"
 output:
   BiocStyle::html_document
 package: scrapper
@@ -25,9 +25,10 @@ self <- Biocpkg("scrapper")
 
 `r self` implements bindings to C++ code for analyzing single-cell data, mostly from the [**libscran**](https://github.com/libscran) libraries.
 Each function performs an individual analysis step ranging from quality control to clustering and marker detection.
-`r self` is mostly intended for other Bioconductor package developers to build more user-friendly end-to-end workflows.
+`r self` is mostly intended for other Bioconductor package developers;
+users should check out the `r Biocpkg("scrapple")` package instead for a more ergonomic experience.
 
-# Quick start
+# Basic analysis
 
 Let's fetch a small single-cell RNA-seq dataset for demonstration purposes:
 
@@ -37,62 +38,15 @@ sce.z <- ZeiselBrainData()
 sce.z
 ```
 
-We run it through the `r self` analysis pipeline:
-
-```{r}
-# Finding the mitochondrial genes for QC purposes.
-is.mito <- grepl("^mt-", rownames(sce.z))
-
-# We can set the number of threads higher in real applications, but
-# we want to avoid stressing out Bioconductor's build system.
-nthreads <- 2
-
-library(scrapper)
-res <- analyze(
-    sce.z,
-    rna.subsets=list(mito=is.mito),
-    num.threads=nthreads
-)
-```
-
-Now we can have a look at some of the results.
-For example, we can make a t-SNE plot:
-
-```{r}
-tabulate(res$clusters)
-plot(res$tsne[,1], res$tsne[,2], col=res$clusters)
-```
-
-We can have a look at the markers defining each cluster:
-
-```{r}
-# Top markers for each cluster, say, based on the median AUC:
-top.markers <- lapply(res$rna.markers$auc, function(x) {
-    head(rownames(x)[order(x$median, decreasing=TRUE)], 10)
-})
-head(top.markers)
-
-# Aggregating all marker statistics for the first cluster
-# (delta.mean is the same as the log-fold change in this case).
-df1 <- reportGroupMarkerStatistics(res$rna.markers, 1)
-df1 <- df1[order(df1$auc.median, decreasing=TRUE),]
-head(df1[,c("mean", "detected", "auc.median", "delta.mean.median")])
-```
-
-Finally, we can convert the results into a `SingleCellExperiment` for interoperability with other Bioconductor packages like `r Biocpkg("scater")`:
-
-```{r}
-sce <- convertAnalyzeResults(res)
-sce
-```
-
-# Step-by-step
-
-The `analyze()` function just calls a series of lower-level functions in `r self`.
+We run it through the `r self` analysis pipeline.
 First, some quality control:
 
 ```{r}
 counts <- assay(sce.z)
+is.mito <- grepl("^mt-", rownames(sce.z))
+nthreads <- 2 # using a smaller value to avoid stressing out the build machines.
+
+library(scrapper)
 rna.qc.metrics <- computeRnaQcMetrics(counts, subsets=list(mt=is.mito), num.threads=nthreads)
 rna.qc.thresholds <- suggestRnaQcThresholds(rna.qc.metrics)
 rna.qc.filter <- filterRnaQcMetrics(rna.qc.thresholds, rna.qc.metrics)
@@ -114,24 +68,37 @@ top.hvgs <- chooseHighlyVariableGenes(gene.var$statistics$residuals)
 pca <- runPca(normalized[top.hvgs,], num.threads=nthreads)
 ```
 
-Some visualization and clustering:
+Some clustering:
+
+```{r}
+snn.graph <- buildSnnGraph(pca$components, num.threads=nthreads)
+clust.out <- clusterGraph(snn.graph)
+table(clust.out$membership)
+```
+
+And visualization:
 
 ```{r}
 umap.out <- runUmap(pca$components, num.threads=nthreads)
 tsne.out <- runTsne(pca$components, num.threads=nthreads)
-snn.graph <- buildSnnGraph(pca$components, num.threads=nthreads)
-clust.out <- clusterGraph(snn.graph)
+plot(tsne.out[,1], tsne.out[,2], col=factor(clust.out$membership))
 ```
 
 And finally marker detection:
 
 ```{r}
 markers <- scoreMarkers(normalized, groups=clust.out$membership, num.threads=nthreads)
+
+# Top markers for each cluster, say, based on the median AUC:
+top.markers <- lapply(markers$auc, function(x) {
+    head(rownames(x)[order(x$median, decreasing=TRUE)], 10)
+})
+head(top.markers)
 ```
 
 Readers are referred to the [OSCA book](https://bioconductor.org/books/release/OSCA/) for more details on the theory behind each step.
 
-# Dealing with multiple batches
+# Blocking on batches 
 
 Let's fetch another brain dataset and combine it with the previous one.
 
@@ -142,21 +109,9 @@ combined <- cbind(assay(sce.t)[common,], assay(sce.z)[common,])
 block <- rep(c("tasic", "zeisel"), c(ncol(sce.t), ncol(sce.z)))
 ```
 
-We call `analyze()` with `block=` to account for the batch structure.
+We set `block=` in each step to account for the batch structure.
 This ensures that the various calculations are not affected by inter-block differences.
 It also uses MNN correction to batch effects in the low-dimensional space prior to further analyses.
-
-```{r}
-# No mitochondrial genes in the combined set, so we'll just skip it.
-blocked_res <- analyze(combined, block=block, num.threads=nthreads)
-
-# Visually check whether the datasets were suitably merged together.
-# Note that these two datasets don't have the same cell types, so
-# complete overlap should not be expected.
-plot(blocked_res$tsne[,1], blocked_res$tsne[,2], pch=16, col=factor(blocked_res$block))
-```
-
-Again, we can see how to do this step by step.
 
 ```{r}
 library(scrapper)
@@ -178,6 +133,8 @@ corrected <- correctMnn(pca$components, block=filtered.block, num.threads=nthrea
 
 umap.out <- runUmap(corrected$corrected, num.threads=nthreads)
 tsne.out <- runTsne(corrected$corrected, num.threads=nthreads)
+plot(tsne.out[,1], tsne.out[,2], pch=16, col=factor(filtered.block))
+
 snn.graph <- buildSnnGraph(corrected$corrected, num.threads=nthreads)
 clust.out <- clusterGraph(snn.graph)
 
@@ -190,7 +147,7 @@ We can also compute pseudo-bulk profiles for each cluster-dataset combination, e
 aggregates <- aggregateAcrossCells(filtered, list(cluster=clust.out$membership, dataset=filtered.block))
 ```
 
-# Handling multi-modal data
+# Combining multiple modalities
 
 Let's fetch a single-cell dataset with both RNA-seq and CITE-seq data.
 To keep the run-time short, we'll only consider the first 5000 cells.
@@ -208,29 +165,17 @@ rna.counts <- assay(sce.s)
 adt.counts <- rbind(assay(altExp(sce.s, "adt1")), assay(altExp(sce.s, "adt2")))
 ```
 
-We pass both matrices to `analyze()`, which will proceess each modality separately before combining them for steps like clustering and visualization.
-
-```{r}
-is.mito <- grepl("^MT-", rownames(rna.counts))
-is.igg <- grepl("^IgG", rownames(adt.counts))
-multi_res <- analyze(
-    rna.counts,
-    adt.x=adt.counts,
-    rna.subsets=list(mito=is.mito),
-    adt.subsets=list(igg=is.igg),
-    num.threads=nthreads
-)
-```
-
-Under the hood, the analysis looks like this:
+We use both matrices in our analysis pipeline.
+Each modality is processed separately before being combined for steps like clustering and visualization.
 
 ```{r}
 # QC in both modalities, only keeping the cells that pass in both.
-library(scrapper)
+is.mito <- grepl("^MT-", rownames(rna.counts))
 rna.qc.metrics <- computeRnaQcMetrics(rna.counts, subsets=list(MT=is.mito), num.threads=nthreads)
 rna.qc.thresholds <- suggestRnaQcThresholds(rna.qc.metrics)
 rna.qc.filter <- filterRnaQcMetrics(rna.qc.thresholds, rna.qc.metrics)
 
+is.igg <- grepl("^IgG", rownames(adt.counts))
 adt.qc.metrics <- computeAdtQcMetrics(adt.counts, subsets=list(IgG=is.igg), num.threads=nthreads)
 adt.qc.thresholds <- suggestAdtQcThresholds(adt.qc.metrics)
 adt.qc.filter <- filterAdtQcMetrics(adt.qc.thresholds, adt.qc.metrics)
@@ -254,10 +199,13 @@ rna.pca <- runPca(rna.normalized[top.hvgs,], num.threads=nthreads)
 # tags so there's no need for further dimensionality reduction.
 combined <- scaleByNeighbors(list(rna.pca$components, as.matrix(adt.normalized)), num.threads=nthreads)
 
-umap.out <- runUmap(combined$combined, num.threads=nthreads)
-tsne.out <- runTsne(combined$combined, num.threads=nthreads)
 snn.graph <- buildSnnGraph(combined$combined, num.threads=nthreads)
 clust.out <- clusterGraph(snn.graph)
+table(clust.out$membership)
+
+umap.out <- runUmap(combined$combined, num.threads=nthreads)
+tsne.out <- runTsne(combined$combined, num.threads=nthreads)
+plot(umap.out[,1], umap.out[,2], pch=16, col=factor(clust.out$membership))
 
 rna.markers <- scoreMarkers(rna.normalized, groups=clust.out$membership, num.threads=nthreads)
 adt.markers <- scoreMarkers(adt.normalized, groups=clust.out$membership, num.threads=nthreads)
@@ -276,7 +224,6 @@ This can be used to reduce the compute time of the various steps downstream of t
 
 For CRISPR data, quality control can be performed using `computeCrisprQcMetrics()`, `suggestCrisprQcThresholds()` and `filterCrisprQcMetrics()`.
 To normalize, we use size factors defined by centering the total sum of guide counts for each cell.
-The resulting matrix can then be directly used in `scaleByNeighbors()`.
 
 # Session information {-}
 
