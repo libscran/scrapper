@@ -19,13 +19,13 @@
 #' @param leiden.resolution Numeric scalar specifying the resolution when \code{method="leiden"}.
 #' Lower values favor fewer, larger communities; higher values favor more, smaller communities.
 #' @param leiden.objective String specifying the objective function when \code{method="leiden"}.
-#' \code{"cpm"} uses the Constant Potts Model, which typically yields more fine-grained clusters at the same \code{leiden.resolution}.
+#' \code{"modularity"} uses the generalized modularity, \code{"cpm"} uses the Constant Potts Model, and \code{"er"} uses the Erd\"os-R\'enyi G(n, p) model.
+#' The CPM typically yields more fine-grained clusters than the modularity at the same \code{leiden.resolution}.
 #' @param walktrap.steps Integer scalar specifying the number of steps to use when \code{method="walktrap"}.
 #' This determines the ability of the Walktrap algorithm to distinguish highly interconnected communities from the rest of the graph.
 #' @param seed Integer scalar specifying the random seed to use for \code{method="multilevel"} or \code{"leiden"}.
 #'
-#' @return A list containing \code{membership}, a factor containing the cluster assignment for each cell;
-#' and \code{status}, an integer scalar indicating whether the algorithm completed successfully (0) or not (non-zero).
+#' @return A list containing \code{membership}, a factor containing the cluster assignment for each cell.
 #' Additional fields may be present depending on the \code{method}:
 #' \itemize{
 #' \item For \code{method="multilevel"}, the \code{levels} list contains the clustering result at each level of the algorithm.
@@ -56,7 +56,7 @@ clusterGraph <- function(
     method=c("multilevel", "leiden", "walktrap"),
     multilevel.resolution=1, 
     leiden.resolution=1, 
-    leiden.objective=c("modularity", "cpm"),
+    leiden.objective=c("modularity", "cpm", "er"),
     walktrap.steps=4,
     seed=42)
 {
@@ -76,7 +76,7 @@ clusterGraph <- function(
         out <- cluster_multilevel(x, resolution=multilevel.resolution, seed=seed)
         out$levels <- lapply(out$levels, function(x) factor(x + 1L))
     } else if (method == "leiden") {
-        out <- cluster_leiden(x, use_cpm=(match.arg(leiden.objective) == "cpm"), resolution=leiden.resolution, seed=seed)
+        out <- cluster_leiden(x, objective=match.arg(leiden.objective), resolution=leiden.resolution, seed=seed)
     } else if (method == "walktrap") {
         out <- cluster_walktrap(x, steps=walktrap.steps)
         out$merges <- out$merges + 1L

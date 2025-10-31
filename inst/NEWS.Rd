@@ -2,6 +2,15 @@
 \title{scrapper News}
 \encoding{UTF-8}
 
+\section{Version 1.6.0}{\itemize{
+\item Multiple changes to \code{clusterGraph()}:
+\itemize{
+\item Updates to use the latest version of the \pkg{igraph} library.
+\item \code{method="leiden"} now supports the ER objective function in \code{leiden.objective=}.
+\item Non-zero status are now directly reported as errors, \code{status} is removed from the output.
+}
+}}
+
 \section{Version 1.4.0}{\itemize{
 \item Multiple changes to \code{scoreMarkers()}:
 \itemize{

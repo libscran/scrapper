@@ -156,15 +156,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // cluster_leiden
-Rcpp::List cluster_leiden(SEXP ptr0, double resolution, bool use_cpm, int seed);
-RcppExport SEXP _scrapper_cluster_leiden(SEXP ptr0SEXP, SEXP resolutionSEXP, SEXP use_cpmSEXP, SEXP seedSEXP) {
+Rcpp::List cluster_leiden(SEXP ptr0, double resolution, std::string objective, int seed);
+RcppExport SEXP _scrapper_cluster_leiden(SEXP ptr0SEXP, SEXP resolutionSEXP, SEXP objectiveSEXP, SEXP seedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type ptr0(ptr0SEXP);
     Rcpp::traits::input_parameter< double >::type resolution(resolutionSEXP);
-    Rcpp::traits::input_parameter< bool >::type use_cpm(use_cpmSEXP);
+    Rcpp::traits::input_parameter< std::string >::type objective(objectiveSEXP);
     Rcpp::traits::input_parameter< int >::type seed(seedSEXP);
-    rcpp_result_gen = Rcpp::wrap(cluster_leiden(ptr0, resolution, use_cpm, seed));
+    rcpp_result_gen = Rcpp::wrap(cluster_leiden(ptr0, resolution, objective, seed));
     return rcpp_result_gen;
 END_RCPP
 }

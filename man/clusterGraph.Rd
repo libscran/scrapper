@@ -9,7 +9,7 @@ clusterGraph(
   method = c("multilevel", "leiden", "walktrap"),
   multilevel.resolution = 1,
   leiden.resolution = 1,
-  leiden.objective = c("modularity", "cpm"),
+  leiden.objective = c("modularity", "cpm", "er"),
   walktrap.steps = 4,
   seed = 42
 )
@@ -35,7 +35,8 @@ Lower values favor fewer, larger communities; higher values favor more, smaller 
 Lower values favor fewer, larger communities; higher values favor more, smaller communities.}
 
 \item{leiden.objective}{String specifying the objective function when \code{method="leiden"}.
-\code{"cpm"} uses the Constant Potts Model, which typically yields more fine-grained clusters at the same \code{leiden.resolution}.}
+\code{"modularity"} uses the generalized modularity, \code{"cpm"} uses the Constant Potts Model, and \code{"er"} uses the Erd\"os-R\'enyi G(n, p) model.
+The CPM typically yields more fine-grained clusters than the modularity at the same \code{leiden.resolution}.}
 
 \item{walktrap.steps}{Integer scalar specifying the number of steps to use when \code{method="walktrap"}.
 This determines the ability of the Walktrap algorithm to distinguish highly interconnected communities from the rest of the graph.}
@@ -43,8 +44,7 @@ This determines the ability of the Walktrap algorithm to distinguish highly inte
 \item{seed}{Integer scalar specifying the random seed to use for \code{method="multilevel"} or \code{"leiden"}.}
 }
 \value{
-A list containing \code{membership}, a factor containing the cluster assignment for each cell;
-and \code{status}, an integer scalar indicating whether the algorithm completed successfully (0) or not (non-zero).
+A list containing \code{membership}, a factor containing the cluster assignment for each cell.
 Additional fields may be present depending on the \code{method}:
 \itemize{
 \item For \code{method="multilevel"}, the \code{levels} list contains the clustering result at each level of the algorithm.

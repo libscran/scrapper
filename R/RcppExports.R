@@ -49,8 +49,8 @@ cluster_multilevel <- function(ptr0, resolution, seed) {
     .Call('_scrapper_cluster_multilevel', PACKAGE = 'scrapper', ptr0, resolution, seed)
 }
 
-cluster_leiden <- function(ptr0, resolution, use_cpm, seed) {
-    .Call('_scrapper_cluster_leiden', PACKAGE = 'scrapper', ptr0, resolution, use_cpm, seed)
+cluster_leiden <- function(ptr0, resolution, objective, seed) {
+    .Call('_scrapper_cluster_leiden', PACKAGE = 'scrapper', ptr0, resolution, objective, seed)
 }
 
 cluster_walktrap <- function(ptr0, steps) {

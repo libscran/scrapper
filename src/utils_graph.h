@@ -6,9 +6,9 @@
 #include "scran_graph_cluster/scran_graph_cluster.hpp"
 
 struct GraphComponents {
-    size_t vertices;
+    size_t vertices = 0;
     std::vector<igraph_integer_t> edges;
-    bool weighted;
+    bool weighted = false;
     std::vector<igraph_real_t> weights;
 };
 
