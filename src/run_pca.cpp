@@ -66,8 +66,8 @@ Rcpp::List run_pca(
             Rcpp::Named("variance.explained") = transfer(out.variance_explained),
             Rcpp::Named("total.variance") = Rcpp::NumericVector::create(out.total_variance),
             Rcpp::Named("center") = transfer(out.center),
-            Rcpp::Named("scale") = transfer(out.scale)//,
-//            Rcpp::Named("converged") = Rcpp::LogicalVector::create(out.scale)
+            Rcpp::Named("scale") = transfer(out.scale),
+            Rcpp::Named("converged") = Rcpp::LogicalVector::create(out.converged)
         );
     };
 

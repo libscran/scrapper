@@ -35,6 +35,7 @@
 #' @param seed Integer scalar specifying the seed for the initial random vector in IRLBA.
 #' @param realized Logical scalar indicating whether to realize \code{x} into an optimal memory layout for IRLBA.
 #' This speeds up computation at the cost of increased memory usage.
+#' @param warn Boolean specifying whether a warning should be emitted if IRLBA failed to converge.
 #' @param num.threads Number of threads to use.
 #'
 #' @return List containing:
@@ -50,6 +51,7 @@
 #' If \code{block} is provided, this is instead a matrix containing the mean for each gene (column) in each block (row).
 #' \item \code{scale}, a numeric vector containing the scaling for each gene.
 #' Only reported if \code{scale=TRUE}.
+#' \item \code{converged}, a boolean indicating whether IRLBA converged successfully.
 #' }
 #'
 #' @details
@@ -100,6 +102,7 @@ runPca <- function(
     iterations=1000,
     seed=5489,
     realized=TRUE,
+    warn=TRUE,
     num.threads=1
 ) {
     block <- .transformFactor(block)
@@ -123,6 +126,10 @@ runPca <- function(
         irlba_seed=seed,
         num_threads=num.threads
     )
+
+    if (!out$converged && warn) {
+        warning("convergence failure for the approximate PCA")
+    }
 
     if (!is.null(block$index)) {
         rownames(out$center) <- block$names

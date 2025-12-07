@@ -17,6 +17,7 @@ runPca(
   iterations = 1000,
   seed = 5489,
   realized = TRUE,
+  warn = TRUE,
   num.threads = 1
 )
 }
@@ -64,6 +65,8 @@ Larger values improve accuracy at the cost of compute time.}
 \item{realized}{Logical scalar indicating whether to realize \code{x} into an optimal memory layout for IRLBA.
 This speeds up computation at the cost of increased memory usage.}
 
+\item{warn}{Boolean specifying whether a warning should be emitted if IRLBA failed to converge.}
+
 \item{num.threads}{Number of threads to use.}
 }
 \value{
@@ -80,6 +83,7 @@ This can be used to divide \code{variance.explained} to obtain the proportion of
 If \code{block} is provided, this is instead a matrix containing the mean for each gene (column) in each block (row).
 \item \code{scale}, a numeric vector containing the scaling for each gene.
 Only reported if \code{scale=TRUE}.
+\item \code{converged}, a boolean indicating whether IRLBA converged successfully.
 }
 }
 \description{
