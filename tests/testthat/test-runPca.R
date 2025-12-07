@@ -77,3 +77,21 @@ test_that("runPCA works when more PCs are requested than available", {
     expect_identical(nrow(pcs$components), min(dim(normed)))
     expect_identical(ncol(pcs$rotation), min(dim(normed)))
 })
+
+test_that("runPCA works with subsets", {
+    ref <- runPca(normed)
+    doubled <- rbind(normed, normed)
+    out <- runPca(doubled, subset=seq_len(nrow(normed)) + nrow(normed))
+    expect_identical(ref$components, out$components)
+    expect_equal(ref$rotation, out$rotation[seq_len(nrow(normed)),], tolerance=1e-5)
+    expect_equal(ref$rotation, out$rotation[nrow(normed) + seq_len(nrow(normed)),])
+
+    # Throwing in some blocks.
+    block <- sample(3, ncol(x), replace=TRUE)
+    ref <- runPca(normed, block=block)
+    doubled <- rbind(normed, normed)
+    out <- runPca(doubled, block=block, subset=seq_len(nrow(normed)) + nrow(normed))
+    expect_identical(ref$components, out$components)
+    expect_equal(ref$rotation, out$rotation[seq_len(nrow(normed)),], tolerance=1e-5)
+    expect_equal(ref$rotation, out$rotation[nrow(normed) + seq_len(nrow(normed)),])
+})

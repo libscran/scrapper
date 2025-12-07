@@ -33,12 +33,13 @@ Rcpp::List run_pca(
     Rcpp::NumericVector variable_block_weight,
     bool components_from_residuals,
     bool scale,
+    Rcpp::Nullable<Rcpp::IntegerVector> subset,
     bool realized,
     int irlba_work,
     int irlba_iterations,
     int irlba_seed,
-    int num_threads)
-{
+    int num_threads
+) {
     auto mat = Rtatami::BoundNumericPointer(x);
     auto block_info = MaybeBlock(block);
     auto ptr = block_info.get();
@@ -49,52 +50,63 @@ Rcpp::List run_pca(
     iopt.seed = irlba_seed;
     iopt.cap_number = true;
 
+    const auto fill_common_options = [&](auto& opt) -> void {
+        opt.number = number;
+        opt.scale = scale;
+        opt.realize_matrix = realized;
+        opt.irlba_options = iopt;
+        opt.num_threads = num_threads;
+    };
+
     Rcpp::List output;
+    const auto deposit_outputs = [&](const auto& out) -> Rcpp::List {
+        return Rcpp::List::create(
+            Rcpp::Named("components") = transfer(out.components),
+            Rcpp::Named("rotation") = transfer(out.rotation),
+            Rcpp::Named("variance.explained") = transfer(out.variance_explained),
+            Rcpp::Named("total.variance") = Rcpp::NumericVector::create(out.total_variance),
+            Rcpp::Named("center") = transfer(out.center),
+            Rcpp::Named("scale") = transfer(out.scale)//,
+//            Rcpp::Named("converged") = Rcpp::LogicalVector::create(out.scale)
+        );
+    };
 
     if (ptr) {
         if (block_info.size() != static_cast<size_t>(mat->ptr->ncol())) {
             throw std::runtime_error("'block' must be the same length as the number of cells");
         }
 
-        scran_pca::BlockedPcaOptions opt;
-        opt.number = number;
-        opt.scale = scale;
-        opt.block_weight_policy = parse_block_weight_policy(block_weight_policy);
-        opt.variable_block_weight_parameters = parse_variable_block_weight(variable_block_weight);
-        opt.components_from_residuals = components_from_residuals;
-        opt.realize_matrix = realized;
-        opt.irlba_options = iopt;
-        opt.num_threads = num_threads;
+        const auto fill_block_options = [&](auto& opt) -> void {
+            fill_common_options(opt);
+            opt.block_weight_policy = parse_block_weight_policy(block_weight_policy);
+            opt.variable_block_weight_parameters = parse_variable_block_weight(variable_block_weight);
+            opt.components_from_residuals = components_from_residuals;
+        };
 
-        auto out = scran_pca::blocked_pca(*(mat->ptr), ptr, opt);
-        output = Rcpp::List::create(
-            Rcpp::Named("components") = transfer(out.components),
-            Rcpp::Named("rotation") = transfer(out.rotation),
-            Rcpp::Named("variance.explained") = transfer(out.variance_explained),
-            Rcpp::Named("total.variance") = Rcpp::NumericVector::create(out.total_variance),
-            Rcpp::Named("center") = transfer(out.center),
-            Rcpp::Named("scale") = transfer(out.scale)//,
-//            Rcpp::Named("converged") = Rcpp::LogicalVector::create(out.scale)
-        );
+        if (subset.isNull()) {
+            scran_pca::BlockedPcaOptions opt;
+            fill_block_options(opt);
+            auto res = scran_pca::blocked_pca(*(mat->ptr), ptr, opt);
+            output = deposit_outputs(res);
+        } else {
+            scran_pca::SubsetPcaBlockedOptions opt;
+            fill_block_options(opt);
+            auto res = scran_pca::subset_pca_blocked(*(mat->ptr), Rcpp::IntegerVector(subset), ptr, opt);
+            output = deposit_outputs(res);
+        }
 
     } else {
-        scran_pca::SimplePcaOptions opt;
-        opt.number = number;
-        opt.scale = scale;
-        opt.realize_matrix = realized;
-        opt.irlba_options = iopt;
-        opt.num_threads = num_threads;
-
-        auto out = scran_pca::simple_pca(*(mat->ptr), opt);
-        output = Rcpp::List::create(
-            Rcpp::Named("components") = transfer(out.components),
-            Rcpp::Named("rotation") = transfer(out.rotation),
-            Rcpp::Named("variance.explained") = transfer(out.variance_explained),
-            Rcpp::Named("total.variance") = Rcpp::NumericVector::create(out.total_variance),
-            Rcpp::Named("center") = transfer(out.center),
-            Rcpp::Named("scale") = transfer(out.scale)//,
-//            Rcpp::Named("converged") = Rcpp::LogicalVector::create(out.scale)
-        );
+        if (subset.isNull()) {
+            scran_pca::SimplePcaOptions opt;
+            fill_common_options(opt);
+            auto res = scran_pca::simple_pca(*(mat->ptr), opt);
+            output = deposit_outputs(res);
+        } else {
+            scran_pca::SubsetPcaOptions opt;
+            fill_common_options(opt);
+            auto res = scran_pca::subset_pca(*(mat->ptr), Rcpp::IntegerVector(subset), opt);
+            output = deposit_outputs(res);
+        }
     }
 
     return output;

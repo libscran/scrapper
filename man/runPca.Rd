@@ -12,6 +12,7 @@ runPca(
   block.weight.policy = c("variable", "equal", "none"),
   variable.block.weight = c(0, 1000),
   components.from.residuals = FALSE,
+  subset = NULL,
   extra.work = 7,
   iterations = 1000,
   seed = 5489,
@@ -47,6 +48,10 @@ Only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "va
 \item{components.from.residuals}{Logical scalar indicating whether to compute the PC scores from the residuals in the presence of a blocking factor.
 By default, the residuals are only used to compute the rotation matrix, and the original expression values of the cells are projected onto this new space (see Details).
 Only used if \code{block} is not \code{NULL}.}
+
+\item{subset}{Integer, logical or character vector specifying the rows of \code{x} to use for the PCA.
+This yields the same results as \code{runPca} on \code{x[subset,]}, except that entries of the rotation matrix will also be computed for rows outside of the subset.
+If \code{NULL}, all rows of \code{x} are used.}
 
 \item{extra.work}{Integer scalar specifying the extra dimensions for the IRLBA workspace.
 Larger values improve accuracy at the cost of compute time.}
