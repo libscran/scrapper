@@ -14,8 +14,10 @@ Rcpp::List model_gene_variances(
     SEXP x,
     Rcpp::Nullable<Rcpp::IntegerVector> block,
     size_t nblocks,
+    std::string block_average_policy,
     std::string block_weight_policy,
     Rcpp::NumericVector variable_block_weight,
+    double block_quantile,
     bool mean_filter,
     double min_mean,
     bool transform,
@@ -35,8 +37,17 @@ Rcpp::List model_gene_variances(
     opt.fit_variance_trend_options.minimum_window_count = min_window_count;
     opt.num_threads = num_threads;
 
+    if (block_average_policy == "mean") {
+        opt.block_average_policy = scran_variances::BlockAveragePolicy::MEAN;
+    } else if (block_average_policy == "quantile") {
+        opt.block_average_policy = scran_variances::BlockAveragePolicy::QUANTILE;
+    } else {
+        throw std::runtime_error("block average policy should be either 'mean' or 'quantile'");
+    }
+
     opt.block_weight_policy = parse_block_weight_policy(block_weight_policy);
     opt.variable_block_weight_parameters = parse_variable_block_weight(variable_block_weight);
+    opt.block_quantile = block_quantile;
 
     auto raw_mat = Rtatami::BoundNumericPointer(x);
     const auto& mat = raw_mat->ptr;

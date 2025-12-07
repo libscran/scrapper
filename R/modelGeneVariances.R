@@ -9,12 +9,18 @@
 #' If provided, calculation of means/variances and trend fitting are performed within each block to ensure that block effects do not confound the estimates.
 #' The weighted average of each statistic across all blocks is reported for each gene.
 #' Alternatively \code{NULL}, if all cells are from the same block.
+#' @param block.average.policy String specifying the policy to use for average statistics across blocks.
+#' This can either be a (weighted) \code{"mean"} or a \code{"quantile"}.
+#' Only used if \code{block} is not \code{NULL}. 
 #' @param block.weight.policy String specifying the policy to use for weighting different blocks when computing the average for each statistic.
 #' See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
-#' Only used if \code{block} is not \code{NULL}.
+#' Only used if \code{block} is not \code{NULL} and \code{block.average.policy="mean"}.
 #' @param variable.block.weight Numeric vector of length 2, specifying the parameters for variable block weighting.
 #' See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
-#' Only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.
+#' Only used if \code{block} is not \code{NULL}, \code{block.average.policy="mean"} and \code{block.weight.policy = "variable"}.
+#' @param block.quantile Number specifying the probability of the quantile of statistics across blocks. 
+#' Defaults to 0.5, i.e., the median of per-block statistics.
+#' Only used if \code{block} is not \code{NULL} and \code{block.average.policy="quantile"}.
 #' @inheritParams fitVarianceTrend
 #' @param num.threads Integer scalar specifying the number of threads to use.
 #'
@@ -53,8 +59,10 @@
 modelGeneVariances <- function(
     x,
     block=NULL,
+    block.average.policy=c("mean", "quantile"),
     block.weight.policy=c("variable", "equal", "none"),
     variable.block.weight=c(0, 1000),
+    block.quantile=0.5,
     mean.filter=TRUE,
     min.mean=0.1, 
     transform=TRUE, 
@@ -62,16 +70,18 @@ modelGeneVariances <- function(
     use.min.width=FALSE,
     min.width=1,
     min.window.count=200,
-    num.threads=1) 
-{
+    num.threads=1
+) {
     block <- .transformFactor(block)
 
     stats <- model_gene_variances(
         initializeCpp(x, .check.na=FALSE),
         block=block$index,
         nblocks=length(block$names),
+        block_average_policy=match.arg(block.average.policy),
         block_weight_policy=match.arg(block.weight.policy),
         variable_block_weight=variable.block.weight,
+        block_quantile=block.quantile,
         mean_filter=mean.filter,
         min_mean=min.mean,
         transform=transform,

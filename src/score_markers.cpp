@@ -21,14 +21,27 @@ void configure_group_vectors(Rcpp::NumericMatrix& store, std::vector<double*>& p
     }
 }
 
+scran_markers::BlockAveragePolicy process_average_policy(const std::string& block_average_policy) {
+    if (block_average_policy == "mean") {
+        return scran_markers::BlockAveragePolicy::MEAN;
+    } else if (block_average_policy == "quantile") {
+        return scran_markers::BlockAveragePolicy::QUANTILE;
+    } else {
+        throw std::runtime_error("block average policy should be either 'mean' or 'quantile'");
+        return scran_markers::BlockAveragePolicy::MEAN;
+    }
+}
+
 //[[Rcpp::export(rng=false)]]
 Rcpp::List score_markers_summary(
     SEXP x,
     Rcpp::IntegerVector groups,
     int num_groups,
     Rcpp::Nullable<Rcpp::IntegerVector> block,
+    std::string block_average_policy,
     std::string block_weight_policy,
     Rcpp::NumericVector variable_block_weight,
+    double block_quantile,
     double threshold,
     int num_threads,
     bool compute_group_mean,
@@ -50,9 +63,11 @@ Rcpp::List score_markers_summary(
     scran_markers::ScoreMarkersSummaryOptions opt;
     opt.threshold = threshold;
     opt.num_threads = num_threads;
+    opt.min_rank_limit = min_rank_limit;
+    opt.block_average_policy = process_average_policy(block_average_policy);
     opt.block_weight_policy = parse_block_weight_policy(block_weight_policy);
     opt.variable_block_weight_parameters = parse_variable_block_weight(variable_block_weight);
-    opt.min_rank_limit = min_rank_limit;
+    opt.block_quantile = block_quantile;
 
     scran_markers::ScoreMarkersSummaryBuffers<double, int> buffers;
 
@@ -159,8 +174,10 @@ Rcpp::List score_markers_pairwise(
     Rcpp::IntegerVector groups,
     int num_groups,
     Rcpp::Nullable<Rcpp::IntegerVector> block,
+    std::string block_average_policy,
     std::string block_weight_policy,
     Rcpp::NumericVector variable_block_weight,
+    double block_quantile,
     double threshold,
     int num_threads,
     bool compute_group_mean,
@@ -181,8 +198,10 @@ Rcpp::List score_markers_pairwise(
     scran_markers::ScoreMarkersPairwiseOptions opt;
     opt.threshold = threshold;
     opt.num_threads = num_threads;
+    opt.block_average_policy = process_average_policy(block_average_policy);
     opt.block_weight_policy = parse_block_weight_policy(block_weight_policy);
     opt.variable_block_weight_parameters = parse_variable_block_weight(variable_block_weight);
+    opt.block_quantile = block_quantile;
 
     scran_markers::ScoreMarkersPairwiseBuffers<double> buffers;
 
@@ -241,8 +260,10 @@ Rcpp::List score_markers_best(
     Rcpp::IntegerVector groups,
     int num_groups,
     Rcpp::Nullable<Rcpp::IntegerVector> block,
+    std::string block_average_policy,
     std::string block_weight_policy,
     Rcpp::NumericVector variable_block_weight,
+    double block_quantile,
     double threshold,
     int num_threads,
     bool compute_group_mean,
@@ -263,8 +284,10 @@ Rcpp::List score_markers_best(
     scran_markers::ScoreMarkersBestOptions opt;
     opt.threshold = threshold;
     opt.num_threads = num_threads;
+    opt.block_average_policy = process_average_policy(block_average_policy);
     opt.block_weight_policy = parse_block_weight_policy(block_weight_policy);
     opt.variable_block_weight_parameters = parse_variable_block_weight(variable_block_weight);
+    opt.block_quantile = block_quantile;
 
     opt.compute_group_mean = compute_group_mean;
     opt.compute_group_detected = compute_group_detected;

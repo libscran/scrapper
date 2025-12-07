@@ -7,8 +7,10 @@
 modelGeneVariances(
   x,
   block = NULL,
+  block.average.policy = c("mean", "quantile"),
   block.weight.policy = c("variable", "equal", "none"),
   variable.block.weight = c(0, 1000),
+  block.quantile = 0.5,
   mean.filter = TRUE,
   min.mean = 0.1,
   transform = TRUE,
@@ -28,13 +30,21 @@ If provided, calculation of means/variances and trend fitting are performed with
 The weighted average of each statistic across all blocks is reported for each gene.
 Alternatively \code{NULL}, if all cells are from the same block.}
 
+\item{block.average.policy}{String specifying the policy to use for average statistics across blocks.
+This can either be a (weighted) \code{"mean"} or a \code{"quantile"}.
+Only used if \code{block} is not \code{NULL}.}
+
 \item{block.weight.policy}{String specifying the policy to use for weighting different blocks when computing the average for each statistic.
 See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
-Only used if \code{block} is not \code{NULL}.}
+Only used if \code{block} is not \code{NULL} and \code{block.average.policy="mean"}.}
 
 \item{variable.block.weight}{Numeric vector of length 2, specifying the parameters for variable block weighting.
 See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
-Only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.}
+Only used if \code{block} is not \code{NULL}, \code{block.average.policy="mean"} and \code{block.weight.policy = "variable"}.}
+
+\item{block.quantile}{Number specifying the probability of the quantile of statistics across blocks. 
+Defaults to 0.5, i.e., the median of per-block statistics.
+Only used if \code{block} is not \code{NULL} and \code{block.average.policy="quantile"}.}
 
 \item{mean.filter}{Logical scalar indicating whether to filter on the means before trend fitting.
 The assumption is that there is a bulk of low-abundance genes that are uninteresting and should be removed to avoid skewing the windows of the LOWESS smoother.}

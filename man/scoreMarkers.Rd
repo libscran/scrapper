@@ -8,8 +8,10 @@ scoreMarkers(
   x,
   groups,
   block = NULL,
+  block.average.policy = c("mean", "quantile"),
   block.weight.policy = c("variable", "equal", "none"),
   variable.block.weight = c(0, 1000),
+  block.quantile = 0.5,
   compute.group.mean = TRUE,
   compute.group.detected = TRUE,
   compute.delta.mean = TRUE,
@@ -33,6 +35,10 @@ If provided, comparisons are performed within each block to ensure that block ef
 The weighted average of the effect sizes across all blocks is reported for each gene.
 Alternatively \code{NULL}, if all cells are from the same block.}
 
+\item{block.average.policy}{String specifying the policy to use for average statistics across blocks.
+This can either be a (weighted) \code{"mean"} or a \code{"quantile"}.
+Only used if \code{block} is not \code{NULL}.}
+
 \item{block.weight.policy}{String specifying the policy to use for weighting different blocks when computing the average for each statistic.
 See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
 Only used if \code{block} is not \code{NULL}.}
@@ -40,6 +46,10 @@ Only used if \code{block} is not \code{NULL}.}
 \item{variable.block.weight}{Numeric vector of length 2, specifying the parameters for variable block weighting.
 See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
 Only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.}
+
+\item{block.quantile}{Number specifying the probability of the quantile of statistics across blocks. 
+Defaults to 0.5, i.e., the median of per-block statistics.
+Only used if \code{block} is not \code{NULL} and \code{block.average.policy="quantile"}.}
 
 \item{compute.group.mean}{Logical scalar indicating whether to compute the group-wise mean expression for each gene.}
 

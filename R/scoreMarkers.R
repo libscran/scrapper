@@ -11,12 +11,18 @@
 #' If provided, comparisons are performed within each block to ensure that block effects do not confound the estimates.
 #' The weighted average of the effect sizes across all blocks is reported for each gene.
 #' Alternatively \code{NULL}, if all cells are from the same block.
+#' @param block.average.policy String specifying the policy to use for average statistics across blocks.
+#' This can either be a (weighted) \code{"mean"} or a \code{"quantile"}.
+#' Only used if \code{block} is not \code{NULL}. 
 #' @param block.weight.policy String specifying the policy to use for weighting different blocks when computing the average for each statistic.
 #' See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
 #' Only used if \code{block} is not \code{NULL}.
 #' @param variable.block.weight Numeric vector of length 2, specifying the parameters for variable block weighting.
 #' See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
 #' Only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.
+#' @param block.quantile Number specifying the probability of the quantile of statistics across blocks. 
+#' Defaults to 0.5, i.e., the median of per-block statistics.
+#' Only used if \code{block} is not \code{NULL} and \code{block.average.policy="quantile"}.
 #' @param threshold Non-negative numeric scalar specifying the minimum threshold on the differences in means (i.e., the log-fold change, if \code{x} contains log-expression values). 
 #' This is incorporated into the effect sizes for Cohen's d and the AUC.
 #' Larger thresholds will favor genes with large differences at the expense of genes with low variance that would otherwise have comparable effect sizes.
@@ -155,8 +161,10 @@ scoreMarkers <- function(
     x, 
     groups, 
     block=NULL, 
+    block.average.policy=c("mean", "quantile"),
     block.weight.policy=c("variable", "equal", "none"),
     variable.block.weight=c(0, 1000),
+    block.quantile=0.5,
     compute.group.mean=TRUE,
     compute.group.detected=TRUE,
     compute.delta.mean=TRUE,
@@ -177,8 +185,10 @@ scoreMarkers <- function(
         groups=groups$index,
         num_groups=length(groups$names),
         block=block$index,
+        block_average_policy=match.arg(block.average.policy),
         block_weight_policy=match.arg(block.weight.policy),
         variable_block_weight=variable.block.weight,
+        block_quantile=block.quantile,
         threshold=threshold,
         compute_group_mean=compute.group.mean,
         compute_group_detected=compute.group.detected,
