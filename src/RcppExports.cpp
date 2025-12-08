@@ -522,8 +522,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // score_markers_summary
-Rcpp::List score_markers_summary(SEXP x, Rcpp::IntegerVector groups, int num_groups, Rcpp::Nullable<Rcpp::IntegerVector> block, std::string block_average_policy, std::string block_weight_policy, Rcpp::NumericVector variable_block_weight, double block_quantile, double threshold, int num_threads, bool compute_group_mean, bool compute_group_detected, bool compute_delta_mean, bool compute_delta_detected, bool compute_cohens_d, bool compute_auc, int min_rank_limit);
-RcppExport SEXP _scrapper_score_markers_summary(SEXP xSEXP, SEXP groupsSEXP, SEXP num_groupsSEXP, SEXP blockSEXP, SEXP block_average_policySEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP block_quantileSEXP, SEXP thresholdSEXP, SEXP num_threadsSEXP, SEXP compute_group_meanSEXP, SEXP compute_group_detectedSEXP, SEXP compute_delta_meanSEXP, SEXP compute_delta_detectedSEXP, SEXP compute_cohens_dSEXP, SEXP compute_aucSEXP, SEXP min_rank_limitSEXP) {
+Rcpp::List score_markers_summary(SEXP x, Rcpp::IntegerVector groups, int num_groups, Rcpp::Nullable<Rcpp::IntegerVector> block, std::string block_average_policy, std::string block_weight_policy, Rcpp::NumericVector variable_block_weight, double block_quantile, double threshold, int num_threads, bool compute_group_mean, bool compute_group_detected, bool compute_delta_mean, bool compute_delta_detected, bool compute_cohens_d, bool compute_auc, bool compute_summary_min, bool compute_summary_mean, bool compute_summary_median, bool compute_summary_max, Rcpp::Nullable<Rcpp::NumericVector> compute_summary_quantiles, bool compute_summary_min_rank, int min_rank_limit);
+RcppExport SEXP _scrapper_score_markers_summary(SEXP xSEXP, SEXP groupsSEXP, SEXP num_groupsSEXP, SEXP blockSEXP, SEXP block_average_policySEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP block_quantileSEXP, SEXP thresholdSEXP, SEXP num_threadsSEXP, SEXP compute_group_meanSEXP, SEXP compute_group_detectedSEXP, SEXP compute_delta_meanSEXP, SEXP compute_delta_detectedSEXP, SEXP compute_cohens_dSEXP, SEXP compute_aucSEXP, SEXP compute_summary_minSEXP, SEXP compute_summary_meanSEXP, SEXP compute_summary_medianSEXP, SEXP compute_summary_maxSEXP, SEXP compute_summary_quantilesSEXP, SEXP compute_summary_min_rankSEXP, SEXP min_rank_limitSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
@@ -542,8 +542,14 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type compute_delta_detected(compute_delta_detectedSEXP);
     Rcpp::traits::input_parameter< bool >::type compute_cohens_d(compute_cohens_dSEXP);
     Rcpp::traits::input_parameter< bool >::type compute_auc(compute_aucSEXP);
+    Rcpp::traits::input_parameter< bool >::type compute_summary_min(compute_summary_minSEXP);
+    Rcpp::traits::input_parameter< bool >::type compute_summary_mean(compute_summary_meanSEXP);
+    Rcpp::traits::input_parameter< bool >::type compute_summary_median(compute_summary_medianSEXP);
+    Rcpp::traits::input_parameter< bool >::type compute_summary_max(compute_summary_maxSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericVector> >::type compute_summary_quantiles(compute_summary_quantilesSEXP);
+    Rcpp::traits::input_parameter< bool >::type compute_summary_min_rank(compute_summary_min_rankSEXP);
     Rcpp::traits::input_parameter< int >::type min_rank_limit(min_rank_limitSEXP);
-    rcpp_result_gen = Rcpp::wrap(score_markers_summary(x, groups, num_groups, block, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc, min_rank_limit));
+    rcpp_result_gen = Rcpp::wrap(score_markers_summary(x, groups, num_groups, block, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc, compute_summary_min, compute_summary_mean, compute_summary_median, compute_summary_max, compute_summary_quantiles, compute_summary_min_rank, min_rank_limit));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -621,15 +627,21 @@ BEGIN_RCPP
 END_RCPP
 }
 // summarize_effects
-SEXP summarize_effects(int num_genes, int num_groups, Rcpp::NumericVector effects, int num_threads);
-RcppExport SEXP _scrapper_summarize_effects(SEXP num_genesSEXP, SEXP num_groupsSEXP, SEXP effectsSEXP, SEXP num_threadsSEXP) {
+SEXP summarize_effects(int num_genes, int num_groups, Rcpp::NumericVector effects, bool compute_summary_min, bool compute_summary_mean, bool compute_summary_median, bool compute_summary_max, Rcpp::Nullable<Rcpp::NumericVector> compute_summary_quantiles, bool compute_summary_min_rank, int num_threads);
+RcppExport SEXP _scrapper_summarize_effects(SEXP num_genesSEXP, SEXP num_groupsSEXP, SEXP effectsSEXP, SEXP compute_summary_minSEXP, SEXP compute_summary_meanSEXP, SEXP compute_summary_medianSEXP, SEXP compute_summary_maxSEXP, SEXP compute_summary_quantilesSEXP, SEXP compute_summary_min_rankSEXP, SEXP num_threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< int >::type num_genes(num_genesSEXP);
     Rcpp::traits::input_parameter< int >::type num_groups(num_groupsSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type effects(effectsSEXP);
+    Rcpp::traits::input_parameter< bool >::type compute_summary_min(compute_summary_minSEXP);
+    Rcpp::traits::input_parameter< bool >::type compute_summary_mean(compute_summary_meanSEXP);
+    Rcpp::traits::input_parameter< bool >::type compute_summary_median(compute_summary_medianSEXP);
+    Rcpp::traits::input_parameter< bool >::type compute_summary_max(compute_summary_maxSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericVector> >::type compute_summary_quantiles(compute_summary_quantilesSEXP);
+    Rcpp::traits::input_parameter< bool >::type compute_summary_min_rank(compute_summary_min_rankSEXP);
     Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(summarize_effects(num_genes, num_groups, effects, num_threads));
+    rcpp_result_gen = Rcpp::wrap(summarize_effects(num_genes, num_groups, effects, compute_summary_min, compute_summary_mean, compute_summary_median, compute_summary_max, compute_summary_quantiles, compute_summary_min_rank, num_threads));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -685,12 +697,12 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_sanitize_size_factors", (DL_FUNC) &_scrapper_sanitize_size_factors, 5},
     {"_scrapper_scale_by_neighbors", (DL_FUNC) &_scrapper_scale_by_neighbors, 8},
     {"_scrapper_score_gene_set", (DL_FUNC) &_scrapper_score_gene_set, 11},
-    {"_scrapper_score_markers_summary", (DL_FUNC) &_scrapper_score_markers_summary, 17},
+    {"_scrapper_score_markers_summary", (DL_FUNC) &_scrapper_score_markers_summary, 23},
     {"_scrapper_score_markers_pairwise", (DL_FUNC) &_scrapper_score_markers_pairwise, 16},
     {"_scrapper_score_markers_best", (DL_FUNC) &_scrapper_score_markers_best, 17},
     {"_scrapper_set_executor", (DL_FUNC) &_scrapper_set_executor, 1},
     {"_scrapper_subsample_by_neighbors", (DL_FUNC) &_scrapper_subsample_by_neighbors, 3},
-    {"_scrapper_summarize_effects", (DL_FUNC) &_scrapper_summarize_effects, 4},
+    {"_scrapper_summarize_effects", (DL_FUNC) &_scrapper_summarize_effects, 10},
     {"_scrapper_test_enrichment", (DL_FUNC) &_scrapper_test_enrichment, 6},
     {NULL, NULL, 0}
 };

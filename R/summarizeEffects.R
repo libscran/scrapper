@@ -7,6 +7,13 @@
 #' The extents of the first two dimensions are equal to the number of groups, while the extent of the final dimension is equal to the number of genes.
 #' The entry \code{[i, j, k]} represents the effect size from the comparison of group \code{j} against group \code{i} for gene \code{k}.
 #' See also the output of \code{\link{scoreMarkers}} with \code{all.pairwise=TRUE}.
+#' @param compute.summary.min Boolean specifying whether to compute the minimum as a summary statistic.
+#' @param compute.summary.mean Boolean specifying whether to compute the mean as a summary statistic. 
+#' @param compute.summary.median Boolean specifying whether to compute the median as a summary statistic. 
+#' @param compute.summary.max Boolean specifying whether to compute the maximum as a summary statistic. 
+#' @param compute.summary.quantiles Numeric scalars containing the probabilities of quantiles to compute as summary statistics. 
+#' If \code{NULL}, no quantiles are computed.
+#' @param compute.summary.min.rank Boolean specifying whether to compute the mininum rank as a summary statistic. 
 #' @param num.threads Integer scalar specifying the number of threads to use.
 #'
 #' @return List of data frames containing summary statistics for the effect sizes.
@@ -27,6 +34,9 @@
 #' \item \code{max} contains the maximum effect size across all comparisons involving the group of interest.
 #' Using this to define markers will focus on genes that are upregulated in at least one comparison.
 #' As such, it is the least stringent summary as markers can achieve large values if they are upregulated in the group of interest compared to any one other group.
+#' \item \code{quantile.P} contains the quantile P (as a percentage) across all comparisons involving the group of interest.
+#' This is a generalization of the minimum, median and maximum for arbitrary quantile probabilities.
+#' For example, a large \code{quantile.20} would mean that the gene is upregulated in the group of interest compared to 80% of other groups.
 #' }
 #'
 #' The exact definition of \dQuote{large} depends on the choice of effect size.
@@ -64,17 +74,41 @@
 #' \code{\link{scoreMarkers}}, to compute the pairwise effects in the first place.
 #'
 #' @export
-summarizeEffects <- function(effects, num.threads=1) {
+summarizeEffects <- function(
+    effects,
+    compute.summary.min=TRUE,
+    compute.summary.mean=TRUE,
+    compute.summary.median=TRUE,
+    compute.summary.max=TRUE,
+    compute.summary.quantiles=NULL,
+    compute.summary.min.rank=TRUE,
+    num.threads=1
+) {
     dm <- dim(effects)
     ngroups <- dm[1]
     ngenes <- dm[3]
 
-    out <- summarize_effects(ngenes, ngroups, effects, num_threads=num.threads)
+    out <- summarize_effects(
+        ngenes,
+        ngroups,
+        effects,
+        compute_summary_mean=compute.summary.mean,
+        compute_summary_min=compute.summary.min,
+        compute_summary_median=compute.summary.median,
+        compute_summary_max=compute.summary.max,
+        compute_summary_quantiles=compute.summary.quantiles,
+        compute_summary_min_rank=compute.summary.min.rank,
+        num_threads=num.threads
+    )
     dmn <- dimnames(effects)
     names(out) <- dmn[[1]]
 
     for (i in seq_along(out)) {
-        df <- data.frame(out[[i]])
+        if (length(out[[i]])) {
+            df <- data.frame(out[[i]])
+        } else {
+            df <- data.frame(matrix(0, ngenes, 0))
+        }
         rownames(df) <- dmn[[3]]
         out[[i]] <- df
     }

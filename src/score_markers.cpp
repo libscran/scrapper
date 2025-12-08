@@ -11,6 +11,7 @@
 #include "scran_markers/score_markers_best.hpp"
 
 #include "utils_block.h"
+#include "utils_markers.h"
 
 void configure_group_vectors(Rcpp::NumericMatrix& store, std::vector<double*>& ptrs, int NR, int num_groups) { 
     store = Rcpp::NumericMatrix(NR, num_groups);
@@ -50,6 +51,12 @@ Rcpp::List score_markers_summary(
     bool compute_delta_detected,
     bool compute_cohens_d,
     bool compute_auc,
+    bool compute_summary_min,
+    bool compute_summary_mean,
+    bool compute_summary_median,
+    bool compute_summary_max,
+    Rcpp::Nullable<Rcpp::NumericVector> compute_summary_quantiles,
+    bool compute_summary_min_rank,
     int min_rank_limit
 ) {
     auto raw_mat = Rtatami::BoundNumericPointer(x);
@@ -68,6 +75,7 @@ Rcpp::List score_markers_summary(
     opt.block_weight_policy = parse_block_weight_policy(block_weight_policy);
     opt.variable_block_weight_parameters = parse_variable_block_weight(variable_block_weight);
     opt.block_quantile = block_quantile;
+    const std::size_t num_quantiles = setup_quantile_options(compute_summary_quantiles, opt.compute_summary_quantiles);
 
     scran_markers::ScoreMarkersSummaryBuffers<double, int> buffers;
 
@@ -83,47 +91,87 @@ Rcpp::List score_markers_summary(
     std::vector<Rcpp::NumericVector> auc_min, auc_mean, auc_median, auc_max;
     std::vector<Rcpp::NumericVector> dm_min, dm_mean, dm_median, dm_max;
     std::vector<Rcpp::NumericVector> dd_min, dd_mean, dd_median, dd_max;
+    std::vector<std::vector<Rcpp::NumericVector> > cohens_quant, auc_quant, dm_quant, dd_quant;
     std::vector<Rcpp::IntegerVector> cohens_mr, auc_mr, dm_mr, dd_mr;
 
-    const auto initialize = [&](
-        std::vector<scran_markers::SummaryBuffers<double, int> >& ptrs,
-        std::vector<Rcpp::NumericVector>& min,
-        std::vector<Rcpp::NumericVector>& mean,
-        std::vector<Rcpp::NumericVector>& median,
-        std::vector<Rcpp::NumericVector>& max,
-        std::vector<Rcpp::IntegerVector>& min_rank
-    ) -> void {
-        ptrs.resize(num_groups);
-        min.reserve(num_groups);
-        mean.reserve(num_groups);
-        median.reserve(num_groups);
-        max.reserve(num_groups);
-        min_rank.reserve(num_groups);
-        for (int g = 0; g < num_groups; ++g) {
-            min.emplace_back(NR);
-            ptrs[g].min = min.back().begin();
-            mean.emplace_back(NR);
-            ptrs[g].mean = mean.back().begin();
-            median.emplace_back(NR);
-            ptrs[g].median = median.back().begin();
-            max.emplace_back(NR);
-            ptrs[g].max = max.back().begin();
-            min_rank.emplace_back(NR);
-            ptrs[g].min_rank = min_rank.back().begin();
-        }
-    };
-
     if (compute_cohens_d) {
-        initialize(buffers.cohens_d, cohens_min, cohens_mean, cohens_median, cohens_max, cohens_mr);
+        initialize_summary_buffers(
+            num_groups,
+            NR,
+            buffers.cohens_d,
+            compute_summary_min,
+            cohens_min,
+            compute_summary_mean,
+            cohens_mean,
+            compute_summary_median,
+            cohens_median,
+            compute_summary_max,
+            cohens_max,
+            num_quantiles,
+            cohens_quant,
+            compute_summary_min_rank,
+            cohens_mr
+        );
     }
-    if (compute_delta_mean) {
-        initialize(buffers.delta_mean, dm_min, dm_mean, dm_median, dm_max, dm_mr);
-    }
-    if (compute_delta_detected) {
-        initialize(buffers.delta_detected, dd_min, dd_mean, dd_median, dd_max, dd_mr);
-    }
+
     if (compute_auc) {
-        initialize(buffers.auc, auc_min, auc_mean, auc_median, auc_max, auc_mr);
+        initialize_summary_buffers(
+            num_groups,
+            NR,
+            buffers.auc,
+            compute_summary_min,
+            auc_min,
+            compute_summary_mean,
+            auc_mean,
+            compute_summary_median,
+            auc_median,
+            compute_summary_max,
+            auc_max,
+            num_quantiles,
+            auc_quant,
+            compute_summary_min_rank,
+            auc_mr
+        );
+    }
+
+    if (compute_delta_mean) {
+        initialize_summary_buffers(
+            num_groups,
+            NR,
+            buffers.delta_mean,
+            compute_summary_min,
+            dm_min,
+            compute_summary_mean,
+            dm_mean,
+            compute_summary_median,
+            dm_median,
+            compute_summary_max,
+            dm_max,
+            num_quantiles,
+            dm_quant,
+            compute_summary_min_rank,
+            dm_mr
+        );
+    }
+
+    if (compute_delta_detected) {
+        initialize_summary_buffers(
+            num_groups,
+            NR,
+            buffers.delta_detected,
+            compute_summary_min,
+            dd_min,
+            compute_summary_mean,
+            dd_mean,
+            compute_summary_median,
+            dd_median,
+            compute_summary_max,
+            dd_max,
+            num_quantiles,
+            dd_quant,
+            compute_summary_min_rank,
+            dd_mr
+        );
     }
 
     auto block_info = MaybeBlock(block);
@@ -137,35 +185,87 @@ Rcpp::List score_markers_summary(
         scran_markers::score_markers_summary(*mat, static_cast<const int*>(groups.begin()), opt, buffers);
     }
 
-    auto format = [&](
-        const std::vector<Rcpp::NumericVector>& min,
-        const std::vector<Rcpp::NumericVector>& mean,
-        const std::vector<Rcpp::NumericVector>& median,
-        const std::vector<Rcpp::NumericVector>& max,
-        const std::vector<Rcpp::IntegerVector>& min_rank
-    ) -> Rcpp::List {
-        size_t ngroups = min.size();
-        Rcpp::List output(ngroups);
-        for (size_t g = 0; g < ngroups; ++g) {
-            output[g] = Rcpp::List::create(
-                Rcpp::Named("min") = min[g],
-                Rcpp::Named("mean") = mean[g],
-                Rcpp::Named("median") = median[g],
-                Rcpp::Named("max") = max[g],
-                Rcpp::Named("min.rank") = min_rank[g]
-            );
-        }
-        return output;
-    };
+    Rcpp::List output;
+    output["mean"] = means;
+    output["detected"] = detected;
 
-    return Rcpp::List::create(
-        Rcpp::Named("mean") = means,
-        Rcpp::Named("detected") = detected,
-        Rcpp::Named("cohens.d") = format(cohens_min, cohens_mean, cohens_median, cohens_max, cohens_mr),
-        Rcpp::Named("auc") = format(auc_min, auc_mean, auc_median, auc_max, auc_mr),
-        Rcpp::Named("delta.mean") = format(dm_min, dm_mean, dm_median, dm_max, dm_mr),
-        Rcpp::Named("delta.detected") = format(dd_min, dd_mean, dd_median, dd_max, dd_mr)
-    );
+    if (compute_cohens_d) {
+        output["cohens.d"] = format_summary_output(
+            num_groups,
+            compute_summary_min,
+            cohens_min,
+            compute_summary_mean,
+            cohens_mean,
+            compute_summary_median,
+            cohens_median,
+            compute_summary_max,
+            cohens_max,
+            num_quantiles,
+            opt.compute_summary_quantiles,
+            cohens_quant,
+            compute_summary_min_rank,
+            cohens_mr
+        );
+    }
+
+    if (compute_auc) {
+        output["auc"] = format_summary_output(
+            num_groups,
+            compute_summary_min,
+            auc_min,
+            compute_summary_mean,
+            auc_mean,
+            compute_summary_median,
+            auc_median,
+            compute_summary_max,
+            auc_max,
+            num_quantiles,
+            opt.compute_summary_quantiles,
+            auc_quant, 
+            compute_summary_min_rank,
+            auc_mr
+        );
+    }
+
+    if (compute_delta_mean) {
+        output["delta.mean"] = format_summary_output(
+            num_groups,
+            compute_summary_min,
+            dm_min,
+            compute_summary_mean,
+            dm_mean,
+            compute_summary_median,
+            dm_median,
+            compute_summary_max,
+            dm_max,
+            num_quantiles,
+            opt.compute_summary_quantiles,
+            dm_quant,
+            compute_summary_min_rank,
+            dm_mr
+        );
+    }
+
+    if (compute_delta_detected) {
+        output["delta.detected"] = format_summary_output(
+            num_groups,
+            compute_summary_min,
+            dd_min,
+            compute_summary_mean,
+            dd_mean,
+            compute_summary_median,
+            dd_median,
+            compute_summary_max,
+            dd_max,
+            num_quantiles,
+            opt.compute_summary_quantiles,
+            dd_quant,
+            compute_summary_min_rank,
+            dd_mr
+        );
+    }
+
+    return output;
 }
 
 //[[Rcpp::export(rng=false)]]

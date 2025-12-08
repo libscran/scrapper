@@ -33,6 +33,20 @@
 #' @param compute.cohens.d Logical scalar indicating whether to compute Cohen's d.
 #' @param compute.auc Logical scalar indicating whether to compute the AUC.
 #' Setting this to \code{FALSE} can improve speed and memory efficiency.
+#' @param compute.summary.min Boolean specifying whether to compute the minimum as a summary statistic for each effect size.
+#' Only used if \code{all.pairwise=FALSE}.
+#' @param compute.summary.mean Boolean specifying whether to compute the mean as a summary statistic for each effect size.
+#' Only used if \code{all.pairwise=FALSE}.
+#' @param compute.summary.median Boolean specifying whether to compute the median as a summary statistic for each effect size.
+#' Only used if \code{all.pairwise=FALSE}.
+#' @param compute.summary.max Boolean specifying whether to compute the maximum as a summary statistic for each effect size.
+#' Only used if \code{all.pairwise=FALSE}.
+#' @param compute.summary.quantiles Numeric scalars containing the probabilities of quantiles to compute as summary statistics for each effect size.
+#' If \code{NULL}, no quantiles are computed.
+#' Only used if \code{all.pairwise=FALSE}.
+#' @param compute.summary.min.rank Boolean specifying whether to compute the mininum rank as a summary statistic for each effect size.
+#' If \code{NULL}, no quantiles are computed.
+#' Only used if \code{all.pairwise=FALSE}.
 #' @param all.pairwise Logical scalar indicating whether to report the effect sizes for every pairwise comparison between groups.
 #' Alternatively, an integer scalar indicating the number of top markers to report from each pairwise comparison between groups.
 #' If \code{FALSE}, only the summary statistics are reported.
@@ -45,7 +59,7 @@
 #' \itemize{
 #' \item \code{cohens.d}, a list of data frames where each data frame corresponds to a group.
 #' Each row of each data frame represents a gene, while each column contains a summary of Cohen's d from pairwise comparisons to all other groups.
-#' This includes the \code{min}, \code{mean}, \code{median}, \code{max} and \code{min.rank} - check out \code{?\link{summarizeEffects}} for details.
+#' This includes \code{min}, \code{mean}, \code{median}, \code{max}, \code{quantile.*} and \code{min.rank} - check out \code{?\link{summarizeEffects}} for details.
 #' Omitted if \code{compute.cohens.d=FALSE}.
 #' \item \code{auc}, a list like \code{cohens.d} but containing the summaries of the AUCs from each pairwise comparison.
 #' Omitted if \code{compute.auc=FALSE}.
@@ -171,12 +185,19 @@ scoreMarkers <- function(
     compute.delta.detected=TRUE,
     compute.cohens.d=TRUE,
     compute.auc=TRUE,
+    compute.summary.min=TRUE,
+    compute.summary.mean=TRUE,
+    compute.summary.median=TRUE,
+    compute.summary.max=TRUE,
+    compute.summary.quantiles=NULL,
+    compute.summary.min.rank=TRUE,
     threshold=0, 
     all.pairwise=FALSE, 
     min.rank.limit=500,
     num.threads=1
 ) {
     rn <- rownames(x)
+    ngenes <- nrow(x)
     x <- initializeCpp(x, .check.na=FALSE)
     groups <- .transformFactor(groups)
     block <- .transformFactor(block)
@@ -222,12 +243,36 @@ scoreMarkers <- function(
         }
 
     } else if (isFALSE(all.pairwise)) {
-        output <- do.call(score_markers_summary, c(list(x, min_rank_limit=min.rank.limit), args))
+        if (!is.null(compute.summary.quantiles)) {
+            compute.summary.quantiles <- sort(unique(compute.summary.quantiles))
+        }
+
+        output <- do.call(
+            score_markers_summary,
+            c(
+                list(
+                    x,
+                    min_rank_limit=min.rank.limit,
+                    compute_summary_mean=compute.summary.mean,
+                    compute_summary_min=compute.summary.min,
+                    compute_summary_median=compute.summary.median,
+                    compute_summary_max=compute.summary.max,
+                    compute_summary_quantiles=compute.summary.quantiles,
+                    compute_summary_min_rank=compute.summary.min.rank
+                ),
+                args
+            )
+        )
+
         for (nm in keep.effects) {
             current <- output[[nm]]
             names(current) <- groups$names
             for (i in seq_along(current)) {
-                df <- data.frame(current[[i]])
+                if (length(current[[i]])) {
+                    df <- data.frame(current[[i]])
+                } else {
+                    df <- data.frame(matrix(0, ngenes, 0))
+                }
                 rownames(df) <- rn
                 current[[i]] <- df
             }

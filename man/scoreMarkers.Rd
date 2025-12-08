@@ -18,6 +18,12 @@ scoreMarkers(
   compute.delta.detected = TRUE,
   compute.cohens.d = TRUE,
   compute.auc = TRUE,
+  compute.summary.min = TRUE,
+  compute.summary.mean = TRUE,
+  compute.summary.median = TRUE,
+  compute.summary.max = TRUE,
+  compute.summary.quantiles = NULL,
+  compute.summary.min.rank = TRUE,
   threshold = 0,
   all.pairwise = FALSE,
   min.rank.limit = 500,
@@ -64,6 +70,26 @@ Only used if \code{block} is not \code{NULL} and \code{block.average.policy="qua
 \item{compute.auc}{Logical scalar indicating whether to compute the AUC.
 Setting this to \code{FALSE} can improve speed and memory efficiency.}
 
+\item{compute.summary.min}{Boolean specifying whether to compute the minimum as a summary statistic for each effect size.
+Only used if \code{all.pairwise=FALSE}.}
+
+\item{compute.summary.mean}{Boolean specifying whether to compute the mean as a summary statistic for each effect size.
+Only used if \code{all.pairwise=FALSE}.}
+
+\item{compute.summary.median}{Boolean specifying whether to compute the median as a summary statistic for each effect size.
+Only used if \code{all.pairwise=FALSE}.}
+
+\item{compute.summary.max}{Boolean specifying whether to compute the maximum as a summary statistic for each effect size.
+Only used if \code{all.pairwise=FALSE}.}
+
+\item{compute.summary.quantiles}{Numeric scalars containing the probabilities of quantiles to compute as summary statistics for each effect size.
+If \code{NULL}, no quantiles are computed.
+Only used if \code{all.pairwise=FALSE}.}
+
+\item{compute.summary.min.rank}{Boolean specifying whether to compute the mininum rank as a summary statistic for each effect size.
+If \code{NULL}, no quantiles are computed.
+Only used if \code{all.pairwise=FALSE}.}
+
 \item{threshold}{Non-negative numeric scalar specifying the minimum threshold on the differences in means (i.e., the log-fold change, if \code{x} contains log-expression values). 
 This is incorporated into the effect sizes for Cohen's d and the AUC.
 Larger thresholds will favor genes with large differences at the expense of genes with low variance that would otherwise have comparable effect sizes.}
@@ -83,7 +109,7 @@ If \code{all.pairwise=FALSE}, a named list is returned containing:
 \itemize{
 \item \code{cohens.d}, a list of data frames where each data frame corresponds to a group.
 Each row of each data frame represents a gene, while each column contains a summary of Cohen's d from pairwise comparisons to all other groups.
-This includes the \code{min}, \code{mean}, \code{median}, \code{max} and \code{min.rank} - check out \code{?\link{summarizeEffects}} for details.
+This includes \code{min}, \code{mean}, \code{median}, \code{max}, \code{quantile.*} and \code{min.rank} - check out \code{?\link{summarizeEffects}} for details.
 Omitted if \code{compute.cohens.d=FALSE}.
 \item \code{auc}, a list like \code{cohens.d} but containing the summaries of the AUCs from each pairwise comparison.
 Omitted if \code{compute.auc=FALSE}.

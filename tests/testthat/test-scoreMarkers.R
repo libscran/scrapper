@@ -74,6 +74,41 @@ test_that("scoreMarkers works with blocking", {
     }
 })
 
+test_that("scoreMarkers works with quantile summaries", {
+    g <- sample(4, ncol(x), replace=TRUE)
+    res <- scoreMarkers(x, g, compute.summary.quantiles=c(0, 0.5, 1))
+    for (i in seq_len(max(g))) {
+        for (e in c("cohens.d", "auc", "delta.mean", "delta.detected")) {
+            current <- res[[e]][[i]]
+            expect_identical(current$min, current$quantile.0)
+            expect_identical(current$median, current$quantile.50)
+            expect_identical(current$max, current$quantile.100)
+        }
+    }
+})
+
+test_that("scoreMarkers works with all summaries disabled", {
+    g <- sample(4, ncol(x), replace=TRUE)
+    res <- scoreMarkers(
+        x, 
+        g,
+        compute.group.mean=FALSE,
+        compute.group.detected=FALSE,
+        compute.summary.min=FALSE,
+        compute.summary.mean=FALSE,
+        compute.summary.median=FALSE,
+        compute.summary.max=FALSE,
+        compute.summary.min.rank=FALSE
+    )
+
+    for (i in seq_len(max(g))) {
+        for (e in c("cohens.d", "auc", "delta.mean", "delta.detected")) {
+            expect_identical(ncol(res[[e]][[i]]), 0L)
+            expect_identical(nrow(res[[e]][[i]]), nrow(x))
+        }
+    }
+})
+
 test_that("scoreMarkers works as expected for the full pairwise statistics", {
     g <- sample(4, ncol(x), replace=TRUE)
     full <- scoreMarkers(x, g, all.pairwise=TRUE)

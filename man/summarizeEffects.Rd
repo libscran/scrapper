@@ -4,13 +4,35 @@
 \alias{summarizeEffects}
 \title{Summarize pairwise effect sizes for each group}
 \usage{
-summarizeEffects(effects, num.threads = 1)
+summarizeEffects(
+  effects,
+  compute.summary.min = TRUE,
+  compute.summary.mean = TRUE,
+  compute.summary.median = TRUE,
+  compute.summary.max = TRUE,
+  compute.summary.quantiles = NULL,
+  compute.summary.min.rank = TRUE,
+  num.threads = 1
+)
 }
 \arguments{
 \item{effects}{A 3-dimensional numeric containing the effect sizes from each pairwise comparison between groups.
 The extents of the first two dimensions are equal to the number of groups, while the extent of the final dimension is equal to the number of genes.
 The entry \code{[i, j, k]} represents the effect size from the comparison of group \code{j} against group \code{i} for gene \code{k}.
 See also the output of \code{\link{scoreMarkers}} with \code{all.pairwise=TRUE}.}
+
+\item{compute.summary.min}{Boolean specifying whether to compute the minimum as a summary statistic.}
+
+\item{compute.summary.mean}{Boolean specifying whether to compute the mean as a summary statistic.}
+
+\item{compute.summary.median}{Boolean specifying whether to compute the median as a summary statistic.}
+
+\item{compute.summary.max}{Boolean specifying whether to compute the maximum as a summary statistic.}
+
+\item{compute.summary.quantiles}{Numeric scalars containing the probabilities of quantiles to compute as summary statistics. 
+If \code{NULL}, no quantiles are computed.}
+
+\item{compute.summary.min.rank}{Boolean specifying whether to compute the mininum rank as a summary statistic.}
 
 \item{num.threads}{Integer scalar specifying the number of threads to use.}
 }
@@ -37,6 +59,9 @@ Compared to the mean, this is more robust to outlier effects but less sensitive 
 \item \code{max} contains the maximum effect size across all comparisons involving the group of interest.
 Using this to define markers will focus on genes that are upregulated in at least one comparison.
 As such, it is the least stringent summary as markers can achieve large values if they are upregulated in the group of interest compared to any one other group.
+\item \code{quantile.P} contains the quantile P (as a percentage) across all comparisons involving the group of interest.
+This is a generalization of the minimum, median and maximum for arbitrary quantile probabilities.
+For example, a large \code{quantile.20} would mean that the gene is upregulated in the group of interest compared to 80% of other groups.
 }
 
 The exact definition of \dQuote{large} depends on the choice of effect size.

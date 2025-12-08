@@ -141,8 +141,8 @@ score_gene_set <- function(x, rank, block, block_weight_policy, variable_block_w
     .Call('_scrapper_score_gene_set', PACKAGE = 'scrapper', x, rank, block, block_weight_policy, variable_block_weight, scale, realized, irlba_work, irlba_iterations, irlba_seed, num_threads)
 }
 
-score_markers_summary <- function(x, groups, num_groups, block, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc, min_rank_limit) {
-    .Call('_scrapper_score_markers_summary', PACKAGE = 'scrapper', x, groups, num_groups, block, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc, min_rank_limit)
+score_markers_summary <- function(x, groups, num_groups, block, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc, compute_summary_min, compute_summary_mean, compute_summary_median, compute_summary_max, compute_summary_quantiles, compute_summary_min_rank, min_rank_limit) {
+    .Call('_scrapper_score_markers_summary', PACKAGE = 'scrapper', x, groups, num_groups, block, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc, compute_summary_min, compute_summary_mean, compute_summary_median, compute_summary_max, compute_summary_quantiles, compute_summary_min_rank, min_rank_limit)
 }
 
 score_markers_pairwise <- function(x, groups, num_groups, block, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc) {
@@ -161,8 +161,8 @@ subsample_by_neighbors <- function(indices, distances, min_remaining) {
     .Call('_scrapper_subsample_by_neighbors', PACKAGE = 'scrapper', indices, distances, min_remaining)
 }
 
-summarize_effects <- function(num_genes, num_groups, effects, num_threads) {
-    .Call('_scrapper_summarize_effects', PACKAGE = 'scrapper', num_genes, num_groups, effects, num_threads)
+summarize_effects <- function(num_genes, num_groups, effects, compute_summary_min, compute_summary_mean, compute_summary_median, compute_summary_max, compute_summary_quantiles, compute_summary_min_rank, num_threads) {
+    .Call('_scrapper_summarize_effects', PACKAGE = 'scrapper', num_genes, num_groups, effects, compute_summary_min, compute_summary_mean, compute_summary_median, compute_summary_max, compute_summary_quantiles, compute_summary_min_rank, num_threads)
 }
 
 test_enrichment <- function(overlap, num_interest, set_sizes, universe, log, num_threads) {
