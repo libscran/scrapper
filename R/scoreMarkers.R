@@ -220,23 +220,9 @@ scoreMarkers <- function(
         num_threads=num.threads
     )
 
-    keep.effects <- character(0)
-    if (compute.cohens.d) {
-        keep.effects <- c(keep.effects, "cohens.d")
-    }
-    if (compute.auc) {
-        keep.effects <- c(keep.effects, "auc")
-    }
-    if (compute.delta.mean) {
-        keep.effects <- c(keep.effects, "delta.mean")
-    }
-    if (compute.delta.detected) {
-        keep.effects <- c(keep.effects, "delta.detected")
-    }
-
     if (isTRUE(all.pairwise)) {
         output <- do.call(score_markers_pairwise, c(list(x), args))
-        for (nm in keep.effects) {
+        for (nm in setdiff(names(output), c("mean", "detected"))) {
             current <- output[[nm]]
             dimnames(current) <- list(groups$names, groups$names, rn)
             output[[nm]] <- current
@@ -264,7 +250,7 @@ scoreMarkers <- function(
             )
         )
 
-        for (nm in keep.effects) {
+        for (nm in setdiff(names(output), c("mean", "detected"))) {
             current <- output[[nm]]
             names(current) <- groups$names
             for (i in seq_along(current)) {
@@ -281,7 +267,7 @@ scoreMarkers <- function(
 
     } else {
         output <- do.call(score_markers_best, c(list(x, top=all.pairwise), args))
-        for (nm in keep.effects) {
+        for (nm in setdiff(names(output), c("mean", "detected"))) {
             current <- output[[nm]]
             names(current) <- groups$names
             for (i in seq_along(current)) {
@@ -291,17 +277,14 @@ scoreMarkers <- function(
         }
     }
 
-    keep.stats <- character()
     if (compute.group.mean) {
         dimnames(output$mean) <- list(rn, groups$names)
-        keep.stats <- c(keep.stats, "mean")
     }
     if (compute.group.detected) {
         dimnames(output$detected) <- list(rn, groups$names)
-        keep.stats <- c(keep.stats, "detected")
     }
 
-    output[c(keep.stats, keep.effects)]
+    output
 }
 
 #' Report marker statistics for a single group

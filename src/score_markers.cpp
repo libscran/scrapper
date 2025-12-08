@@ -186,8 +186,12 @@ Rcpp::List score_markers_summary(
     }
 
     Rcpp::List output;
-    output["mean"] = means;
-    output["detected"] = detected;
+    if (compute_group_mean) {
+        output["mean"] = means;
+    }
+    if (compute_group_detected) {
+        output["detected"] = detected;
+    }
 
     if (compute_cohens_d) {
         output["cohens.d"] = format_summary_output(
@@ -314,10 +318,10 @@ Rcpp::List score_markers_pairwise(
     }
 
     Rcpp::Dimension dim(num_groups, num_groups, NR);
-    Rcpp::NumericVector cohen, auc, delta_mean, delta_detected;
+    Rcpp::NumericVector cohens_d, auc, delta_mean, delta_detected;
     if (compute_cohens_d) {
-        cohen = Rcpp::NumericVector(dim);
-        buffers.cohens_d = cohen.begin();
+        cohens_d = Rcpp::NumericVector(dim);
+        buffers.cohens_d = cohens_d.begin();
     }
     if (compute_delta_mean) {
         delta_mean = Rcpp::NumericVector(dim);
@@ -343,14 +347,28 @@ Rcpp::List score_markers_pairwise(
         scran_markers::score_markers_pairwise(*mat, static_cast<const int*>(groups.begin()), opt, buffers);
     }
 
-    return Rcpp::List::create(
-        Rcpp::Named("mean") = means,
-        Rcpp::Named("detected") = detected,
-        Rcpp::Named("cohens.d") = cohen,
-        Rcpp::Named("auc") = auc,
-        Rcpp::Named("delta.mean") = delta_mean,
-        Rcpp::Named("delta.detected") = delta_detected
-    );
+    Rcpp::List output;
+    if (compute_group_mean) {
+        output["mean"] = means;
+    }
+    if (compute_group_detected) {
+        output["detected"] = detected;
+    }
+
+    if (compute_cohens_d) {
+        output["cohens.d"] = cohens_d;
+    }
+    if (compute_auc) {
+        output["auc"] = auc;
+    }
+    if (compute_delta_mean) {
+        output["delta.mean"] = delta_mean;
+    }
+    if (compute_delta_detected) {
+        output["delta.detected"] = delta_detected;
+    }
+
+    return output;
 }
 
 //[[Rcpp::export(rng=false)]]
@@ -460,12 +478,26 @@ Rcpp::List score_markers_best(
         transfer_effects(delta_detected, res.delta_detected);
     }
 
-    return Rcpp::List::create(
-        Rcpp::Named("mean") = means,
-        Rcpp::Named("detected") = detected,
-        Rcpp::Named("cohens.d") = cohens_d,
-        Rcpp::Named("auc") = auc,
-        Rcpp::Named("delta.mean") = delta_mean,
-        Rcpp::Named("delta.detected") = delta_detected
-    );
+    Rcpp::List output;
+    if (compute_group_mean) {
+        output["mean"] = means;
+    }
+    if (compute_group_detected) {
+        output["detected"] = detected;
+    }
+
+    if (compute_cohens_d) {
+        output["cohens.d"] = cohens_d;
+    }
+    if (compute_auc) {
+        output["auc"] = auc;
+    }
+    if (compute_delta_mean) {
+        output["delta.mean"] = delta_mean;
+    }
+    if (compute_delta_detected) {
+        output["delta.detected"] = delta_detected;
+    }
+
+    return output;
 }
