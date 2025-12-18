@@ -253,16 +253,7 @@ scoreMarkers <- function(
         for (nm in setdiff(names(output), c("mean", "detected"))) {
             current <- output[[nm]]
             names(current) <- groups$names
-            for (i in seq_along(current)) {
-                if (length(current[[i]])) {
-                    df <- data.frame(current[[i]])
-                } else {
-                    df <- data.frame(matrix(0, ngenes, 0))
-                }
-                rownames(df) <- rn
-                current[[i]] <- df
-            }
-            output[[nm]] <- current
+            output[[nm]] <- format_summary_output(current, ngenes, rn, compute.summary.quantiles)
         }
 
     } else {

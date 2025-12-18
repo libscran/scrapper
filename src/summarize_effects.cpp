@@ -66,8 +66,7 @@ SEXP summarize_effects(
         median,
         compute_summary_max,
         max,
-        num_quantiles,
-        opt.compute_quantiles,
+        opt.compute_quantiles.has_value(),
         quant,
         compute_summary_min_rank,
         mr

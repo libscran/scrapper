@@ -39,6 +39,7 @@ If \code{NULL}, no quantiles are computed.}
 \value{
 List of data frames containing summary statistics for the effect sizes.
 Each data frame corresponds to a group, each row corresponds to a gene, and each column contains a summary statistic.
+If \code{compute.summary.quantiles} is provided, the \code{"quantiles"} column is a nested data frame where each column coresponds to a probability in \code{compute.summary.quantiles}.
 }
 \description{
 For each group, summarize the effect sizes for all pairwise comparisons to other groups.
@@ -59,9 +60,9 @@ Compared to the mean, this is more robust to outlier effects but less sensitive 
 \item \code{max} contains the maximum effect size across all comparisons involving the group of interest.
 Using this to define markers will focus on genes that are upregulated in at least one comparison.
 As such, it is the least stringent summary as markers can achieve large values if they are upregulated in the group of interest compared to any one other group.
-\item \code{quantile.P} contains the quantile P (as a percentage) across all comparisons involving the group of interest.
+\item \code{quantiles[[P]]} contains the quantile P (as a percentage) across all comparisons involving the group of interest.
 This is a generalization of the minimum, median and maximum for arbitrary quantile probabilities.
-For example, a large \code{quantile.20} would mean that the gene is upregulated in the group of interest compared to 80% of other groups.
+For example, a large \code{quantile[["20"]]} would mean that the gene is upregulated in the group of interest compared to 80% of other groups.
 }
 
 The exact definition of \dQuote{large} depends on the choice of effect size.

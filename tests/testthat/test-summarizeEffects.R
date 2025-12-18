@@ -19,9 +19,9 @@ test_that("summarizeEffects works with quantiles", {
     res <- summarizeEffects(full$cohens.d, compute.summary.quantiles=c(0, 0.5, 1))
 
     for (i in seq_len(max(g))) {
-        expect_identical(res[[i]]$median, res[[i]]$quantile.50)
-        expect_identical(res[[i]]$min, res[[i]]$quantile.0)
-        expect_identical(res[[i]]$max, res[[i]]$quantile.100)
+        expect_identical(res[[i]]$median, res[[i]]$quantile[["0.5"]])
+        expect_identical(res[[i]]$min, res[[i]]$quantile[["0"]])
+        expect_identical(res[[i]]$max, res[[i]]$quantile[["1"]])
     }
 })
 

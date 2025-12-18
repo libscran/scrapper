@@ -101,8 +101,7 @@ inline Rcpp::List format_summary_output(
     const std::vector<Rcpp::NumericVector>& median,
     const bool compute_max,
     const std::vector<Rcpp::NumericVector>& max,
-    const std::size_t num_quantiles,
-    const std::optional<std::vector<double> >& input_quantiles,
+    const bool compute_quantiles,
     const std::vector<std::vector<Rcpp::NumericVector> >& output_quantiles,
     const bool compute_min_rank,
     const std::vector<Rcpp::IntegerVector>& min_rank
@@ -122,12 +121,14 @@ inline Rcpp::List format_summary_output(
         if (compute_max) {
             current["max"] = max[g];
         }
-        if (input_quantiles.has_value()) {
-            const auto& iquantiles = *input_quantiles;
+        if (compute_quantiles) {
             const auto& oquantiles = output_quantiles[g];
-            for (std::size_t q = 0; q < num_quantiles; ++q) {
-                current["quantile." + std::to_string(iquantiles[q] * 100)] = oquantiles[q];
+            auto num_quantiles = oquantiles.size();
+            auto collected = sanisizer::create<Rcpp::List>(num_quantiles);
+            for (decltype(num_quantiles) q = 0; q < num_quantiles; ++q) {
+                collected[q] = oquantiles[q];
             }
+            current["quantile"] = std::move(collected);
         }
         if (compute_min_rank) {
             current["min.rank"] = min_rank[g];

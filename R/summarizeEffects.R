@@ -18,6 +18,7 @@
 #'
 #' @return List of data frames containing summary statistics for the effect sizes.
 #' Each data frame corresponds to a group, each row corresponds to a gene, and each column contains a summary statistic.
+#' If \code{compute.summary.quantiles} is provided, the \code{"quantile"} column is a nested data frame where each column coresponds to a probability in \code{compute.summary.quantiles}.
 #'
 #' @details
 #' Each summary statistic can be used to prioritize different sets of marker genes for the group of interest, by ranking them in decreasing order according to said statistic:
@@ -34,9 +35,9 @@
 #' \item \code{max} contains the maximum effect size across all comparisons involving the group of interest.
 #' Using this to define markers will focus on genes that are upregulated in at least one comparison.
 #' As such, it is the least stringent summary as markers can achieve large values if they are upregulated in the group of interest compared to any one other group.
-#' \item \code{quantile.P} contains the quantile P (as a percentage) across all comparisons involving the group of interest.
+#' \item \code{quantile[[P]]} contains the quantile P across all comparisons involving the group of interest.
 #' This is a generalization of the minimum, median and maximum for arbitrary quantile probabilities.
-#' For example, a large \code{quantile.20} would mean that the gene is upregulated in the group of interest compared to 80% of other groups.
+#' For example, a large \code{quantile[["20"]]} would mean that the gene is upregulated in the group of interest compared to 80% of other groups.
 #' }
 #'
 #' The exact definition of \dQuote{large} depends on the choice of effect size.
@@ -103,15 +104,33 @@ summarizeEffects <- function(
     dmn <- dimnames(effects)
     names(out) <- dmn[[1]]
 
-    for (i in seq_along(out)) {
-        if (length(out[[i]])) {
-            df <- data.frame(out[[i]])
+    format_summary_output(out, ngenes, dmn[[3]], compute.summary.quantiles)
+}
+
+format_summary_output <- function(raw, ngenes, rownames, quantiles) {
+    for (i in seq_along(raw)) {
+        current <- raw[[i]]
+
+        if ("quantile" %in% names(current)) {
+            names(current$quantile) <- as.character(quantiles)
+            to.add <- data.frame(current$quantile, check.names=FALSE)
+            current$quantile <- logical(ngenes)
+        } else {
+            to.add <- NULL
+        }
+
+        if (length(current)) {
+            df <- data.frame(current)
         } else {
             df <- data.frame(matrix(0, ngenes, 0))
         }
-        rownames(df) <- dmn[[3]]
-        out[[i]] <- df
-    }
+        rownames(df) <- rownames
 
-    out
+        if (!is.null(to.add)) {
+            df$quantile <- to.add
+        }
+
+        raw[[i]] <- df
+    }
+    raw
 }

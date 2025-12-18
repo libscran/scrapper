@@ -80,9 +80,9 @@ test_that("scoreMarkers works with quantile summaries", {
     for (i in seq_len(max(g))) {
         for (e in c("cohens.d", "auc", "delta.mean", "delta.detected")) {
             current <- res[[e]][[i]]
-            expect_identical(current$min, current$quantile.0)
-            expect_identical(current$median, current$quantile.50)
-            expect_identical(current$max, current$quantile.100)
+            expect_identical(current$min, current$quantile[["0"]])
+            expect_identical(current$median, current$quantile[["0.5"]])
+            expect_identical(current$max, current$quantile[["1"]])
         }
     }
 })

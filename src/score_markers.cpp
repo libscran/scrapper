@@ -204,8 +204,7 @@ Rcpp::List score_markers_summary(
             cohens_median,
             compute_summary_max,
             cohens_max,
-            num_quantiles,
-            opt.compute_summary_quantiles,
+            opt.compute_summary_quantiles.has_value(),
             cohens_quant,
             compute_summary_min_rank,
             cohens_mr
@@ -223,8 +222,7 @@ Rcpp::List score_markers_summary(
             auc_median,
             compute_summary_max,
             auc_max,
-            num_quantiles,
-            opt.compute_summary_quantiles,
+            opt.compute_summary_quantiles.has_value(),
             auc_quant, 
             compute_summary_min_rank,
             auc_mr
@@ -242,8 +240,7 @@ Rcpp::List score_markers_summary(
             dm_median,
             compute_summary_max,
             dm_max,
-            num_quantiles,
-            opt.compute_summary_quantiles,
+            opt.compute_summary_quantiles.has_value(),
             dm_quant,
             compute_summary_min_rank,
             dm_mr
@@ -261,8 +258,7 @@ Rcpp::List score_markers_summary(
             dd_median,
             compute_summary_max,
             dd_max,
-            num_quantiles,
-            opt.compute_summary_quantiles,
+            opt.compute_summary_quantiles.has_value(),
             dd_quant,
             compute_summary_min_rank,
             dd_mr
