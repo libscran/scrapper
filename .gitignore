@@ -1,4 +1,6 @@
 *.swp
+*.rds
+tests/testthat/_problems
 vignettes/*.html
 vignettes/*_files
 src/*.so
