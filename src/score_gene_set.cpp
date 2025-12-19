@@ -7,6 +7,7 @@
 #include "sanisizer/sanisizer.hpp"
 
 #include "utils_block.h"
+#include "utils_other.h"
 
 //[[Rcpp::export(rng=false)]]
 Rcpp::List score_gene_set(
@@ -19,7 +20,7 @@ Rcpp::List score_gene_set(
     bool realized,
     int irlba_work,
     int irlba_iterations,
-    int irlba_seed,
+    double irlba_seed,
     int num_threads
 ) {
     auto mat = Rtatami::BoundNumericPointer(x);
@@ -35,7 +36,7 @@ Rcpp::List score_gene_set(
     opt.realize_matrix = realized;
     opt.irlba_options.extra_work = irlba_work;
     opt.irlba_options.max_iterations = irlba_iterations;
-    opt.irlba_options.seed = irlba_seed;
+    opt.irlba_options.seed = sanisizer::from_float<I<decltype(opt.irlba_options.seed)> >(irlba_seed);
     opt.num_threads = num_threads;
 
     const auto NR = matrix.nrow();

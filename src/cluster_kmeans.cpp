@@ -24,9 +24,9 @@ Rcpp::List cluster_kmeans(
     int hartigan_wong_iterations,
     int hartigan_wong_quick_transfer_iterations,
     bool hartigan_wong_quit_quick_transfer_failure,
-    int seed,
-    int nthreads)
-{
+    double seed,
+    int nthreads
+) {
     const auto ndim = data.nrow();
     const auto nobs = data.ncol();
     auto ptr = static_cast<const double*>(data.begin());
@@ -39,18 +39,23 @@ Rcpp::List cluster_kmeans(
     std::unique_ptr<kmeans::Initialize<int, double, int, double> > iptr;
     if (init_method == "random") {
         auto ptr = new kmeans::InitializeRandom<int, double, int, double>;
-        ptr->get_options().seed = seed;
+        auto& dest_seed = ptr->get_options().seed;
+        dest_seed = sanisizer::from_float<I<decltype(dest_seed)> >(seed);
         iptr.reset(ptr);
+
     } else if (init_method == "kmeans++") {
         auto ptr = new kmeans::InitializeKmeanspp<int, double, int, double>;
         ptr->get_options().num_threads = nthreads;
-        ptr->get_options().seed = seed;
-        iptr.reset(ptr);;
+        auto& dest_seed = ptr->get_options().seed;
+        dest_seed = sanisizer::from_float<I<decltype(dest_seed)> >(seed);
+        iptr.reset(ptr);
+
     } else if (init_method == "var-part") {
         auto ptr = new kmeans::InitializeVariancePartition<int, double, int, double>;
         ptr->get_options().optimize_partition = var_part_optimize_partition;
         ptr->get_options().size_adjustment = var_part_size_adjustment;
         iptr.reset(ptr);
+
     } else {
         throw std::runtime_error("unknown init_method '" + init_method + "'");
     }
@@ -61,6 +66,7 @@ Rcpp::List cluster_kmeans(
         ptr->get_options().max_iterations = lloyd_iterations;
         ptr->get_options().num_threads = nthreads;
         rptr.reset(ptr);
+
     } else if (refine_method == "hartigan-wong") {
         auto ptr = new kmeans::RefineHartiganWong<int, double, int, double>;
         ptr->get_options().max_iterations = hartigan_wong_iterations;

@@ -5,10 +5,12 @@
 #include "scran_variances/scran_variances.hpp"
 #include "sanisizer/sanisizer.hpp"
 
+#include "utils_other.h"
+
 //[[Rcpp::export(rng=false)]]
 Rcpp::IntegerVector choose_highly_variable_genes(Rcpp::NumericVector stats, int top, bool larger, bool keep_ties, Rcpp::Nullable<Rcpp::NumericVector> bound) {
     scran_variances::ChooseHighlyVariableGenesOptions opt;
-    opt.top = top;
+    opt.top = sanisizer::cast<I<decltype(opt.top)> >(top);
     opt.larger = larger;
     opt.keep_ties = keep_ties;
 

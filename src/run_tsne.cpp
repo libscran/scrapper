@@ -22,7 +22,7 @@ SEXP run_tsne(
     int max_depth,
     int leaf_approx,
     int max_iter,
-    int seed,
+    double seed,
     int num_threads)
 {
     qdtsne::Options opt;
@@ -46,7 +46,7 @@ SEXP run_tsne(
 
     auto output = create_matrix<Rcpp::NumericMatrix>(2, nobs);
     auto optr = static_cast<double*>(output.begin());
-    qdtsne::initialize_random<2>(optr, sanisizer::cast<std::size_t>(nobs), seed);
+    qdtsne::initialize_random<2>(optr, sanisizer::cast<std::size_t>(nobs), sanisizer::from_float<unsigned long long>(seed));
     status.run(optr);
 
     return output;

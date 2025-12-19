@@ -10,7 +10,7 @@
 #include "utils_other.h"
 
 //[[Rcpp::export(rng=false)]]
-Rcpp::List cluster_multilevel(SEXP ptr0, double resolution, int seed) {
+Rcpp::List cluster_multilevel(SEXP ptr0, double resolution, double seed) {
     GraphComponentsPointer ptr(ptr0);
     const auto& edges = ptr->edges;
 
@@ -26,7 +26,7 @@ Rcpp::List cluster_multilevel(SEXP ptr0, double resolution, int seed) {
 
     scran_graph_cluster::ClusterMultilevelOptions opt;
     opt.resolution = resolution;
-    opt.seed = seed;
+    opt.seed = sanisizer::from_float<I<decltype(opt.seed)> >(seed);
 
     scran_graph_cluster::ClusterMultilevelResults res;
     scran_graph_cluster::cluster_multilevel(graph.get(), weight_view_ptr, opt, res);
@@ -46,7 +46,7 @@ Rcpp::List cluster_multilevel(SEXP ptr0, double resolution, int seed) {
 }
 
 //[[Rcpp::export(rng=false)]]
-Rcpp::List cluster_leiden(SEXP ptr0, double resolution, std::string objective, int seed) {
+Rcpp::List cluster_leiden(SEXP ptr0, double resolution, std::string objective, double seed) {
     GraphComponentsPointer ptr(ptr0);
     const auto& edges = ptr->edges;
 
@@ -62,7 +62,7 @@ Rcpp::List cluster_leiden(SEXP ptr0, double resolution, std::string objective, i
 
     scran_graph_cluster::ClusterLeidenOptions opt;
     opt.resolution = resolution;
-    opt.seed = seed;
+    opt.seed = sanisizer::from_float<I<decltype(opt.seed)> >(seed);
     opt.report_quality = true;
 
     if (objective == "modularity") {

@@ -144,26 +144,26 @@ BEGIN_RCPP
 END_RCPP
 }
 // cluster_multilevel
-Rcpp::List cluster_multilevel(SEXP ptr0, double resolution, int seed);
+Rcpp::List cluster_multilevel(SEXP ptr0, double resolution, double seed);
 RcppExport SEXP _scrapper_cluster_multilevel(SEXP ptr0SEXP, SEXP resolutionSEXP, SEXP seedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type ptr0(ptr0SEXP);
     Rcpp::traits::input_parameter< double >::type resolution(resolutionSEXP);
-    Rcpp::traits::input_parameter< int >::type seed(seedSEXP);
+    Rcpp::traits::input_parameter< double >::type seed(seedSEXP);
     rcpp_result_gen = Rcpp::wrap(cluster_multilevel(ptr0, resolution, seed));
     return rcpp_result_gen;
 END_RCPP
 }
 // cluster_leiden
-Rcpp::List cluster_leiden(SEXP ptr0, double resolution, std::string objective, int seed);
+Rcpp::List cluster_leiden(SEXP ptr0, double resolution, std::string objective, double seed);
 RcppExport SEXP _scrapper_cluster_leiden(SEXP ptr0SEXP, SEXP resolutionSEXP, SEXP objectiveSEXP, SEXP seedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type ptr0(ptr0SEXP);
     Rcpp::traits::input_parameter< double >::type resolution(resolutionSEXP);
     Rcpp::traits::input_parameter< std::string >::type objective(objectiveSEXP);
-    Rcpp::traits::input_parameter< int >::type seed(seedSEXP);
+    Rcpp::traits::input_parameter< double >::type seed(seedSEXP);
     rcpp_result_gen = Rcpp::wrap(cluster_leiden(ptr0, resolution, objective, seed));
     return rcpp_result_gen;
 END_RCPP
@@ -180,7 +180,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // cluster_kmeans
-Rcpp::List cluster_kmeans(Rcpp::NumericMatrix data, int nclusters, std::string init_method, std::string refine_method, bool var_part_optimize_partition, double var_part_size_adjustment, int lloyd_iterations, int hartigan_wong_iterations, int hartigan_wong_quick_transfer_iterations, bool hartigan_wong_quit_quick_transfer_failure, int seed, int nthreads);
+Rcpp::List cluster_kmeans(Rcpp::NumericMatrix data, int nclusters, std::string init_method, std::string refine_method, bool var_part_optimize_partition, double var_part_size_adjustment, int lloyd_iterations, int hartigan_wong_iterations, int hartigan_wong_quick_transfer_iterations, bool hartigan_wong_quit_quick_transfer_failure, double seed, int nthreads);
 RcppExport SEXP _scrapper_cluster_kmeans(SEXP dataSEXP, SEXP nclustersSEXP, SEXP init_methodSEXP, SEXP refine_methodSEXP, SEXP var_part_optimize_partitionSEXP, SEXP var_part_size_adjustmentSEXP, SEXP lloyd_iterationsSEXP, SEXP hartigan_wong_iterationsSEXP, SEXP hartigan_wong_quick_transfer_iterationsSEXP, SEXP hartigan_wong_quit_quick_transfer_failureSEXP, SEXP seedSEXP, SEXP nthreadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -194,7 +194,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type hartigan_wong_iterations(hartigan_wong_iterationsSEXP);
     Rcpp::traits::input_parameter< int >::type hartigan_wong_quick_transfer_iterations(hartigan_wong_quick_transfer_iterationsSEXP);
     Rcpp::traits::input_parameter< bool >::type hartigan_wong_quit_quick_transfer_failure(hartigan_wong_quit_quick_transfer_failureSEXP);
-    Rcpp::traits::input_parameter< int >::type seed(seedSEXP);
+    Rcpp::traits::input_parameter< double >::type seed(seedSEXP);
     Rcpp::traits::input_parameter< int >::type nthreads(nthreadsSEXP);
     rcpp_result_gen = Rcpp::wrap(cluster_kmeans(data, nclusters, init_method, refine_method, var_part_optimize_partition, var_part_size_adjustment, lloyd_iterations, hartigan_wong_iterations, hartigan_wong_quick_transfer_iterations, hartigan_wong_quit_quick_transfer_failure, seed, nthreads));
     return rcpp_result_gen;
@@ -403,7 +403,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // run_tsne
-SEXP run_tsne(Rcpp::IntegerMatrix nnidx, Rcpp::NumericMatrix nndist, double perplexity, double theta, int early_exaggeration_iterations, double exaggeration_factor, int momentum_switch_iterations, double start_momentum, double final_momentum, double eta, int max_depth, int leaf_approx, int max_iter, int seed, int num_threads);
+SEXP run_tsne(Rcpp::IntegerMatrix nnidx, Rcpp::NumericMatrix nndist, double perplexity, double theta, int early_exaggeration_iterations, double exaggeration_factor, int momentum_switch_iterations, double start_momentum, double final_momentum, double eta, int max_depth, int leaf_approx, int max_iter, double seed, int num_threads);
 RcppExport SEXP _scrapper_run_tsne(SEXP nnidxSEXP, SEXP nndistSEXP, SEXP perplexitySEXP, SEXP thetaSEXP, SEXP early_exaggeration_iterationsSEXP, SEXP exaggeration_factorSEXP, SEXP momentum_switch_iterationsSEXP, SEXP start_momentumSEXP, SEXP final_momentumSEXP, SEXP etaSEXP, SEXP max_depthSEXP, SEXP leaf_approxSEXP, SEXP max_iterSEXP, SEXP seedSEXP, SEXP num_threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -420,7 +420,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type max_depth(max_depthSEXP);
     Rcpp::traits::input_parameter< int >::type leaf_approx(leaf_approxSEXP);
     Rcpp::traits::input_parameter< int >::type max_iter(max_iterSEXP);
-    Rcpp::traits::input_parameter< int >::type seed(seedSEXP);
+    Rcpp::traits::input_parameter< double >::type seed(seedSEXP);
     Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
     rcpp_result_gen = Rcpp::wrap(run_tsne(nnidx, nndist, perplexity, theta, early_exaggeration_iterations, exaggeration_factor, momentum_switch_iterations, start_momentum, final_momentum, eta, max_depth, leaf_approx, max_iter, seed, num_threads));
     return rcpp_result_gen;
@@ -502,7 +502,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // score_gene_set
-Rcpp::List score_gene_set(SEXP x, int rank, Rcpp::Nullable<Rcpp::IntegerVector> block, std::string block_weight_policy, Rcpp::NumericVector variable_block_weight, bool scale, bool realized, int irlba_work, int irlba_iterations, int irlba_seed, int num_threads);
+Rcpp::List score_gene_set(SEXP x, int rank, Rcpp::Nullable<Rcpp::IntegerVector> block, std::string block_weight_policy, Rcpp::NumericVector variable_block_weight, bool scale, bool realized, int irlba_work, int irlba_iterations, double irlba_seed, int num_threads);
 RcppExport SEXP _scrapper_score_gene_set(SEXP xSEXP, SEXP rankSEXP, SEXP blockSEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP scaleSEXP, SEXP realizedSEXP, SEXP irlba_workSEXP, SEXP irlba_iterationsSEXP, SEXP irlba_seedSEXP, SEXP num_threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -515,7 +515,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type realized(realizedSEXP);
     Rcpp::traits::input_parameter< int >::type irlba_work(irlba_workSEXP);
     Rcpp::traits::input_parameter< int >::type irlba_iterations(irlba_iterationsSEXP);
-    Rcpp::traits::input_parameter< int >::type irlba_seed(irlba_seedSEXP);
+    Rcpp::traits::input_parameter< double >::type irlba_seed(irlba_seedSEXP);
     Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
     rcpp_result_gen = Rcpp::wrap(score_gene_set(x, rank, block, block_weight_policy, variable_block_weight, scale, realized, irlba_work, irlba_iterations, irlba_seed, num_threads));
     return rcpp_result_gen;

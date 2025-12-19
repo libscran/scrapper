@@ -46,7 +46,7 @@ Rcpp::List run_pca(
     irlba::Options iopt;
     iopt.extra_work = irlba_work;
     iopt.max_iterations = irlba_iterations;
-    iopt.seed = irlba_seed;
+    iopt.seed = sanisizer::from_float<I<decltype(iopt.seed)> >(irlba_seed);
     iopt.cap_number = true;
 
     const auto fill_common_options = [&](auto& opt) -> void {
