@@ -29,36 +29,36 @@
 #' @param initialize.method String specifying how to initialize the embedding.
 #' This should be one of:
 #' \itemize{
-#' \item \code{SPECTRAL}: spectral decomposition of the normalized graph Laplacian.
+#' \item \code{spectral}: spectral decomposition of the normalized graph Laplacian.
 #' Specifically, the initial coordinates are defined from the eigenvectors corresponding to the smallest non-zero eigenvalues.
 #' This fails in the presence of multiple graph components or if the approximate SVD fails to converge.
-#' \item \code{RANDOM}: fills the embedding with random draws from a normal distribution.
-#' \item \code{NONE}: uses initial values from \code{initial.coordinates}.
+#' \item \code{random}: fills the embedding with random draws from a normal distribution.
+#' \item \code{none}: uses initial values from \code{initial.coordinates}.
 #' }
-#' @param initialize.random.on.spectral.fail Logical scalar indicating whether to fall back to random sampling (i.e., same as \code{RANDOM})
+#' @param initialize.random.on.spectral.fail Logical scalar indicating whether to fall back to random sampling (i.e., same as \code{random})
 #' if spectral initialization fails due to the presence of multiple components in the graph.
-#' If \code{FALSE}, the values in \code{initial.coordinates} will be used instead, i.e., same as \code{NONE}.
-#' Only relevant if \code{initialize.method = "SPECTRAL"} and spectral initialization fails.
+#' If \code{FALSE}, the values in \code{initial.coordinates} will be used instead, i.e., same as \code{none}.
+#' Only relevant if \code{initialize.method = "spectral"} and spectral initialization fails.
 #' @param initialize.spectral.scale Numeric scalar specifying the maximum absolute magnitude of the coordinates after spectral initialization.
 #' All initial coordinates are scaled such that the maximum of the absolute values is equal to \code{initialize.spectral.scale}.
 #' This ensures that outlier observations will not have large absolute distances that may interfere with optimization.
-#' Only relevant if \code{initialize.method = "SPECTRAL"} and spectral initialization does not fail.
+#' Only relevant if \code{initialize.method = "spectral"} and spectral initialization does not fail.
 #' @param initialize.spectral.jitter Logical scalar indicating whether to jitter coordinates after spectral initialization to separate duplicate observations (e.g., to avoid overplotting).
 #' This is done using normally-distributed noise of mean zero and standard deviation of \code{initialize.spectral.jitter.sd}.
-#' Only relevant if \code{initialize.method = "SPECTRAL"} and spectral initialization does not fail.
+#' Only relevant if \code{initialize.method = "spectral"} and spectral initialization does not fail.
 #' @param initialize.spectral.jitter.sd Numeric scalar specifying the standard deviation of the jitter to apply after spectral initialization.
-#' Only relevant if \code{initialize.method = "SPECTRAL"} and spectral initialization does not fail and \code{initialize.spectral.jitter = TRUE}.
+#' Only relevant if \code{initialize.method = "spectral"} and spectral initialization does not fail and \code{initialize.spectral.jitter = TRUE}.
 #' @param initialize.random.scale Numeric scalar specifying the scale of the randomly generated initial coordinates.
 #' Coordinates are sampled from a uniform distribution from \eqn{[-x, x)} where \eqn{x} is \code{initialize.random.scale}.
-#' Only relevant if \code{initialize.method = "RANDOM"},
-#' or \code{initialize.method = "SPECTRAL"} and spectral initialization fails and \code{initialize.random.on.spectral.fail = TRUE}.
+#' Only relevant if \code{initialize.method = "random"},
+#' or \code{initialize.method = "spectral"} and spectral initialization fails and \code{initialize.random.on.spectral.fail = TRUE}.
 #' @param initialize.seed Numeric scalar specifying the seed for the random number generation during initialization.
-#' Only relevant if \code{initialize.method = "RANDOM"},
-#' or \code{initialize.method = "SPECTRAL"} and \code{initialize.spectral.jitter = TRUE};
-#' or \code{initialize.method = "SPECTRAL"} and spectral initialization fails and \code{initialize.random.on.spectral.fail = TRUE}.
+#' Only relevant if \code{initialize.method = "random"},
+#' or \code{initialize.method = "spectral"} and \code{initialize.spectral.jitter = TRUE};
+#' or \code{initialize.method = "spectral"} and spectral initialization fails and \code{initialize.random.on.spectral.fail = TRUE}.
 #' @param initial.coordinates Numeric matrix of initial coordinates, with number of rows equal to the number of observations and number of columns equal to \code{num.dim}.
-#' Only relevant if \code{initialize.method = "NONE"};
-#' or \code{initialize.method = "SPECTRAL"} and spectral initialization fails and \code{initialize.random.on.spectral.fail = FALSE}.
+#' Only relevant if \code{initialize.method = "none"};
+#' or \code{initialize.method = "spectral"} and spectral initialization fails and \code{initialize.random.on.spectral.fail = FALSE}.
 #' @param num.epochs Integer scalar specifying the number of epochs for the gradient descent, i.e., optimization iterations. 
 #' Larger values improve accuracy at the cost of increased compute time.
 #' If \code{NULL}, a value is automatically chosen based on the size of the dataset:
