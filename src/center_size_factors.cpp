@@ -1,10 +1,10 @@
-//#include "config.h"
+#include "config.h"
 
-#include <vector>
 #include <stdexcept>
+#include <cstddef>
 
-#include "Rcpp.h"
 #include "scran_norm/scran_norm.hpp"
+#include "sanisizer/sanisizer.hpp"
 
 #include "utils_block.h"
 
@@ -17,15 +17,15 @@ Rcpp::NumericVector center_size_factors(Rcpp::NumericVector size_factors, Rcpp::
     opt.block_mode = (lowest ? scran_norm::CenterBlockMode::LOWEST : scran_norm::CenterBlockMode::PER_BLOCK);
     opt.ignore_invalid = true;
 
-    size_t ncells = size_factors.size();
+    const auto ncells = size_factors.size();
     auto output = Rcpp::clone(size_factors);
     if (ptr) {
-        if (block_info.size() != ncells) {
+        if (!sanisizer::is_equal(block_info.size(), ncells)) {
             throw std::runtime_error("'block' must be the same length as the number of cells");
         }
-        scran_norm::center_size_factors_blocked(ncells, static_cast<double*>(output.begin()), ptr, NULL, opt);
+        scran_norm::center_size_factors_blocked(sanisizer::cast<std::size_t>(ncells), static_cast<double*>(output.begin()), ptr, NULL, opt);
     } else {
-        scran_norm::center_size_factors(output.size(), static_cast<double*>(output.begin()), NULL, opt);
+        scran_norm::center_size_factors(sanisizer::cast<std::size_t>(output.size()), static_cast<double*>(output.begin()), NULL, opt);
     }
 
     return output; 

@@ -1,17 +1,21 @@
 #ifndef UTILS_MARKERS_H
 #define UTILS_MARKERS_H
 
-#include "Rcpp.h"
+#include "config.h"
 
 #include <vector>
 #include <cstddef>
 #include <string>
+#include <optional>
 
 #include "scran_markers/scran_markers.hpp"
 
+#include "utils_other.h"
+
+template<typename Ngroups_, typename Ngenes_, typename Nquantiles_>
 inline void initialize_summary_buffers(
-    const int num_groups,
-    const int num_genes,
+    const Ngroups_ num_groups,
+    const Ngenes_ num_genes,
     std::vector<scran_markers::SummaryBuffers<double, int> >& ptrs,
     const bool compute_min,
     std::vector<Rcpp::NumericVector>& min,
@@ -21,7 +25,7 @@ inline void initialize_summary_buffers(
     std::vector<Rcpp::NumericVector>& median,
     const bool compute_max,
     std::vector<Rcpp::NumericVector>& max,
-    const std::size_t num_quantiles,
+    const Nquantiles_ num_quantiles,
     std::vector<std::vector<Rcpp::NumericVector> >& quantiles,
     const bool compute_min_rank,
     std::vector<Rcpp::IntegerVector>& min_rank
@@ -47,7 +51,7 @@ inline void initialize_summary_buffers(
         min_rank.reserve(num_groups);
     }
 
-    for (int g = 0; g < num_groups; ++g) {
+    for (I<decltype(num_groups)> g = 0; g < num_groups; ++g) {
         auto& curptr = ptrs[g];
         if (compute_min) {
             min.emplace_back(num_genes);
@@ -70,7 +74,7 @@ inline void initialize_summary_buffers(
             quantiles.back().reserve(num_quantiles);
             curptr.quantiles.emplace();
             curptr.quantiles->reserve(num_quantiles);
-            for (std::size_t q = 0; q < num_quantiles; ++q) {
+            for (I<decltype(num_groups)> q = 0; q < num_quantiles; ++q) {
                 quantiles.back().emplace_back(num_genes);
                 curptr.quantiles->push_back(quantiles.back().back().begin());
             }
@@ -82,59 +86,65 @@ inline void initialize_summary_buffers(
     }
 }
 
-inline std::size_t setup_quantile_options(const Rcpp::Nullable<Rcpp::NumericVector>& input, std::optional<std::vector<double> >& output) {
+inline auto setup_quantile_options(const Rcpp::Nullable<Rcpp::NumericVector>& input, std::optional<std::vector<double> >& output) {
     if (input.isNull()) {
-        return 0;
+        return sanisizer::as_size_type<Rcpp::NumericVector>(0);
     }
     Rcpp::NumericVector squantiles(input);
     output.emplace(squantiles.begin(), squantiles.end());
-    return sanisizer::cast<std::size_t>(squantiles.size());
+    return squantiles.size();
 }
 
-inline Rcpp::List format_summary_output(
-    const int num_groups,
+template<typename Ngroups_>
+Rcpp::List format_summary_output(
+    const Ngroups_ num_groups,
     const bool compute_min,
-    const std::vector<Rcpp::NumericVector>& min,
+    std::vector<Rcpp::NumericVector>& min,
     const bool compute_mean,
-    const std::vector<Rcpp::NumericVector>& mean,
+    std::vector<Rcpp::NumericVector>& mean,
     const bool compute_median,
-    const std::vector<Rcpp::NumericVector>& median,
+    std::vector<Rcpp::NumericVector>& median,
     const bool compute_max,
-    const std::vector<Rcpp::NumericVector>& max,
+    std::vector<Rcpp::NumericVector>& max,
     const bool compute_quantiles,
-    const std::vector<std::vector<Rcpp::NumericVector> >& output_quantiles,
+    std::vector<std::vector<Rcpp::NumericVector> >& output_quantiles,
     const bool compute_min_rank,
-    const std::vector<Rcpp::IntegerVector>& min_rank
+    std::vector<Rcpp::IntegerVector>& min_rank
 ) { 
     auto output = sanisizer::create<Rcpp::List>(num_groups);
-    for (int g = 0; g < num_groups; ++g) {
+    for (I<decltype(num_groups)> g = 0; g < num_groups; ++g) {
         Rcpp::List current;
+
         if (compute_min) {
-            current["min"] = min[g];
+            current["min"] = std::move(min[g]);
         }
         if (compute_mean) {
-            current["mean"] = mean[g];
+            current["mean"] = std::move(mean[g]);
         }
         if (compute_median) {
-            current["median"] = median[g];
+            current["median"] = std::move(median[g]);
         }
         if (compute_max) {
-            current["max"] = max[g];
+            current["max"] = std::move(max[g]);
         }
+
         if (compute_quantiles) {
-            const auto& oquantiles = output_quantiles[g];
-            auto num_quantiles = oquantiles.size();
+            auto& oquantiles = output_quantiles[g];
+            const auto num_quantiles = oquantiles.size();
             auto collected = sanisizer::create<Rcpp::List>(num_quantiles);
-            for (decltype(num_quantiles) q = 0; q < num_quantiles; ++q) {
-                collected[q] = oquantiles[q];
+            for (I<decltype(num_quantiles)> q = 0; q < num_quantiles; ++q) {
+                collected[q] = std::move(oquantiles[q]);
             }
             current["quantile"] = std::move(collected);
         }
+
         if (compute_min_rank) {
-            current["min.rank"] = min_rank[g];
+            current["min.rank"] = std::move(min_rank[g]);
         }
-        output[g] = current;
+
+        output[g] = std::move(current);
     }
+
     return output;
 }
 

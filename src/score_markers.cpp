@@ -1,22 +1,22 @@
-//#include "config.h"
+#include "config.h"
 
 #include <vector>
 #include <string>
 #include <stdexcept>
 
-#include "Rcpp.h"
-#include "Rtatami.h"
-
 #include "scran_markers/scran_markers.hpp"
 #include "scran_markers/score_markers_best.hpp"
+#include "sanisizer/sanisizer.hpp"
 
 #include "utils_block.h"
 #include "utils_markers.h"
+#include "utils_other.h"
 
-void configure_group_vectors(Rcpp::NumericMatrix& store, std::vector<double*>& ptrs, int NR, int num_groups) { 
-    store = Rcpp::NumericMatrix(NR, num_groups);
+template<typename Nrow_, typename Ngroups_>
+void configure_group_vectors(Rcpp::NumericMatrix& store, std::vector<double*>& ptrs, Nrow_ NR, Ngroups_ num_groups) { 
+    store = create_matrix<Rcpp::NumericMatrix>(NR, num_groups);
     ptrs.reserve(num_groups);
-    for (int g = 0; g < num_groups; ++g) {
+    for (I<decltype(num_groups)> g = 0; g < num_groups; ++g) {
         const auto out_offset = sanisizer::product_unsafe<std::size_t>(g, NR);
         ptrs.emplace_back(store.begin() + out_offset);
     }
@@ -75,7 +75,7 @@ Rcpp::List score_markers_summary(
     opt.block_weight_policy = parse_block_weight_policy(block_weight_policy);
     opt.variable_block_weight_parameters = parse_variable_block_weight(variable_block_weight);
     opt.block_quantile = block_quantile;
-    const std::size_t num_quantiles = setup_quantile_options(compute_summary_quantiles, opt.compute_summary_quantiles);
+    const auto num_quantiles = setup_quantile_options(compute_summary_quantiles, opt.compute_summary_quantiles);
 
     scran_markers::ScoreMarkersSummaryBuffers<double, int> buffers;
 
@@ -187,10 +187,10 @@ Rcpp::List score_markers_summary(
 
     Rcpp::List output;
     if (compute_group_mean) {
-        output["mean"] = means;
+        output["mean"] = std::move(means);
     }
     if (compute_group_detected) {
-        output["detected"] = detected;
+        output["detected"] = std::move(detected);
     }
 
     if (compute_cohens_d) {
@@ -345,23 +345,23 @@ Rcpp::List score_markers_pairwise(
 
     Rcpp::List output;
     if (compute_group_mean) {
-        output["mean"] = means;
+        output["mean"] = std::move(means);
     }
     if (compute_group_detected) {
-        output["detected"] = detected;
+        output["detected"] = std::move(detected);
     }
 
     if (compute_cohens_d) {
-        output["cohens.d"] = cohens_d;
+        output["cohens.d"] = std::move(cohens_d);
     }
     if (compute_auc) {
-        output["auc"] = auc;
+        output["auc"] = std::move(auc);
     }
     if (compute_delta_mean) {
-        output["delta.mean"] = delta_mean;
+        output["delta.mean"] = std::move(delta_mean);
     }
     if (compute_delta_detected) {
-        output["delta.detected"] = delta_detected;
+        output["delta.detected"] = std::move(delta_detected);
     }
 
     return output;
@@ -424,7 +424,7 @@ Rcpp::List score_markers_best(
 
     const auto transfer_groupwise = [&](Rcpp::NumericMatrix& store, std::vector<std::vector<double> >& vecs) -> void {
         store = Rcpp::NumericMatrix(NR, num_groups);
-        for (int g = 0; g < num_groups; ++g) {
+        for (I<decltype(num_groups)> g = 0; g < num_groups; ++g) {
             std::copy(vecs[g].begin(), vecs[g].end(), store.begin() + sanisizer::product_unsafe<std::size_t>(g, NR));
         }
     };
@@ -438,28 +438,31 @@ Rcpp::List score_markers_best(
 
     const auto transfer_effects = [&](Rcpp::List& store, std::vector<std::vector<std::vector<std::pair<int, double> > > >& vecs) -> void {
         store = Rcpp::List(num_groups);
-        for (int g = 0; g < num_groups; ++g) {
+        for (I<decltype(num_groups)> g = 0; g < num_groups; ++g) {
             Rcpp::List current(num_groups);
-            for (int g2 = 0; g2 < num_groups; ++g2) {
+            for (I<decltype(num_groups)> g2 = 0; g2 < num_groups; ++g2) {
                 if (g == g2) {
                     continue;
                 }
+
                 const auto& curtop = vecs[g][g2];
-                const std::size_t numtop = curtop.size();
-                Rcpp::IntegerVector indices(numtop);
-                Rcpp::NumericVector effects(numtop);
-                for (std::size_t t = 0; t < numtop; ++t) {
+                const auto numtop = curtop.size();
+                auto indices = sanisizer::create<Rcpp::IntegerVector>(numtop);
+                auto effects = sanisizer::create<Rcpp::NumericVector>(numtop);
+                for (I<decltype(numtop)> t = 0; t < numtop; ++t) {
                     indices[t] = curtop[t].first + 1;
                     effects[t] = curtop[t].second;
                 }
+
                 current[g2] = Rcpp::DataFrame::create(
-                    Rcpp::Named("index") = indices,
-                    Rcpp::Named("effect") = effects
+                    Rcpp::Named("index") = std::move(indices),
+                    Rcpp::Named("effect") = std::move(effects)
                 );
             }
-            store[g] = current;
+            store[g] = std::move(current);
         }
     };
+
     Rcpp::List cohens_d, auc, delta_mean, delta_detected;
     if (compute_cohens_d) {
         transfer_effects(cohens_d, res.cohens_d);
@@ -476,23 +479,23 @@ Rcpp::List score_markers_best(
 
     Rcpp::List output;
     if (compute_group_mean) {
-        output["mean"] = means;
+        output["mean"] = std::move(means);
     }
     if (compute_group_detected) {
-        output["detected"] = detected;
+        output["detected"] = std::move(detected);
     }
 
     if (compute_cohens_d) {
-        output["cohens.d"] = cohens_d;
+        output["cohens.d"] = std::move(cohens_d);
     }
     if (compute_auc) {
-        output["auc"] = auc;
+        output["auc"] = std::move(auc);
     }
     if (compute_delta_mean) {
-        output["delta.mean"] = delta_mean;
+        output["delta.mean"] = std::move(delta_mean);
     }
     if (compute_delta_detected) {
-        output["delta.detected"] = delta_detected;
+        output["delta.detected"] = std::move(delta_detected);
     }
 
     return output;

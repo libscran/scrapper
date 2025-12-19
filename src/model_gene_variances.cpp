@@ -1,19 +1,20 @@
-//#include "config.h"
+#include "config.h"
 
 #include <vector>
 #include <stdexcept>
+#include <string>
 
-#include "Rcpp.h"
-#include "Rtatami.h"
 #include "scran_variances/scran_variances.hpp"
+#include "sanisizer/sanisizer.hpp"
 
 #include "utils_block.h"
+#include "utils_other.h"
 
 //[[Rcpp::export(rng=false)]]
 Rcpp::List model_gene_variances(
     SEXP x,
     Rcpp::Nullable<Rcpp::IntegerVector> block,
-    size_t nblocks,
+    int nblocks,
     std::string block_average_policy,
     std::string block_weight_policy,
     Rcpp::NumericVector variable_block_weight,
@@ -25,8 +26,8 @@ Rcpp::List model_gene_variances(
     bool use_min_width,
     double min_width,
     int min_window_count,
-    int num_threads)
-{
+    int num_threads
+) {
     scran_variances::ModelGeneVariancesOptions opt;
     opt.fit_variance_trend_options.mean_filter = mean_filter;
     opt.fit_variance_trend_options.minimum_mean = min_mean;
@@ -51,9 +52,10 @@ Rcpp::List model_gene_variances(
 
     auto raw_mat = Rtatami::BoundNumericPointer(x);
     const auto& mat = raw_mat->ptr;
-    size_t nc = mat->ncol();
-    size_t nr = mat->nrow();
+    const auto nc = mat->ncol();
+    const auto nr = mat->nrow();
 
+    sanisizer::as_size_type<Rcpp::NumericVector>(nr);
     Rcpp::NumericVector means(nr), variances(nr), fitted(nr), residuals(nr);
     scran_variances::ModelGeneVariancesBuffers<double> buffers;
     buffers.means = means.begin();
@@ -64,13 +66,13 @@ Rcpp::List model_gene_variances(
     auto block_info = MaybeBlock(block);
     auto ptr = block_info.get();
     if (ptr) {
-        if (block_info.size() != nc) {
+        if (!sanisizer::is_equal(block_info.size(), nc)) {
             throw std::runtime_error("'block' must be the same length as the number of cells");
         }
 
         scran_variances::ModelGeneVariancesBlockedBuffers<double> bbuffers;
         bbuffers.average = buffers;
-        bbuffers.per_block.resize(nblocks);
+        sanisizer::resize(bbuffers.per_block, nblocks);
 
         std::vector<Rcpp::NumericVector> block_mean, block_var, block_fit, block_res;
         block_mean.reserve(nblocks);
@@ -78,7 +80,7 @@ Rcpp::List model_gene_variances(
         block_fit.reserve(nblocks);
         block_res.reserve(nblocks);
 
-        for (size_t b = 0; b < nblocks; ++b) {
+        for (I<decltype(nblocks)> b = 0; b < nblocks; ++b) {
             block_mean.emplace_back(nr);
             bbuffers.per_block[b].means = block_mean.back().begin();
             block_var.emplace_back(nr);
@@ -91,8 +93,8 @@ Rcpp::List model_gene_variances(
 
         scran_variances::model_gene_variances_blocked(*mat, ptr, bbuffers, opt);
 
-        Rcpp::List pb(nblocks);
-        for (size_t b = 0; b < nblocks; ++b) {
+        auto pb = sanisizer::create<Rcpp::List>(nblocks);
+        for (I<decltype(nblocks)> b = 0; b < nblocks; ++b) {
             pb[b] = Rcpp::List::create(
                 Rcpp::Named("means") = block_mean[b],
                 Rcpp::Named("variances") = block_var[b],

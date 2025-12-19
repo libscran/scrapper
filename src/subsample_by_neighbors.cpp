@@ -1,6 +1,4 @@
-//#include "config.h"
-
-#include "Rcpp.h"
+#include "config.h"
 
 #include "nenesub/nenesub.hpp"
 #include "tatami/tatami.hpp"

@@ -1,25 +1,24 @@
-//#include "config.h"
+#include "config.h"
 
 #include <vector>
 #include <algorithm>
 #include <string>
 #include <stdexcept>
 
-#include "Rcpp.h"
-#include "Rtatami.h"
 #include "scran_pca/scran_pca.hpp"
 
 #include "utils_block.h"
+#include "utils_other.h"
 
 static Rcpp::NumericMatrix transfer(const Eigen::MatrixXd& x) {
-    Rcpp::NumericMatrix output(x.rows(), x.cols());
+    auto output = create_matrix<Rcpp::NumericMatrix>(x.rows(), x.cols());
     static_assert(!Eigen::MatrixXd::IsRowMajor);
     std::copy_n(x.data(), output.size(), output.begin());
     return output;
 }
 
 static Rcpp::NumericVector transfer(const Eigen::VectorXd& x) {
-    Rcpp::NumericVector output(x.size());
+    auto output = sanisizer::create<Rcpp::NumericVector>(x.size());
     std::copy(x.begin(), x.end(), output.begin());
     return output;
 }
@@ -72,7 +71,7 @@ Rcpp::List run_pca(
     };
 
     if (ptr) {
-        if (block_info.size() != static_cast<size_t>(mat->ptr->ncol())) {
+        if (!sanisizer::is_equal(block_info.size(), mat->ptr->ncol())) {
             throw std::runtime_error("'block' must be the same length as the number of cells");
         }
 

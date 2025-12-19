@@ -1,8 +1,14 @@
-//#include "config.h"
+#include "config.h"
 
-#include "Rcpp.h"
+#include <string>
+#include <memory>
+#include <stdexcept>
+#include <cstddef>
+
 #include "mnncorrect/mnncorrect.hpp"
-#include "BiocNeighbors.h"
+#include "sanisizer/sanisizer.hpp"
+
+#include "utils_other.h"
 
 //[[Rcpp::export(rng=false)]]
 Rcpp::List correct_mnn(
@@ -34,14 +40,14 @@ Rcpp::List correct_mnn(
     BiocNeighbors::BuilderPointer ptr(builder);
     opts.builder = std::shared_ptr<BiocNeighbors::Builder>(std::shared_ptr<BiocNeighbors::Builder>{}, &(*ptr)); // aliasing constructor to no-op destruction.
 
-    if (x.ncol() != block.size()) {
+    if (!sanisizer::is_equal(x.ncol(), block.size())) {
         throw std::runtime_error("length of 'block' should equal the number of columns in 'x'");
     }
 
-    Rcpp::NumericMatrix output(x.nrow(), x.ncol());
+    auto output = create_matrix<Rcpp::NumericMatrix>(x.nrow(), x.ncol());
     mnncorrect::compute(
-        x.nrow(),
-        x.ncol(),
+        sanisizer::cast<std::size_t>(x.nrow()),
+        sanisizer::cast<int>(x.ncol()),
         static_cast<const double*>(x.begin()),
         static_cast<const int*>(block.begin()),
         static_cast<double*>(output.begin()),

@@ -1,11 +1,10 @@
-//#include "config.h"
+#include "config.h"
 
-#include <vector>
 #include <stdexcept>
+#include <cstddef>
 
-#include "Rcpp.h"
 #include "scran_qc/scran_qc.hpp"
-#include "Rtatami.h"
+#include "sanisizer/sanisizer.hpp"
 
 #include "utils_block.h"
 #include "utils_qc.h"
@@ -14,10 +13,12 @@
 Rcpp::List compute_crispr_qc_metrics(SEXP x, int num_threads) {
     auto raw_mat = Rtatami::BoundNumericPointer(x);
     const auto& mat = raw_mat->ptr;
-    size_t nc = mat->ncol();
+    const auto nc = mat->ncol();
 
     // Creating output containers.
+    sanisizer::as_size_type<Rcpp::NumericVector>(nc);
     Rcpp::NumericVector sums(nc), max_value(nc);
+    sanisizer::as_size_type<Rcpp::IntegerVector>(nc);
     Rcpp::IntegerVector detected(nc), max_index(nc);
 
     scran_qc::ComputeCrisprQcMetricsBuffers<double, int, double, int> buffers;
@@ -47,20 +48,20 @@ public:
         }
 
         sums = metrics["sum"];
-        size_t ncells = sums.size();
+        const auto ncells = sums.size();
 
         detected = metrics["detected"];
-        if (ncells != static_cast<size_t>(detected.size())) {
+        if (!sanisizer::is_equal(ncells, detected.size())) {
             throw std::runtime_error("all 'metrics' vectors should have the same length");
         }
 
         max_value = metrics["max.value"];
-        if (ncells != static_cast<size_t>(max_value.size())) {
+        if (!sanisizer::is_equal(ncells, max_value.size())) {
             throw std::runtime_error("all 'metrics' vectors should have the same length");
         }
 
         max_index = metrics["max.index"];
-        if (ncells != static_cast<size_t>(max_index.size())) {
+        if (!sanisizer::is_equal(ncells, max_index.size())) {
             throw std::runtime_error("all 'metrics' vectors should have the same length");
         }
     }
@@ -70,7 +71,7 @@ private:
     Rcpp::IntegerVector detected, max_index;
 
 public:
-    size_t size() const {
+    auto size() const {
         return sums.size();
     }
 
@@ -88,7 +89,7 @@ public:
 Rcpp::List suggest_crispr_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::IntegerVector> block, double num_mads) {
     ConvertedCrisprQcMetrics all_metrics(metrics);
     auto buffers = all_metrics.to_buffer();
-    size_t ncells = all_metrics.size();
+    const auto ncells = all_metrics.size();
 
     scran_qc::ComputeCrisprQcFiltersOptions opt;
     opt.max_value_num_mads = num_mads;
@@ -96,17 +97,17 @@ Rcpp::List suggest_crispr_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp:
     auto block_info = MaybeBlock(block);
     auto ptr = block_info.get();
     if (ptr) {
-        if (block_info.size() != ncells) {
+        if (!sanisizer::is_equal(block_info.size(), ncells)) {
             throw std::runtime_error("'block' must be the same length as the number of cells");
         }
 
-        auto filt = scran_qc::compute_crispr_qc_filters_blocked(ncells, buffers, ptr, opt);
+        auto filt = scran_qc::compute_crispr_qc_filters_blocked(sanisizer::cast<std::size_t>(ncells), buffers, ptr, opt);
         const auto& mout = filt.get_max_value();
         return Rcpp::List::create(
             Rcpp::Named("max.value") = Rcpp::NumericVector(mout.begin(), mout.end())
         );
     } else {
-        auto filt = scran_qc::compute_crispr_qc_filters(ncells, buffers, opt);
+        auto filt = scran_qc::compute_crispr_qc_filters(sanisizer::cast<std::size_t>(ncells), buffers, opt);
         return Rcpp::List::create(
             Rcpp::Named("max.value") = Rcpp::NumericVector::create(filt.get_max_value())
         );
@@ -117,34 +118,34 @@ Rcpp::List suggest_crispr_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp:
 Rcpp::LogicalVector filter_crispr_qc_metrics(Rcpp::List filters, Rcpp::List metrics, Rcpp::Nullable<Rcpp::IntegerVector> block) {
     ConvertedCrisprQcMetrics all_metrics(metrics);
     auto mbuffers = all_metrics.to_buffer();
-    size_t ncells = all_metrics.size();
+    const auto ncells = all_metrics.size();
 
     if (filters.size() != 1) {
         throw std::runtime_error("'filters' should have the same format as the output of 'suggestCrisprQcFilters'");
     }
 
-    Rcpp::LogicalVector keep(ncells);
+    auto keep = sanisizer::create<Rcpp::LogicalVector>(ncells);
     auto kptr = static_cast<int*>(keep.begin());
 
     auto block_info = MaybeBlock(block);
     auto ptr = block_info.get();
     if (ptr) {
-        if (block_info.size() != ncells) {
+        if (!sanisizer::is_equal(block_info.size(), ncells)) {
             throw std::runtime_error("'block' must be the same length as the number of cells");
         }
 
         scran_qc::CrisprQcBlockedFilters filt;
 
         Rcpp::NumericVector max_value(filters["max.value"]);
-        size_t nblocks = max_value.size();
+        const auto nblocks = max_value.size();
         copy_filters_blocked(nblocks, max_value, filt.get_max_value());
 
-        filt.filter(ncells, mbuffers, ptr, kptr);
+        filt.filter(sanisizer::cast<std::size_t>(ncells), mbuffers, ptr, kptr);
 
     } else {
         scran_qc::CrisprQcFilters filt;
         filt.get_max_value() = parse_filter_unblocked(filters["max.value"], "filters$max.value");
-        filt.filter(ncells, mbuffers, kptr);
+        filt.filter(sanisizer::cast<std::size_t>(ncells), mbuffers, kptr);
     }
 
     return keep;

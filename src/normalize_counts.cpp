@@ -1,10 +1,8 @@
-//#include "config.h"
+#include "config.h"
 
 #include <vector>
 
-#include "Rcpp.h"
 #include "scran_norm/scran_norm.hpp"
-#include "Rtatami.h"
 
 //[[Rcpp::export(rng=false)]]
 SEXP normalize_counts(SEXP x, Rcpp::NumericVector size_factors, bool log, double pseudo_count, double log_base, bool preserve_sparsity) {

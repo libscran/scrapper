@@ -1,5 +1,4 @@
-#include "Rtatami.h"
-#include "Rcpp.h"
+#include "config.h"
 
 //[[Rcpp::export(rng=false)]]
 SEXP set_executor(SEXP ptr) {

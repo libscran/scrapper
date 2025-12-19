@@ -1,5 +1,16 @@
-#include "Rcpp.h"
+#include "config.h"
+
+#include <string>
+#include <vector>
+#include <memory>
+#include <stdexcept>
+#include <cstddef>
+#include <algorithm>
+
 #include "kmeans/kmeans.hpp"
+#include "sanisizer/sanisizer.hpp"
+
+#include "utils_other.h"
 
 //[[Rcpp::export(rng=false)]]
 Rcpp::List cluster_kmeans(
@@ -16,12 +27,12 @@ Rcpp::List cluster_kmeans(
     int seed,
     int nthreads)
 {
-    const auto ndim = sanisizer::cast<std::size_t>(data.nrow());
-    const auto nobs = sanisizer::cast<int>(data.ncol());
+    const auto ndim = data.nrow();
+    const auto nobs = data.ncol();
     auto ptr = static_cast<const double*>(data.begin());
 
-    Rcpp::NumericMatrix centers(ndim, nclusters);
-    Rcpp::IntegerVector clusters(nobs);
+    auto centers = create_matrix<Rcpp::NumericMatrix>(ndim, nclusters);
+    auto clusters = sanisizer::create<Rcpp::IntegerVector>(nobs);
     auto center_ptr = static_cast<double*>(centers.begin());
     auto cluster_ptr = static_cast<int*>(clusters.begin());
 
@@ -59,13 +70,16 @@ Rcpp::List cluster_kmeans(
         rptr.reset(ptr);
     }
 
-    auto out = kmeans::compute(kmeans::SimpleMatrix<int, double>(ndim, nobs, ptr), *iptr, *rptr, nclusters, center_ptr, cluster_ptr);
+    // Explicitly casting to avoid troubles later on.
+    const auto ndim_s = sanisizer::cast<std::size_t>(ndim);
+    const auto nobs_i = sanisizer::cast<int>(nobs);
+    auto out = kmeans::compute(kmeans::SimpleMatrix<int, double>(ndim_s, nobs_i, ptr), *iptr, *rptr, nclusters, center_ptr, cluster_ptr);
 
-    const auto actual_k = kmeans::remove_unused_centers(ndim, nobs, cluster_ptr, nclusters, center_ptr, out.sizes);
+    const auto actual_k = kmeans::remove_unused_centers(ndim_s, nobs_i, cluster_ptr, nclusters, center_ptr, out.sizes);
     if (actual_k != nclusters) {
-        Rcpp::NumericMatrix new_centers(ndim, actual_k);
+        auto new_centers = create_matrix<Rcpp::NumericMatrix>(ndim, actual_k);
         std::copy_n(centers.begin(), new_centers.size(), new_centers.begin());
-        centers = new_centers;
+        centers = std::move(new_centers);
     }
 
     return Rcpp::List::create(

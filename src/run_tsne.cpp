@@ -1,10 +1,11 @@
-//#include "config.h"
+#include "config.h"
 
-#include "Rcpp.h"
-#include "knncolle/knncolle.hpp"
+#include <cstddef>
+
 #include "qdtsne/qdtsne.hpp"
 
 #include "utils_neighbors.h"
+#include "utils_other.h"
 
 //[[Rcpp::export(rng=false)]]
 SEXP run_tsne(
@@ -39,12 +40,12 @@ SEXP run_tsne(
     opt.num_threads = num_threads;
 
     auto neighbors = unpack_neighbors<int, double>(nnidx, nndist);
-    size_t nobs = neighbors.size();
+    const auto nobs = neighbors.size();
     auto status = qdtsne::initialize<2>(std::move(neighbors), opt);
 
-    Rcpp::NumericMatrix output(2, nobs);
+    auto output = create_matrix<Rcpp::NumericMatrix>(2, nobs);
     auto optr = static_cast<double*>(output.begin());
-    qdtsne::initialize_random<2>(optr, nobs, seed);
+    qdtsne::initialize_random<2>(optr, sanisizer::cast<std::size_t>(nobs), seed);
     status.run(optr);
 
     return output;

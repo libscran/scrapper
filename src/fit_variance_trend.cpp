@@ -1,10 +1,10 @@
-//#include "config.h"
+#include "config.h"
 
-#include <vector>
 #include <stdexcept>
+#include <cstddef>
 
-#include "Rcpp.h"
 #include "scran_variances/scran_variances.hpp"
+#include "sanisizer/sanisizer.hpp"
 
 //[[Rcpp::export(rng=false)]]
 Rcpp::List fit_variance_trend(
@@ -29,15 +29,16 @@ Rcpp::List fit_variance_trend(
     opt.minimum_window_count = min_window_count;
     opt.num_threads = num_threads;
 
-    size_t n = means.size();
-    if (n != static_cast<size_t>(variances.size())) {
+    const auto n = means.size();
+    if (!sanisizer::is_equal(n, variances.size())) {
         throw std::runtime_error("'means' and 'variances' should have the same length");
     }
 
+    sanisizer::as_size_type<Rcpp::NumericVector>(n);
     Rcpp::NumericVector fitted(n), residuals(n);
     scran_variances::FitVarianceTrendWorkspace<double> wrk; 
     scran_variances::fit_variance_trend(
-        n,
+        sanisizer::cast<std::size_t>(n),
         static_cast<const double*>(means.begin()),
         static_cast<const double*>(variances.begin()),
         static_cast<double*>(fitted.begin()),

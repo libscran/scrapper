@@ -1,11 +1,11 @@
-//#include "config.h"
+#include "config.h"
 
 #include <vector>
+#include <cstddef>
 #include <stdexcept>
 
-#include "Rcpp.h"
 #include "scran_qc/scran_qc.hpp"
-#include "Rtatami.h"
+#include "sanisizer/sanisizer.hpp"
 
 #include "utils_block.h"
 #include "utils_qc.h"
@@ -14,8 +14,8 @@
 Rcpp::List compute_rna_qc_metrics(SEXP x, Rcpp::List subsets, int num_threads) {
     auto raw_mat = Rtatami::BoundNumericPointer(x);
     const auto& mat = raw_mat->ptr;
-    size_t nc = mat->ncol();
-    size_t nr = mat->nrow();
+    const auto nc = mat->ncol();
+    const auto nr = mat->nrow();
 
     // Setting up the subsets.
     std::vector<Rcpp::LogicalVector> in_subsets;
@@ -25,9 +25,9 @@ Rcpp::List compute_rna_qc_metrics(SEXP x, Rcpp::List subsets, int num_threads) {
     // Creating output containers.
     scran_qc::ComputeRnaQcMetricsBuffers<double, int> buffers;
 
-    Rcpp::NumericVector sums(nc);
+    auto sums = sanisizer::create<Rcpp::NumericVector>(nc);
     buffers.sum = sums.begin();
-    Rcpp::IntegerVector detected(nc);
+    auto detected = sanisizer::create<Rcpp::IntegerVector>(nc);
     buffers.detected = detected.begin();
     std::vector<Rcpp::NumericVector> out_subsets;
     prepare_subset_metrics(nc, sub_ptrs.size(), out_subsets, buffers.subset_proportion); 
@@ -52,10 +52,10 @@ public:
         }
 
         sums = metrics["sum"];
-        size_t ncells = sums.size();
+        const auto ncells = sums.size();
 
         detected = metrics["detected"];
-        if (ncells != static_cast<size_t>(detected.size())) {
+        if (!sanisizer::is_equal(ncells, detected.size())) {
             throw std::runtime_error("all 'metrics' vectors should have the same length");
         }
 
@@ -69,11 +69,11 @@ private:
     std::vector<Rcpp::NumericVector> subsets;
 
 public:
-    size_t size() const {
+    auto size() const {
         return sums.size();
     }
 
-    size_t num_subsets() const {
+    auto num_subsets() const {
         return subsets.size();
     }
 
@@ -92,7 +92,7 @@ public:
 Rcpp::List suggest_rna_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::IntegerVector> block, double num_mads) {
     ConvertedRnaQcMetrics all_metrics(metrics);
     auto buffers = all_metrics.to_buffer();
-    size_t ncells = all_metrics.size();
+    const auto ncells = all_metrics.size();
 
     scran_qc::ComputeRnaQcFiltersOptions opt;
     opt.sum_num_mads = num_mads;
@@ -102,11 +102,11 @@ Rcpp::List suggest_rna_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::In
     auto block_info = MaybeBlock(block);
     auto ptr = block_info.get();
     if (ptr) {
-        if (block_info.size() != ncells) {
+        if (!sanisizer::is_equal(block_info.size(), ncells)) {
             throw std::runtime_error("'block' must be the same length as the number of cells");
         }
 
-        auto filt = scran_qc::compute_rna_qc_filters_blocked(ncells, buffers, ptr, opt);
+        auto filt = scran_qc::compute_rna_qc_filters_blocked(sanisizer::cast<std::size_t>(ncells), buffers, ptr, opt);
         const auto& sout = filt.get_sum();
         const auto& dout = filt.get_detected();
         return Rcpp::List::create(
@@ -114,8 +114,9 @@ Rcpp::List suggest_rna_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::In
             Rcpp::Named("detected") = Rcpp::NumericVector(dout.begin(), dout.end()),
             Rcpp::Named("subsets") = create_subset_filters(filt.get_subset_proportion())
         );
+
     } else {
-        auto filt = scran_qc::compute_rna_qc_filters(ncells, buffers, opt);
+        auto filt = scran_qc::compute_rna_qc_filters(sanisizer::cast<std::size_t>(ncells), buffers, opt);
         const auto& ssout = filt.get_subset_proportion();
         return Rcpp::List::create(
             Rcpp::Named("sum") = Rcpp::NumericVector::create(filt.get_sum()),
@@ -129,39 +130,39 @@ Rcpp::List suggest_rna_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::In
 Rcpp::LogicalVector filter_rna_qc_metrics(Rcpp::List filters, Rcpp::List metrics, Rcpp::Nullable<Rcpp::IntegerVector> block) {
     ConvertedRnaQcMetrics all_metrics(metrics);
     auto mbuffers = all_metrics.to_buffer();
-    size_t ncells = all_metrics.size();
-    size_t nsubs = all_metrics.num_subsets();
+    const auto ncells = all_metrics.size();
+    const auto nsubs = all_metrics.num_subsets();
 
     if (filters.size() != 3) {
         throw std::runtime_error("'filters' should have the same format as the output of 'suggestRnaQcFilters'");
     }
 
-    Rcpp::LogicalVector keep(ncells);
+    auto keep = sanisizer::create<Rcpp::LogicalVector>(ncells);
     auto kptr = static_cast<int*>(keep.begin());
 
     auto block_info = MaybeBlock(block);
     auto ptr = block_info.get();
     if (ptr) {
-        if (block_info.size() != ncells) {
+        if (!sanisizer::is_equal(block_info.size(), ncells)) {
             throw std::runtime_error("'block' must be the same length as the number of cells");
         }
 
         scran_qc::RnaQcBlockedFilters filt;
 
         Rcpp::NumericVector sum(filters["sum"]);
-        size_t nblocks = sum.size();
+        const auto nblocks = sum.size();
         copy_filters_blocked(nblocks, sum, filt.get_sum());
         copy_filters_blocked(nblocks, filters["detected"], filt.get_detected());
         copy_subset_filters_blocked(nsubs, nblocks, filters["subsets"], filt.get_subset_proportion());
 
-        filt.filter(ncells, mbuffers, ptr, kptr);
+        filt.filter(sanisizer::cast<std::size_t>(ncells), mbuffers, ptr, kptr);
 
     } else {
         scran_qc::RnaQcFilters filt;
         filt.get_sum() = parse_filter_unblocked(filters["sum"], "filters$sum");
         filt.get_detected() = parse_filter_unblocked(filters["detected"], "filters$detected");
         copy_subset_filters_unblocked(nsubs, filters["subsets"], filt.get_subset_proportion());
-        filt.filter(ncells, mbuffers, kptr);
+        filt.filter(sanisizer::cast<std::size_t>(ncells), mbuffers, kptr);
     }
 
     return keep;

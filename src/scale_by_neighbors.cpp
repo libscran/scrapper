@@ -1,9 +1,14 @@
-//#include "config.h"
+#include "config.h"
+
+#include <vector>
+#include <string>
+#include <memory>
 
 #include "mumosa/mumosa.hpp"
+#include "sanisizer/sanisizer.hpp"
+
 #include "utils_block.h"
-#include "BiocNeighbors.h"
-#include "Rcpp.h"
+#include "utils_other.h"
 
 // [[Rcpp::export(rng=false)]]
 Rcpp::NumericVector scale_by_neighbors(
@@ -16,7 +21,7 @@ Rcpp::NumericVector scale_by_neighbors(
     int num_threads,
     SEXP nn_builder
 ) {
-    auto nmod = embedding.size();
+    const auto nmod = embedding.size();
     std::vector<std::pair<double, double> > values;
     values.reserve(nmod);
 
@@ -36,9 +41,15 @@ Rcpp::NumericVector scale_by_neighbors(
         auto work = mumosa::create_workspace<double>(factory.sizes(), opt);
 
         std::vector<std::shared_ptr<const BiocNeighbors::Prebuilt> > prebuilts;
-        for (decltype(nmod) x = 0; x < nmod; ++x) {
+        for (I<decltype(nmod)> x = 0; x < nmod; ++x) {
             Rcpp::NumericMatrix current(embedding[x]);
-            factory.build(current.rows(), static_cast<const double*>(current.begin()), *builder, prebuilts, buff);
+            factory.build(  
+                sanisizer::cast<std::size_t>(current.rows()),
+                static_cast<const double*>(current.begin()),
+                *builder,
+                prebuilts,
+                buff
+            );
             values.push_back(mumosa::compute_distance_blocked(prebuilts, work, opt));
         }
 
@@ -48,9 +59,13 @@ Rcpp::NumericVector scale_by_neighbors(
         opt.num_neighbors = num_neighbors;
         opt.num_threads = num_threads;
 
-        for (decltype(nmod) x = 0; x < nmod; ++x) {
+        for (I<decltype(nmod)> x = 0; x < nmod; ++x) {
             Rcpp::NumericMatrix current(embedding[x]);
-            const auto prebuilt = builder->build_unique(knncolle::SimpleMatrix(current.rows(), num_cells, static_cast<const double*>(current.begin())));
+            const auto prebuilt = builder->build_unique(
+                knncolle::SimpleMatrix(sanisizer::cast<std::size_t>(current.rows()),
+                num_cells,
+                static_cast<const double*>(current.begin()))
+            );
             values.push_back(mumosa::compute_distance<int, double>(*prebuilt, dist.data(), opt));
         }
     }

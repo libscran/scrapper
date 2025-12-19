@@ -1,17 +1,17 @@
 #ifndef UTILS_BLOCK_H
 #define UTILS_BLOCK_H
 
-#include <algorithm>
+#include "config.h"
+
 #include <stdexcept>
 #include <string>
-
-#include "Rcpp.h"
 
 #include "scran_blocks/scran_blocks.hpp"
 
 inline scran_blocks::WeightPolicy parse_block_weight_policy(const std::string& block_weight_policy) {
-    scran_blocks::WeightPolicy output  = scran_blocks::WeightPolicy::NONE;
+    scran_blocks::WeightPolicy output  = scran_blocks::WeightPolicy::SIZE;
     if (block_weight_policy == "none" || block_weight_policy == "size") {
+        ;
     } else if (block_weight_policy == "equal") {
         output = scran_blocks::WeightPolicy::EQUAL;
     } else if (block_weight_policy == "variable") {
@@ -46,7 +46,7 @@ public:
         return (my_has_block ? static_cast<const int*>(my_block.begin()) : NULL);
     }
 
-    size_t size() const {
+    auto size() const {
         return my_block.size();
     }
 

@@ -1,18 +1,20 @@
-//#include "config.h"
+#include "config.h"
 
-#include <vector>
 #include <stdexcept>
+#include <string>
+#include <cstddef>
 
-#include "Rcpp.h"
 #include "scran_graph_cluster/build_snn_graph.hpp"
 #include "tatami/tatami.hpp"
 
 #include "utils_graph.h"
+#include "utils_other.h"
 
 //[[Rcpp::export(rng=false)]]
 SEXP build_snn_graph(Rcpp::IntegerMatrix neighbors, std::string scheme, int num_threads) {
     const int* nptr = neighbors.begin();
-    size_t nrow = neighbors.rows();
+    const auto nrow = neighbors.rows();
+    const auto ncells = neighbors.cols();
 
     scran_graph_cluster::BuildSnnGraphOptions opt;
     opt.num_threads = num_threads;
@@ -26,12 +28,11 @@ SEXP build_snn_graph(Rcpp::IntegerMatrix neighbors, std::string scheme, int num_
         throw std::runtime_error("unknown weighting scheme '" + scheme + "'");
     }
 
-    size_t ncells = neighbors.cols();
     scran_graph_cluster::BuildSnnGraphResults<igraph_integer_t, igraph_real_t> buffers;
     scran_graph_cluster::build_snn_graph(
         ncells,
         [&](int i) -> tatami::ArrayView<int> {
-            return tatami::ArrayView<int>(nptr + nrow * static_cast<size_t>(i), nrow);
+            return tatami::ArrayView<int>(nptr + sanisizer::product_unsafe<std::size_t>(nrow, i), nrow);
         },
         [](int i) -> int {
             return i - 1;
@@ -41,7 +42,7 @@ SEXP build_snn_graph(Rcpp::IntegerMatrix neighbors, std::string scheme, int num_
     );
 
     GraphComponentsPointer output(new GraphComponents);
-    output->vertices = ncells;
+    output->vertices = sanisizer::cast<std::size_t>(ncells);
     output->weighted = true;
     output->edges = std::move(buffers.edges);
     output->weights = std::move(buffers.weights);
@@ -53,9 +54,9 @@ Rcpp::List graph_to_list(SEXP ptr0) {
     GraphComponentsPointer ptr(ptr0);
     const auto& edges = ptr->edges;
 
-    size_t nedges = edges.size();
-    Rcpp::IntegerVector edges_p1(nedges);
-    for (size_t e = 0; e < nedges; ++e) {
+    const auto nedges = edges.size();
+    auto edges_p1 = sanisizer::create<Rcpp::IntegerVector>(nedges);
+    for (I<decltype(nedges)> e = 0; e < nedges; ++e) {
         edges_p1[e] = edges[e] + 1; // get to 1-based indexing.
     }
 
@@ -87,10 +88,10 @@ SEXP list_to_graph(Rcpp::List contents) {
     output->vertices = vertices[0];
 
     Rcpp::IntegerVector edges_p1(contents[1]);
-    size_t nedges = edges_p1.size();
+    const auto nedges = edges_p1.size();
     auto& edges = output->edges;
-    edges.resize(nedges);
-    for (size_t i = 0; i < nedges; ++i) {
+    sanisizer::resize(edges, nedges);
+    for (I<decltype(nedges)> i = 0; i < nedges; ++i) {
         edges[i] = edges_p1[i] - 1; // get back to 0-based indexing.
     }
 

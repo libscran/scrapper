@@ -1,9 +1,9 @@
-//#include "config.h"
+#include "config.h"
 
-#include <vector>
+#include <cstddef>
 
-#include "Rcpp.h"
 #include "scran_norm/scran_norm.hpp"
+#include "sanisizer/sanisizer.hpp"
 
 //[[Rcpp::export(rng=false)]]
 Rcpp::NumericVector sanitize_size_factors(Rcpp::NumericVector size_factors, bool handle_zero, bool handle_negative, bool handle_nan, bool handle_infinite) {
@@ -13,6 +13,6 @@ Rcpp::NumericVector sanitize_size_factors(Rcpp::NumericVector size_factors, bool
     opt.handle_infinite = (handle_infinite ? scran_norm::SanitizeAction::SANITIZE : scran_norm::SanitizeAction::IGNORE);
     opt.handle_nan = (handle_nan ? scran_norm::SanitizeAction::SANITIZE : scran_norm::SanitizeAction::IGNORE);
     auto output = Rcpp::clone(size_factors);
-    scran_norm::sanitize_size_factors(output.size(), static_cast<double*>(output.begin()), opt);
+    scran_norm::sanitize_size_factors(sanisizer::cast<std::size_t>(output.size()), static_cast<double*>(output.begin()), opt);
     return output; 
 }

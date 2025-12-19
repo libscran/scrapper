@@ -1,10 +1,15 @@
-//#include "config.h"
+#include "config.h"
 
-#include "Rcpp.h"
+#include <string>
+#include <stdexcept>
+#include <vector>
+#include <algorithm>
+
 #include "umappp/umappp.hpp"
 #include "sanisizer/sanisizer.hpp"
 
 #include "utils_neighbors.h"
+#include "utils_other.h"
 
 //[[Rcpp::export(rng=false)]]
 SEXP run_umap(
@@ -35,7 +40,7 @@ SEXP run_umap(
     bool parallel_optimization)
 {
     auto neighbors = unpack_neighbors<int, float>(nnidx, nndist);
-    size_t nobs = neighbors.size();
+    const auto nobs = neighbors.size();
 
     umappp::Options opt;
     opt.local_connectivity = local_connectivity;
@@ -101,10 +106,10 @@ SEXP run_umap(
     opt.num_threads = num_threads;
     opt.parallel_optimization = parallel_optimization;
 
-    auto status = umappp::initialize(std::move(neighbors), num_dim, embedding.data(), opt);
+    auto status = umappp::initialize(std::move(neighbors), sanisizer::cast<std::size_t>(num_dim), embedding.data(), opt);
     status.run(embedding.data());
 
-    Rcpp::NumericMatrix output(num_dim, nobs);
+    auto output = create_matrix<Rcpp::NumericMatrix>(num_dim, nobs);
     std::copy(embedding.begin(), embedding.end(), output.begin());
     return output;
 }

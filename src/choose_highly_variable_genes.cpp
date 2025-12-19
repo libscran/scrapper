@@ -1,9 +1,9 @@
-//#include "config.h"
+#include "config.h"
 
-#include <vector>
+#include <stdexcept>
 
-#include "Rcpp.h"
 #include "scran_variances/scran_variances.hpp"
+#include "sanisizer/sanisizer.hpp"
 
 //[[Rcpp::export(rng=false)]]
 Rcpp::IntegerVector choose_highly_variable_genes(Rcpp::NumericVector stats, int top, bool larger, bool keep_ties, Rcpp::Nullable<Rcpp::NumericVector> bound) {
@@ -21,6 +21,6 @@ Rcpp::IntegerVector choose_highly_variable_genes(Rcpp::NumericVector stats, int 
         opt.bound = bnd[0];
     }
 
-    auto res = scran_variances::choose_highly_variable_genes_index(stats.size(), static_cast<const double*>(stats.begin()), opt);
+    auto res = scran_variances::choose_highly_variable_genes_index(sanisizer::cast<std::size_t>(stats.size()), static_cast<const double*>(stats.begin()), opt);
     return Rcpp::IntegerVector(res.begin(), res.end());
 }

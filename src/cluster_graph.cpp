@@ -1,12 +1,13 @@
-//#include "config.h"
+#include "config.h"
 
-#include <vector>
+#include <algorithm>
 #include <stdexcept>
+#include <string>
 
-#include "Rcpp.h"
 #include "scran_graph_cluster/scran_graph_cluster.hpp"
 
 #include "utils_graph.h"
+#include "utils_other.h"
 
 //[[Rcpp::export(rng=false)]]
 Rcpp::List cluster_multilevel(SEXP ptr0, double resolution, int seed) {
@@ -30,16 +31,16 @@ Rcpp::List cluster_multilevel(SEXP ptr0, double resolution, int seed) {
     scran_graph_cluster::ClusterMultilevelResults res;
     scran_graph_cluster::cluster_multilevel(graph.get(), weight_view_ptr, opt, res);
 
-    size_t nlevels = res.levels.nrow();
+    const auto nlevels = res.levels.nrow();
     Rcpp::List levels(nlevels);
-    for (size_t l = 0; l < nlevels; ++l) {
+    for (I<decltype(nlevels)> l = 0; l < nlevels; ++l) {
         auto incol = res.levels.row(l);
         levels[l] = Rcpp::IntegerVector(incol.begin(), incol.end());
     }
 
     return Rcpp::List::create(
         Rcpp::Named("membership") = Rcpp::IntegerVector(res.membership.begin(), res.membership.end()),
-        Rcpp::Named("levels") = levels,
+        Rcpp::Named("levels") = std::move(levels),
         Rcpp::Named("modularity") = Rcpp::NumericVector(res.modularity.begin(), res.modularity.end())
     );
 }
@@ -104,9 +105,9 @@ Rcpp::List cluster_walktrap(SEXP ptr0, int steps) {
     scran_graph_cluster::ClusterWalktrapResults res;
     scran_graph_cluster::cluster_walktrap(graph.get(), weight_view_ptr, opt, res);
 
-    size_t merge_ncol = res.merges.ncol();
-    Rcpp::IntegerMatrix merges(res.merges.nrow(), merge_ncol);
-    for (size_t m = 0; m < merge_ncol; ++m) {
+    const auto merge_ncol = res.merges.ncol();
+    auto merges = create_matrix<Rcpp::IntegerMatrix>(res.merges.nrow(), merge_ncol);
+    for (I<decltype(merge_ncol)> m = 0; m < merge_ncol; ++m) {
         auto incol = res.merges.column(m);
         auto outcol = merges.column(m);
         std::copy(incol.begin(), incol.end(), outcol.begin());
@@ -114,7 +115,7 @@ Rcpp::List cluster_walktrap(SEXP ptr0, int steps) {
 
     return Rcpp::List::create(
         Rcpp::Named("membership") = Rcpp::IntegerVector(res.membership.begin(), res.membership.end()),
-        Rcpp::Named("merges") = merges,
+        Rcpp::Named("merges") = std::move(merges),
         Rcpp::Named("modularity") = Rcpp::NumericVector(res.modularity.begin(), res.modularity.end())
     ); 
 }

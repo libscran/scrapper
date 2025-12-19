@@ -306,13 +306,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // model_gene_variances
-Rcpp::List model_gene_variances(SEXP x, Rcpp::Nullable<Rcpp::IntegerVector> block, size_t nblocks, std::string block_average_policy, std::string block_weight_policy, Rcpp::NumericVector variable_block_weight, double block_quantile, bool mean_filter, double min_mean, bool transform, double span, bool use_min_width, double min_width, int min_window_count, int num_threads);
+Rcpp::List model_gene_variances(SEXP x, Rcpp::Nullable<Rcpp::IntegerVector> block, int nblocks, std::string block_average_policy, std::string block_weight_policy, Rcpp::NumericVector variable_block_weight, double block_quantile, bool mean_filter, double min_mean, bool transform, double span, bool use_min_width, double min_width, int min_window_count, int num_threads);
 RcppExport SEXP _scrapper_model_gene_variances(SEXP xSEXP, SEXP blockSEXP, SEXP nblocksSEXP, SEXP block_average_policySEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP block_quantileSEXP, SEXP mean_filterSEXP, SEXP min_meanSEXP, SEXP transformSEXP, SEXP spanSEXP, SEXP use_min_widthSEXP, SEXP min_widthSEXP, SEXP min_window_countSEXP, SEXP num_threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type block(blockSEXP);
-    Rcpp::traits::input_parameter< size_t >::type nblocks(nblocksSEXP);
+    Rcpp::traits::input_parameter< int >::type nblocks(nblocksSEXP);
     Rcpp::traits::input_parameter< std::string >::type block_average_policy(block_average_policySEXP);
     Rcpp::traits::input_parameter< std::string >::type block_weight_policy(block_weight_policySEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type variable_block_weight(variable_block_weightSEXP);
