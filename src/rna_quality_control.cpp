@@ -47,9 +47,7 @@ Rcpp::List compute_rna_qc_metrics(SEXP x, Rcpp::List subsets, int num_threads) {
 class ConvertedRnaQcMetrics {
 public:
     ConvertedRnaQcMetrics(Rcpp::List metrics) {
-        if (metrics.size() != 3) {
-            throw std::runtime_error("'metrics' should have the same format as the output of 'computeRnaQcMetrics'");
-        }
+        check_names(metrics, { "sum", "detected", "subsets" });
 
         sums = metrics["sum"];
         const auto ncells = sums.size();
@@ -133,9 +131,7 @@ Rcpp::LogicalVector filter_rna_qc_metrics(Rcpp::List filters, Rcpp::List metrics
     const auto ncells = all_metrics.size();
     const auto nsubs = all_metrics.num_subsets();
 
-    if (filters.size() != 3) {
-        throw std::runtime_error("'filters' should have the same format as the output of 'suggestRnaQcFilters'");
-    }
+    check_names(metrics, { "sum", "detected", "subsets" });
 
     auto keep = sanisizer::create<Rcpp::LogicalVector>(ncells);
     auto kptr = static_cast<int*>(keep.begin());

@@ -43,9 +43,7 @@ Rcpp::List compute_crispr_qc_metrics(SEXP x, int num_threads) {
 class ConvertedCrisprQcMetrics {
 public:
     ConvertedCrisprQcMetrics(Rcpp::List metrics) {
-        if (metrics.size() != 4) {
-            throw std::runtime_error("'metrics' should have the same format as the output of 'computeCrisprQcMetrics'");
-        }
+        check_names(metrics, { "sum", "detected", "max.value", "max.index" });
 
         sums = metrics["sum"];
         const auto ncells = sums.size();
@@ -120,9 +118,7 @@ Rcpp::LogicalVector filter_crispr_qc_metrics(Rcpp::List filters, Rcpp::List metr
     auto mbuffers = all_metrics.to_buffer();
     const auto ncells = all_metrics.size();
 
-    if (filters.size() != 1) {
-        throw std::runtime_error("'filters' should have the same format as the output of 'suggestCrisprQcFilters'");
-    }
+    check_names(metrics, { "max.value" });
 
     auto keep = sanisizer::create<Rcpp::LogicalVector>(ncells);
     auto kptr = static_cast<int*>(keep.begin());

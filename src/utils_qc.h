@@ -6,6 +6,7 @@
 #include <vector>
 #include <stdexcept>
 #include <cstdint>
+#include <unordered_map>
 
 #include "sanisizer/sanisizer.hpp"
 
@@ -77,6 +78,24 @@ void copy_subset_filters_blocked(Nsubs_ nsubs, Nblocks_ nblocks, const Rcpp::Lis
     for (I<decltype(nsubs)> s = 0; s < nsubs; ++s) {
         Rcpp::NumericVector cursub(subsets[s]);
         copy_filters_blocked(nblocks, cursub, store[s]);
+    }
+}
+
+inline void check_names(const Rcpp::List& contents, const std::vector<std::string>& names) {
+    if (!contents.hasAttribute("names")) {
+        throw std::runtime_error("list is unnamed");
+    }
+    Rcpp::CharacterVector all_names(contents.attr("names"));
+
+    std::unordered_set<std::string> known_names;
+    for (auto x : all_names) {
+        known_names.insert(Rcpp::as<std::string>(x));
+    }
+
+    for (const auto& n : names) {
+        if (known_names.find(n) == known_names.end()) {
+            throw std::runtime_error("expected list to contain element with name '" + n + "'");
+        }
     }
 }
 
