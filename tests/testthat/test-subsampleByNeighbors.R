@@ -20,4 +20,10 @@ test_that("subsampleByNeighbors works as expected", {
     expect_identical(keep2, keep.alt)
 
     expect_error(subsampleByNeighbors(x, num.neighbors=10, min.remaining=1000), "should not be greater")
+
+    # Make sure that we're actually using the latest distance.
+    copyres <- res
+    copyres$distance[seq_len(9),] <- NA_real_ 
+    keep.copy <- subsampleByNeighbors(copyres, num.neighbors=10, min.remaining=2)
+    expect_identical(keep.copy, keep.alt)
 })
