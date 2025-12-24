@@ -1,11 +1,16 @@
 #' Aggregate expression across cells in a SummarizedExperiment
 #' 
 #' Aggregate expression values across groups of cells for each gene,
-#' by calling \code{\link{aggregateAcrossCells}} on an assay in a SummarizedExperiment.
+#' by calling \code{\link{aggregateAcrossCells}} on an assay in a \link[SummarizedExperiment]{SummarizedExperiment}.
 #'
 #' @param x A \link[SummarizedExperiment]{SummarizedExperiment} object or one of its subclasses.
 #' Rows correspond to genes and columns correspond to cells.
-#' @param factors,num.threads Arguments passed to \code{\link{aggregateAcrossCells}}.
+#' @param factors List or data frame containing grouping factors, see \code{\link{aggregateAcrossCells}} for more details.
+#'
+#' Alternatively, a \link[S4Vectors]{List} or \link[S4Vectors]{DataFrame}, which will be coerced to a list or data frame, respectively.
+#'
+#' Alternatively, an atomic vector or factor representing a single variable.
+#' @param num.threads Number of threads, passed to \code{\link{aggregateAcrossCells}}.
 #' @param more.aggr.args Named list of additional arguments to pass to \code{\link{aggregateAcrossCells}}.
 #' @param assay.type Integer or string specifying the assay of \code{x} to be aggregated.
 #' @param output.prefix String specifying a prefix to add to the names of the \code{link[SummarizedExperiment]{colData}} columns storing the factor combinations. 
@@ -32,11 +37,6 @@
 #' @param only.atomic Logical scalar specifying whether to skip non-atomic, non-factor columns.
 #' @param placeholder Placeholder value to store in the output column when a factor combination does not have a single unique value. 
 #'
-#' @details
-#' \code{factors} is expected to be an ordinary list of categorical variables.
-#' However, it may also be a \link[S4Vectors]{List} or \link[S4Vectors]{DataFrame}, which will be coerced to a corresponding list.
-#' Alternatively, \code{factors} may be an atomic vector or factor representing a single variable, named as \code{"unnamed"} in the output \code{colData}.
-#' 
 #' @return
 #' For \code{aggregateAcrossCells.se}, a SummarizedExperiment is returned where each column corresponds to a factor combination.
 #' Each row corresponds to a gene in \code{x} and the \code{\link[SummarizedExperiment]{rowData}} is taken from \code{x}.
@@ -96,7 +96,8 @@ aggregateAcrossCells.se <- function(
     } else if (is(factors, "List")) {
         factors <- as.list(factors)
     } else {
-        factors <- list(unnamed=factors)
+        factors <- list(factors)
+        names(factors) <- make.names(1) # mimic what happens in combineFactors.
     }
 
     out <- .call(

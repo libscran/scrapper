@@ -3,6 +3,7 @@
 export(aggregateAcrossCells)
 export(aggregateAcrossCells.se)
 export(aggregateAcrossGenes)
+export(aggregateAcrossGenes.se)
 export(aggregateColData)
 export(analyze)
 export(buildSnnGraph)

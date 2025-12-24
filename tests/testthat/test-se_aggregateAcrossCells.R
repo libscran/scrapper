@@ -1,6 +1,6 @@
-# library(testthat); library(scrapple); source("test-se_aggregateAcrossCells.R")
+# library(testthat); library(scrapper); source("test-se_aggregateAcrossCells.R")
 
-library(SummarizedExperiment)
+library(SingleCellExperiment)
 mat <- matrix(rpois(1000, 10), ncol=100)
 se <- SummarizedExperiment(list(counts=mat))
 se$stuff <- sample(LETTERS[1:5], ncol(se), replace=TRUE)
@@ -18,7 +18,7 @@ test_that("aggregateAcrossCells.se works as expected", {
 
     # Works with direct specification of the factor.
     out2 <- aggregateAcrossCells.se(se, se$stuff)
-    expect_identical(out2$factor.unnamed, out2$stuff)
+    expect_identical(out2$factor.X1, out2$stuff)
     expect_identical(assay(out2), assay(out))
 
     # Works if we provide a list.

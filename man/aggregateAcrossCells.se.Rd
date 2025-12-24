@@ -26,7 +26,13 @@ aggregateColData(coldata, index, number, only.atomic = TRUE, placeholder = NA)
 \item{x}{A \link[SummarizedExperiment]{SummarizedExperiment} object or one of its subclasses.
 Rows correspond to genes and columns correspond to cells.}
 
-\item{factors, num.threads}{Arguments passed to \code{\link{aggregateAcrossCells}}.}
+\item{factors}{List or data frame containing grouping factors, see \code{\link{aggregateAcrossCells}} for more details.
+
+Alternatively, a \link[S4Vectors]{List} or \link[S4Vectors]{DataFrame}, which will be coerced to a list or data frame, respectively.
+
+Alternatively, an atomic vector or factor representing a single variable.}
+
+\item{num.threads}{Number of threads, passed to \code{\link{aggregateAcrossCells}}.}
 
 \item{more.aggr.args}{Named list of additional arguments to pass to \code{\link{aggregateAcrossCells}}.}
 
@@ -95,14 +101,10 @@ If \code{only.atomic=TRUE}, any non-atomic/non-factor columns of \code{coldata} 
 }
 \description{
 Aggregate expression values across groups of cells for each gene,
-by calling \code{\link{aggregateAcrossCells}} on an assay in a SummarizedExperiment.
-}
-\details{
-\code{factors} is expected to be an ordinary list of categorical variables.
-However, it may also be a \link[S4Vectors]{List} or \link[S4Vectors]{DataFrame}, which will be coerced to a corresponding list.
-Alternatively, \code{factors} may be an atomic vector or factor representing a single variable, named as \code{"unnamed"} in the output \code{colData}.
+by calling \code{\link{aggregateAcrossCells}} on an assay in a \link[SummarizedExperiment]{SummarizedExperiment}.
 }
 \examples{
+library(SingleCellExperiment)
 sce <- getTestRnaData.se("start")
 aggr <- aggregateAcrossCells.se(sce, sce$level1class)
 head(assay(aggr))

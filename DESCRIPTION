@@ -24,9 +24,11 @@ Suggests:
     sparseMatrixStats,
     Matrix,
     S4Vectors,
+    IRanges,
     SummarizedExperiment,
     SingleCellExperiment,
     scRNAseq,
+    org.Mm.eg.db,
     igraph
 LinkingTo:
     Rcpp,
