@@ -39,6 +39,8 @@ Rows correspond to genes and columns correspond to cells.}
 
 \item{block}{Block assignment for each cell, to pass to \code{\link{suggestRnaQcThresholds}} and \code{\link{filterRnaQcMetrics}}.}
 
+\item{more.suggest.args}{Named list of additional arguments to pass to \code{\link{suggestRnaQcThresholds}}.}
+
 \item{altexp.proportions}{Alternative experiments for which to compute QC metrics.
 This is typically used to refer to alternative experiments holding spike-in data.
 For each alternative experiment, the proportion is defined as \eqn{X/(X+Y)} where \eqn{X} is the alternative experiment's total and \eqn{Y} is the RNA total.

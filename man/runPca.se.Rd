@@ -27,6 +27,8 @@ If \code{NULL}, all available features are used.}
 
 \item{number}{Number of PCs to retain, passed to \code{\link{runPca}}.}
 
+\item{block}{Block assignment for each cell, passed to \code{\link{runPca}}.}
+
 \item{num.threads}{Number of threads for the PCA, passed to \code{\link{runPca}}.}
 
 \item{more.pca.args}{Named list of additional arguments to pass to \code{\link{runPca}}.}

@@ -12,6 +12,7 @@
 #' @param num.neighbors Number of neighbors used to define the scaling factor, passed to \code{\link{scaleByNeighbors}}.
 #' @param block Block assignment for each cell, passed to \code{\link{scaleByNeighbors}}.
 #' @param num.threads Number of threads for the neighbor search, passed to \code{\link{scaleByNeighbors}}.
+#' @param BNPARAM Algorithm for the nearest neighbor search, passed to \code{\link{scaleByNeighbors}}.
 #' @param more.scale.args Named list of additional arguments to pass to \code{\link[scrapper]{scaleByNeighbors}}.
 #' @param output.name String containing the name of the \code{\link[SingleCellExperiment]{reducedDim}} entry in which to store the combined embeddings.
 #' @param meta.name String containing the name of the \code{\link[S4Vectors]{metadata}} entry in which to store additional metrics.

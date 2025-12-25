@@ -32,6 +32,8 @@ Each vector contains the names/indices of the \code{\link[SingleCellExperiment]{
 
 \item{block}{Block assignment for each cell, passed to \code{\link{scaleByNeighbors}}.}
 
+\item{BNPARAM}{Algorithm for the nearest neighbor search, passed to \code{\link{scaleByNeighbors}}.}
+
 \item{num.threads}{Number of threads for the neighbor search, passed to \code{\link{scaleByNeighbors}}.}
 
 \item{more.scale.args}{Named list of additional arguments to pass to \code{\link[scrapper]{scaleByNeighbors}}.}

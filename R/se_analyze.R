@@ -121,6 +121,7 @@
 #'
 #' @author Aaron Lun
 #' @examples
+#' library(SingleCellExperiment)
 #' sce <- getTestRnaData.se("start")
 #' res <- analyze.se(
 #'     sce, 
@@ -305,7 +306,7 @@ analyze.se <- function(
 
     if (!is.null(rna.altexp)) {
         tmp <- .getModality(x, rna.altexp)
-        is.hvg <- .extractOrError(rowData(tmp), paste0(rna.hvg.output.prefix, "hvg"))
+        is.hvg <- .extractOrError(SummarizedExperiment::rowData(tmp), paste0(rna.hvg.output.prefix, "hvg"))
         tmp <- .call(
             runPca.se,
             list(tmp, assay.type=rna.norm.output.name, output.name=rna.pca.output.name),

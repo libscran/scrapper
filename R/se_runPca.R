@@ -9,6 +9,7 @@
 #' For RNA data, this is typically the \code{hvg} vector added by \code{\link{chooseRnaHvgs.se}}.
 #' If \code{NULL}, all available features are used.
 #' @param number Number of PCs to retain, passed to \code{\link{runPca}}.
+#' @param block Block assignment for each cell, passed to \code{\link{runPca}}.
 #' @param num.threads Number of threads for the PCA, passed to \code{\link{runPca}}.
 #' @param more.pca.args Named list of additional arguments to pass to \code{\link{runPca}}.
 #' @param assay.type Integer or string specifying the assay of \code{x} to be used for PCA.
