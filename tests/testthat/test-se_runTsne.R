@@ -1,4 +1,4 @@
-# library(testthat); library(scrapple); source("test-se_runTsne.R")
+# library(testthat); library(scrapper); source("test-se_runTsne.R")
 
 library(SingleCellExperiment)
 set.seed(7777)

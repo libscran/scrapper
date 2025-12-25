@@ -1,4 +1,4 @@
-# library(testthat); library(scrapple); source("test-se_chooseRnaHvgs.R")
+# library(testthat); library(scrapper); source("test-se_chooseRnaHvgs.R")
 
 set.seed(12341234)
 library(SummarizedExperiment)
