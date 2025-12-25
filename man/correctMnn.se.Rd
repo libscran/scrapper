@@ -43,6 +43,7 @@ Correct batch effects from an existing embedding with mutual nearest neighbors (
 by calling \code{\link{correctMnn}} on a reduced dimension entry of a \link[SingleCellExperiment]{SingleCellExperiment}.
 }
 \examples{
+library(SingleCellExperiment)
 sce <- getTestRnaData.se("pca")
 # Treating the tissue of origin as the batch.
 sce <- correctMnn.se(sce, sce$tissue)

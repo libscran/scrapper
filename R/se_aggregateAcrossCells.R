@@ -102,7 +102,7 @@ aggregateAcrossCells.se <- function(
 
     out <- .call(
         aggregateAcrossCells,
-        list(assay(x, assay.type)),
+        list(SummarizedExperiment::assay(x, assay.type)),
         list(factors=factors, num.threads=num.threads),
         more.aggr.args
     )

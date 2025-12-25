@@ -28,7 +28,7 @@
 #' @author Aaron Lun
 #'
 #' @examples
-#' library(SummarizedExperiment)
+#' library(SingleCellExperiment)
 #' sce <- altExp(getTestAdtData.se("qc"), "ADT")
 #' sce <- normalizeAdtCounts.se(sce)
 #' assayNames(sce)

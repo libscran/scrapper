@@ -43,6 +43,7 @@ Aggregate expression values across sets of genes for each cell,
 by calling \code{\link{aggregateAcrossGenes}} on an assay in a \link[SummarizedExperiment]{SummarizedExperiment}.
 }
 \examples{
+library(SingleCellExperiment)
 sce <- getTestRnaData.se("norm")
 
 library(org.Mm.eg.db)

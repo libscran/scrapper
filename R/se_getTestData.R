@@ -76,7 +76,7 @@ getTestRnaData.se <- function(at = c("start", "qc", "norm", "hvg", "pca", "clust
     }
 
     if (!("pca" %in% names(cache$rna))) {
-        sce <- runPca.se(sce, features=rowData(sce)$hvg)
+        sce <- runPca.se(sce, features=SummarizedExperiment::rowData(sce)$hvg)
         cache$rna$pca <- sce
     }
     sce <- cache$rna$pca
@@ -119,8 +119,10 @@ getTestAdtData.se <- function(at = c("start", "qc", "norm", "hvg", "pca")) {
 
     if (!("qc" %in% names(cache$adt))) {
         sce <- quickRnaQc.se(sce, subsets=list(mito=startsWith(rownames(sce), "MT-")))
-        altExp(sce, "ADT") <- quickAdtQc.se(altExp(sce, "ADT"), subsets=list(igg=rowData(altExp(sce, "ADT"))$isotype))
-        sce <- sce[,sce$keep & altExp(sce, "ADT")$keep]
+        alt.se <- SingleCellExperiment::altExp(sce, "ADT")
+        alt.se <- quickAdtQc.se(alt.se, subsets=list(igg=SummarizedExperiment::rowData(alt.se, "ADT")$isotype))
+        SingleCellExperiment::altExp(sce, "ADT") <- alt.se
+        sce <- sce[,sce$keep & alt.se$keep]
         cache$adt$qc <- sce
     }
     sce <- cache$adt$qc
@@ -148,7 +150,7 @@ getTestAdtData.se <- function(at = c("start", "qc", "norm", "hvg", "pca")) {
     }
 
     if (!("pca" %in% names(cache$adt))) {
-        sce <- runPca.se(sce, features=rowData(sce)$hvg)
+        sce <- runPca.se(sce, features=SummarizedExperiment::rowData(sce)$hvg)
         altExp(sce, "ADT") <- runPca.se(altExp(sce, "ADT"), features=NULL)
         cache$adt$pca <- sce
     }

@@ -57,7 +57,7 @@ centering the subsequent size factors with \code{\link{centerSizeFactors}},
 and then computing normalized log-expression values with \code{\link{normalizeCounts}}.
 }
 \examples{
-library(SummarizedExperiment)
+library(SingleCellExperiment)
 sce <- altExp(getTestAdtData.se("qc"), "ADT")
 sce <- normalizeAdtCounts.se(sce)
 assayNames(sce)

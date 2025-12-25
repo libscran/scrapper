@@ -19,6 +19,7 @@
 #' @author Aaron Lun
 #'
 #' @examples
+#' library(SingleCellExperiment)
 #' sce <- getTestRnaData.se("pca")
 #' # Treating the tissue of origin as the batch.
 #' sce <- correctMnn.se(sce, sce$tissue)

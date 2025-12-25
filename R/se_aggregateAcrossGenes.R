@@ -23,6 +23,7 @@
 #'
 #' @author Aaron Lun
 #' @examples
+#' library(SingleCellExperiment)
 #' sce <- getTestRnaData.se("norm")
 #'
 #' library(org.Mm.eg.db)

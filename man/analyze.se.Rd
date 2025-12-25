@@ -231,6 +231,7 @@ This function is equivalent to:
 }
 }
 \examples{
+library(SingleCellExperiment)
 sce <- getTestRnaData.se("start")
 res <- analyze.se(
     sce, 

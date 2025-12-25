@@ -32,6 +32,7 @@
 #' @author Aaron Lun
 #'
 #' @examples
+#' library(SingleCellExperiment)
 #' sce <- getTestRnaData.se("pca")
 #' sce <- runAllNeighborSteps.se(
 #'    sce,

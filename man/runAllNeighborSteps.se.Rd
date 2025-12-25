@@ -66,6 +66,7 @@ Concurrently run all steps involving a nearest-neighbor search (t-SNE, UMAP and 
 by calling \code{\link{runAllNeighborSteps}} on a reduced dimension entry of a \link[SingleCellExperiment]{SingleCellExperiment}.
 }
 \examples{
+library(SingleCellExperiment)
 sce <- getTestRnaData.se("pca")
 sce <- runAllNeighborSteps.se(
    sce,
