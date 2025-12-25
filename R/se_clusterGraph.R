@@ -1,8 +1,8 @@
-#' Graph-based clustering of cells
+#' Graph-based clustering of cells in a SingleCellExperiment 
 #'
 #' Construct a shared-nearest neighbor (SNN) graph from an existing low-dimensional embedding
-#' by calling \code{\link{buildSnnGraph}} on a reduced dimension in a \link[SingleCellExperiment]{SingleCellExperiment},
-#' and apply community detection algorithms to obtain clusters of cells with \code{\link{clusterGraph}}.
+#' by calling \code{\link{buildSnnGraph}} on a reduced dimension entry in a \link[SingleCellExperiment]{SingleCellExperiment}.
+#' Then, apply community detection algorithms to obtain clusters of cells with \code{\link{clusterGraph}}.
 #'
 #' @param x A \link[SingleCellExperiment]{SingleCellExperiment} object or one of its subclasses.
 #' Rows correspond to genomic features and columns correspond to cells.

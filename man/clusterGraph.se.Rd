@@ -2,7 +2,7 @@
 % Please edit documentation in R/se_clusterGraph.R
 \name{clusterGraph.se}
 \alias{clusterGraph.se}
-\title{Graph-based clustering of cells}
+\title{Graph-based clustering of cells in a SingleCellExperiment}
 \usage{
 clusterGraph.se(
   x,
@@ -53,8 +53,8 @@ Additional clustering output is stored in the \code{metadata}.
 }
 \description{
 Construct a shared-nearest neighbor (SNN) graph from an existing low-dimensional embedding
-by calling \code{\link{buildSnnGraph}} on a reduced dimension in a \link[SingleCellExperiment]{SingleCellExperiment},
-and apply community detection algorithms to obtain clusters of cells with \code{\link{clusterGraph}}.
+by calling \code{\link{buildSnnGraph}} on a reduced dimension entry in a \link[SingleCellExperiment]{SingleCellExperiment}.
+Then, apply community detection algorithms to obtain clusters of cells with \code{\link{clusterGraph}}.
 }
 \examples{
 sce <- getTestRnaData.se("pca")
