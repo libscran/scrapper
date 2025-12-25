@@ -18,6 +18,7 @@
 #' @param delayed.transpose Logical scalar indicating whether to delay the transposition when storing coordinates in the \code{\link[SingleCellExperiment]{reducedDims}}.
 #'
 #' @return \code{x} is returned with the principal component scores in the \code{reducedDim}.
+#' (This is converted to a \link[SingleCellExperiment]{SingleCellExperiment} if it wasn't one already.)
 #' Additional outputs (e.g., rotation matrix, variance explained) are stored in the \code{\link[S4Vectors]{metadata}}.
 #'
 #' @author Aaron Lun

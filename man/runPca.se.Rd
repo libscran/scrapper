@@ -42,6 +42,7 @@ This is typically the log-normalized expression matrix created by \code{\link{no
 }
 \value{
 \code{x} is returned with the principal component scores in the \code{reducedDim}.
+(This is converted to a \link[SingleCellExperiment]{SingleCellExperiment} if it wasn't one already.)
 Additional outputs (e.g., rotation matrix, variance explained) are stored in the \code{\link[S4Vectors]{metadata}}.
 }
 \description{
@@ -49,6 +50,7 @@ Compact and denoise the dataset by performing PCA on the (log-)normalized expres
 by calling \code{\link{runPca}} on an assay of a \link[SummarizedExperiment]{SummarizedExperiment}.
 }
 \examples{
+library(SingleCellExperiment)
 sce <- getTestRnaData.se("hvg")
 sce <- runPca.se(sce, rowData(sce)$hvg)
 dim(reducedDim(sce, "PCA"))
