@@ -148,7 +148,7 @@ aggregateAcrossCells.se <- function(
 
             ae.cd <- SummarizedExperiment::colData(ae.se)[,-1,drop=FALSE] # remove uninteresting factor combination
             if (copy.altexps) {
-                ae.cd <- cbind(common.cd, ae.cd)
+                ae.cd <- S4Vectors::cbind(common.cd, ae.cd)
             }
             SummarizedExperiment::colData(ae.se) <- ae.cd
 

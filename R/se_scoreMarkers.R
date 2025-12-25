@@ -108,7 +108,6 @@ scoreMarkers.se <- function(
 }
 
 #' @export
-#' @importFrom S4Vectors DataFrame List
 #' @rdname scoreMarkers.se
 formatScoreMarkersResult <- function(marker.res, extra.columns = NULL, order.by = TRUE) {
     effect.sizes <- c("cohens.d", "auc", "delta.mean", "delta.detected")
@@ -119,12 +118,12 @@ formatScoreMarkersResult <- function(marker.res, extra.columns = NULL, order.by 
         stop("could not determine dimnames from 'marker.res'")
     }
 
-    output <- List()
+    output <- S4Vectors::List()
     for (group in out$groups) {
-        current <- make_zero_col_DFrame(out$nrow)
+        current <- S4Vectors::make_zero_col_DFrame(out$nrow)
         rownames(current) <- out$rownames
         if (!is.null(extra.columns)) {
-            current <- cbind(current, extra.columns)
+            current <- S4Vectors::cbind(current, extra.columns)
         }
 
         if ("mean" %in% names(marker.res)) {
