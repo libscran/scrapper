@@ -32,7 +32,6 @@
 #' table(sce$clusters)
 #'
 #' @export
-#' @importFrom SingleCellExperiment reducedDim
 clusterGraph.se <- function(
     x,
     num.neighbors = 10,

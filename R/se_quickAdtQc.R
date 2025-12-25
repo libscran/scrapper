@@ -37,8 +37,6 @@
 #' summary(sce$keep)
 #' 
 #' @export
-#' @importFrom S4Vectors metadata metadata<-
-#' @importFrom SummarizedExperiment assay colData colData<-
 quickAdtQc.se <- function( 
     x,
     subsets,

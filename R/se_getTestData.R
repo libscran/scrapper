@@ -98,16 +98,18 @@ getTestRnaData.se <- function(at = c("start", "qc", "norm", "hvg", "pca", "clust
 #' @rdname getTestData.se
 #' @importFrom methods as
 #' @importClassesFrom Matrix dgCMatrix
-#' @importFrom SummarizedExperiment assay assay<-
-#' @importFrom SingleCellExperiment altExp altExp<-
 getTestAdtData.se <- function(at = c("start", "qc", "norm", "hvg", "pca")) {
     at <- match.arg(at)
 
     if (!("start" %in% names(cache$adt))) {
         raw.sce <- scRNAseq::fetchDataset("kotliarov-pbmc-2020", "2024-04-18")
         raw.sce <- raw.sce[,1:5000] # Cutting it down a bit for speed.
-        assay(raw.sce) <- as(assay(raw.sce), "dgCMatrix")
-        assay(altExp(raw.sce)) <- as(assay(altExp(raw.sce)), "dgCMatrix")
+        SummarizedExperiment::assay(raw.sce) <- as(SummarizedExperiment::assay(raw.sce), "dgCMatrix")
+
+        raw.ae <- SingleCellExperiment::altExp(raw.sce)
+        SummarizedExperiment::assay(raw.ae) <- as(SummarizedExperiment::assay(raw.ae), "dgCMatrix")
+        SingleCellExperiment::altExp(raw.sce) <- raw.ae
+
         cache$adt$start <- raw.sce
     }
     sce <- cache$adt$start
@@ -160,16 +162,18 @@ getTestAdtData.se <- function(at = c("start", "qc", "norm", "hvg", "pca")) {
 #' @rdname getTestData.se
 #' @importFrom methods as
 #' @importClassesFrom Matrix dgCMatrix
-#' @importFrom SummarizedExperiment assay assay<-
-#' @importFrom SingleCellExperiment altExp altExp<-
 getTestCrisprData.se <- function(at = c("start", "qc")) {
     at <- match.arg(at)
 
     if (!("start" %in% names(cache$crispr))) {
         raw.sce <- scRNAseq::fetchDataset("cao-pancreas-2025", "2025-10-10", "rqc")
         raw.sce <- raw.sce[,1:5000] # Cutting it down a bit for speed.
-        assay(raw.sce) <- as(assay(raw.sce), "dgCMatrix")
-        assay(altExp(raw.sce)) <- as(assay(altExp(raw.sce)), "dgCMatrix")
+        SummarizedExperiment::assay(raw.sce) <- as(SummarizedExperiment::assay(raw.sce), "dgCMatrix")
+
+        raw.ae <- SingleCellExperiment::altExp(raw.sce)
+        SummarizedExperiment::assay(raw.ae) <- as(SummarizedExperiment::assay(raw.ae), "dgCMatrix")
+        SingleCellExperiment::altExp(raw.sce) <- raw.ae
+
         cache$crispr$start <- raw.sce
     }
     sce <- cache$crispr$start
