@@ -1,11 +1,11 @@
-#' Normalize RNA counts in a SummarizedExperiment
+#' Normalize CRISPR counts in a SummarizedExperiment
 #'
-#' Compute (log-)normalized expression values after performing scaling normalization of an RNA count matrix.
+#' Compute (log-)normalized expression values after performing scaling normalization of an CRISPR count matrix.
 #' This calls \code{\link{normalizeCounts}} on an assay of a \link[SummarizedExperiment]{SummarizedExperiment},
 #' after centering the size factors with \code{\link{centerSizeFactors}}.
 #'
 #' @param x A \link[SummarizedExperiment]{SummarizedExperiment} object or one of its subclasses.
-#' Rows correspond to genes and columns correspond to cells.
+#' Rows correspond to CRISPR guides and columns correspond to cells.
 #' @param size.factors Numeric vector of length equal to the number of columns of \code{x},
 #' containing the size factor for each cell in \code{x}.
 #' If \code{NULL}, this defaults to the column sums of the count matrix in \code{x}.
@@ -27,14 +27,14 @@
 #'
 #' @examples
 #' library(SingleCellExperiment)
-#' sce <- getTestRnaData.se("qc")
-#' sce <- normalizeRnaCounts.se(sce, size.factors=sce$sum)
+#' sce <- altExp(getTestCrisprData.se("qc"), "CRISPR Guide Capture")
+#' sce <- normalizeCrisprCounts.se(sce, size.factors=sce$sum)
 #' assayNames(sce)
 #' summary(sizeFactors(sce))
 #'
 #' @export
 #' @importFrom Matrix colSums
-normalizeRnaCounts.se <- function(
+normalizeCrisprCounts.se <- function(
     x,
     size.factors = NULL,
     center = TRUE,
