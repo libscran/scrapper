@@ -2,7 +2,7 @@
 % Please edit documentation in R/se_aggregateAcrossGenes.R
 \name{aggregateAcrossGenes.se}
 \alias{aggregateAcrossGenes.se}
-\title{Aggregate expression across gene sets}
+\title{Aggregate expression across gene sets in a SummarizedExperiment}
 \usage{
 aggregateAcrossGenes.se(
   x,

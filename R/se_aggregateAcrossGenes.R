@@ -1,4 +1,4 @@
-#' Aggregate expression across gene sets
+#' Aggregate expression across gene sets in a SummarizedExperiment
 #'
 #' Aggregate expression values across sets of genes for each cell,
 #' by calling \code{\link{aggregateAcrossGenes}} on an assay in a \link[SummarizedExperiment]{SummarizedExperiment}.
