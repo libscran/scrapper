@@ -50,7 +50,7 @@ runPca.se <- function(
     }
 
     out <- .call(
-        scrapper::runPca,
+        runPca,
         list(y),
         list(number=number, block=block, num.threads=num.threads),
         more.pca.args

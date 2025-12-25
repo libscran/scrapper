@@ -9,14 +9,14 @@
 #' Rows correspond to antibody-derived tags (ADTs) and columns correspond to cells.
 #' @param size.factors Numeric vector of length equal to the number of columns of \code{x},
 #' containing the size factor for each cell in \code{x}.
-#' If \code{NULL}, this defaults to the output of \code{\link[scrapper]{computeClrm1Factors}}.
-#' @param num.threads Number of threads, passed to \code{\link[scrapper]{computeClrm1Factors}}.
+#' If \code{NULL}, this defaults to the output of \code{\link{computeClrm1Factors}}.
+#' @param num.threads Number of threads, passed to \code{\link{computeClrm1Factors}}.
 #' @param center Logical scalar indicating whether to center the \code{size.factors},
-#' see \code{?\link[scrapper]{centerSizeFactors}} for more details.
-#' @param block Block assignments for each cell, passed to \code{\link[scrapper]{centerSizeFactors}}.
-#' @param mode How to center size factors in different blocks, see \code{?\link[scrapper]{centerSizeFactors}} for more details.
-#' @param log Whether to log-transform the normalized expression values, see \code{?\link[scrapper]{normalizeCounts}} for more details.
-#' @param pseudo.count The pseudo-count for log-transformation, see \code{?\link[scrapper]{normalizeCounts}} for more details.
+#' see \code{?\link{centerSizeFactors}} for more details.
+#' @param block Block assignments for each cell, passed to \code{\link{centerSizeFactors}}.
+#' @param mode How to center size factors in different blocks, see \code{?\link{centerSizeFactors}} for more details.
+#' @param log Whether to log-transform the normalized expression values, see \code{?\link{normalizeCounts}} for more details.
+#' @param pseudo.count The pseudo-count for log-transformation, see \code{?\link{normalizeCounts}} for more details.
 #' @param assay.type Integer or string specifying the assay of \code{x} with the count matrix.
 #' @param output.name String containing the name of the assay to store the normalized matrix.
 #' @param factor.name String containing the name of the \code{\link[SummarizedExperiment]{colData}} column in which to store the size factors in the output object.

@@ -26,15 +26,15 @@ containing the size factor for each cell in \code{x}.
 If \code{NULL}, this defaults to the column sums of the count matrix in \code{x}.}
 
 \item{center}{Logical scalar indicating whether to center the \code{size.factors},
-see \code{?\link[scrapper]{centerSizeFactors}} for more details.}
+see \code{?\link{centerSizeFactors}} for more details.}
 
-\item{block}{Block assignments for each cell, passed to \code{\link[scrapper]{centerSizeFactors}}.}
+\item{block}{Block assignments for each cell, passed to \code{\link{centerSizeFactors}}.}
 
-\item{mode}{How to center size factors in different blocks, see \code{?\link[scrapper]{centerSizeFactors}} for more details.}
+\item{mode}{How to center size factors in different blocks, see \code{?\link{centerSizeFactors}} for more details.}
 
-\item{log}{Whether to log-transform the normalized expression values, see \code{?\link[scrapper]{normalizeCounts}} for more details.}
+\item{log}{Whether to log-transform the normalized expression values, see \code{?\link{normalizeCounts}} for more details.}
 
-\item{pseudo.count}{The pseudo-count for log-transformation, see \code{?\link[scrapper]{normalizeCounts}} for more details.}
+\item{pseudo.count}{The pseudo-count for log-transformation, see \code{?\link{normalizeCounts}} for more details.}
 
 \item{assay.type}{Integer or string specifying the assay of \code{x} with the count matrix.}
 

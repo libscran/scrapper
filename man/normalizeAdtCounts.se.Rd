@@ -24,20 +24,20 @@ Rows correspond to antibody-derived tags (ADTs) and columns correspond to cells.
 
 \item{size.factors}{Numeric vector of length equal to the number of columns of \code{x},
 containing the size factor for each cell in \code{x}.
-If \code{NULL}, this defaults to the output of \code{\link[scrapper]{computeClrm1Factors}}.}
+If \code{NULL}, this defaults to the output of \code{\link{computeClrm1Factors}}.}
 
-\item{num.threads}{Number of threads, passed to \code{\link[scrapper]{computeClrm1Factors}}.}
+\item{num.threads}{Number of threads, passed to \code{\link{computeClrm1Factors}}.}
 
 \item{center}{Logical scalar indicating whether to center the \code{size.factors},
-see \code{?\link[scrapper]{centerSizeFactors}} for more details.}
+see \code{?\link{centerSizeFactors}} for more details.}
 
-\item{block}{Block assignments for each cell, passed to \code{\link[scrapper]{centerSizeFactors}}.}
+\item{block}{Block assignments for each cell, passed to \code{\link{centerSizeFactors}}.}
 
-\item{mode}{How to center size factors in different blocks, see \code{?\link[scrapper]{centerSizeFactors}} for more details.}
+\item{mode}{How to center size factors in different blocks, see \code{?\link{centerSizeFactors}} for more details.}
 
-\item{log}{Whether to log-transform the normalized expression values, see \code{?\link[scrapper]{normalizeCounts}} for more details.}
+\item{log}{Whether to log-transform the normalized expression values, see \code{?\link{normalizeCounts}} for more details.}
 
-\item{pseudo.count}{The pseudo-count for log-transformation, see \code{?\link[scrapper]{normalizeCounts}} for more details.}
+\item{pseudo.count}{The pseudo-count for log-transformation, see \code{?\link{normalizeCounts}} for more details.}
 
 \item{assay.type}{Integer or string specifying the assay of \code{x} with the count matrix.}
 
