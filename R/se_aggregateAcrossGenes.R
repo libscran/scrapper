@@ -71,7 +71,7 @@ aggregateAcrossGenes.se <- function(
 
     vecs <- .call(
         aggregateAcrossGenes,
-        list(assay(x, assay.type)),
+        list(SummarizedExperiment::assay(x, assay.type)),
         list(sets=sets, num.threads=num.threads),
         more.aggr.args
     )

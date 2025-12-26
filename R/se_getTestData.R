@@ -106,9 +106,9 @@ getTestAdtData.se <- function(at = c("start", "qc", "norm", "hvg", "pca")) {
         raw.sce <- raw.sce[,1:5000] # Cutting it down a bit for speed.
         SummarizedExperiment::assay(raw.sce) <- as(SummarizedExperiment::assay(raw.sce), "dgCMatrix")
 
-        raw.ae <- SingleCellExperiment::altExp(raw.sce)
+        raw.ae <- SingleCellExperiment::altExp(raw.sce, "ADT")
         SummarizedExperiment::assay(raw.ae) <- as(SummarizedExperiment::assay(raw.ae), "dgCMatrix")
-        SingleCellExperiment::altExp(raw.sce) <- raw.ae
+        SingleCellExperiment::altExp(raw.sce, "ADT") <- raw.ae
 
         cache$adt$start <- raw.sce
     }
@@ -132,7 +132,7 @@ getTestAdtData.se <- function(at = c("start", "qc", "norm", "hvg", "pca")) {
 
     if (!("norm" %in% names(cache$adt))) {
         sce <- normalizeRnaCounts.se(sce)
-        altExp(sce, "ADT") <- normalizeAdtCounts.se(altExp(sce, "ADT"))
+        SingleCellExperiment::altExp(sce, "ADT") <- normalizeAdtCounts.se(SingleCellExperiment::altExp(sce, "ADT"))
         cache$adt$norm <- sce
     }
     sce <- cache$adt$norm
@@ -151,7 +151,7 @@ getTestAdtData.se <- function(at = c("start", "qc", "norm", "hvg", "pca")) {
 
     if (!("pca" %in% names(cache$adt))) {
         sce <- runPca.se(sce, features=SummarizedExperiment::rowData(sce)$hvg)
-        altExp(sce, "ADT") <- runPca.se(altExp(sce, "ADT"), features=NULL)
+        SingleCellExperiment::altExp(sce, "ADT") <- runPca.se(SingleCellExperiment::altExp(sce, "ADT"), features=NULL)
         cache$adt$pca <- sce
     }
     sce <- cache$adt$pca
@@ -172,9 +172,9 @@ getTestCrisprData.se <- function(at = c("start", "qc")) {
         raw.sce <- raw.sce[,1:5000] # Cutting it down a bit for speed.
         SummarizedExperiment::assay(raw.sce) <- as(SummarizedExperiment::assay(raw.sce), "dgCMatrix")
 
-        raw.ae <- SingleCellExperiment::altExp(raw.sce)
+        raw.ae <- SingleCellExperiment::altExp(raw.sce, "CRISPR Guide Capture")
         SummarizedExperiment::assay(raw.ae) <- as(SummarizedExperiment::assay(raw.ae), "dgCMatrix")
-        SingleCellExperiment::altExp(raw.sce) <- raw.ae
+        SingleCellExperiment::altExp(raw.sce, "CRISPR Guide Capture") <- raw.ae
 
         cache$crispr$start <- raw.sce
     }
@@ -185,8 +185,8 @@ getTestCrisprData.se <- function(at = c("start", "qc")) {
 
     if (!("qc" %in% names(cache$crispr))) {
         sce <- quickRnaQc.se(sce, subsets=list(mito=startsWith(rownames(sce), "MT-")))
-        altExp(sce, "CRISPR Guide Capture") <- quickCrisprQc.se(altExp(sce, "CRISPR Guide Capture"))
-        sce <- sce[,sce$keep & altExp(sce, "CRISPR Guide Capture")$keep]
+        SingleCellExperiment::altExp(sce, "CRISPR Guide Capture") <- quickCrisprQc.se(SingleCEllExperiment::altExp(sce, "CRISPR Guide Capture"))
+        sce <- sce[,sce$keep & SingleCellExperiment::altExp(sce, "CRISPR Guide Capture")$keep]
         cache$crispr$qc <- sce
     }
     sce <- cache$crispr$qc
