@@ -20,6 +20,12 @@ Also support calculation of arbitrary quantiles as described for \code{scoreMark
 via the new \code{block.average.policy=} and \code{block.quantile=} arguments.
 \item Added a \code{subset=} argument to \code{runPca()} to allow users to perform a PCA on a subset of features,
 but still report the full rotation matrix for all features. 
+\item Added SummarizedExperiment-compatible wrappers for all functions.
+These can be identified by their \code{*.se} suffix, e.g., \code{aggregateAcrossCells.se()}.
+Some functions execute multiple steps for convenience, e.g., \code{quickRnaQc.se()} runs all of the RNA-related QC functions.
+\item Added \code{analyze.se()} to replace the \code{analyze()} function.
+The former is more convenient it stores most outputs in a SingleCellExperiment and formats the marker tables correctly.
+The latter is now deprecated.
 }}
 
 \section{Version 1.4.0}{\itemize{
