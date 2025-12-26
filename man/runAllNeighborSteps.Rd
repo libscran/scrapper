@@ -12,7 +12,7 @@ runAllNeighborSteps(
   clusterGraph.args = list(),
   BNPARAM = AnnoyParam(),
   return.graph = FALSE,
-  collapse.search = FALSE,
+  collapse.search = TRUE,
   num.threads = 3
 )
 }
@@ -41,7 +41,7 @@ By default, only the output of \code{\link{clusterGraph}} is returned.}
 
 \item{collapse.search}{Logical scalar indicating whether to collapse the nearest-neighbor search for each step into a single search.
 Steps that need fewer neighbors will take a subset of the neighbors from the collapsed search.
-This is faster but may not give the same results as separate searches for some algorithms (e.g., approximate searches).}
+Setting this to \code{TRUE} is faster but may not give the same results as separate searches for some nearest-neighbor algorithms (e.g., approximate methods).}
 
 \item{num.threads}{Integer scalar specifying the number of threads to use.
 At least one thread should be available for each step.}

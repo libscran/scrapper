@@ -3,7 +3,7 @@
 x <- t(as.matrix(iris[,1:4]))
 
 test_that("runAllNeighborSteps gives the same results as the reference", {
-    res <- runAllNeighborSteps(x, num.threads=2)
+    res <- runAllNeighborSteps(x, num.threads=2, collapse.search=FALSE)
 
     umap.ref <- runUmap(x)
     expect_identical(res$runUmap, umap.ref)
