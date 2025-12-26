@@ -11,7 +11,7 @@ test_that("normalizeAdtCounts.se works as expected", {
     expect_equal(mean(out$sizeFactor), 1)
     expect_s4_class(assay(out, "logcounts"), "DelayedArray")
 
-    raw.sf <- scrapper::computeClrm1Factors(mat)
+    raw.sf <- computeClrm1Factors(mat)
     out2 <- normalizeAdtCounts.se(se, size.factors=raw.sf)
     expect_equal(out, out2)
 
