@@ -41,13 +41,17 @@
 #' The \code{fit_variance_trend} function in \url{https://libscran.github.io/scran_variances/}.
 #'
 #' @examples
-#' x <- runif(1000)
-#' y <- 2^rnorm(1000)
-#' out <- fitVarianceTrend(x, y)
+#' # Setting up some single-cell-like data.
+#' mu <- 2^runif(1000, -10, 10)
+#' counts <- matrix(rpois(20 * length(mu), lambda=mu), ncol=20)
 #'
-#' plot(x, y)
-#' o <- order(x)
-#' lines(x[o], out$fitted[o], col="red")
+#' sf <- centerSizeFactors(colSums(counts))
+#' normalized <- normalizeCounts(counts, size.factors=sf)
+#' stats <- modelGeneVariances(normalized)
+#'
+#' out <- fitVarianceTrend(stats$statistics$mean, stats$statistics$variance)
+#' plot(stats$statistics$mean, stats$statistics$variance)
+#' curve(approxfun(stats$statistics$mean, out$fitted)(x), col="red", add=TRUE)
 #'
 #' @export
 fitVarianceTrend <- function(means, variances, mean.filter=TRUE, min.mean=0.1, transform=TRUE, span=0.3, use.min.width=FALSE, min.width=1, min.window.count=200, num.threads=1) {

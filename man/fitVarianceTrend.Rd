@@ -63,13 +63,17 @@ and \code{residuals}, a numeric vector containing the residuals from the trend.
 Fit a trend to the per-gene variances with respect to their means, typically from normalized and log-transformed expression values.
 }
 \examples{
-x <- runif(1000)
-y <- 2^rnorm(1000)
-out <- fitVarianceTrend(x, y)
+# Setting up some single-cell-like data.
+mu <- 2^runif(1000, -10, 10)
+counts <- matrix(rpois(20 * length(mu), lambda=mu), ncol=20)
 
-plot(x, y)
-o <- order(x)
-lines(x[o], out$fitted[o], col="red")
+sf <- centerSizeFactors(colSums(counts))
+normalized <- normalizeCounts(counts, size.factors=sf)
+stats <- modelGeneVariances(normalized)
+
+out <- fitVarianceTrend(stats$statistics$mean, stats$statistics$variance)
+plot(stats$statistics$mean, stats$statistics$variance)
+curve(approxfun(stats$statistics$mean, out$fitted)(x), col="red", add=TRUE)
 
 }
 \seealso{
