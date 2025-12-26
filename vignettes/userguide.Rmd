@@ -3,7 +3,7 @@ title: Using scrapper to analyze single-cell data
 author: 
 - name: Aaron Lun
   email: infinite.monkeys.with.keyboards@gmail.com
-date: "Revised: October 29, 2025"
+date: "Revised: December 26, 2025"
 output:
   BiocStyle::html_document
 package: scrapper
@@ -25,8 +25,7 @@ self <- Biocpkg("scrapper")
 
 `r self` implements bindings to C++ code for analyzing single-cell data, mostly from the [**libscran**](https://github.com/libscran) libraries.
 Each function performs an individual analysis step ranging from quality control to clustering and marker detection.
-`r self` is mostly intended for other Bioconductor package developers;
-users should check out the `r Biocpkg("scrapple")` package instead for a more ergonomic experience.
+Users can also conveniently perform end-to-end analyses with a single call to the `analyze.se()` function. 
 
 # Basic analysis
 
@@ -39,64 +38,47 @@ sce.z
 ```
 
 We run it through the `r self` analysis pipeline.
-First, some quality control:
+This performs the usual steps - quality control, normalization, selection of highly variable genes, PCA, clustering, visualization and marker detection,
+see the [OSCA book](https://bioconductor.org/books/release/OSCA/) for more theoretical details. 
 
 ```{r}
-counts <- assay(sce.z)
-is.mito <- grepl("^mt-", rownames(sce.z))
-nthreads <- 2 # using a smaller value to avoid stressing out the build machines.
-
 library(scrapper)
-rna.qc.metrics <- computeRnaQcMetrics(counts, subsets=list(mt=is.mito), num.threads=nthreads)
-rna.qc.thresholds <- suggestRnaQcThresholds(rna.qc.metrics)
-rna.qc.filter <- filterRnaQcMetrics(rna.qc.thresholds, rna.qc.metrics)
-filtered <- counts[,rna.qc.filter,drop=FALSE]
+is.mito <- grep("^mt-", rownames(sce.z))
+results <- analyze.se(
+    sce.z,
+    rna.qc.subsets=list(Mito=is.mito),
+    num.threads=2 # limit number of threads to keep R CMD check happy.
+)
+results$x # most outputs are stored in a copy of the input SingleCellExperiment. 
 ```
 
-Then normalization:
+Now we can have a look at some of the results.
+For example, we can make a t-SNE plot:
 
 ```{r}
-size.factors <- centerSizeFactors(rna.qc.metrics$sum[rna.qc.filter])
-normalized <- normalizeCounts(filtered, size.factors)
+library(scater)
+plotReducedDim(results$x, "TSNE", colour_by="graph.cluster")
 ```
 
-Feature selection and PCA:
+We can also look at the markers defining each cluster:
 
 ```{r}
-gene.var <- modelGeneVariances(normalized, num.threads=nthreads)
-top.hvgs <- chooseHighlyVariableGenes(gene.var$statistics$residuals)
-pca <- runPca(normalized[top.hvgs,], num.threads=nthreads)
+# Ordering by the median AUC across pairwise comparisons involving the cluster.
+previewMarkers(results$markers$rna[[1]], order.by="auc.median")
 ```
 
-Some clustering:
+`analyze.se()` can also be broken down to its component functions for further customization:
 
 ```{r}
-snn.graph <- buildSnnGraph(pca$components, num.threads=nthreads)
-clust.out <- clusterGraph(snn.graph)
-table(clust.out$membership)
+test <- sce.z
+test <- quickRnaQc.se(test, subsets=list(mt=is.mito), num.threads=2)
+test <- test[,test$keep]
+test <- normalizeRnaCounts.se(test, size.factors=test$sum)
+test <- chooseRnaHvgs.se(test, num.threads=2)
+test <- runPca.se(test, features=rowData(test)$hvg, num.threads=2)
+test <- runAllNeighborSteps.se(test, num.threads=2)
+markers <- scoreMarkers.se(test, groups=test$clusters, num.threads=2)
 ```
-
-And visualization:
-
-```{r}
-umap.out <- runUmap(pca$components, num.threads=nthreads)
-tsne.out <- runTsne(pca$components, num.threads=nthreads)
-plot(tsne.out[,1], tsne.out[,2], col=factor(clust.out$membership))
-```
-
-And finally marker detection:
-
-```{r}
-markers <- scoreMarkers(normalized, groups=clust.out$membership, num.threads=nthreads)
-
-# Top markers for each cluster, say, based on the median AUC:
-top.markers <- lapply(markers$auc, function(x) {
-    head(rownames(x)[order(x$median, decreasing=TRUE)], 10)
-})
-head(top.markers)
-```
-
-Readers are referred to the [OSCA book](https://bioconductor.org/books/release/OSCA/) for more details on the theory behind each step.
 
 # Blocking on batches 
 
@@ -104,8 +86,10 @@ Let's fetch another brain dataset and combine it with the previous one.
 
 ```{r}
 sce.t <- TasicBrainData()
+
+# Only using the common genes in both datasets.
 common <- intersect(rownames(sce.z), rownames(sce.t))
-combined <- cbind(assay(sce.t)[common,], assay(sce.z)[common,])
+combined <- combineCols(sce.t[common,], sce.z[common,])
 block <- rep(c("tasic", "zeisel"), c(ncol(sce.t), ncol(sce.z)))
 ```
 
@@ -114,37 +98,38 @@ This ensures that the various calculations are not affected by inter-block diffe
 It also uses MNN correction to batch effects in the low-dimensional space prior to further analyses.
 
 ```{r}
-library(scrapper)
-rna.qc.metrics <- computeRnaQcMetrics(combined, subsets=list(), num.threads=nthreads)
-rna.qc.thresholds <- suggestRnaQcThresholds(rna.qc.metrics, block=block)
-rna.qc.filter <- filterRnaQcMetrics(rna.qc.thresholds, rna.qc.metrics, block=block)
+# No mitochondrial genes in the combined set, so we'll just skip it.
+blocked_res <- analyze.se(combined, block=block, num.threads=2)
+```
 
-filtered <- combined[,rna.qc.filter,drop=FALSE]
-filtered.block <- block[rna.qc.filter]
-size.factors <- centerSizeFactors(rna.qc.metrics$sum[rna.qc.filter], block=filtered.block)
-normalized <- normalizeCounts(filtered, size.factors)
+Hopefully, the correction is able to get rid of the batch effect and merge the datasets together. 
 
-gene.var <- modelGeneVariances(normalized, num.threads=nthreads, block=filtered.block)
-top.hvgs <- chooseHighlyVariableGenes(gene.var$statistics$residuals)
-pca <- runPca(normalized[top.hvgs,], num.threads=nthreads, block=filtered.block)
+```{r}
+plotReducedDim(blocked_res$x, "TSNE", colour_by="block")
+```
 
-# Now we do a MNN correction to get rid of the batch effect.
-corrected <- correctMnn(pca$components, block=filtered.block, num.threads=nthreads)
+We can also check the distribution of clusters across batches.
+The presence of batch-specific clusters might indicate that the batch effect was not fully removed;
+or they might represent cell types that are unique to one of the studies, who knows.
 
-umap.out <- runUmap(corrected$corrected, num.threads=nthreads)
-tsne.out <- runTsne(corrected$corrected, num.threads=nthreads)
-plot(tsne.out[,1], tsne.out[,2], pch=16, col=factor(filtered.block))
+```{r}
+table(blocked_res$x$graph.cluster, blocked_res$x$block)
+```
 
-snn.graph <- buildSnnGraph(corrected$corrected, num.threads=nthreads)
-clust.out <- clusterGraph(snn.graph)
+Finally, some markers for another cluster:
 
-markers <- scoreMarkers(normalized, groups=clust.out$membership, block=filtered.block, num.threads=nthreads)
+```{r}
+previewMarkers(blocked_res$markers$rna[[1]])
 ```
 
 We can also compute pseudo-bulk profiles for each cluster-dataset combination, e.g., for differential expression analyses.
 
 ```{r}
-aggregates <- aggregateAcrossCells(filtered, list(cluster=clust.out$membership, dataset=filtered.block))
+aggregates <- aggregateAcrossCells.se(
+    blocked_res$x,
+    list(cluster=blocked_res$x$graph.cluster, dataset=blocked_res$x$block)
+)
+aggregates
 ```
 
 # Combining multiple modalities
@@ -155,65 +140,53 @@ To keep the run-time short, we'll only consider the first 5000 cells.
 ```{r}
 sce.s <- StoeckiusHashingData(mode=c("human", "adt1", "adt2"))
 sce.s <- sce.s[,1:5000]
+
+# Combining the various ADT-related alternative experiments into a single object.
+altExp(sce.s, "all.adts") <- rbind(altExp(sce.s, "adt1"), altExp(sce.s, "adt2"))
+altExp(sce.s, "adt1") <- altExp(sce.s, "adt2") <- NULL
+
 sce.s
 ```
 
-We extract the counts for both the RNA and the ADTs.
+We specify `adt.altexp=` to indicate that one of the alternative experiments contains ADT data.
+This instructs the analysis to use data from both modalities during clustering and visualization.
 
 ```{r}
-rna.counts <- assay(sce.s)
-adt.counts <- rbind(assay(altExp(sce.s, "adt1")), assay(altExp(sce.s, "adt2")))
+is.mito <- grepl("^MT-", rownames(sce.s))
+is.igg <- grepl("^IgG", rownames(altExp(sce.s, 'all.adts')))
+multi_res <- analyze.se(
+    sce.s,
+    adt.altexp="all.adts",
+    rna.qc.subsets=list(mito=is.mito),
+    adt.qc.subsets=list(igg=is.igg),
+    num.threads=2
+)
 ```
 
-We use both matrices in our analysis pipeline.
-Each modality is processed separately before being combined for steps like clustering and visualization.
+Here's an obligatory plot:
 
 ```{r}
-# QC in both modalities, only keeping the cells that pass in both.
-is.mito <- grepl("^MT-", rownames(rna.counts))
-rna.qc.metrics <- computeRnaQcMetrics(rna.counts, subsets=list(MT=is.mito), num.threads=nthreads)
-rna.qc.thresholds <- suggestRnaQcThresholds(rna.qc.metrics)
-rna.qc.filter <- filterRnaQcMetrics(rna.qc.thresholds, rna.qc.metrics)
+plotReducedDim(multi_res$x, "UMAP", colour_by="graph.cluster")
+```
 
-is.igg <- grepl("^IgG", rownames(adt.counts))
-adt.qc.metrics <- computeAdtQcMetrics(adt.counts, subsets=list(IgG=is.igg), num.threads=nthreads)
-adt.qc.thresholds <- suggestAdtQcThresholds(adt.qc.metrics)
-adt.qc.filter <- filterAdtQcMetrics(adt.qc.thresholds, adt.qc.metrics)
+We can inspect the top markers among the ADTs for a cluster:
 
-keep <- rna.qc.filter & adt.qc.filter
-rna.filtered <- rna.counts[,keep,drop=FALSE]
-adt.filtered <- adt.counts[,keep,drop=FALSE]
+```{r}
+# By default, markers are sorted by the mean Cohen's d.
+# We just replace the column name when printing the dataframe here.
+previewMarkers(multi_res$markers$adt[[5]], c(effect="cohens.d.mean"))
+```
 
-rna.size.factors <- centerSizeFactors(rna.qc.metrics$sum[keep])
-rna.normalized <- normalizeCounts(rna.filtered, rna.size.factors)
+... along with the RNA markers, as before.
 
-adt.size.factors <- computeClrm1Factors(adt.filtered, num.threads=nthreads)
-adt.size.factors <- centerSizeFactors(adt.size.factors)
-adt.normalized <- normalizeCounts(adt.filtered, adt.size.factors)
-
-gene.var <- modelGeneVariances(rna.normalized, num.threads=nthreads)
-top.hvgs <- chooseHighlyVariableGenes(gene.var$statistics$residuals)
-rna.pca <- runPca(rna.normalized[top.hvgs,], num.threads=nthreads)
-
-# Combining the RNA-derived PCs with ADT expression. Here, there's very few ADT
-# tags so there's no need for further dimensionality reduction.
-combined <- scaleByNeighbors(list(rna.pca$components, as.matrix(adt.normalized)), num.threads=nthreads)
-
-snn.graph <- buildSnnGraph(combined$combined, num.threads=nthreads)
-clust.out <- clusterGraph(snn.graph)
-table(clust.out$membership)
-
-umap.out <- runUmap(combined$combined, num.threads=nthreads)
-tsne.out <- runTsne(combined$combined, num.threads=nthreads)
-plot(umap.out[,1], umap.out[,2], pch=16, col=factor(clust.out$membership))
-
-rna.markers <- scoreMarkers(rna.normalized, groups=clust.out$membership, num.threads=nthreads)
-adt.markers <- scoreMarkers(adt.normalized, groups=clust.out$membership, num.threads=nthreads)
+```{r}
+# Using the delta-detected to focus on silent-to-expressed genes.
+previewMarkers(multi_res$markers$rna[[5]], order.by="delta.detected.mean")
 ```
 
 # Other useful functions
 
-The `runAllNeighborSteps()` will run `runUmap()`, `runTsne()`, `buildSnnGraph()` and `clusterGraph()` in a single call.
+The `runAllNeighborSteps()` fucntion will run `runUmap()`, `runTsne()`, `buildSnnGraph()` and `clusterGraph()` in a single call.
 This runs the UMAP/t-SNE iterations and the clustering in parallel to maximize use of multiple threads.
 
 The `scoreGeneSet()` function will compute a gene set score based on the input expression matrix.

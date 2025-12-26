@@ -230,8 +230,7 @@ Execute a simple single-cell analysis pipeline, starting from a count matrix and
 This also supports integration of multiple modalities and correction of batch effects.
 }
 \examples{
-library(scRNAseq)
-sce <- fetchDataset("zeisel-brain-2015", "2023-12-14", realize.assays=TRUE)
+sce <- getTestRnaData.se()
 sce <- sce[,1:500] # smaller dataset for a faster runtime for R CMD check. 
 res <- analyze(
     sce, 

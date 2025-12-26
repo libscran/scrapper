@@ -155,8 +155,7 @@
 #'
 #' @author Aaron Lun
 #' @examples
-#' library(scRNAseq)
-#' sce <- fetchDataset("zeisel-brain-2015", "2023-12-14", realize.assays=TRUE)
+#' sce <- getTestRnaData.se()
 #' sce <- sce[,1:500] # smaller dataset for a faster runtime for R CMD check. 
 #' res <- analyze(
 #'     sce, 
@@ -208,6 +207,7 @@ analyze <- function(
     num.threads = 3L)
 {
     store <- list()
+    .Deprecated(new="analyze.se")
 
     try.se.extract <- function(x, assay) {
         if (is(x, "SummarizedExperiment")) {
@@ -534,6 +534,7 @@ convertAnalyzeResults <- function(
     include.per.block.variances = FALSE)
 {
     objects <- list()
+    .Deprecated(new="analyze.se")
 
     maybe.filter <- function(x, ncells) {
         if (nrow(x) > ncells) {
