@@ -185,7 +185,7 @@ getTestCrisprData.se <- function(at = c("start", "qc")) {
 
     if (!("qc" %in% names(cache$crispr))) {
         sce <- quickRnaQc.se(sce, subsets=list(mito=startsWith(rownames(sce), "MT-")))
-        SingleCellExperiment::altExp(sce, "CRISPR Guide Capture") <- quickCrisprQc.se(SingleCEllExperiment::altExp(sce, "CRISPR Guide Capture"))
+        SingleCellExperiment::altExp(sce, "CRISPR Guide Capture") <- quickCrisprQc.se(SingleCellExperiment::altExp(sce, "CRISPR Guide Capture"))
         sce <- sce[,sce$keep & SingleCellExperiment::altExp(sce, "CRISPR Guide Capture")$keep]
         cache$crispr$qc <- sce
     }
