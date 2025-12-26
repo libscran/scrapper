@@ -25,6 +25,8 @@
 #' @seealso
 #' The \code{choose_highly_variable_genes} function in \url{https://libscran.github.io/scran_variances/}. 
 #'
+#' \code{\link{chooseRnaHvgs.se}}, which choose the HVGs from the residuals computed from a \link[SummarizedExperiment]{SummarizedExperiment}.
+#'
 #' @author Aaron Lun
 #' @export
 chooseHighlyVariableGenes <- function(stats, top=4000, larger=TRUE, keep.ties=TRUE, bound=0) {

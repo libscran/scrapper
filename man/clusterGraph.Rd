@@ -69,7 +69,9 @@ str(clusterGraph(gout, method="walktrap"))
 
 }
 \seealso{
-The various \code{cluster_*} functions in \url{https://libscran.github.io/scran_graph_cluster/}.
+The various \code{cluster_*} functions in \url{https://libscran.github.io/scran_graph_cluster/}. 
+
+\code{\link{clusterGraph.se}}, which performs clustering on graph constructed from a \link[SingleCellExperiment]{SingleCellExperiment}.
 }
 \author{
 Aaron Lun

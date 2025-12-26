@@ -36,12 +36,13 @@ choosePseudoCount(sf, quantile=0.01)
 choosePseudoCount(sf, max.bias=0.5)
 
 }
-\seealso{
-\code{choose_pseudo_count} in \url{https://libscran.github.io/scran_norm/}.
-
+\references{
 Lun ATL (2018).
 Overcoming systematic errors caused by log-transformation of normalized single-cell RNA sequencing data.
 \emph{biorXiv} doi:10.1101/404962
+}
+\seealso{
+\code{choose_pseudo_count} in \url{https://libscran.github.io/scran_norm/}.
 }
 \author{
 Aaron Lun

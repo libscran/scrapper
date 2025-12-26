@@ -109,6 +109,8 @@ Accelerating t-SNE using tree-based algorithms.
 }
 \seealso{
 \url{https://libscran.github.io/qdtsne/}, for an explanation of the approximations.
+
+\code{\link{runTsne.se}}, to run t-SNE on a \link[SingleCellExperiment]{SingleCellExperiment}.
 }
 \author{
 Aaron Lun

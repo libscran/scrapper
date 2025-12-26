@@ -67,6 +67,8 @@ optr
 }
 \seealso{
 The \code{normalize_counts} function in \url{https://libscran.github.io/scran_norm/}.
+
+\code{\link{normalizeRnaCounts.se}} and related functions, which compute normalized expression values from a \link[SummarizedExperiment]{SummarizedExperiment}.
 }
 \author{
 Aaron Lun

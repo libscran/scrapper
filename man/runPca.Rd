@@ -121,7 +121,9 @@ str(bout)
 
 }
 \seealso{
-The \code{simple_pca} and \code{blocked_pca} functions for \url{https://libscran.github.io/scran_pca/}.
+The \code{simple_pca} and \code{blocked_pca} functions for \url{https://libscran.github.io/scran_pca/}. 
+
+\code{\link{runPca.se}}, to run a PCA on a \link[SummarizedExperiment]{SummarizedExperiment}.
 }
 \author{
 Aaron Lun

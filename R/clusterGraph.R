@@ -40,6 +40,8 @@
 #' @seealso
 #' The various \code{cluster_*} functions in \url{https://libscran.github.io/scran_graph_cluster/}. 
 #'
+#' \code{\link{clusterGraph.se}}, which performs clustering on graph constructed from a \link[SingleCellExperiment]{SingleCellExperiment}.
+#'
 #' @examples
 #' data <- matrix(rnorm(10000), ncol=1000)
 #' gout <- buildSnnGraph(data)

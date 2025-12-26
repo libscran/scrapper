@@ -62,6 +62,9 @@ res <- runAllNeighborSteps(x, num.threads=2)
 str(res)
 
 }
+\seealso{
+\code{\link{runAllNeighborSteps.se}}, to run each neighbor-related step on a \link[SingleCellExperiment]{SingleCellExperiment}.
+}
 \author{
 Aaron Lun
 }

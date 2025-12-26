@@ -53,6 +53,8 @@
 #'
 #' \code{\link{clusterGraph}}, to define clusters (i.e., communities) from the graph.
 #'
+#' \code{\link{clusterGraph.se}}, which builds an SNN graph from a \link[SingleCellExperiment]{SingleCellExperiment}.
+#'
 #' @examples
 #' data <- matrix(rnorm(10000), ncol=1000)
 #' out <- buildSnnGraph(data)

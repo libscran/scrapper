@@ -73,6 +73,8 @@
 #' @seealso
 #' The \code{simple_pca} and \code{blocked_pca} functions for \url{https://libscran.github.io/scran_pca/}. 
 #'
+#' \code{\link{runPca.se}}, to run a PCA on a \link[SummarizedExperiment]{SummarizedExperiment}.
+#'
 #' @examples
 #' library(Matrix)
 #' x <- abs(rsparsematrix(1000, 100, 0.1) * 10)

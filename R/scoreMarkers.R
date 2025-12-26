@@ -169,6 +169,9 @@
 #' \code{\link{summarizeEffects}}, to summarize the pairwise effects returned when \code{all.pairwise=TRUE}.
 #'
 #' \code{\link{reportGroupMarkerStatistics}}, to consolidate the statistics for a single group into its own data frame.
+#'
+#' \code{\link{scoreMarkers.se}}, to score markers from a \link[SummarizedExperiment]{SummarizedExperiment}.
+#'
 #' @export
 #' @importFrom beachmat initializeCpp
 scoreMarkers <- function(

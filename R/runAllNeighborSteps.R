@@ -27,6 +27,9 @@
 #'
 #' @return A named list containing the results of each step.
 #' See each individual function for the format of the results.
+#'
+#' @seealso
+#' \code{\link{runAllNeighborSteps.se}}, to run each neighbor-related step on a \link[SingleCellExperiment]{SingleCellExperiment}.
 #' 
 #' @author Aaron Lun
 #' @examples

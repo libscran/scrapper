@@ -43,7 +43,9 @@ str(chooseHighlyVariableGenes(resids))
 
 }
 \seealso{
-The \code{choose_highly_variable_genes} function in \url{https://libscran.github.io/scran_variances/}.
+The \code{choose_highly_variable_genes} function in \url{https://libscran.github.io/scran_variances/}. 
+
+\code{\link{chooseRnaHvgs.se}}, which choose the HVGs from the residuals computed from a \link[SummarizedExperiment]{SummarizedExperiment}.
 }
 \author{
 Aaron Lun

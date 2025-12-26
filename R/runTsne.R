@@ -54,6 +54,8 @@
 #' @seealso
 #' \url{https://libscran.github.io/qdtsne/}, for an explanation of the approximations.
 #'
+#' \code{\link{runTsne.se}}, to run t-SNE on a \link[SingleCellExperiment]{SingleCellExperiment}.
+#'
 #' @examples
 #' x <- t(as.matrix(iris[,1:4]))
 #' embedding <- runTsne(x)

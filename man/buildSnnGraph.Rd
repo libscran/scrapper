@@ -81,6 +81,8 @@ igraph::E(g)$weight <- out$weight
 The \code{build_snn_graph} function in \url{https://libscran.github.io/scran_graph_cluster/}.
 
 \code{\link{clusterGraph}}, to define clusters (i.e., communities) from the graph.
+
+\code{\link{clusterGraph.se}}, which builds an SNN graph from a \link[SingleCellExperiment]{SingleCellExperiment}.
 }
 \author{
 Aaron Lun

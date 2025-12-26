@@ -73,7 +73,7 @@ lines(x[o], out$fitted[o], col="red")
 
 }
 \seealso{
-\code{\link{modelGeneVariances}}, to compute the means and variances.
+\code{\link{modelGeneVariances}}, to compute the means and variances on which the trend is fitted.
 
 The \code{fit_variance_trend} function in \url{https://libscran.github.io/scran_variances/}.
 }

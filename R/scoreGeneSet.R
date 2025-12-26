@@ -24,6 +24,8 @@
 #' @seealso
 #' The \code{compute} and \code{compute_blocked} functions in \url{https://libscran.github.io/gsdecon/}.
 #'
+#' \code{\link{scoreGeneSet.se}}, to compute gene set scores from a \link[SummarizedExperiment]{SummarizedExperiment}.
+#'
 #' @author Aaron Lun
 #' @examples
 #' library(Matrix)

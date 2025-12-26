@@ -64,6 +64,8 @@ dim(out$combined)
 }
 \seealso{
 \url{https://libscran.github.io/mumosa/}, for the basis and caveats of this approach.
+
+\code{\link{scaleByNeighbors.se}}, to combine embeddings in a \link[SingleCellExperiment]{SingleCellExperiment}.
 }
 \author{
 Aaron Lun

@@ -38,6 +38,8 @@
 #' @seealso
 #' The \code{compute} function in \url{https://libscran.github.io/mnncorrect/}.
 #'
+#' \code{\link{correctMnn.se}}, to perform MNN correction on a \link[SingleCellExperiment]{SingleCellExperiment}.
+#'
 #' @references 
 #' Haghverdi L, Lun ATL, Morgan MD, Marioni JC (2018).
 #' Batch effects in single-cell RNA-sequencing data are corrected by matching mutual nearest neighbors.

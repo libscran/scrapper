@@ -81,6 +81,8 @@ scoreGeneSet(normed, set=c(1,3,5,10,20,100))
 }
 \seealso{
 The \code{compute} and \code{compute_blocked} functions in \url{https://libscran.github.io/gsdecon/}.
+
+\code{\link{scoreGeneSet.se}}, to compute gene set scores from a \link[SummarizedExperiment]{SummarizedExperiment}.
 }
 \author{
 Aaron Lun

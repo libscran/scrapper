@@ -70,6 +70,8 @@
 #' @seealso
 #' The \code{compute_crispr_qc_metrics}, \code{compute_crispr_qc_filters} and \code{compute_crispr_qc_filters_blocked} functions in \url{https://libscran.github.io/scran_qc/}.
 #'
+#' \code{\link{quickCrisprQc.se}}, to run all of the CRISPR-related QC functions on a \link[SummarizedExperiment]{SummarizedExperiment}.
+#'
 #' @author Aaron Lun
 #' @examples
 #' # Mocking a matrix:

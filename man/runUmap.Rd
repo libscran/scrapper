@@ -165,6 +165,8 @@ UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction.
 }
 \seealso{
 \url{https://libscran.github.io/umappp/}, for details on the underlying implementation.
+
+\code{\link{runUmap.se}}, to run UMAP on a \link[SingleCellExperiment]{SingleCellExperiment}.
 }
 \author{
 Aaron Lun

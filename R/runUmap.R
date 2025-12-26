@@ -86,6 +86,8 @@
 #' @seealso
 #' \url{https://libscran.github.io/umappp/}, for details on the underlying implementation.
 #'
+#' \code{\link{runUmap.se}}, to run UMAP on a \link[SingleCellExperiment]{SingleCellExperiment}.
+#'
 #' @references
 #' McInnes L, Healy J, Melville J (2020).
 #' UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction.

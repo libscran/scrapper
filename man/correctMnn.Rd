@@ -90,6 +90,8 @@ Batch effects in single-cell RNA-sequencing data are corrected by matching mutua
 }
 \seealso{
 The \code{compute} function in \url{https://libscran.github.io/mnncorrect/}.
+
+\code{\link{correctMnn.se}}, to perform MNN correction on a \link[SingleCellExperiment]{SingleCellExperiment}.
 }
 \author{
 Aaron Lun

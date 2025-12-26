@@ -118,6 +118,8 @@ In Search of Deterministic Methods for Initializing K-Means and Gaussian Mixture
 }
 \seealso{
 \url{https://ltla.github.io/CppKmeans/}, which describes the various initialization and refinement algorithms in more detail.
+
+\code{\link{clusterKmeans.se}}, for k-means clustering on a \link[SingleCellExperiment]{SingleCellExperiment}.
 }
 \author{
 Aaron Lun

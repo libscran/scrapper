@@ -15,6 +15,8 @@
 #' @seealso
 #' \url{https://github.com/libscran/clrm1}, for a description of the CLRm1 method.
 #'
+#' \code{\link{normalizeAdtCounts.se}}, which computes CLRm1 factors prior to normalization.
+#'
 #' @examples
 #' library(Matrix)
 #' x <- abs(rsparsematrix(1000, 100, 0.1) * 10)

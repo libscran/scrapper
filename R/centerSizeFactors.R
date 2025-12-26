@@ -34,6 +34,8 @@
 #' @seealso
 #' The \code{center_size_factors} and \code{center_size_factors_blocked} functions in \url{https://libscran.github.io/scran_norm/}.
 #'
+#' \code{\link{normalizeRnaCounts.se}} and related functions, which center the size factors prior to normalization of a \link[SummarizedExperiment]{SummarizedExperiment}.
+#'
 #' @examples
 #' centerSizeFactors(runif(100))
 #'

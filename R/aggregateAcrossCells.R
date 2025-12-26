@@ -26,6 +26,8 @@
 #' @seealso
 #' The \code{aggregate_across_cells} function in \url{https://libscran.github.io/scran_aggregate/}.
 #'
+#' \code{\link{aggregateAcrossCells.se}}, to perform aggregation on a \link[SummarizedExperiment]{SummarizedExperiment}.
+#'
 #' \code{\link{aggregateAcrossGenes}}, to aggregate expression values across gene sets.
 #'
 #' @author Aaron Lun

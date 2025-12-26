@@ -43,6 +43,8 @@
 #' @seealso
 #' The \code{model_gene_variances} function in \url{https://libscran.github.io/scran_variances/}.
 #'
+#' \code{\link{chooseRnaHvgs.se}}, which computes the variances and trend from a \link[SummarizedExperiment]{SummarizedExperiment}.
+#'
 #' @examples
 #' library(Matrix)
 #' x <- abs(rsparsematrix(1000, 100, 0.1) * 10)

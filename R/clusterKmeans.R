@@ -68,6 +68,8 @@
 #' @seealso
 #' \url{https://ltla.github.io/CppKmeans/}, which describes the various initialization and refinement algorithms in more detail.
 #'
+#' \code{\link{clusterKmeans.se}}, for k-means clustering on a \link[SingleCellExperiment]{SingleCellExperiment}.
+#'
 #' @references
 #' Hartigan JA. and Wong MA (1979).
 #' Algorithm AS 136: A K-means clustering algorithm.
