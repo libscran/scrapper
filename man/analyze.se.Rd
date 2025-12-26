@@ -181,7 +181,7 @@ Only used if \code{block} is supplied.}
 
 \item{more.cluster.graph.args}{Passed to \code{\link{runAllNeighborSteps.se}}.}
 
-\item{more.neighbor.args}{Named list of arguments to pass to \code{\link{runAllNeighborSteps.se}}.}
+\item{more.neighbor.args}{Passed to \code{\link{runAllNeighborSteps.se}}.}
 
 \item{kmeans.clusters}{Passed to \code{\link{clusterKmeans.se}} as the \code{k} argument.
 If \code{NULL}, k-means clustering is not performed.}

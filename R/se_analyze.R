@@ -84,7 +84,7 @@
 #' @param more.build.graph.args Passed to \code{\link{runAllNeighborSteps.se}}. 
 #' @param cluster.graph.output.name Passed to \code{\link{runAllNeighborSteps.se}} as \code{cluster.output.name}.
 #' @param more.cluster.graph.args Passed to \code{\link{runAllNeighborSteps.se}}. 
-#' @param more.neighbor.args Named list of arguments to pass to \code{\link{runAllNeighborSteps.se}}.
+#' @param more.neighbor.args Passed to \code{\link{runAllNeighborSteps.se}}.
 #' @param kmeans.clusters Passed to \code{\link{clusterKmeans.se}} as the \code{k} argument.
 #' If \code{NULL}, k-means clustering is not performed.
 #' @param kmeans.clusters.output.name Passed to \code{\link{clusterKmeans.se}} as the \code{output.name} argument.
@@ -384,18 +384,20 @@ analyze.se <- function(
 
     ############ Assorted neighbor-related stuff ⸜(⸝⸝⸝´꒳`⸝⸝⸝)⸝ #############
 
-    x <- .call(
+    x <- do.call(
         runAllNeighborSteps.se,
-        list(x, reddim.type=target.embedding, cluster.output.name=cluster.graph.output.name),
         list(
+            x,
+            reddim.type=target.embedding,
+            cluster.output.name=cluster.graph.output.name,
             more.umap.args=more.umap.args, 
             more.tsne.args=more.tsne.args, 
             more.build.graph.args=more.build.graph.args,
             more.cluster.graph.args=more.cluster.graph.args,
+            more.neighbor.args=more.neighbor.args,
             BNPARAM=BNPARAM,
             num.threads=num.threads
-        ),
-        more.neighbor.args
+        )
     )
 
     ############ Maybe some k-means clustering ⸜(⸝⸝⸝´꒳`⸝⸝⸝)⸝ #############
