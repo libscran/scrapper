@@ -148,15 +148,15 @@ test_that("analyze.se works correctly with the CRISPR modality", {
 
 test_that(".extract_or_error works correctly", {
     se$foo <- runif(ncol(se))
-    expect_identical(scrapple:::.extract_or_error(colData(se), "foo"), se$foo)
-    expect_error(scrapple:::.extract_or_error(colData(se), "bar"), "no DataFrame")
+    expect_identical(scrapper:::.extractOrError(colData(se), "foo"), se$foo)
+    expect_error(scrapper:::.extractOrError(colData(se), "bar"), "no DataFrame")
 })
 
 test_that(".delayify_assays works correctly", {
     assay(se, "logcounts", withDimnames=FALSE) <- matrix(rpois(10000, mean * 10), ncol=100)
     sce <- as(se, "SingleCellExperiment")
     altExp(sce, "FOOBAR") <- se
-    del <- scrapple:::.delayify_assays(sce)
+    del <- scrapper:::.delayifyAssays(sce)
 
     expect_s4_class(assay(del, "counts"), "DelayedMatrix")
     expect_identical(as.matrix(assay(del, "counts")), assay(se, "counts"))
@@ -171,9 +171,9 @@ test_that(".delayify_assays works correctly", {
 test_that(".define_single_target_embedding works as expected", {
     sce <- as(se, "SingleCellExperiment")
     altExp(sce, "FOOBAR") <- se
-    expect_identical(scrapple:::.define_single_target_embedding(sce, NA, "PCA"), "PCA")
-    expect_identical(scrapple:::.define_single_target_embedding(sce, 1, "PCA"), c(FOOBAR="PCA"))
-    expect_identical(scrapple:::.define_single_target_embedding(sce, "STUFF", "PCA"), c(STUFF="PCA"))
+    expect_identical(scrapper:::.defineSingleTargetEmbedding(sce, NA, "PCA"), "PCA")
+    expect_identical(scrapper:::.defineSingleTargetEmbedding(sce, 1, "PCA"), c(FOOBAR="PCA"))
+    expect_identical(scrapper:::.defineSingleTargetEmbedding(sce, "STUFF", "PCA"), c(STUFF="PCA"))
 })
 
 test_that(".add_source_embedding_to_scale works as expected", {
@@ -181,7 +181,7 @@ test_that(".add_source_embedding_to_scale works as expected", {
     altExp(sce, "FOOBAR") <- se
 
     everything <- list(main="A", altexp=list(YAY=2))
-    expect_identical(scrapple:::.add_source_embedding_to_scale(sce, NA, "PCA", everything), list(main=c("A", "PCA"), altexp=list(YAY=2)))
-    expect_identical(scrapple:::.add_source_embedding_to_scale(sce, 1, "PCA", everything), list(main="A", altexp=list(YAY=2, FOOBAR="PCA")))
-    expect_identical(scrapple:::.add_source_embedding_to_scale(sce, "STUFF", "PCA", everything), list(main="A", altexp=list(YAY=2, STUFF="PCA")))
+    expect_identical(scrapper:::.addSourceEmbeddingToScale(sce, NA, "PCA", everything), list(main=c("A", "PCA"), altexp=list(YAY=2)))
+    expect_identical(scrapper:::.addSourceEmbeddingToScale(sce, 1, "PCA", everything), list(main="A", altexp=list(YAY=2, FOOBAR="PCA")))
+    expect_identical(scrapper:::.addSourceEmbeddingToScale(sce, "STUFF", "PCA", everything), list(main="A", altexp=list(YAY=2, STUFF="PCA")))
 })
