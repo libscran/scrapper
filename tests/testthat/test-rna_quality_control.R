@@ -11,9 +11,10 @@ test_that("computeRnaQcMetrics works as expected", {
     expect_identical(qc$detected, Matrix::colSums(x > 0))
     expect_identical(qc$subsets$Mito, Matrix::colSums(x[sub$Mito,]) / qc$sum)
 
-    expect_error(computeRnaQcMetrics(x, list(TRUE)), "number of rows")
-    expect_error(computeRnaQcMetrics(x, list(-1)), "out-of-range")
-    expect_error(computeRnaQcMetrics(x, list("foo")), "no row names")
+    expect_error(computeRnaQcMetrics(x, list(-1)), "names")
+    expect_error(computeRnaQcMetrics(x, list(foo=TRUE)), "number of rows")
+    expect_error(computeRnaQcMetrics(x, list(foo=-1)), "out-of-range")
+    expect_error(computeRnaQcMetrics(x, list(foo="foo")), "no row names")
 })
 
 test_that("suggestRnaQcThresholds works as expected", { 

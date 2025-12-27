@@ -6,7 +6,8 @@
 #' @param x A matrix-like object where rows are CRISPRs and columns are cells.
 #' Values are expected to be counts.
 #' @param num.threads Integer scalar specifying the number of threads to use.
-#' @param metrics List with the same structure as produced by \code{computeCrisprQcMetrics}.
+#' @param metrics \link[S4Vectors]{DataFrame} of per-cell QC metrics.
+#' This should have the same structure as the return value of \code{computeCrisprQcMetrics}.
 #' @param block Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{metrics}.
 #' Alternatively \code{NULL} if all cells are from the same block.
 #'
@@ -14,7 +15,8 @@
 #' @param num.mads Number of median from the median, to define the threshold for outliers in each metric.
 #' @param thresholds List with the same structure as produced by \code{suggestCrisprQcThresholds}.
 #'
-#' @return For \code{computeCrisprQcMetrics}, a list is returned containing:
+#' @return For \code{computeCrisprQcMetrics}, a \link[S4Vectors]{DataFrame} is returned with one row per cell in \code{x}.
+#' This contains the following columns:
 #' \itemize{
 #' \item \code{sum}, a numeric vector containing the total CRISPR count for each cell.
 #' Low counts indicate that the cell was not successfully transfected with a construct or that library preparation and sequencing failed.
@@ -79,7 +81,7 @@
 #' x <- round(abs(rsparsematrix(100, 100, 0.1) * 100))
 #'
 #' qc <- computeCrisprQcMetrics(x)
-#' str(qc)
+#' qc
 #'
 #' filt <- suggestCrisprQcThresholds(qc)
 #' str(filt)
@@ -89,17 +91,19 @@
 #'
 #' @export
 #' @name crispr_quality_control
+#' @importFrom S4Vectors DataFrame
 computeCrisprQcMetrics <- function(x, num.threads = 1) {
     y <- initializeCpp(x, .check.na=FALSE)
     output <- compute_crispr_qc_metrics(y, num_threads=num.threads)
     output$max.index <- output$max.index + 1L
-    output
+    DataFrame(output, row.names=colnames(x))
 }
 
 #' @export
 #' @rdname crispr_quality_control
 suggestCrisprQcThresholds <- function(metrics, block=NULL, num.mads=3) {
     block <- .transformFactor(block)
+    metrics <- as.list(metrics)
     metrics$max.index <- metrics$max.index - 1L # restore 0-based indexing.
     thresholds <- suggest_crispr_qc_thresholds(metrics, block=block$index, num_mads=num.mads)
     names(thresholds$max.value) <- block$names
@@ -110,6 +114,7 @@ suggestCrisprQcThresholds <- function(metrics, block=NULL, num.mads=3) {
 #' @rdname crispr_quality_control
 filterCrisprQcMetrics <- function(thresholds, metrics, block=NULL) {
     block <- .matchBlockThresholds(block, names(thresholds$max.value))
+    metrics <- as.list(metrics)
     metrics$max.index <- metrics$max.index - 1L # restore 0-based indexing.
     filter_crispr_qc_metrics(thresholds, metrics, block=block)
 }

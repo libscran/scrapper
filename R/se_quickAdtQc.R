@@ -16,7 +16,7 @@
 #' If \code{NULL}, additional outputs are not reported.
 #' @param flatten Logical scalar indicating whether to flatten the subset proportions into separate columns of the \code{link[SummarizedExperiment]{colData}}.
 #' If \code{FALSE}, the subset proportions are stored in a nested \link[S4Vectors]{DataFrame}.
-#' @param compute.res List returned by \code{\link{computeAdtQcMetrics}}.
+#' @param compute.res \link[S4Vectors]{DataFrame} returned by \code{\link{computeAdtQcMetrics}}.
 #' 
 #' @return
 #' For \code{quickAdtQc.se}, \code{x} is returned with additional columns added to its \code{\link[SummarizedExperiment]{colData}}.
@@ -65,6 +65,7 @@ quickAdtQc.se <- function(
     SummarizedExperiment::colData(x) <- S4Vectors::cbind(SummarizedExperiment::colData(x), df)
 
     if (!is.null(meta.name)) {
+        names(thresholds)[names(thresholds) == "subsets"] <- "subset.sum"
         S4Vectors::metadata(x)[[meta.name]] <- list(thresholds=thresholds)
     }
 
@@ -73,20 +74,14 @@ quickAdtQc.se <- function(
 
 #' @export
 #' @rdname quickAdtQc.se
+#' @importFrom S4Vectors DataFrame cbind
 formatComputeAdtQcMetricsResult <- function(compute.res, flatten = TRUE) {
-    df <- S4Vectors::DataFrame(sum=compute.res$sum, detected=compute.res$detected)
-
     if (flatten) {
-        for (sub in names(compute.res$subsets)) {
-            df[[paste0(sub, ".sum")]] <- compute.res$subsets[[sub]]
-        }
+        extra <- compute.res$subsets
+        colnames(extra) <- sprintf("subset.sum.%s", colnames(extra))
+        cbind(DataFrame(sum=compute.res$sum, detected=compute.res$detected), extra)
     } else {
-        tmp <- S4Vectors::make_zero_col_DFrame(nrow=nrow(df))
-        for (sub in names(compute.res$subsets)) {
-            tmp[[sub]] <- compute.res$subsets[[sub]]
-        }
-        df[["sum"]] <- tmp
+        colnames(compute.res)[colnames(compute.res) == "subsets"] <- "subset.sum"
+        compute.res
     }
-
-    df
 }

@@ -28,7 +28,7 @@
 #' If \code{NULL}, additional outputs are not reported. 
 #' @param flatten Logical scalar indicating whether to flatten the subset proportions into separate columns of the \code{link[SummarizedExperiment]{colData}}.
 #' If \code{FALSE}, the subset proportions are stored in a nested \link[S4Vectors]{DataFrame}.
-#' @param compute.res List returned by \code{\link{computeRnaQcMetrics}}.
+#' @param compute.res \link[S4Vectors]{DataFrame} returned by \code{\link{computeRnaQcMetrics}}.
 #' 
 #' @return
 #' For \code{quickRnaQc.se}, \code{x} is returned with additional columns added to its \code{\link[SummarizedExperiment]{colData}}.
@@ -108,6 +108,7 @@ quickRnaQc.se <- function(
     }
 
     if (!is.null(meta.name)) {
+        names(thresholds)[names(thresholds) == "subsets"] <- "subset.proportion"
         S4Vectors::metadata(x)[[meta.name]] <- list(thresholds=thresholds)
     }
 
@@ -141,20 +142,14 @@ computeRnaQcMetricsWithAltExps <- function(x, subsets, altexp.proportions, num.t
 
 #' @export
 #' @rdname quickRnaQc.se
+#' @importFrom S4Vectors DataFrame cbind
 formatComputeRnaQcMetricsResult <- function(compute.res, flatten = TRUE) {
-    df <- S4Vectors::DataFrame(sum=compute.res$sum, detected=compute.res$detected)
-
     if (flatten) {
-        for (sub in names(compute.res$subsets)) {
-            df[[paste0(sub, ".proportion")]] <- compute.res$subsets[[sub]]
-        }
+        extra <- compute.res$subsets
+        colnames(extra) <- sprintf("subset.proportion.%s", colnames(extra))
+        cbind(DataFrame(sum=compute.res$sum, detected=compute.res$detected), extra)
     } else {
-        tmp <- S4Vectors::make_zero_col_DFrame(nrow=nrow(df))
-        for (sub in names(compute.res$subsets)) {
-            tmp[[sub]] <- compute.res$subsets[[sub]]
-        }
-        df[["proportion"]] <- tmp
+        colnames(compute.res)[colnames(compute.res) == "subsets"] <- "subset.proportion"
+        compute.res
     }
-
-    df
 }

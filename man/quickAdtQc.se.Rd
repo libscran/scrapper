@@ -41,7 +41,7 @@ If \code{NULL}, additional outputs are not reported.}
 \item{flatten}{Logical scalar indicating whether to flatten the subset proportions into separate columns of the \code{link[SummarizedExperiment]{colData}}.
 If \code{FALSE}, the subset proportions are stored in a nested \link[S4Vectors]{DataFrame}.}
 
-\item{compute.res}{List returned by \code{\link{computeAdtQcMetrics}}.}
+\item{compute.res}{\link[S4Vectors]{DataFrame} returned by \code{\link{computeAdtQcMetrics}}.}
 }
 \value{
 For \code{quickAdtQc.se}, \code{x} is returned with additional columns added to its \code{\link[SummarizedExperiment]{colData}}.

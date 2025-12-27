@@ -17,12 +17,13 @@ filterRnaQcMetrics(thresholds, metrics, block = NULL)
 \item{x}{A matrix-like object where rows are genes and columns are cells.
 Values are expected to be counts.}
 
-\item{subsets}{List of vectors specifying gene subsets of interest, typically for control-like features like mitochondrial genes or spike-in transcripts.
+\item{subsets}{Named list of vectors specifying gene subsets of interest, typically for control-like features like mitochondrial genes or spike-in transcripts.
 Each vector may be logical (whether to keep each row), integer (row indices) or character (row names).}
 
 \item{num.threads}{Integer scalar specifying the number of threads to use.}
 
-\item{metrics}{List with the same structure as produced by \code{computeRnaQcMetrics}.}
+\item{metrics}{\link[S4Vectors]{DataFrame} of per-cell QC metrics.
+This should have the same structure as the return value of \code{computeRnaQcMetrics}.}
 
 \item{block}{Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{metrics}.
 Alternatively \code{NULL} if all cells are from the same block.
@@ -34,14 +35,15 @@ For \code{filterRnaQcMetrics}, a blocking factor should be provided if \code{blo
 \item{thresholds}{List with the same structure as produced by \code{suggestRnaQcThresholds}.}
 }
 \value{
-For \code{computeRnaQcMetrics}, a list is returned containing:
+For \code{computeRnaQcMetrics}, a \link[S4Vectors]{DataFrame} is returned with one row per cell in \code{x}.
+This contains the following columns:
 \itemize{
 \item \code{sum}, a numeric vector containing the total RNA count for each cell.
 This represents the efficiency of library preparation and sequencing.
 Low totals indicate that the library was not successfully captured.
 \item \code{detected}, an integer vector containing the number of detected genes per cell.
 This also quantifies library preparation efficiency but with greater focus on capturing transcriptional complexity.
-\item \code{subsets}, a list of numeric vectors containing the proportion of counts in each feature subset.
+\item \code{subsets}, a nested DataFrame where each column corresponds to a feature subset and is a numeric vector containing the proportion of counts in that subset.
 The exact interpretation of which depends on the nature of the subset.
 For example, if one subset contains all genes on the mitochondrial chromosome, higher proportions are representative of cell damage;
 the assumption is that cytoplasmic transcripts leak through tears in the cell membrane while the mitochondria are still trapped inside.
@@ -88,7 +90,7 @@ x <- round(abs(rsparsematrix(1000, 100, 0.1) * 100))
 sub <- list(mito=rbinom(nrow(x), 1, 0.1) > 0)
 
 qc <- computeRnaQcMetrics(x, sub)
-str(qc)
+qc
 
 filt <- suggestRnaQcThresholds(qc)
 str(filt)

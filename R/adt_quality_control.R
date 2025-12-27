@@ -5,10 +5,11 @@
 #' 
 #' @param x A matrix-like object where rows are ADTs and columns are cells.
 #' Values are expected to be counts.
-#' @param subsets List of vectors specifying tag subsets of interest, typically control tags like IgGs.
+#' @param subsets Named list of vectors specifying tag subsets of interest, typically control tags like IgGs.
 #' Each vector may be logical (whether to keep each row), integer (row indices) or character (row names).
 #' @param num.threads Integer scalar specifying the number of threads to use.
-#' @param metrics List with the same structure as produced by \code{computeAdtQcMetrics}.
+#' @param metrics \link[S4Vectors]{DataFrame} of per-cell QC metrics.
+#' This should have the same structure as the return value of \code{computeAdtQcMetrics}.
 #' @param block Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{metrics}.
 #' Alternatively \code{NULL} if all cells are from the same block.
 #'
@@ -17,7 +18,8 @@
 #' @param num.mads Number of median from the median, to define the threshold for outliers in each metric.
 #' @param thresholds List with the same structure as produced by \code{suggestAdtQcThresholds}.
 #'
-#' @return For \code{computeAdtQcMetrics}, a list is returned containing:
+#' @return For \code{computeAdtQcMetrics}, a \link[S4Vectors]{DataFrame} is returned with one row per cell in \code{x}.
+#' This contains the following columns:
 #' \itemize{
 #' \item \code{sum}, a numeric vector containing the total ADT count for each cell.
 #' In theory, this represents the efficiency of library preparation and sequencing.
@@ -27,7 +29,7 @@
 #' Even though ADTs are typically used in situations where few features are highly abundant (e.g., cell type-specific markers), 
 #' we still expect detectable coverage of most features due to ambient contamination, non-specific binding or some background expression.
 #' Low numbers of detected tags indicates that library preparation or sequencing depth was suboptimal.
-#' \item \code{subsets}, a list of numeric vectors containing the total count of each control subset. 
+#' \item \code{subsets}, a nested DataFrame where each column corresponds to a control subset and is a numeric vector containing the total count in that subset. 
 #' The exact interpretation depends on the nature of the feature subset but the most common use case involves isotype control (IgG) features.
 #' IgG antibodies should not bind to anything so a high subset sum suggests that non-specific binding is a problem, e.g., due to antibody conjugates.
 #' (Unlike RNA quality control, we do not use proportions here as it is entirely possible for a cell to have low counts for other tags due to the absence of their targeted features;
@@ -74,7 +76,7 @@
 #' sub <- list(IgG=rbinom(nrow(x), 1, 0.1) > 0)
 #'
 #' qc <- computeAdtQcMetrics(x, sub)
-#' str(qc)
+#' qc 
 #'
 #' filt <- suggestAdtQcThresholds(qc)
 #' str(filt)
@@ -85,21 +87,23 @@
 #' @export
 #' @name adt_quality_control
 #' @importFrom beachmat initializeCpp tatami.dim
+#' @importFrom S4Vectors DataFrame I
 computeAdtQcMetrics <- function(x, subsets, num.threads = 1) {
+    stopifnot(length(subsets) == 0 || !is.null(names(subsets)))
     ptr <- initializeCpp(x, .check.na=FALSE)
 
     subsets <- as.list(subsets)
     subsets <- lapply(subsets, .subsetToLogical, n=tatami.dim(ptr)[1], names=rownames(x))
 
     output <- compute_adt_qc_metrics(ptr, subsets, num_threads=num.threads)
-    names(output$subsets) <- names(subsets)
-    output
+    .reformatQcMetrics(output, "subsets", subsets, x)
 }
 
 #' @export
 #' @rdname adt_quality_control
 suggestAdtQcThresholds <- function(metrics, block=NULL, min.detected.drop=0.1, num.mads=3) {
     block <- .transformFactor(block) 
+    metrics <- .simplifyQcMetrics(metrics)
     thresholds <- suggest_adt_qc_thresholds(metrics, block=block$index, min_detected_drop=min.detected.drop, num_mads=num.mads)
 
     names(thresholds$detected) <- block$names
@@ -115,5 +119,6 @@ suggestAdtQcThresholds <- function(metrics, block=NULL, min.detected.drop=0.1, n
 #' @rdname adt_quality_control
 filterAdtQcMetrics <- function(thresholds, metrics, block=NULL) {
     block <- .matchBlockThresholds(block, names(thresholds$detected))
+    metrics <- .simplifyQcMetrics(metrics)
     filter_adt_qc_metrics(thresholds, metrics, block=block)
 }

@@ -19,7 +19,8 @@ Values are expected to be counts.}
 
 \item{num.threads}{Integer scalar specifying the number of threads to use.}
 
-\item{metrics}{List with the same structure as produced by \code{computeCrisprQcMetrics}.}
+\item{metrics}{\link[S4Vectors]{DataFrame} of per-cell QC metrics.
+This should have the same structure as the return value of \code{computeCrisprQcMetrics}.}
 
 \item{block}{Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{metrics}.
 Alternatively \code{NULL} if all cells are from the same block.
@@ -31,7 +32,8 @@ For \code{filterCrisprQcMetrics}, a blocking factor should be provided if \code{
 \item{thresholds}{List with the same structure as produced by \code{suggestCrisprQcThresholds}.}
 }
 \value{
-For \code{computeCrisprQcMetrics}, a list is returned containing:
+For \code{computeCrisprQcMetrics}, a \link[S4Vectors]{DataFrame} is returned with one row per cell in \code{x}.
+This contains the following columns:
 \itemize{
 \item \code{sum}, a numeric vector containing the total CRISPR count for each cell.
 Low counts indicate that the cell was not successfully transfected with a construct or that library preparation and sequencing failed.
@@ -94,7 +96,7 @@ library(Matrix)
 x <- round(abs(rsparsematrix(100, 100, 0.1) * 100))
 
 qc <- computeCrisprQcMetrics(x)
-str(qc)
+qc
 
 filt <- suggestCrisprQcThresholds(qc)
 str(filt)

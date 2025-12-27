@@ -5,10 +5,11 @@
 #' 
 #' @param x A matrix-like object where rows are genes and columns are cells.
 #' Values are expected to be counts.
-#' @param subsets List of vectors specifying gene subsets of interest, typically for control-like features like mitochondrial genes or spike-in transcripts.
+#' @param subsets Named list of vectors specifying gene subsets of interest, typically for control-like features like mitochondrial genes or spike-in transcripts.
 #' Each vector may be logical (whether to keep each row), integer (row indices) or character (row names).
 #' @param num.threads Integer scalar specifying the number of threads to use.
-#' @param metrics List with the same structure as produced by \code{computeRnaQcMetrics}.
+#' @param metrics \link[S4Vectors]{DataFrame} of per-cell QC metrics.
+#' This should have the same structure as the return value of \code{computeRnaQcMetrics}.
 #' @param block Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{metrics}.
 #' Alternatively \code{NULL} if all cells are from the same block.
 #'
@@ -16,14 +17,15 @@
 #' @param num.mads Number of median from the median, to define the threshold for outliers in each metric.
 #' @param thresholds List with the same structure as produced by \code{suggestRnaQcThresholds}.
 #'
-#' @return For \code{computeRnaQcMetrics}, a list is returned containing:
+#' @return For \code{computeRnaQcMetrics}, a \link[S4Vectors]{DataFrame} is returned with one row per cell in \code{x}.
+#' This contains the following columns:
 #' \itemize{
 #' \item \code{sum}, a numeric vector containing the total RNA count for each cell.
 #' This represents the efficiency of library preparation and sequencing.
 #' Low totals indicate that the library was not successfully captured.
 #' \item \code{detected}, an integer vector containing the number of detected genes per cell.
 #' This also quantifies library preparation efficiency but with greater focus on capturing transcriptional complexity.
-#' \item \code{subsets}, a list of numeric vectors containing the proportion of counts in each feature subset.
+#' \item \code{subsets}, a nested DataFrame where each column corresponds to a feature subset and is a numeric vector containing the proportion of counts in that subset.
 #' The exact interpretation of which depends on the nature of the subset.
 #' For example, if one subset contains all genes on the mitochondrial chromosome, higher proportions are representative of cell damage;
 #' the assumption is that cytoplasmic transcripts leak through tears in the cell membrane while the mitochondria are still trapped inside.
@@ -72,7 +74,7 @@
 #' sub <- list(mito=rbinom(nrow(x), 1, 0.1) > 0)
 #'
 #' qc <- computeRnaQcMetrics(x, sub)
-#' str(qc)
+#' qc
 #'
 #' filt <- suggestRnaQcThresholds(qc)
 #' str(filt)
@@ -84,20 +86,21 @@
 #' @name rna_quality_control
 #' @importFrom beachmat initializeCpp tatami.dim
 computeRnaQcMetrics <- function(x, subsets, num.threads = 1) {
+    stopifnot(length(subsets) == 0 || !is.null(names(subsets)))
     ptr <- initializeCpp(x, .check.na=FALSE)
 
     subsets <- as.list(subsets)
     subsets <- lapply(subsets, .subsetToLogical, n=tatami.dim(ptr)[1], names=rownames(x))
 
     output <- compute_rna_qc_metrics(ptr, subsets, num_threads=num.threads)
-    names(output$subsets) <- names(subsets)
-    output
+    .reformatQcMetrics(output, "subsets", subsets, x)
 }
 
 #' @export
 #' @rdname rna_quality_control
 suggestRnaQcThresholds <- function(metrics, block=NULL, num.mads=3) {
     block <- .transformFactor(block)
+    metrics <- .simplifyQcMetrics(metrics)
     thresholds <- suggest_rna_qc_thresholds(metrics, block=block$index, num_mads=num.mads)
 
     names(thresholds$sum) <- block$names
@@ -114,7 +117,27 @@ suggestRnaQcThresholds <- function(metrics, block=NULL, num.mads=3) {
 #' @rdname rna_quality_control
 filterRnaQcMetrics <- function(thresholds, metrics, block=NULL) {
     block <- .matchBlockThresholds(block, names(thresholds$sum))
+    metrics <- .simplifyQcMetrics(metrics)
     filter_rna_qc_metrics(thresholds, metrics, block=block)
+}
+
+#' @importFrom S4Vectors DataFrame I
+.reformatQcMetrics <- function(res, subfield, subsets, mat) {
+    if (length(res$subsets) > 0) {
+        names(res$subsets) <- names(subsets)
+        subdf <- DataFrame(res$subsets, row.names=colnames(mat))
+    } else {
+        subdf <- make_zero_col_DFrame(ncol(mat))
+        rownames(subdf) <- colnames(mat)
+    }
+    res$subsets <- I(subdf)
+    DataFrame(res, row.names=colnames(mat))
+}
+
+.simplifyQcMetrics <- function(df) {
+    metrics <- as.list(df)
+    metrics$subsets <- as.list(metrics$subsets)
+    metrics
 }
 
 .subsetToLogical <- function(x, n, names) {

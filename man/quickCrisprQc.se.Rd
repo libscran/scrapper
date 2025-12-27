@@ -34,7 +34,7 @@ Rows correspond to CRISPR guides and columns correspond to cells.}
 \item{meta.name}{String containing the name of the \code{\link[S4Vectors]{metadata}} entry containing additional outputs like the filtering thresholds.
 If \code{NULL}, additional outputs are not reported.}
 
-\item{compute.res}{List returned by \code{\link[scrapper]{computeCrisprQcMetrics}}.}
+\item{compute.res}{\link[S4Vectors]{DataFrame} returned by \code{\link[scrapper]{computeCrisprQcMetrics}}.}
 }
 \value{
 For \code{quickCrisprQc.se}, \code{x} is returned with additional columns added to its \code{\link[SummarizedExperiment]{colData}}.

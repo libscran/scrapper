@@ -13,7 +13,7 @@
 #' @param output.prefix String containing a prefix to add to the names of the \code{link[SummarizedExperiment]{colData}} columns containing the output statistics.
 #' @param meta.name String containing the name of the \code{\link[S4Vectors]{metadata}} entry containing additional outputs like the filtering thresholds.
 #' If \code{NULL}, additional outputs are not reported. 
-#' @param compute.res List returned by \code{\link[scrapper]{computeCrisprQcMetrics}}.
+#' @param compute.res \link[S4Vectors]{DataFrame} returned by \code{\link[scrapper]{computeCrisprQcMetrics}}.
 #' 
 #' @return
 #' For \code{quickCrisprQc.se}, \code{x} is returned with additional columns added to its \code{\link[SummarizedExperiment]{colData}}.
@@ -70,5 +70,5 @@ quickCrisprQc.se <- function(
 #' @rdname quickCrisprQc.se
 formatComputeCrisprQcMetricsResult <- function(compute.res) {
     # Maybe we'll add something more later.
-    S4Vectors::DataFrame(compute.res)
+    compute.res
 }

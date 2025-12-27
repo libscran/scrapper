@@ -22,12 +22,13 @@ filterAdtQcMetrics(thresholds, metrics, block = NULL)
 \item{x}{A matrix-like object where rows are ADTs and columns are cells.
 Values are expected to be counts.}
 
-\item{subsets}{List of vectors specifying tag subsets of interest, typically control tags like IgGs.
+\item{subsets}{Named list of vectors specifying tag subsets of interest, typically control tags like IgGs.
 Each vector may be logical (whether to keep each row), integer (row indices) or character (row names).}
 
 \item{num.threads}{Integer scalar specifying the number of threads to use.}
 
-\item{metrics}{List with the same structure as produced by \code{computeAdtQcMetrics}.}
+\item{metrics}{\link[S4Vectors]{DataFrame} of per-cell QC metrics.
+This should have the same structure as the return value of \code{computeAdtQcMetrics}.}
 
 \item{block}{Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{metrics}.
 Alternatively \code{NULL} if all cells are from the same block.
@@ -41,7 +42,8 @@ For \code{filterAdtQcMetrics}, a blocking factor should be provided if \code{blo
 \item{thresholds}{List with the same structure as produced by \code{suggestAdtQcThresholds}.}
 }
 \value{
-For \code{computeAdtQcMetrics}, a list is returned containing:
+For \code{computeAdtQcMetrics}, a \link[S4Vectors]{DataFrame} is returned with one row per cell in \code{x}.
+This contains the following columns:
 \itemize{
 \item \code{sum}, a numeric vector containing the total ADT count for each cell.
 In theory, this represents the efficiency of library preparation and sequencing.
@@ -51,7 +53,7 @@ Nonetheless, we compute it for diagnostic purposes.
 Even though ADTs are typically used in situations where few features are highly abundant (e.g., cell type-specific markers), 
 we still expect detectable coverage of most features due to ambient contamination, non-specific binding or some background expression.
 Low numbers of detected tags indicates that library preparation or sequencing depth was suboptimal.
-\item \code{subsets}, a list of numeric vectors containing the total count of each control subset. 
+\item \code{subsets}, a nested DataFrame where each column corresponds to a control subset and is a numeric vector containing the total count in that subset. 
 The exact interpretation depends on the nature of the feature subset but the most common use case involves isotype control (IgG) features.
 IgG antibodies should not bind to anything so a high subset sum suggests that non-specific binding is a problem, e.g., due to antibody conjugates.
 (Unlike RNA quality control, we do not use proportions here as it is entirely possible for a cell to have low counts for other tags due to the absence of their targeted features;
@@ -96,7 +98,7 @@ x <- round(abs(rsparsematrix(1000, 100, 0.1) * 100))
 sub <- list(IgG=rbinom(nrow(x), 1, 0.1) > 0)
 
 qc <- computeAdtQcMetrics(x, sub)
-str(qc)
+qc 
 
 filt <- suggestAdtQcThresholds(qc)
 str(filt)
