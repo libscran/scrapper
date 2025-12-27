@@ -119,6 +119,8 @@ formatScoreMarkersResult <- function(marker.res, extra.columns = NULL, order.by 
     }
 
     output <- S4Vectors::List()
+    check.order.by <- FALSE
+
     for (group in out$groups) {
         current <- S4Vectors::make_zero_col_DFrame(out$nrow)
         rownames(current) <- out$rownames
@@ -155,7 +157,10 @@ formatScoreMarkersResult <- function(marker.res, extra.columns = NULL, order.by 
             }
         }
 
-        order.by <- .findOrderBy(current, order.by)
+        if (!check.order.by) {
+            order.by <- .findOrderBy(current, order.by)
+            check.order.by <- TRUE
+        }
         if (!is.null(order.by)) {
             dec <- !endsWith(order.by, ".min.rank")
             current <- current[order(current[[order.by]], decreasing=dec),,drop=FALSE]
