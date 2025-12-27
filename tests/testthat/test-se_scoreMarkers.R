@@ -63,6 +63,16 @@ test_that("scoreMarkers.se works with extra columns", {
     }
 })
 
+test_that("scoreMarkers.se works with quantiles", {
+    out <- scoreMarkers.se(se, groups, more.marker.args=list(compute.summary.quantiles=c(0, 0.5, 1)))
+    for (g in LETTERS[1:4]) {
+        df <- out[[g]]
+        expect_equal(df$auc.quantile.0.5, df$auc.median)
+        expect_equal(df$cohens.d.quantile.0, df$cohens.d.min)
+        expect_equal(df$delta.detected.quantile.1, df$delta.detected.max)
+    }
+})
+
 test_that("scoreMarkers.se behaves without any metrics", {
     out <- scoreMarkers.se(se, groups, more.marker.args=list(compute.group.mean=FALSE, compute.group.detected=FALSE, compute.cohens.d=FALSE))
     for (g in LETTERS[1:4]) {

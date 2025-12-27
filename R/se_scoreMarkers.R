@@ -111,7 +111,7 @@ scoreMarkers.se <- function(
 #' @rdname scoreMarkers.se
 formatScoreMarkersResult <- function(marker.res, extra.columns = NULL, order.by = TRUE) {
     effect.sizes <- c("cohens.d", "auc", "delta.mean", "delta.detected")
-    summaries <- c("min", "mean", "median", "max", "min.rank")
+    summaries <- c("min", "mean", "median", "max", "quantile", "min.rank")
 
     out <- .guessDimnames(marker.res)
     if (is.null(out)) {
@@ -138,9 +138,20 @@ formatScoreMarkersResult <- function(marker.res, extra.columns = NULL, order.by 
             if (is.null(eff.all)) {
                 next
             }
+
             eff.df <- eff.all[[group]]
             for (summ in summaries) {
-                current[[paste0(eff, ".", summ)]] <- eff.df[[summ]]
+                eff.summ <- eff.df[[summ]]
+                if (is.null(eff.summ)) {
+                    next
+                }
+
+                if (is.data.frame(eff.summ)) {
+                    colnames(eff.summ) <- sprintf("%s.%s.%s", eff, summ, colnames(eff.summ))
+                    current <- cbind(current, eff.summ)
+                } else {
+                    current[[paste0(eff, ".", summ)]] <- eff.summ
+                }
             }
         }
 
