@@ -100,11 +100,19 @@ test_that("scoreMarkers.se sorts by min.rank correctly", {
 test_that("previewMarkers works as expected", {
     out <- scoreMarkers.se(se, groups)
 
-    preview <- previewMarkers(out[[1]], NULL)
+    preview <- previewMarkers(out[[1]])
     expect_identical(colnames(preview), c("mean", "detected", "lfc"))
     expect_identical(nrow(preview), 10L)
 
-    preview <- previewMarkers(out[[1]], NULL, rows=NULL)
+    preview <- previewMarkers(out[[1]], order.by=TRUE)
+    expect_identical(colnames(preview), c("mean", "detected", "lfc", "cohens.d.mean"))
+    expect_identical(nrow(preview), 10L)
+
+    preview <- previewMarkers(out[[1]], columns=NULL, include.order.by=FALSE)
+    expect_identical(colnames(preview), character(0))
+    expect_identical(nrow(preview), 10L)
+
+    preview <- previewMarkers(out[[1]], rows=NULL)
     expect_identical(rownames(preview), rownames(out[[1]]))
 
     preview <- previewMarkers(out[[1]], order.by="auc.median")

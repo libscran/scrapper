@@ -14,12 +14,13 @@
 #' This should have the same number of rows as \code{x}.
 #' For \code{scoreMarkers.se}, this may also be a character vector specifying the columns of \code{\link[SummarizedExperiment]{rowData}} to be added.
 #' @param order.by String specifying the column to order each DataFrame by.
-#' If \code{TRUE}, a column is automatically chosen from the effect size summaries.
+#' Alternatively \code{TRUE}, a column is automatically chosen from the effect size summaries.
 #' If \code{NULL} or \code{FALSE}, no ordering is performed.
 #' @param marker.res List containing the result of \code{\link{scoreMarkers}}.
 #' @param marker.df DataFrame containing the marker statistics for a single group.
-#' @param columns,default.columns Character vector of the columns to retain in the preview.
+#' @param columns Character vector of the columns to retain in the preview.
 #' This may be named, in which the names are used as the column names.
+#' @param include.order.by Boolean indicating whether the column specified by \code{order.by} should be included in the output DataFrame.
 #' @param rows Integer specifying the number of rows to show.
 #' If \code{NULL}, all rows are returned.
 #' 
@@ -175,8 +176,16 @@ formatScoreMarkersResult <- function(marker.res, extra.columns = NULL, order.by 
 #' @export
 #' @rdname scoreMarkers.se
 #' @importFrom utils head
-previewMarkers <- function(marker.df, columns = order.by, default.columns = c("mean", "detected", lfc="delta.mean.mean"), rows = 10, order.by = NULL) {
-    columns <- c(default.columns, columns)
+previewMarkers <- function(marker.df, columns = c("mean", "detected", lfc="delta.mean.mean"), rows = 10, order.by = NULL, include.order.by = !is.null(order.by)) {
+    if (is.null(columns)) {
+        columns <- as.character(0)
+    }
+
+    order.by <- .findOrderBy(marker.df, order.by)
+    if (include.order.by) {
+        columns <- c(columns, order.by)
+    }
+
     columns <- columns[columns %in% colnames(marker.df)]
     df <- marker.df[,columns,drop=FALSE]
     if (!is.null(names(columns))) {
@@ -184,10 +193,9 @@ previewMarkers <- function(marker.df, columns = order.by, default.columns = c("m
         colnames(df)[replace] <- names(columns)[replace]
     }
 
-    order.by <- .findOrderBy(df, order.by)
     if (!is.null(order.by)) {
         dec <- !endsWith(order.by, ".min.rank")
-        o <- order(df[[order.by]], decreasing=dec)
+        o <- order(marker.df[[order.by]], decreasing=dec) # use marker.df in case the ordering statistic was renamed.
         if (!is.null(rows)) {
             o <- head(o, rows)
         }

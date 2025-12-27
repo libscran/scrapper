@@ -21,10 +21,10 @@ formatScoreMarkersResult(marker.res, extra.columns = NULL, order.by = TRUE)
 
 previewMarkers(
   marker.df,
-  columns = order.by,
-  default.columns = c("mean", "detected", lfc = "delta.mean.mean"),
+  columns = c("mean", "detected", lfc = "delta.mean.mean"),
   rows = 10,
-  order.by = NULL
+  order.by = NULL,
+  include.order.by = !is.null(order.by)
 )
 }
 \arguments{
@@ -46,18 +46,20 @@ This should have the same number of rows as \code{x}.
 For \code{scoreMarkers.se}, this may also be a character vector specifying the columns of \code{\link[SummarizedExperiment]{rowData}} to be added.}
 
 \item{order.by}{String specifying the column to order each DataFrame by.
-If \code{TRUE}, a column is automatically chosen from the effect size summaries.
+Alternatively \code{TRUE}, a column is automatically chosen from the effect size summaries.
 If \code{NULL} or \code{FALSE}, no ordering is performed.}
 
 \item{marker.res}{List containing the result of \code{\link{scoreMarkers}}.}
 
 \item{marker.df}{DataFrame containing the marker statistics for a single group.}
 
-\item{columns, default.columns}{Character vector of the columns to retain in the preview.
+\item{columns}{Character vector of the columns to retain in the preview.
 This may be named, in which the names are used as the column names.}
 
 \item{rows}{Integer specifying the number of rows to show.
 If \code{NULL}, all rows are returned.}
+
+\item{include.order.by}{Boolean indicating whether the column specified by \code{order.by} should be included in the output DataFrame.}
 }
 \value{
 For \code{scoreMarkers.se} and \code{formatScoreMarkersResult}, a \link[S4Vectors]{List} of \link[S4Vectors]{DataFrame}s is returned.
