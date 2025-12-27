@@ -80,12 +80,12 @@ Only used if \code{use.min.width=TRUE}.}
 \item{num.threads}{Integer scalar specifying the number of threads to use.}
 }
 \value{
-A list containing \code{statistics}, a data frame with number of rows equal to the number of genes.
+A list containing \code{statistics}, a \link[S4Vectors]{DataFrame} with number of rows equal to the number of genes.
 This contains the columns \code{means}, \code{variances}, \code{fitted} and \code{residuals},
 each of which is a numeric vector containing the statistic of the same name across all genes.
 
 If \code{block} is supplied, each of the column vectors described above contains the average across all blocks.
-The list will also contain \code{per.block}, a list of data frames containing the equivalent statistics for each block.
+The list will also contain \code{per.block}, a list of DataFrames containing the equivalent statistics for each block.
 }
 \description{
 Model the per-gene variances as a function of the mean in single-cell expression data.
@@ -102,12 +102,12 @@ Genes with large residuals can then be selected for downstream analyses, e.g., w
 library(Matrix)
 x <- abs(rsparsematrix(1000, 100, 0.1) * 10)
 out <- modelGeneVariances(x)
-str(out)
+out
 
 # Throwing in some blocking.
 block <- sample(letters[1:4], ncol(x), replace=TRUE)
 out <- modelGeneVariances(x, block=block)
-str(out)
+out
 
 }
 \seealso{

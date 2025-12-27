@@ -71,13 +71,14 @@ chooseRnaHvgs.se <- function(
 
 #' @export
 #' @rdname chooseRnaHvgs.se
+#' @importFrom S4Vectors make_zero_col_DFrame
 formatModelGeneVariancesResult <- function(model.res, choose.res = NULL, include.per.block = FALSE) {
-    df <- S4Vectors::DataFrame(model.res$statistics)
+    df <- model.res$statistics
 
     if (include.per.block && !is.null(model.res$per.block)) {
-        tmp <- S4Vectors::make_zero_col_DFrame(nrow=nrow(df))
+        tmp <- make_zero_col_DFrame(nrow=nrow(df))
         for (n in names(model.res$per.block)) {
-            tmp[[n]] <- S4Vectors::DataFrame(model.res$per.block[[n]])
+            tmp[[n]] <- model.res$per.block[[n]]
         }
         df[["per.block"]] <- tmp
     }

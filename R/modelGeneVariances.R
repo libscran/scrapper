@@ -31,12 +31,12 @@
 #' Under this assumption, the residual can be treated as a measure of biologically interesting variation.
 #' Genes with large residuals can then be selected for downstream analyses, e.g., with \code{\link{chooseHighlyVariableGenes}}.
 #'
-#' @return A list containing \code{statistics}, a data frame with number of rows equal to the number of genes.
+#' @return A list containing \code{statistics}, a \link[S4Vectors]{DataFrame} with number of rows equal to the number of genes.
 #' This contains the columns \code{means}, \code{variances}, \code{fitted} and \code{residuals},
 #' each of which is a numeric vector containing the statistic of the same name across all genes.
 #'
 #' If \code{block} is supplied, each of the column vectors described above contains the average across all blocks.
-#' The list will also contain \code{per.block}, a list of data frames containing the equivalent statistics for each block.
+#' The list will also contain \code{per.block}, a list of DataFrames containing the equivalent statistics for each block.
 #'
 #' @author Aaron Lun
 #'
@@ -49,15 +49,16 @@
 #' library(Matrix)
 #' x <- abs(rsparsematrix(1000, 100, 0.1) * 10)
 #' out <- modelGeneVariances(x)
-#' str(out)
+#' out
 #'
 #' # Throwing in some blocking.
 #' block <- sample(letters[1:4], ncol(x), replace=TRUE)
 #' out <- modelGeneVariances(x, block=block)
-#' str(out)
+#' out
 #'
 #' @export
 #' @importFrom beachmat initializeCpp
+#' @importFrom S4Vectors DataFrame
 modelGeneVariances <- function(
     x,
     block=NULL,
@@ -95,7 +96,7 @@ modelGeneVariances <- function(
     )
 
     output <- list(
-        statistics = data.frame(
+        statistics = DataFrame(
             means = stats$means,
             variances = stats$variances,
             fitted = stats$fitted,
@@ -108,7 +109,7 @@ modelGeneVariances <- function(
         pb <- stats$per.block
         for (i in seq_along(pb)) {
             curstats <- pb[[i]]
-            pb[[i]] <- data.frame(
+            pb[[i]] <- DataFrame( 
                 means = curstats$means,
                 variances = curstats$variances,
                 fitted = curstats$fitted,
