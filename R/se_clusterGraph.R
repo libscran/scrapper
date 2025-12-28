@@ -69,18 +69,20 @@ clusterGraph.se <- function(
     .addClusterGraphResults(x, clust.out, output.name=output.name, meta.name=meta.name)
 }
 
+#' @importFrom S4Vectors metadata metadata<-
 .addBuildGraphResults <- function(x, graph, graph.name) {
     if (!is.null(graph.name)) {
-        S4Vectors::metadata(x)[[graph.name]] <- graph
+        metadata(x)[[graph.name]] <- graph
     }
     x
 }
 
+#' @importFrom S4Vectors metadata metadata<-
 .addClusterGraphResults <- function(x, res, output.name, meta.name) {
     SummarizedExperiment::colData(x)[[output.name]] <- res$membership
     if (!is.null(meta.name)) {
         res$membership <- NULL
-        S4Vectors::metadata(x)[[meta.name]] <- res
+        metadata(x)[[meta.name]] <- res
     }
     x
 }

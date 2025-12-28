@@ -38,6 +38,7 @@
 #' curve(approxfun(rowData(sce)$means, rowData(sce)$fitted)(x), col="dodgerblue", add=TRUE)
 #' 
 #' @export
+#' @importFrom S4Vectors cbind
 chooseRnaHvgs.se <- function(
     x, 
     block = NULL,
@@ -65,7 +66,7 @@ chooseRnaHvgs.se <- function(
 
     df <- formatModelGeneVariancesResult(info, choose.res=hvg.index, include.per.block=include.per.block)
     colnames(df) <- paste0(output.prefix, colnames(df))
-    SummarizedExperiment::rowData(x) <- S4Vectors::cbind(SummarizedExperiment::rowData(x), df)
+    SummarizedExperiment::rowData(x) <- cbind(SummarizedExperiment::rowData(x), df)
     x
 }
 

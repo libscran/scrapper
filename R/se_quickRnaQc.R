@@ -68,6 +68,7 @@
 #' colData(altExp(sce, "ERCC"))[,c("sum", "detected")]
 #'
 #' @export
+#' @importFrom S4Vectors cbind metadata metadata<-
 quickRnaQc.se <- function( 
     x,
     subsets,
@@ -94,7 +95,7 @@ quickRnaQc.se <- function(
     df <- formatComputeRnaQcMetricsResult(metrics$main, flatten=flatten)
     df$keep <- keep
     colnames(df) <- paste0(output.prefix, colnames(df))
-    SummarizedExperiment::colData(x) <- S4Vectors::cbind(SummarizedExperiment::colData(x), df)
+    SummarizedExperiment::colData(x) <- cbind(SummarizedExperiment::colData(x), df)
 
     if (!is.null(altexp.proportions)) {
         for (ae.name in names(metrics$altexp)) {
@@ -102,14 +103,14 @@ quickRnaQc.se <- function(
             colnames(ae.df) <- paste0(output.prefix, colnames(ae.df))
 
             ae.se <- SingleCellExperiment::altExp(x, ae.name)
-            ae.cd <- SummarizedExperiment::colData(ae.se) <- S4Vectors::cbind(SummarizedExperiment::colData(ae.se), ae.df)
+            ae.cd <- SummarizedExperiment::colData(ae.se) <- cbind(SummarizedExperiment::colData(ae.se), ae.df)
             SingleCellExperiment::altExp(x, ae.name) <- ae.se
         }
     }
 
     if (!is.null(meta.name)) {
         names(thresholds)[names(thresholds) == "subsets"] <- "subset.proportion"
-        S4Vectors::metadata(x)[[meta.name]] <- list(thresholds=thresholds)
+        metadata(x)[[meta.name]] <- list(thresholds=thresholds)
     }
 
     x

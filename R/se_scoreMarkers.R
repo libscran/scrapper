@@ -110,6 +110,7 @@ scoreMarkers.se <- function(
 
 #' @export
 #' @rdname scoreMarkers.se
+#' @importFrom S4Vectors List make_zero_col_DFrame cbind
 formatScoreMarkersResult <- function(marker.res, extra.columns = NULL, order.by = TRUE) {
     effect.sizes <- c("cohens.d", "auc", "delta.mean", "delta.detected")
     summaries <- c("min", "mean", "median", "max", "quantile", "min.rank")
@@ -119,14 +120,14 @@ formatScoreMarkersResult <- function(marker.res, extra.columns = NULL, order.by 
         stop("could not determine dimnames from 'marker.res'")
     }
 
-    output <- S4Vectors::List()
+    output <- List()
     check.order.by <- FALSE
 
     for (group in out$groups) {
-        current <- S4Vectors::make_zero_col_DFrame(out$nrow)
+        current <- make_zero_col_DFrame(out$nrow)
         rownames(current) <- out$rownames
         if (!is.null(extra.columns)) {
-            current <- S4Vectors::cbind(current, extra.columns)
+            current <- cbind(current, extra.columns)
         }
 
         if ("mean" %in% names(marker.res)) {

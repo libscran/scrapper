@@ -37,6 +37,7 @@
 #' summary(sce$keep)
 #' 
 #' @export
+#' @importFrom S4Vectors cbind metadata metadata<-
 quickAdtQc.se <- function( 
     x,
     subsets,
@@ -62,11 +63,11 @@ quickAdtQc.se <- function(
     df <- formatComputeAdtQcMetricsResult(metrics, flatten=flatten)
     df$keep <- keep
     colnames(df) <- paste0(output.prefix, colnames(df))
-    SummarizedExperiment::colData(x) <- S4Vectors::cbind(SummarizedExperiment::colData(x), df)
+    SummarizedExperiment::colData(x) <- cbind(SummarizedExperiment::colData(x), df)
 
     if (!is.null(meta.name)) {
         names(thresholds)[names(thresholds) == "subsets"] <- "subset.sum"
-        S4Vectors::metadata(x)[[meta.name]] <- list(thresholds=thresholds)
+        metadata(x)[[meta.name]] <- list(thresholds=thresholds)
     }
 
     x

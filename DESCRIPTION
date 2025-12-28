@@ -13,6 +13,7 @@ Imports:
     Rcpp,
     beachmat (>= 2.25.1),
     Matrix,
+    S4Vectors,
     DelayedArray,
     BiocNeighbors (>= 1.99.0),
     parallel
@@ -23,7 +24,6 @@ Suggests:
     BiocStyle,
     MatrixGenerics,
     sparseMatrixStats,
-    S4Vectors,
     IRanges,
     SummarizedExperiment,
     SingleCellExperiment,

@@ -33,6 +33,7 @@
 #'
 #' @export
 #' @importFrom BiocNeighbors AnnoyParam
+#' @importFrom S4Vectors metadata metadata<-
 scaleByNeighbors.se <- function(
     x,
     altexp.reddims,
@@ -92,7 +93,7 @@ scaleByNeighbors.se <- function(
         }
 
         out$scaling <- NULL
-        S4Vectors::metadata(x)[[meta.name]] <- out
+        metadata(x)[[meta.name]] <- out
     }
 
     x

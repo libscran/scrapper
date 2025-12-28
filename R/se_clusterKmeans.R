@@ -25,6 +25,7 @@
 #' table(sce$clusters)
 #' 
 #' @export
+#' @importFrom S4Vectors metadata metadata<-
 clusterKmeans.se <- function(x, k, num.threads=1, more.kmeans.args = list(), reddim.type = "PCA", output.name = "clusters", meta.name = NULL) {
     clout <- .call(
         clusterKmeans,
@@ -36,7 +37,7 @@ clusterKmeans.se <- function(x, k, num.threads=1, more.kmeans.args = list(), red
     SummarizedExperiment::colData(x)[[output.name]] <- clout$clusters
     if (!is.null(meta.name)) {
         clout$clusters <- NULL
-        S4Vectors::metadata(x)[[meta.name]] <- clout
+        metadata(x)[[meta.name]] <- clout
     }
 
     x

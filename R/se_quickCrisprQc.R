@@ -34,6 +34,7 @@
 #' summary(sce$keep)
 #' 
 #' @export
+#' @importFrom S4Vectors cbind metadata metadata<-
 quickCrisprQc.se <- function( 
     x,
     num.threads = 1,
@@ -57,10 +58,10 @@ quickCrisprQc.se <- function(
     df <- formatComputeCrisprQcMetricsResult(metrics)
     df$keep <- keep
     colnames(df) <- paste0(output.prefix, colnames(df))
-    SummarizedExperiment::colData(x) <- S4Vectors::cbind(SummarizedExperiment::colData(x), df)
+    SummarizedExperiment::colData(x) <- cbind(SummarizedExperiment::colData(x), df)
 
     if (!is.null(meta.name)) {
-        S4Vectors::metadata(x)[[meta.name]] <- list(thresholds=thresholds)
+        metadata(x)[[meta.name]] <- list(thresholds=thresholds)
     }
 
     x

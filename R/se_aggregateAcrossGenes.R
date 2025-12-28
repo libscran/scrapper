@@ -46,6 +46,7 @@
 #'
 #' @export
 #' @importFrom methods is
+#' @importFrom S4Vectors mcols
 aggregateAcrossGenes.se <- function(
     x,
     sets,
@@ -56,7 +57,7 @@ aggregateAcrossGenes.se <- function(
 ) {
     rd <- NULL
     if (is(sets, "List")) {
-        rd <- S4Vectors::mcols(sets)
+        rd <- mcols(sets)
         if (!is.null(rd)) {
             rownames(rd) <- names(sets) # just in case
         }

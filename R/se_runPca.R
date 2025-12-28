@@ -33,6 +33,7 @@
 #' @export
 #' @importFrom methods is as
 #' @importFrom DelayedArray DelayedArray
+#' @importFrom S4Vectors metadata metadata<-
 runPca.se <- function(
     x,
     features,
@@ -65,7 +66,7 @@ runPca.se <- function(
 
     if (!is.null(meta.name)) {
         out$components <- NULL
-        S4Vectors::metadata(x)[[meta.name]] <- out
+        metadata(x)[[meta.name]] <- out
     }
 
     x
