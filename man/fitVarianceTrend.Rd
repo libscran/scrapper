@@ -71,9 +71,9 @@ sf <- centerSizeFactors(colSums(counts))
 normalized <- normalizeCounts(counts, size.factors=sf)
 stats <- modelGeneVariances(normalized)
 
-out <- fitVarianceTrend(stats$statistics$mean, stats$statistics$variance)
-plot(stats$statistics$mean, stats$statistics$variance)
-curve(approxfun(stats$statistics$mean, out$fitted)(x), col="red", add=TRUE)
+out <- fitVarianceTrend(stats$statistics$means, stats$statistics$variances)
+plot(stats$statistics$means, stats$statistics$variances)
+curve(approxfun(stats$statistics$means, out$fitted)(x), col="red", add=TRUE)
 
 }
 \seealso{

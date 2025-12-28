@@ -32,7 +32,7 @@
 #' library(SingleCellExperiment)
 #' sce <- altExp(getTestAdtData.se(), "ADT")
 #' sce <- quickAdtQc.se(sce, subsets=list(igg=grepl("IgG", rownames(sce))))
-#' colData(sce)[,c("sum", "detected", "igg.sum")]
+#' colData(sce)[,c("sum", "detected", "subset.sum.igg")]
 #' metadata(sce)$qc$thresholds
 #' summary(sce$keep)
 #' 

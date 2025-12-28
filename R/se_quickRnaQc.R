@@ -53,7 +53,7 @@
 #' library(SingleCellExperiment)
 #' sce <- getTestRnaData.se()
 #' sce <- quickRnaQc.se(sce, subsets=list(mito=grepl("^mt", rownames(sce))))
-#' colData(sce)[,c("sum", "detected", "mito.proportion")]
+#' colData(sce)[,c("sum", "detected", "subset.proportion.mito")]
 #' metadata(sce)$qc$thresholds
 #' summary(sce$keep)
 #'
@@ -64,7 +64,7 @@
 #'    subsets=list(mito=grepl("^mt", rownames(sce))),
 #'    altexp.proportions="ERCC"
 #' )
-#' colData(sce)[,c("sum", "detected", "mito.proportion", "ERCC.proportion")]
+#' colData(sce)[,c("sum", "detected", "subset.proportion.mito", "subset.proportion.ERCC")]
 #' colData(altExp(sce, "ERCC"))[,c("sum", "detected")]
 #'
 #' @export
