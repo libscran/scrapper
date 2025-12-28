@@ -57,8 +57,8 @@
 #'
 #' @return If \code{all.pairwise=FALSE}, a named list is returned containing:
 #' \itemize{
-#' \item \code{cohens.d}, a list of data frames where each data frame corresponds to a group.
-#' Each row of each data frame represents a gene, while each column contains a summary of Cohen's d from pairwise comparisons to all other groups.
+#' \item \code{cohens.d}, a list of \link[S4Vectors]{DataFrame}s where each DataFrame corresponds to a group.
+#' Each row of a DataFrame represents a gene, while each column contains a summary of Cohen's d from pairwise comparisons to all other groups.
 #' This includes \code{min}, \code{mean}, \code{median}, \code{max}, \code{quantile.*} and \code{min.rank} - check out \code{?\link{summarizeEffects}} for details.
 #' Omitted if \code{compute.cohens.d=FALSE}.
 #' \item \code{auc}, a list like \code{cohens.d} but containing the summaries of the AUCs from each pairwise comparison.
@@ -85,15 +85,15 @@
 #'
 #' If \code{all.pairwise} is an integer, a named list is returned containing:
 #' \itemize{
-#' \item \code{cohens.d}, a list of list of data frames containing the top genes with the largest Cohen's d for each pairwise comparison.
-#' Specifically, \code{cohens.d[[i]][[j]]} is a data frame contains the top \code{all.pairwise} genes from the comparison of group \code{i} over group \code{j}. 
-#' Each data frame contains \code{index}, the row index of the gene; and \code{effect}, the Cohen's d for that gene.
+#' \item \code{cohens.d}, a list of list of \link[S4Vectors]{DataFrame}s containing the top genes with the largest Cohen's d for each pairwise comparison.
+#' Specifically, \code{cohens.d[[i]][[j]]} is a DataFrame that contains the top \code{all.pairwise} genes from the comparison of group \code{i} over group \code{j}. 
+#' Columns are \code{index}, the row index of the gene; and \code{effect}, the Cohen's d for that gene.
 #' Omitted if \code{compute.cohens.d=FALSE}.
-#' \item \code{auc}, a list of list of data frames like \code{cohens.d} but containing the AUCs from each pairwise comparison.
+#' \item \code{auc}, a list of list of DataFrames like \code{cohens.d} but containing the AUCs from each pairwise comparison.
 #' Omitted if \code{compute.auc=FALSE}.
-#' \item \code{delta.mean}, a list of list of data frames like \code{cohens.d} but containing the delta-mean from each pairwise comparison.
+#' \item \code{delta.mean}, a list of list of DataFrames like \code{cohens.d} but containing the delta-mean from each pairwise comparison.
 #' Omitted if \code{compute.delta.mean=FALSE}.
-#' \item \code{delta.detected}, a list of list of data frames like \code{cohens.d} but containing the delta-detected from each pairwise comparison.
+#' \item \code{delta.detected}, a list of list of DataFrames like \code{cohens.d} but containing the delta-detected from each pairwise comparison.
 #' Omitted if \code{compute.delta.detected=FALSE}.
 #' }
 #'
@@ -174,6 +174,7 @@
 #'
 #' @export
 #' @importFrom beachmat initializeCpp
+#' @importFrom S4Vectors DataFrame
 scoreMarkers <- function(
     x, 
     groups, 

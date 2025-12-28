@@ -1,5 +1,7 @@
 # library(testthat); library(scrapper); source("test-se_scoreMarkers.R")
 
+library(S4Vectors)
+
 test_that("guessing the dimnames works as expected", {
     mat <- matrix(0, 200, 10)
     rownames(mat) <- sprintf("foo%s", seq_len(nrow(mat)))
@@ -12,19 +14,19 @@ test_that("guessing the dimnames works as expected", {
     expect_identical(out$groups, LETTERS[1:10])
 
     # Works for a list of effect sizes.
-    effects <- lapply(1:10, function(x) data.frame(X=seq_len(200), row.names=rownames(mat)))
+    effects <- lapply(1:10, function(x) DataFrame(X=seq_len(200), row.names=rownames(mat)))
     names(effects) <- LETTERS[1:10]
     out2 <- scrapper:::.guessDimnames(list(cohens.d=effects))
     expect_identical(out, out2)
 })
 
 test_that("finding an ordering statistic works as expected", {
-    expect_identical(scrapper:::.findOrderBy(data.frame(cohens.d.mean=1, auc.max=2), TRUE), "cohens.d.mean")
-    expect_identical(scrapper:::.findOrderBy(data.frame(cohens.d.max=1, auc.median=2), TRUE), "auc.median")
-    expect_null(scrapper:::.findOrderBy(data.frame(cohens.d.max=1, auc.median=2), FALSE))
-    expect_null(scrapper:::.findOrderBy(data.frame(cohens.d.max=1, auc.median=2), NULL))
-    expect_null(scrapper:::.findOrderBy(data.frame(stuff=2), TRUE))
-    expect_identical(scrapper:::.findOrderBy(data.frame(cohens.d.max=1, auc.median=2), "foobar"), "foobar")
+    expect_identical(scrapper:::.findOrderBy(DataFrame(cohens.d.mean=1, auc.max=2), TRUE), "cohens.d.mean")
+    expect_identical(scrapper:::.findOrderBy(DataFrame(cohens.d.max=1, auc.median=2), TRUE), "auc.median")
+    expect_null(scrapper:::.findOrderBy(DataFrame(cohens.d.max=1, auc.median=2), FALSE))
+    expect_null(scrapper:::.findOrderBy(DataFrame(cohens.d.max=1, auc.median=2), NULL))
+    expect_null(scrapper:::.findOrderBy(DataFrame(stuff=2), TRUE))
+    expect_identical(scrapper:::.findOrderBy(DataFrame(cohens.d.max=1, auc.median=2), "foobar"), "foobar")
 })
 
 set.seed(6900)

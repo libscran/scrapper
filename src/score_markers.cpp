@@ -436,6 +436,8 @@ Rcpp::List score_markers_best(
         transfer_groupwise(detected, res.detected);
     }
 
+    auto s4env = Rcpp::Environment::namespace_env("S4Vectors");
+    Rcpp::Function dfcon = s4env["DataFrame"];
     const auto transfer_effects = [&](Rcpp::List& store, std::vector<std::vector<std::vector<std::pair<int, double> > > >& vecs) -> void {
         store = Rcpp::List(num_groups);
         for (I<decltype(num_groups)> g = 0; g < num_groups; ++g) {
@@ -454,10 +456,10 @@ Rcpp::List score_markers_best(
                     effects[t] = curtop[t].second;
                 }
 
-                current[g2] = Rcpp::DataFrame::create(
+                current[g2] = dfcon(Rcpp::List::create(
                     Rcpp::Named("index") = std::move(indices),
                     Rcpp::Named("effect") = std::move(effects)
-                );
+                ));
             }
             store[g] = std::move(current);
         }

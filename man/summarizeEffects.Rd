@@ -37,9 +37,9 @@ If \code{NULL}, no quantiles are computed.}
 \item{num.threads}{Integer scalar specifying the number of threads to use.}
 }
 \value{
-List of data frames containing summary statistics for the effect sizes.
-Each data frame corresponds to a group, each row corresponds to a gene, and each column contains a summary statistic.
-If \code{compute.summary.quantiles} is provided, the \code{"quantile"} column is a nested data frame where each column coresponds to a probability in \code{compute.summary.quantiles}.
+List of \link[S4Vectors]{DataFrame}s containing summary statistics for the effect sizes.
+Each DataFrame corresponds to a group, each row corresponds to a gene, and each column contains a summary statistic.
+If \code{compute.summary.quantiles} is provided, the \code{"quantile"} column is a nested DataFrame where each column coresponds to a probability in \code{compute.summary.quantiles}.
 }
 \description{
 For each group, summarize the effect sizes for all pairwise comparisons to other groups.

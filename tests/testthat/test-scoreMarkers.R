@@ -164,7 +164,7 @@ test_that("scoreMarkers works as expected for the best pairwise statistics", {
                 keep <- which(stats > bound)
                 o <- order(stats[keep], decreasing=TRUE)
                 indices <- keep[head(o, n)]
-                current[[g2]] <- data.frame(index=indices, effect=stats[indices])
+                current[[g2]] <- S4Vectors::DataFrame(index=indices, effect=stats[indices])
             }
             output[[g1]] <- current
         }

@@ -68,12 +68,13 @@ scoreMarkers.se <- function(
     formatScoreMarkersResult(res, extra.columns=extra.columns, order.by=order.by)
 }
 
+#' @importClassesFrom S4Vectors DataFrame
 .guessDimnames <- function(marker.res) {
     for (n in names(marker.res)) {
         current <- marker.res[[n]]
         if (is.matrix(current)) {
             return(list(nrow=nrow(current), rownames=rownames(current), groups=colnames(current)))
-        } else if (is.data.frame(current)) {
+        } else if (is(current, "DataFrame")) {
             return(list(nrow=nrow(current), rownames=rownames(current), groups=NULL))
         } else if (is.list(current)) {
             out <- .guessDimnames(current)
@@ -111,6 +112,7 @@ scoreMarkers.se <- function(
 #' @export
 #' @rdname scoreMarkers.se
 #' @importFrom S4Vectors List make_zero_col_DFrame cbind
+#' @importClassesFrom S4Vectors DataFrame
 formatScoreMarkersResult <- function(marker.res, extra.columns = NULL, order.by = TRUE) {
     effect.sizes <- c("cohens.d", "auc", "delta.mean", "delta.detected")
     summaries <- c("min", "mean", "median", "max", "quantile", "min.rank")
@@ -150,7 +152,7 @@ formatScoreMarkersResult <- function(marker.res, extra.columns = NULL, order.by 
                     next
                 }
 
-                if (is.data.frame(eff.summ)) {
+                if (is(eff.summ, "DataFrame")) {
                     colnames(eff.summ) <- sprintf("%s.%s.%s", eff, summ, colnames(eff.summ))
                     current <- cbind(current, eff.summ)
                 } else {

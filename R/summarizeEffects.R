@@ -16,9 +16,9 @@
 #' @param compute.summary.min.rank Boolean specifying whether to compute the mininum rank as a summary statistic. 
 #' @param num.threads Integer scalar specifying the number of threads to use.
 #'
-#' @return List of data frames containing summary statistics for the effect sizes.
-#' Each data frame corresponds to a group, each row corresponds to a gene, and each column contains a summary statistic.
-#' If \code{compute.summary.quantiles} is provided, the \code{"quantile"} column is a nested data frame where each column coresponds to a probability in \code{compute.summary.quantiles}.
+#' @return List of \link[S4Vectors]{DataFrame}s containing summary statistics for the effect sizes.
+#' Each DataFrame corresponds to a group, each row corresponds to a gene, and each column contains a summary statistic.
+#' If \code{compute.summary.quantiles} is provided, the \code{"quantile"} column is a nested DataFrame where each column coresponds to a probability in \code{compute.summary.quantiles}.
 #'
 #' @details
 #' Each summary statistic can be used to prioritize different sets of marker genes for the group of interest, by ranking them in decreasing order according to said statistic:
@@ -107,22 +107,23 @@ summarizeEffects <- function(
     format_summary_output(out, ngenes, dmn[[3]], compute.summary.quantiles)
 }
 
+#' @importFrom S4Vectors DataFrame
 format_summary_output <- function(raw, ngenes, rownames, quantiles) {
     for (i in seq_along(raw)) {
         current <- raw[[i]]
 
         if ("quantile" %in% names(current)) {
             names(current$quantile) <- as.character(quantiles)
-            to.add <- data.frame(current$quantile, check.names=FALSE)
+            to.add <- DataFrame(current$quantile, check.names=FALSE)
             current$quantile <- logical(ngenes)
         } else {
             to.add <- NULL
         }
 
         if (length(current)) {
-            df <- data.frame(current)
+            df <- DataFrame(current)
         } else {
-            df <- data.frame(matrix(0, ngenes, 0))
+            df <- DataFrame(matrix(0, ngenes, 0))
         }
         rownames(df) <- rownames
 
