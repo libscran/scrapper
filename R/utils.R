@@ -2,8 +2,9 @@
     if (is.null(f)) {
         list(index=NULL, names=NULL)
     } else {
-        f <- factor(f)
-        list(index=as.integer(f) - 1L, names=levels(f))
+        # Don't use 'factor', to preserve the type of 'f' in the 'names'.
+        lev <- sort(unique(f))
+        list(index=match(f, lev) - 1L, names=lev)
     }
 }
 

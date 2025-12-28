@@ -58,6 +58,7 @@ This is defined as \code{num.mads} MADs below the median of the log-transformed 
 \itemize{
 \item \code{max.value}, a numeric vector containing the lower bound on the maximum counts for each blocking level.
 Here, the threshold is computed independently for each block, using the same method as the unblocked case.
+\item \code{block.levels}, a vector containing the unique blocking levels.
 }
 Each vector is of length equal to the number of levels in \code{block} and is named accordingly.
 }

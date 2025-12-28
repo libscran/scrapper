@@ -41,6 +41,7 @@
 #' \itemize{
 #' \item \code{max.value}, a numeric vector containing the lower bound on the maximum counts for each blocking level.
 #' Here, the threshold is computed independently for each block, using the same method as the unblocked case.
+#' \item \code{block.levels}, a vector containing the unique blocking levels.
 #' }
 #' Each vector is of length equal to the number of levels in \code{block} and is named accordingly.
 #' }
@@ -106,14 +107,19 @@ suggestCrisprQcThresholds <- function(metrics, block=NULL, num.mads=3) {
     metrics <- as.list(metrics)
     metrics$max.index <- metrics$max.index - 1L # restore 0-based indexing.
     thresholds <- suggest_crispr_qc_thresholds(metrics, block=block$index, num_mads=num.mads)
-    names(thresholds$max.value) <- block$names
+
+    if (!is.null(block$names)) {
+        names(thresholds$max.value) <- block$names
+        thresholds$block.levels <- block$names # store it separately to preserve any non-character type.
+    }
+
     thresholds
 }
 
 #' @export
 #' @rdname crispr_quality_control
 filterCrisprQcMetrics <- function(thresholds, metrics, block=NULL) {
-    block <- .matchBlockThresholds(block, names(thresholds$max.value))
+    block <- .matchBlockThresholds(block, thresholds$block.levels)
     metrics <- as.list(metrics)
     metrics$max.index <- metrics$max.index - 1L # restore 0-based indexing.
     filter_crispr_qc_metrics(thresholds, metrics, block=block)

@@ -36,6 +36,8 @@ test_that("suggestAdtQcThresholds works as expected with blocking", {
     num.mads <- 1.5
     thresholds <- suggestAdtQcThresholds(qc, block=block, num.mads=num.mads)
 
+    expect_identical(thresholds$block.levels, 1:3)
+
     # Check the thresholds.
     for (b in 1:3) {
         keep <- block == b

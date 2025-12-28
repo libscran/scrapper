@@ -52,6 +52,7 @@
 #' Here, the threshold is computed independently for each block, using the same method as the unblocked case.
 #' \item \code{subsets}, a list of numeric vectors containing the upper bound on the sum of counts in each feature subset for each blocking level.
 #' Here, the threshold is computed independently for each block, using the same method as the unblocked case.
+#' \item \code{block.levels}, a vector containing the unique blocking levels.
 #' }
 #' Each vector is of length equal to the number of levels in \code{block} and is named accordingly.
 #' }
@@ -103,11 +104,15 @@ suggestRnaQcThresholds <- function(metrics, block=NULL, num.mads=3) {
     metrics <- .simplifyQcMetrics(metrics)
     thresholds <- suggest_rna_qc_thresholds(metrics, block=block$index, num_mads=num.mads)
 
-    names(thresholds$sum) <- block$names
-    names(thresholds$detected) <- block$names
     names(thresholds$subsets) <- names(metrics$subsets)
-    for (i in seq_along(metrics$subsets)) {
-        names(thresholds$subsets[[i]]) <- block$names
+
+    if (!is.null(block$names)) {
+        names(thresholds$sum) <- block$names
+        names(thresholds$detected) <- block$names
+        for (i in seq_along(metrics$subsets)) {
+            names(thresholds$subsets[[i]]) <- block$names
+        }
+        thresholds$block.levels <- block$names # store it separately to preserve any non-character type.
     }
 
     thresholds
@@ -116,7 +121,7 @@ suggestRnaQcThresholds <- function(metrics, block=NULL, num.mads=3) {
 #' @export
 #' @rdname rna_quality_control
 filterRnaQcMetrics <- function(thresholds, metrics, block=NULL) {
-    block <- .matchBlockThresholds(block, names(thresholds$sum))
+    block <- .matchBlockThresholds(block, thresholds$block.levels)
     metrics <- .simplifyQcMetrics(metrics)
     filter_rna_qc_metrics(thresholds, metrics, block=block)
 }

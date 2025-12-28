@@ -35,6 +35,8 @@ test_that("suggestCrisprQcFilters works as expected with blocking", {
     num.mads <- 1.5
     thresholds <- suggestCrisprQcThresholds(qc, block=block, num.mads=num.mads)
 
+    expect_identical(thresholds$block.levels, 1:3)
+
     expected <- qc$max.value >= unname(thresholds$max.value[block])
     expected[is.na(expected)] <- TRUE
     observed <- filterCrisprQcMetrics(thresholds, qc, block=block)
