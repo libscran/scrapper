@@ -15,7 +15,7 @@
 #' Each entry contains the summed expression across all cells with that combination. 
 #' \item \code{detected}, an integer matrix where each row corresponds to a gene and each column corresponds to a unique combination of levels from \code{factors}.
 #' Each entry contains the number of cells with detected expression in that combination.
-#' \item \code{combinations}, a data frame containing the unique combination of levels from \code{factors}.
+#' \item \code{combinations}, a \link[S4Vectors]{DataFrame} containing the unique combination of levels from \code{factors}.
 #' Rows of this data frame correspond to columns of \code{sums} and \code{detected}, while columns correspond to the factors in \code{factors}.
 #' \item \code{counts}, the number of cells associated with each combination.
 #' Each entry corresponds to a row of \code{combinations}.
@@ -48,6 +48,7 @@
 #' 
 #' @export
 #' @importFrom beachmat initializeCpp
+#' @importFrom S4Vectors DataFrame
 aggregateAcrossCells <- function(x, factors, num.threads = 1) {
     combined <- combineFactors(factors)
 
@@ -55,7 +56,7 @@ aggregateAcrossCells <- function(x, factors, num.threads = 1) {
     output <- aggregate_across_cells(ptr, combined$index - 1L, num.threads)
     rownames(output$sums) <- rownames(output$detected) <- rownames(x)
 
-    output$combinations <- combined$levels
+    output$combinations <- DataFrame(combined$levels, check.names=FALSE)
     output$counts <- tabulate(combined$index, nbins=nrow(output$combinations))
     output$index <- combined$index
 

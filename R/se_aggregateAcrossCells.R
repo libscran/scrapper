@@ -77,6 +77,7 @@
 #'
 #' @export
 #' @importFrom methods is
+#' @importFrom S4Vectors cbind metadata metadata<-
 aggregateAcrossCells.se <- function(
     x,
     factors,
@@ -113,7 +114,7 @@ aggregateAcrossCells.se <- function(
     }
     se <- CON(out[c("sums", "detected")], rowData=SummarizedExperiment::rowData(x))
 
-    common.cd <- S4Vectors::DataFrame(out$combinations, check.names=FALSE)
+    common.cd <- out$combinations
     colnames(common.cd) <- paste0(output.prefix, colnames(common.cd))
     if (!is.null(counts.name)) {
         common.cd[[counts.name]] <- out$counts
@@ -121,11 +122,11 @@ aggregateAcrossCells.se <- function(
     SummarizedExperiment::colData(se) <- common.cd
     if (include.coldata) {
         aggr.cd <- do.call(aggregateColData, c(list(SummarizedExperiment::colData(x), out$index, number=nrow(out$combinations)), more.coldata.args))
-        SummarizedExperiment::colData(se) <- S4Vectors::cbind(SummarizedExperiment::colData(se), aggr.cd)
+        SummarizedExperiment::colData(se) <- cbind(SummarizedExperiment::colData(se), aggr.cd)
     }
 
     if (!is.null(meta.name)) {
-        S4Vectors::metadata(se)[[meta.name]] <- list(index=out$index)
+        metadata(se)[[meta.name]] <- list(index=out$index)
     }
 
     if (length(altexps)) {
@@ -148,12 +149,12 @@ aggregateAcrossCells.se <- function(
 
             ae.cd <- SummarizedExperiment::colData(ae.se)[,-1,drop=FALSE] # remove uninteresting factor combination
             if (copy.altexps) {
-                ae.cd <- S4Vectors::cbind(common.cd, ae.cd)
+                ae.cd <- cbind(common.cd, ae.cd)
             }
             SummarizedExperiment::colData(ae.se) <- ae.cd
 
             if (copy.altexps) {
-                S4Vectors::metadata(ae.se) <- S4Vectors::metadata(se)
+                metadata(ae.se) <- metadata(se)
             }
             SingleCellExperiment::altExp(se, ae) <- ae.se
         }
@@ -164,8 +165,9 @@ aggregateAcrossCells.se <- function(
 
 #' @export
 #' @rdname aggregateAcrossCells.se
+#' @importFrom S4Vectors make_zero_col_DFrame
 aggregateColData <- function(coldata, index, number, only.atomic = TRUE, placeholder = NA) {
-    collected <- S4Vectors::make_zero_col_DFrame(nrow=number)
+    collected <- make_zero_col_DFrame(nrow=number)
     index <- factor(index, seq_len(number))
 
     for (cn in colnames(coldata)) {
