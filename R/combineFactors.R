@@ -2,17 +2,20 @@
 #'
 #' Combine multiple factors into a single factor where each level of the latter is a unique combination of levels from the former.
 #'
-#' @param factors List of vectors or factors of the same length.
+#' @param factors An ordinary list or \link[S4Vectors]{List} of vectors or factors of the same length.
 #' Corresponding elements across all vectors/factors represent the combination of levels for a single observation.
 #' For factors, any existing levels are respected.
 #' For other vectors, the sorted and unique values are used as levels.
 #'
-#' Alternatively, a data frame where each column is a vector or factor and each row corresponds to an observation.
+#' Alternatively, a data frame or \link[S4Vectors]{DataFrame} where each column is a vector or factor and each row corresponds to an observation.
 #' @param keep.unused Logical scalar indicating whether to report unused combinations of levels.
 #'
-#' @return List containing \code{levels}, a data frame containing the sorted and unique combinations of levels from \code{factors};
-#' and \code{index}, an integer vector specifying the index into \code{levels} for each observation.
-#' In other words, for observation \code{i} and factor \code{j}, \code{levels[[[j]][index[i]]} will recover \code{factors[[j]][i]}.
+#' @return List containing:
+#' \itemize{
+#' \item \code{levels}, a \link[S4Vectors]{DataFrame} containing the sorted and unique combinations of levels from \code{factors}.
+#' \item \code{index}, an integer vector specifying the index into \code{levels} for each observation.
+#' }
+#' For observation \code{i} and factor \code{j}, \code{levels[[[j]][index[i]]} will recover \code{factors[[j]][i]}.
 #'
 #' @author Aaron Lun
 #'
@@ -37,7 +40,9 @@ combineFactors <- function(factors, keep.unused=FALSE) {
     out
 }
 
+#' @importFrom S4Vectors DataFrame
 .combineFactors <- function(factors, keep.unused=FALSE) {
+    factors <- as.list(factors)
     nfac <- length(factors)
     f0 <- vector("list", nfac)
     levels0 <- vector("list", nfac)
@@ -66,7 +71,7 @@ combineFactors <- function(factors, keep.unused=FALSE) {
     if (is.null(names(combined$levels))) {
         names(combined$levels) <- make.names(seq_len(nfac))
     }
-    combined$levels <- data.frame(combined$levels, check.names=FALSE)
+    combined$levels <- DataFrame(combined$levels, check.names=FALSE)
 
     combined 
 }

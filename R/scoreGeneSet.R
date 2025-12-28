@@ -15,7 +15,7 @@
 #' @return List containing:
 #' \itemize{
 #' \item \code{scores}, a numeric vector of per-cell scores for each column in \code{x}.
-#' \item \code{weights}, a data frame containing \code{row}, an integer vector of ordered and unique row indices corresponding to the genes in \code{set};
+#' \item \code{weights}, a \link[S4Vectors]{DataFrame} containing \code{row}, an integer vector of ordered and unique row indices corresponding to the genes in \code{set};
 #' and \code{weight}, a numeric vector of per-gene weights for each gene in \code{row}. 
 #' }
 #'
@@ -35,6 +35,7 @@
 #' 
 #' @export
 #' @importFrom beachmat initializeCpp tatami.dim tatami.subset
+#' @importFrom S4Vectors DataFrame
 scoreGeneSet <- function(
     x,
     set,
@@ -70,7 +71,7 @@ scoreGeneSet <- function(
         num_threads=num.threads
     )
 
-    out$weights <- data.frame(row=chosen, weight=out$weights)
+    out$weights <- DataFrame(row=chosen, weight=out$weights)
     out
 }
 

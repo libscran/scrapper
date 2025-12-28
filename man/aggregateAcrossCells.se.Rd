@@ -26,9 +26,7 @@ aggregateColData(coldata, index, number, only.atomic = TRUE, placeholder = NA)
 \item{x}{A \link[SummarizedExperiment]{SummarizedExperiment} object or one of its subclasses.
 Rows correspond to genes and columns correspond to cells.}
 
-\item{factors}{List or data frame containing grouping factors, see \code{\link{aggregateAcrossCells}} for more details.
-
-Alternatively, a \link[S4Vectors]{List} or \link[S4Vectors]{DataFrame}, which will be coerced to a list or data frame, respectively.
+\item{factors}{List or data frame (or their equivalents from \pkg{S4Vectors}) containing grouping factors, see \code{\link{aggregateAcrossCells}} for more details.
 
 Alternatively, an atomic vector or factor representing a single variable.}
 
@@ -92,11 +90,11 @@ The same aggregation for the main experiment is applied to each alternative expe
 If \code{copy.altexps=TRUE}, the \code{colData} for each alternative experiment will contain a copy of the factor combinations and cell counts,
 and the \code{metadata} will contain a copy of the index vector.
 
-For \code{aggregateColData}, a \link[S4Vectors]{DFrame} is returned with number of rows equal to \code{number}.
-Each atomic or factor column in \code{coldata} is represented by a column in the output DFrame.
+For \code{aggregateColData}, a \link[S4Vectors]{DataFrame} is returned with number of rows equal to \code{number}.
+Each atomic or factor column in \code{coldata} is represented by a column in the output DataFrame.
 In each column, the \code{j}-th entry is equal to the unique value of all rows where \code{index == j},
 or \code{placeholder} if there is not exactly one unique value.
-If \code{only.atomic=FALSE}, any non-atomic/non-factor columns of \code{coldata} are represented in the output DFrame by a vector of \code{placeholder} values.
+If \code{only.atomic=FALSE}, any non-atomic/non-factor columns of \code{coldata} are represented in the output DataFrame by a vector of \code{placeholder} values.
 If \code{only.atomic=TRUE}, any non-atomic/non-factor columns of \code{coldata} are skipped.
 }
 \description{

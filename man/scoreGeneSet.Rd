@@ -64,7 +64,7 @@ This speeds up computation at the cost of increased memory usage.}
 List containing:
 \itemize{
 \item \code{scores}, a numeric vector of per-cell scores for each column in \code{x}.
-\item \code{weights}, a data frame containing \code{row}, an integer vector of ordered and unique row indices corresponding to the genes in \code{set};
+\item \code{weights}, a \link[S4Vectors]{DataFrame} containing \code{row}, an integer vector of ordered and unique row indices corresponding to the genes in \code{set};
 and \code{weight}, a numeric vector of per-gene weights for each gene in \code{row}. 
 }
 }
