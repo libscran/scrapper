@@ -95,7 +95,7 @@ aggregateAcrossCells.se <- function(
         # this is fine.
     } else {
         factors <- list(factors)
-        names(factors) <- make.names(1) # mimic what happens in combineFactors.
+        names(factors) <- "1" # mimic what happens in combineFactors.
     }
 
     out <- .call(

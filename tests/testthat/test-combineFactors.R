@@ -6,7 +6,8 @@ test_that("combineFactors works for multiple factors", {
     y <- sample(3, 100, replace=TRUE)
     z <- sample(letters[1:4], 100, replace=TRUE)
 
-    out <- combineFactors(list(x, y, z))
+    out <- combineFactors(list(X=x, Y=y, Z=z))
+    expect_identical(names(out$levels), c("X", "Y", "Z"))
     expect_identical(out$levels[[1]][out$index], x)
     expect_identical(out$levels[[2]][out$index], y)
     expect_identical(out$levels[[3]][out$index], z)
@@ -20,6 +21,7 @@ test_that("combineFactors works for multiple factors with unused combinations", 
 
     # Sanity check.
     out <- combineFactors(list(x, y, z))
+    expect_identical(names(out$levels), as.character(1:3))
     expect_lt(length(out$levels[[1]]), 60L)
     expect_identical(out$levels[[1]][out$index], as.character(x))
     expect_identical(out$levels[[2]][out$index], as.character(y))

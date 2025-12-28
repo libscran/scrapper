@@ -13,6 +13,7 @@
 #' @return List containing:
 #' \itemize{
 #' \item \code{levels}, a \link[S4Vectors]{DataFrame} containing the sorted and unique combinations of levels from \code{factors}.
+#' Each column corresponds to a factor in \code{factors} while each row corresponds to a unqiue combination.
 #' \item \code{index}, an integer vector specifying the index into \code{levels} for each observation.
 #' }
 #' For observation \code{i} and factor \code{j}, \code{levels[[[j]][index[i]]} will recover \code{factors[[j]][i]}.
@@ -69,7 +70,7 @@ combineFactors <- function(factors, keep.unused=FALSE) {
     names(combined$levels) <- names(factors)
 
     if (is.null(names(combined$levels))) {
-        names(combined$levels) <- make.names(seq_len(nfac))
+        names(combined$levels) <- seq_len(nfac)
     }
     combined$levels <- DataFrame(combined$levels, check.names=FALSE)
 

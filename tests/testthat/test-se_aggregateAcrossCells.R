@@ -18,7 +18,7 @@ test_that("aggregateAcrossCells.se works as expected", {
 
     # Works with direct specification of the factor.
     out2 <- aggregateAcrossCells.se(se, se$stuff)
-    expect_identical(out2$factor.X1, out2$stuff)
+    expect_identical(out2$factor.1, out2$stuff)
     expect_identical(assay(out2), assay(out))
 
     # Works if we provide a list.
