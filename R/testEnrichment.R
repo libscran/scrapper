@@ -16,7 +16,7 @@
 #' This may be desirable to avoid underflow at near-zero p-values.
 #' @param num.threads Integer scalar specifying the number of threads to use.
 #'
-#' @return Data frame with one row per gene set and the following columns:
+#' @return \link[S4Vectors]{DataFrame} with one row per gene set and the following columns:
 #' \itemize{
 #' \item \code{overlap}, the overlap between \code{x} and each entry of \code{sets}, i.e., the number of genes in the intersection.
 #' \item \code{size}, the set of each entry of \code{sets}.
@@ -41,6 +41,7 @@
 #' )
 #' 
 #' @export
+#' @importFrom S4Vectors DataFrame
 testEnrichment <- function(x, sets, universe=NULL, log=FALSE, num.threads=1) {
     num.sets <- length(sets)
     all.genes <- unlist(sets)
@@ -63,7 +64,7 @@ testEnrichment <- function(x, sets, universe=NULL, log=FALSE, num.threads=1) {
     overlap <- tabulate(set.ids[all.genes %in% x], nbins=num.sets)
     out <- test_enrichment(overlap, length(x), set.sizes, universe, log=log, num_threads=num.threads)
 
-    data.frame(
+    DataFrame(
         overlap=overlap,
         size=set.sizes,
         p.value=out,

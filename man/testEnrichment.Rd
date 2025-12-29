@@ -26,7 +26,7 @@ This may be desirable to avoid underflow at near-zero p-values.}
 \item{num.threads}{Integer scalar specifying the number of threads to use.}
 }
 \value{
-Data frame with one row per gene set and the following columns:
+\link[S4Vectors]{DataFrame} with one row per gene set and the following columns:
 \itemize{
 \item \code{overlap}, the overlap between \code{x} and each entry of \code{sets}, i.e., the number of genes in the intersection.
 \item \code{size}, the set of each entry of \code{sets}.
