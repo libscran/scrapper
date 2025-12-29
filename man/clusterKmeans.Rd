@@ -16,6 +16,7 @@ clusterKmeans(
   hartigan.wong.quick.transfer.iterations = 50,
   hartigan.wong.quit.quick.transfer.failure = FALSE,
   seed = 5489L,
+  warn = TRUE,
   num.threads = 1
 )
 }
@@ -73,6 +74,8 @@ Only used if \code{refine.method = "hartigan-wong"}.}
 
 \item{seed}{Integer scalar specifying the seed for random number generation.
 Only used if \code{init.method = "random"} or \code{"kmeans++"}.}
+
+\item{warn}{Boolean specifying whether a warning should be emitted if the k-means algorithm failed to converge.}
 
 \item{num.threads}{Integer scalar specifying the number of threads to use.}
 }

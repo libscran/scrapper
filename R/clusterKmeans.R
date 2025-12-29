@@ -45,6 +45,7 @@
 #' Only used if \code{refine.method = "hartigan-wong"}.
 #' @param seed Integer scalar specifying the seed for random number generation.
 #' Only used if \code{init.method = "random"} or \code{"kmeans++"}.
+#' @param warn Boolean specifying whether a warning should be emitted if the k-means algorithm failed to converge.
 #' @param num.threads Integer scalar specifying the number of threads to use.
 #' 
 #' @return 
@@ -103,8 +104,9 @@ clusterKmeans <- function(
     hartigan.wong.quick.transfer.iterations = 50,
     hartigan.wong.quit.quick.transfer.failure = FALSE,
     seed=5489L,
-    num.threads=1)
-{
+    warn=TRUE,
+    num.threads=1
+) {
     output <- cluster_kmeans(
         x,
         k,
@@ -119,6 +121,10 @@ clusterKmeans <- function(
         seed=seed, 
         nthreads=num.threads
     )
+
+    if (output$status != 0 && warn) {
+        warning("convergence failure for k-means")
+    }
 
     output$clusters <- factor(output$clusters + 1L)
     rownames(output$centers) <- rownames(x)
