@@ -2,24 +2,6 @@
 
 library(S4Vectors)
 
-test_that("guessing the dimnames works as expected", {
-    mat <- matrix(0, 200, 10)
-    rownames(mat) <- sprintf("foo%s", seq_len(nrow(mat)))
-    colnames(mat) <- LETTERS[1:10]
-
-    # Works on a matrix.
-    out <- scrapper:::.guessDimnames(list(stuff=mat))
-    expect_identical(out$nrow, 200L)
-    expect_identical(out$rownames, rownames(mat))
-    expect_identical(out$groups, LETTERS[1:10])
-
-    # Works for a list of effect sizes.
-    effects <- lapply(1:10, function(x) DataFrame(X=seq_len(200), row.names=rownames(mat)))
-    names(effects) <- LETTERS[1:10]
-    out2 <- scrapper:::.guessDimnames(list(cohens.d=effects))
-    expect_identical(out, out2)
-})
-
 test_that("finding an ordering statistic works as expected", {
     expect_identical(scrapper:::.findOrderBy(DataFrame(cohens.d.mean=1, auc.max=2), TRUE), "cohens.d.mean")
     expect_identical(scrapper:::.findOrderBy(DataFrame(cohens.d.max=1, auc.median=2), TRUE), "auc.median")
@@ -53,6 +35,13 @@ test_that("scoreMarkers.se works as expected", {
         expect_type(df$detected, "double")
 
         expect_false(is.unsorted(-df$cohens.d.mean)) # i.e., the default order-by choice.
+    }
+
+    # Also works with non-character groupings.
+    out2 <- scoreMarkers.se(se, as.integer(factor(groups)))
+    expect_identical(names(out2), as.character(1:4))
+    for (g in 1:4) {
+        expect_identical(out2[[as.character(g)]], out[[LETTERS[g]]])
     }
 })
 
@@ -96,6 +85,23 @@ test_that("scoreMarkers.se sorts by min.rank correctly", {
     for (g in LETTERS[1:4]) {
         df <- out[[g]]
         expect_false(is.unsorted(df$cohens.d.min.rank))
+    }
+})
+
+test_that("scoreMarkers.se can still make DFs when no statistics are computed", {
+    out <- scoreMarkers.se(se, groups, more.marker.args=list(
+        compute.cohens.d=FALSE,
+        compute.auc=FALSE,
+        compute.group.mean=FALSE,
+        compute.group.detected=FALSE,
+        compute.delta.mean=FALSE,
+        compute.delta.detected=FALSE
+    ))
+
+    for (g in LETTERS[1:4]) {
+        expect_identical(nrow(out[[g]]), nrow(se))
+        expect_identical(rownames(out[[g]]), rownames(se))
+        expect_identical(ncol(out[[g]]), 0L)
     }
 })
 

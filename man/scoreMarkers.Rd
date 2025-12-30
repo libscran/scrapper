@@ -105,9 +105,22 @@ Only used if \code{all.pairwise=FALSE}.}
 \item{num.threads}{Integer scalar specifying the number of threads to use.}
 }
 \value{
-If \code{all.pairwise=FALSE}, a named list is returned containing:
+A named list containing:
 \itemize{
-\item \code{cohens.d}, a list of \link[S4Vectors]{DataFrame}s where each DataFrame corresponds to a group.
+\item \code{nrow}, integer specifying the number of rows in \code{x}.
+\item \code{row.names}, character vector or \code{NULL} containing the row names of \code{x}.
+\item \code{group.ids}, vector contaning the identities of the unique groups.
+\item \code{mean}, a numeric matrix containing the mean expression for each group.
+Each row is a gene and each column is a group in \code{group.ids}.
+Omitted if \code{compute.group.mean=FALSE}.
+\item \code{detected}, a numeric matrix containing the proportion of detected cells in each group.
+Each row is a gene and each column is a group in \code{group.ids}.
+Omitted if \code{compute.group.detected=FALSE}.
+}
+
+If \code{all.pairwise=FALSE}, the list also contains:
+\itemize{
+\item \code{cohens.d}, a list of \link[S4Vectors]{DataFrame}s where each DataFrame corresponds to a group in \code{group.ids}.
 Each row of a DataFrame represents a gene, while each column contains a summary of Cohen's d from pairwise comparisons to all other groups.
 This includes \code{min}, \code{mean}, \code{median}, \code{max}, \code{quantile.*} and \code{min.rank} - check out \code{?\link{summarizeEffects}} for details.
 Omitted if \code{compute.cohens.d=FALSE}.
@@ -119,11 +132,11 @@ Omitted if \code{compute.delta.mean=FALSE}.
 Omitted if \code{compute.delta.detected=FALSE}.
 }
 
-If \code{all.pairwise=TRUE}, a named list is returned containing:
+If \code{all.pairwise=TRUE}, the list also contains:
 \itemize{
 \item \code{cohens.d}, a 3-dimensional numeric array containing the Cohen's d from each pairwise comparison between groups.
-The extents of the first two dimensions are equal to the number of groups, while the extent of the final dimension is equal to the number of genes.
-The entry \code{[i, j, k]} represents Cohen's d from the comparison of group \code{j} over group \code{i} for gene \code{k}.
+The extents of the first two dimensions are equal to the number of groups in \code{group.ids}, while the extent of the final dimension is equal to the number of genes.
+The entry \code{cohens.d[i, j, k]} represents Cohen's d from the comparison of group \code{group.ids[j]} over group \code{group.ids[i]} for gene \code{k}.
 Omitted if \code{compute.cohens.d=FALSE}.
 \item \code{auc}, an array like \code{cohens.d} but containing the AUCs from each pairwise comparison.
 Omitted if \code{compute.auc=FALSE}.
@@ -133,11 +146,11 @@ Omitted if \code{compute.delta.mean=FALSE}.
 Omitted if \code{compute.delta.detected=FALSE}.
 }
 
-If \code{all.pairwise} is an integer, a named list is returned containing:
+If \code{all.pairwise} is an integer, the list also contains:
 \itemize{
 \item \code{cohens.d}, a list of list of \link[S4Vectors]{DataFrame}s containing the top genes with the largest Cohen's d for each pairwise comparison.
-Specifically, \code{cohens.d[[i]][[j]]} is a DataFrame that contains the top \code{all.pairwise} genes from the comparison of group \code{i} over group \code{j}. 
-Columns are \code{index}, the row index of the gene; and \code{effect}, the Cohen's d for that gene.
+Specifically, \code{cohens.d[[i]][[j]]} is a DataFrame that contains the top \code{all.pairwise} genes from the comparison of group \code{group.ids[i]} over group \code{group.ids[j]}. 
+Each DataFrame contains an \code{index} column, the row index of the gene; and an \code{effect} column, the Cohen's d for that gene.
 Omitted if \code{compute.cohens.d=FALSE}.
 \item \code{auc}, a list of list of DataFrames like \code{cohens.d} but containing the AUCs from each pairwise comparison.
 Omitted if \code{compute.auc=FALSE}.
@@ -148,14 +161,6 @@ Omitted if \code{compute.delta.detected=FALSE}.
 }
 
 All returned lists will also contain:
-\itemize{
-\item \code{mean}, a numeric matrix containing the mean expression for each group.
-Each row is a gene and each column is a group.
-Omitted if \code{compute.group.mean=FALSE}.
-\item \code{detected}, a numeric matrix containing the proportion of detected cells in each group.
-Each row is a gene and each column is a group.
-Omitted if \code{compute.group.detected=FALSE}.
-}
 }
 \description{
 Score marker genes for each group using a variety of effect sizes from pairwise comparisons between groups.

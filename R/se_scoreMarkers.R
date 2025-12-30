@@ -68,27 +68,6 @@ scoreMarkers.se <- function(
     formatScoreMarkersResult(res, extra.columns=extra.columns, order.by=order.by)
 }
 
-#' @importClassesFrom S4Vectors DataFrame
-.guessDimnames <- function(marker.res) {
-    for (n in names(marker.res)) {
-        current <- marker.res[[n]]
-        if (is.matrix(current)) {
-            return(list(nrow=nrow(current), rownames=rownames(current), groups=colnames(current)))
-        } else if (is(current, "DataFrame")) {
-            return(list(nrow=nrow(current), rownames=rownames(current), groups=NULL))
-        } else if (is.list(current)) {
-            out <- .guessDimnames(current)
-            if (!is.null(out)) {
-                out$groups <- names(current)
-                return(out)
-            }
-        } else {
-            stop("unknown type '", typeof(current), "'")
-        }
-    }
-    return(NULL)
-}
-
 .findOrderBy <- function(marker.df, order.by) {
     if (isTRUE(order.by)) {
         # Find something decent to use for ordering.
@@ -116,18 +95,12 @@ scoreMarkers.se <- function(
 formatScoreMarkersResult <- function(marker.res, extra.columns = NULL, order.by = TRUE) {
     effect.sizes <- c("cohens.d", "auc", "delta.mean", "delta.detected")
     summaries <- c("min", "mean", "median", "max", "quantile", "min.rank")
-
-    out <- .guessDimnames(marker.res)
-    if (is.null(out)) {
-        stop("could not determine dimnames from 'marker.res'")
-    }
-
     output <- List()
     check.order.by <- FALSE
 
-    for (group in out$groups) {
-        current <- make_zero_col_DFrame(out$nrow)
-        rownames(current) <- out$rownames
+    for (group in as.character(marker.res$group.ids)) {
+        current <- make_zero_col_DFrame(marker.res$nrow)
+        rownames(current) <- marker.res$row.names
         if (!is.null(extra.columns)) {
             current <- cbind(current, extra.columns)
         }
