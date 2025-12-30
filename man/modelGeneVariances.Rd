@@ -85,7 +85,8 @@ This contains the columns \code{means}, \code{variances}, \code{fitted} and \cod
 each of which is a numeric vector containing the statistic of the same name across all genes.
 
 If \code{block} is supplied, each of the column vectors described above contains the average across all blocks.
-The list will also contain \code{per.block}, a list of DataFrames containing the equivalent statistics for each block.
+The list will also contain \code{per.block}, a list of DataFrames containing the equivalent statistics for each block;
+and \code{block.ids}, a vector containing the identities of the unique blocks in the same order as \code{per.block}.
 }
 \description{
 Model the per-gene variances as a function of the mean in single-cell expression data.

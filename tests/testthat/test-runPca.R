@@ -1,5 +1,6 @@
 # library(testthat); library(scrapper); source("test-runPca.R")
 
+set.seed(991)
 library(Matrix)
 x <- round(abs(rsparsematrix(1000, 100, 0.1) * 100))
 normed <- normalizeCounts(x, size.factors=centerSizeFactors(Matrix::colSums(x)))
@@ -29,6 +30,7 @@ test_that("runPCA works more or less as expected", {
 test_that("runPCA works with blocking", {
     block <- sample(3, ncol(x), replace=TRUE)
     pcs <- runPca(normed, block=block)
+    expect_identical(pcs$block.ids, 1:3)
 
     rm <- rowMeans(pcs$components)
     expect_true(all(abs(rm) < 1e-8))

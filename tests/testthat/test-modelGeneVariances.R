@@ -30,7 +30,8 @@ test_that("modelGeneVariances works with blocking", {
     block <- sample(LETTERS[1:3], ncol(x), replace=TRUE)
     out <- modelGeneVariances(x, block, block.weight.policy="equal")
 
-    for (b in LETTERS[1:3]) {
+    expect_identical(out$block.ids, LETTERS[1:3])
+    for (b in out$block.ids) {
         sub <- x[,block == b]
         current <- out$per.block[[b]]
         expect_equal(current$variances, rowVars(sub))

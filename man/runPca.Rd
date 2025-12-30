@@ -81,6 +81,8 @@ Rows are genes and columns are dimensions.
 This can be used to divide \code{variance.explained} to obtain the proportion of variance explained by each PC.
 \item \code{center}, a numeric vector containing the mean for each gene.
 If \code{block} is provided, this is instead a matrix containing the mean for each gene (column) in each block (row).
+\item \code{block.ids}, a vector containing the identities of the unique blocks in the same order as the rows of \code{center}.
+Only reported if \code{block} is provided. 
 \item \code{scale}, a numeric vector containing the scaling for each gene.
 Only reported if \code{scale=TRUE}.
 \item \code{converged}, a boolean indicating whether IRLBA converged successfully.

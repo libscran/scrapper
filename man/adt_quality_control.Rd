@@ -78,7 +78,7 @@ This is defined as \code{num.mads} MADs above the median of the log-transformed 
 Here, the threshold is computed independently for each block, using the same method as the unblocked case.
 \item \code{subsets}, a list of numeric vectors containing the upper bound on the sum of counts in each control subset for each blocking level.
 Here, the threshold is computed independently for each block, using the same method as the unblocked case.
-\item \code{block.levels}, a vector containing the unique blocking levels.
+\item \code{block.ids}, a vector containing the identities of the unique blocks.
 }
 Each vector is of length equal to the number of levels in \code{block} and is named accordingly.
 }
