@@ -112,13 +112,19 @@ test_that("previewMarkers works as expected", {
     expect_identical(colnames(preview), c("mean", "detected", "lfc"))
     expect_identical(nrow(preview), 10L)
 
-    preview <- previewMarkers(out[[1]], order.by=TRUE)
-    expect_identical(colnames(preview), c("mean", "detected", "lfc", "cohens.d.mean"))
-    expect_identical(nrow(preview), 10L)
+    order_preview <- previewMarkers(out[[1]], order.by=TRUE)
+    expect_identical(colnames(order_preview), c("mean", "detected", "lfc", "cohens.d.mean"))
+    expect_identical(nrow(order_preview), 10L)
 
-    preview <- previewMarkers(out[[1]], columns=NULL, include.order.by=FALSE)
-    expect_identical(colnames(preview), character(0))
-    expect_identical(nrow(preview), 10L)
+    noninc_preview <- previewMarkers(out[[1]], columns=NULL, order.by=TRUE, include.order.by=FALSE)
+    expect_identical(colnames(noninc_preview), character(0))
+    expect_identical(nrow(noninc_preview), 10L)
+    expect_identical(rownames(order_preview), rownames(noninc_preview))
+
+    eff_preview <- previewMarkers(out[[1]], order.by=TRUE, include.order.by="effect")
+    expect_identical(eff_preview$effect, order_preview$cohens.d.mean)
+    expect_identical(nrow(eff_preview), 10L)
+    expect_identical(rownames(order_preview), rownames(eff_preview))
 
     preview <- previewMarkers(out[[1]], rows=NULL)
     expect_identical(rownames(preview), rownames(out[[1]]))

@@ -21,6 +21,7 @@
 #' @param columns Character vector of the columns to retain in the preview.
 #' This may be named, in which the names are used as the column names.
 #' @param include.order.by Boolean indicating whether the column specified by \code{order.by} should be included in the output DataFrame.
+#' A string may also be supplied and will be treated as \code{TRUE}; the value of the string will be used as the column name in the output DataFrame.
 #' @param rows Integer specifying the number of rows to show.
 #' If \code{NULL}, all rows are returned.
 #' 
@@ -158,8 +159,11 @@ previewMarkers <- function(marker.df, columns = c("mean", "detected", lfc="delta
     }
 
     order.by <- .findOrderBy(marker.df, order.by)
-    if (include.order.by) {
+    if (!is.null(order.by) && !isFALSE(include.order.by)) {
         columns <- c(columns, order.by)
+        if (is.character(include.order.by)) {
+            names(columns)[length(columns)] <- include.order.by
+        }
     }
 
     columns <- columns[columns %in% colnames(marker.df)]

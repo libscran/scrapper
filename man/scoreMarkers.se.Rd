@@ -59,7 +59,8 @@ This may be named, in which the names are used as the column names.}
 \item{rows}{Integer specifying the number of rows to show.
 If \code{NULL}, all rows are returned.}
 
-\item{include.order.by}{Boolean indicating whether the column specified by \code{order.by} should be included in the output DataFrame.}
+\item{include.order.by}{Boolean indicating whether the column specified by \code{order.by} should be included in the output DataFrame.
+A string may also be supplied and will be treated as \code{TRUE}; the value of the string will be used as the column name in the output DataFrame.}
 }
 \value{
 For \code{scoreMarkers.se} and \code{formatScoreMarkersResult}, a \link[S4Vectors]{List} of \link[S4Vectors]{DataFrame}s is returned.
