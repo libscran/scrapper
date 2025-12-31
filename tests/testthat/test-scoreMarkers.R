@@ -49,7 +49,7 @@ test_that("scoreMarkers works as expected for simple cases", {
 
     # Works without anything.
     empty <- scoreMarkers(x, g, compute.auc=FALSE, compute.cohens.d=FALSE, compute.delta.detected=FALSE, compute.delta.mean=FALSE)
-    expect_identical(names(empty), c("mean", "detected"))
+    expect_identical(names(empty), c("mean", "detected", "nrow", "group.ids"))
 })
 
 test_that("scoreMarkers works with blocking", {
@@ -138,7 +138,7 @@ test_that("scoreMarkers works as expected for the full pairwise statistics", {
 
     # Works without anything.
     empty <- scoreMarkers(x, g, compute.auc=FALSE, compute.cohens.d=FALSE, compute.delta.detected=FALSE, compute.delta.mean=FALSE)
-    expect_identical(names(empty), c("mean", "detected"))
+    expect_identical(names(empty), c("mean", "detected", "nrow", "group.ids"))
 
     # Works with blocking.
     b <- rep(1:3, length.out=ncol(x))
