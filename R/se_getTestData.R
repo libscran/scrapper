@@ -3,12 +3,18 @@ cache$rna <- list()
 cache$adt <- list()
 cache$crispr <- list()
 
-#' Get a test scRNA-seq dataset
+#' Get datasets for testing
 #'
-#' Get a test single-cell dataset with varying levels of processing.
-#' This uses caching to avoid recomputation.
+#' Get single-cell datasets from the \pkg{scRNAseq} package with varying levels of processing.
+#' This is primarily intended for testing other \pkg{scrapper} functions, e.g., in their Examples section.
 #'
 #' @param at String specifying the level of processing.
+#' For \code{"start"}, no processing was performed.
+#' Otherwise, the dataset is returned after quality control (\code{"qc"}),
+#' normalization (\code{"norm"}),
+#' feature selection (\code{"hvg"}),
+#' PCA (\code{"PCA"})
+#' or graph-based clustering (\code{"cluster"}).
 #'
 #' @return A \link[SingleCellExperiment]{SingleCellExperiment} containing a dataset at the specified level of processing.
 #' 
@@ -20,10 +26,12 @@ cache$crispr <- list()
 #' For \code{getTestAdtData}, this is a CITE-seq dataset of human PBMCs,
 #' where the main experiment contains RNA counts and the alternative experiment contains ADT counts.
 #' This is obtained with \code{\link[scRNAseq]{fetchDataset}("kotliarov-pbmc-2020", "2024-04-18")}.
+#' Only the first 5000 cells are loaded for speed.
 #'
 #' For \code{getTestCrisprData}, this is a Perturb-seq dataset of a pancreatic beta cell line,
 #' where the main experiment contains RNA counts and the alternative experiment contains CRISPR guide counts.
 #' This is obtained with \code{\link[scRNAseq]{fetchDataset}("cao-pancreas-2025", "2025-10-10", "rqc")}.
+#' Only the first 5000 cells are loaded for speed.
 #'
 #' @author Aaron Lun
 #' @examples
@@ -180,7 +188,7 @@ getTestCrisprData.se <- function(at = c("start", "qc")) {
     }
     sce <- cache$crispr$start
     if (at == "start") {
-        return(cache$crispr[[at]])
+        return(sce)
     }
 
     if (!("qc" %in% names(cache$crispr))) {

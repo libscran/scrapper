@@ -5,7 +5,7 @@
 \alias{getTestRnaData.se}
 \alias{getTestAdtData.se}
 \alias{getTestCrisprData.se}
-\title{Get a test scRNA-seq dataset}
+\title{Get datasets for testing}
 \usage{
 getTestRnaData.se(at = c("start", "qc", "norm", "hvg", "pca", "cluster"))
 
@@ -14,14 +14,20 @@ getTestAdtData.se(at = c("start", "qc", "norm", "hvg", "pca"))
 getTestCrisprData.se(at = c("start", "qc"))
 }
 \arguments{
-\item{at}{String specifying the level of processing.}
+\item{at}{String specifying the level of processing.
+For \code{"start"}, no processing was performed.
+Otherwise, the dataset is returned after quality control (\code{"qc"}),
+normalization (\code{"norm"}),
+feature selection (\code{"hvg"}),
+PCA (\code{"PCA"})
+or graph-based clustering (\code{"cluster"}).}
 }
 \value{
 A \link[SingleCellExperiment]{SingleCellExperiment} containing a dataset at the specified level of processing.
 }
 \description{
-Get a test single-cell dataset with varying levels of processing.
-This uses caching to avoid recomputation.
+Get single-cell datasets from the \pkg{scRNAseq} package with varying levels of processing.
+This is primarily intended for testing other \pkg{scrapper} functions, e.g., in their Examples section.
 }
 \details{
 For \code{getTestRnaData}, this is a scRNA-seq dataset of the mouse brain,
@@ -31,10 +37,12 @@ This is obtained with \code{\link[scRNAseq]{fetchDataset}("zeisel-brain-2015", "
 For \code{getTestAdtData}, this is a CITE-seq dataset of human PBMCs,
 where the main experiment contains RNA counts and the alternative experiment contains ADT counts.
 This is obtained with \code{\link[scRNAseq]{fetchDataset}("kotliarov-pbmc-2020", "2024-04-18")}.
+Only the first 5000 cells are loaded for speed.
 
 For \code{getTestCrisprData}, this is a Perturb-seq dataset of a pancreatic beta cell line,
 where the main experiment contains RNA counts and the alternative experiment contains CRISPR guide counts.
 This is obtained with \code{\link[scRNAseq]{fetchDataset}("cao-pancreas-2025", "2025-10-10", "rqc")}.
+Only the first 5000 cells are loaded for speed.
 }
 \examples{
 getTestRnaData.se()
