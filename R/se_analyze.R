@@ -4,7 +4,7 @@
 #' This also supports integration of multiple modalities and correction of batch effects.
 #'
 #' @param x A \link[SummarizedExperiment]{SummarizedExperiment} object or one of its subclasses.
-#' Rows correspond to genes and columns correspond to cells.
+#' Rows correspond to genomic features (genes, ADTs or CRISPR guides) and columns correspond to cells.
 #' @param rna.altexp String or integer specifying the alternative experiment of \code{x} containing the RNA data.
 #' If \code{NA}, the main experiment is assumed to contain the RNA data.
 #' If \code{NULL}, it is assumed that no RNA data is available.
@@ -91,8 +91,9 @@
 #' Ignored if \code{kmeans.clusters = NULL}.
 #' @param more.kmeans.args Named list of arguments to pass to \code{\link{clusterKmeans.se}}.
 #' Ignored if \code{kmeans.clusters = NULL}.
-#' @param clusters.for.markers Character vector of clustering algorithms (either \code{"graph"} or \code{"kmeans"}, specifying the clustering to be used for marker detection.
+#' @param clusters.for.markers Character vector of clustering algorithms (either \code{"graph"} or \code{"kmeans"}), specifying the clustering to be used for marker detection.
 #' The first available clustering will be chosen.
+#' If no clustering is available from the list, markers will not be computed.
 #' @param more.rna.marker.args Named list of arguments to pass to \code{\link{scoreMarkers.se}} for the RNA data.
 #' Ignored if no suitable clusterings are available or if \code{rna.altexp=NULL}.
 #' @param more.adt.marker.args Named list of arguments to pass to \code{\link{scoreMarkers.se}} for the ADT data.
@@ -102,7 +103,14 @@
 #' @param BNPARAM A \link[BiocNeighbors]{BiocNeighborParam} instance specifying the nearest-neighbor search algorithm to use.
 #' @param num.threads Integer scalar specifying the number of threads to use in each step.
 #'
-#' @return \code{x} is returned with the results of the analysis.
+#' @return List containing:
+#' \itemize{
+#' \item \code{x}, a \link[SingleCellExperiment]{SingleCellExperiment} that is a copy of the input \code{x}.
+#' It is also decorated with the results of each analysis step - see Details.
+#' \item \code{markers}, a list of list of \link[S4Vectors]{DataFrame}s containing the marker statistics for each modality.
+#' Each inner list corresponds to a modality (RNA, ADT, etc.) while each DataFrame corresponds to a cluster.
+#' If no clusterings were generated, this is set to \code{NULL}.
+#' }
 #'
 #' @details
 #' This function is equivalent to:
@@ -150,8 +158,8 @@ analyze.se <- function(
     rna.qc.subsets = list(),
     rna.qc.output.prefix = NULL,
     more.rna.qc.args = list(),
-    adt.qc.output.prefix = NULL,
     adt.qc.subsets = list(),
+    adt.qc.output.prefix = NULL,
     more.adt.qc.args = list(),
     crispr.qc.output.prefix = NULL,
     more.crispr.qc.args = list(),
@@ -190,8 +198,6 @@ analyze.se <- function(
     BNPARAM = AnnoyParam(),
     num.threads = 3L
 ) {
-    store <- list()
-
     ############ Quality control o(*°▽°*)o #############
 
     collected.filters <- list()
@@ -234,11 +240,8 @@ analyze.se <- function(
 
     # Combining all filters.
     combined.qc.filter <- !logical(ncol(x))
-    for (mod in c("rna", "adt", "crispr")) {
-        keep <- collected.filters[[mod]]
-        if (!is.null(keep)) {
-            combined.qc.filter <- combined.qc.filter & keep
-        }
+    for (keep in collected.filters) {
+        combined.qc.filter <- combined.qc.filter & keep
     }
     if (length(collected.filters) > 1) {
         SummarizedExperiment::colData(x)[["combined.keep"]] <- combined.qc.filter
@@ -348,7 +351,7 @@ analyze.se <- function(
             target.embedding <- .defineSingleTargetEmbedding(x, adt.altexp, adt.pca.output.name)
         }
 
-    } else if (length(embeddings) > 1) {
+    } else {
         all.reddims <- list(main=character(0), altexp=list())
         if ("rna" %in% embeddings) {
             all.reddims <- .addSourceEmbeddingToScale(x, rna.altexp, rna.pca.output.name, all.reddims)
@@ -427,9 +430,11 @@ analyze.se <- function(
 
     ############ Finding markers (˶˃ ᵕ ˂˶) #############
 
-    markers <- list()
+    markers <- NULL
 
     if (!is.null(chosen.clusters)) {
+        markers <- list()
+
         if (!is.null(rna.altexp)) {
             markers$rna <- .call(
                 scoreMarkers.se,

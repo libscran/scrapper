@@ -7,9 +7,11 @@ mat <- matrix(rpois(10000, mean * 10), ncol=100)
 se <- SummarizedExperiment(list(counts=mat))
 rownames(se) <- paste0("GENE_", seq_len(nrow(se)))
 
+# Just fiddling with some of the parameters to cut down the runtime.
+default <- analyze.se(se, more.tsne.args=list(max.iterations=10), more.umap.args=list(num.epochs=5), num.threads=1)
+
 test_that("analyze.se works correctly with a default run", {
-    # Just fiddling with some of the parameters to cut down the runtime.
-    res <- analyze.se(se, more.tsne.args=list(max.iterations=10), more.umap.args=list(num.epochs=5), num.threads=1)
+    res <- default
 
     expect_identical(rownames(res$x), rownames(se))
     expect_true(all(res$x$keep))
@@ -33,29 +35,35 @@ test_that("analyze.se works correctly with a default run", {
 
 test_that("analyze.se works correctly with no filtering", {
     res <- analyze.se(se, more.tsne.args=list(max.iterations=10), filter.cells=FALSE, more.umap.args=list(num.epochs=5), num.threads=1)
+    expect_identical(dim(res$x), dim(se))
     expect_true(is.matrix(counts(res$x)))
 })
 
 test_that("analyze.se works correctly with k-means clustering", {
-    res <- analyze.se(se, more.tsne.args=list(max.iterations=10), filter.cells=FALSE, more.umap.args=list(num.epochs=5), cluster.graph.output.name=NULL, kmeans.clusters=10, num.threads=1)
+    res <- analyze.se(se, more.tsne.args=list(max.iterations=10), more.umap.args=list(num.epochs=5), cluster.graph.output.name=NULL, kmeans.clusters=10, num.threads=1)
     expect_null(res$x$graph.cluster)
     expect_true(is.factor(res$x$kmeans.cluster))
     expect_identical(names(res$markers$rna), levels(res$x$kmeans.cluster))
 })
 
 test_that("analyze.se works correctly with no clustering", {
-    res <- analyze.se(se, more.tsne.args=list(max.iterations=10), filter.cells=FALSE, more.umap.args=list(num.epochs=5), cluster.graph.output.name=NULL, num.threads=1)
+    res <- analyze.se(se, more.tsne.args=list(max.iterations=10), more.umap.args=list(num.epochs=5), cluster.graph.output.name=NULL, num.threads=1)
     expect_null(res$x$graph.cluster)
     expect_null(res$x$kmeans.cluster)
-    expect_identical(res$markers, list())
+    expect_null(res$markers)
 })
 
 test_that("analyze.se works correctly with blocking", {
     block <- rep(LETTERS[1:4], length.out=ncol(mat))
-    res <- analyze.se(se, block=block, more.tsne.args=list(max.iterations=10), filter.cells=FALSE, more.umap.args=list(num.epochs=5), num.threads=1)
+    res <- analyze.se(se, block=block, more.tsne.args=list(max.iterations=10), more.umap.args=list(num.epochs=5), num.threads=1)
     expect_true("MNN" %in% reducedDimNames(res$x))
     expect_type(res$x$block, "character")
     expect_identical(names(metadata(res$x)$qc$thresholds$sum), LETTERS[1:4])
+
+    # Confirm that blocked coordinates are actually used downstream.
+    downstream <- runAllNeighborSteps(as.matrix(t(reducedDim(res$x, "MNN"))), runTsne.args=list(max.iterations=10), runUmap.args=list(num.epochs=5), num.threads=1)
+    expect_identical(downstream$clusterGraph$membership, res$x$graph.cluster)
+    expect_identical(downstream$runTsne, reducedDim(res$x, "TSNE"))
 })
 
 test_that("analyze.se works correctly with combined RNA+ADT", {
@@ -64,8 +72,8 @@ test_that("analyze.se works correctly with combined RNA+ADT", {
     rownames(amat) <- paste0("TAG_", seq_len(nrow(amat)))
     altExp(sce, "ADT") <- SummarizedExperiment(list(counts=amat))
 
-    # Works with RNA + ADT.
-    res <- analyze.se(sce, adt.altexp="ADT", more.tsne.args=list(max.iterations=10), more.umap.args=list(num.epochs=5), num.threads=1)
+    # Works with RNA + ADT. We use a different number of PCs for the ADTs to get some variety.
+    res <- analyze.se(sce, adt.altexp="ADT", more.adt.pca.args=list(number=10), more.tsne.args=list(max.iterations=10), more.umap.args=list(num.epochs=5), num.threads=1)
 
     expect_identical(rownames(altExp(res$x)), rownames(altExp(sce)))
     expect_type(altExp(res$x, "ADT")$keep, "logical")
@@ -74,13 +82,13 @@ test_that("analyze.se works correctly with combined RNA+ADT", {
 
     expect_s4_class(counts(altExp(res$x)), "DelayedMatrix")
     expect_s4_class(logcounts(altExp(res$x)), "DelayedMatrix")
-    expect_null(rowData(altExp(res$x))$hvgs)
-    expect_true("PCA" %in% reducedDimNames(altExp(res$x)))
+    expect_null(rowData(altExp(res$x))$hvg)
+    expect_identical(ncol(reducedDim(altExp(res$x), "PCA")), 10L)
 
     expect_type(rowData(res$x)$hvg, "logical")
-    expect_true("PCA" %in% reducedDimNames(res$x))
+    expect_identical(ncol(reducedDim(res$x, "PCA")), 25L)
 
-    expect_true("combined" %in% reducedDimNames(res$x))
+    expect_identical(ncol(reducedDim(res$x, "combined")), 35L)
     expect_identical(names(metadata(res$x)$combined$main.scaling), "PCA")
     expect_identical(names(metadata(res$x)$combined$altexp.scaling$ADT), "PCA")
 
@@ -92,14 +100,19 @@ test_that("analyze.se works correctly with combined RNA+ADT", {
     altExp(sce2, "RNA") <- se
 
     res2 <- analyze.se(sce2, rna.altexp="RNA", adt.altexp=NA, more.tsne.args=list(max.iterations=10), more.umap.args=list(num.epochs=5), num.threads=1)
-    expect_null(rowData(res2$x)$hvgs)
+    expect_null(rowData(res2$x)$hvg)
     expect_type(rowData(altExp(res2$x))$hvg, "logical")
 
-    expect_true("PCA" %in% reducedDimNames(res2$x))
-    expect_true("combined" %in% reducedDimNames(res2$x))
-    expect_true("PCA" %in% reducedDimNames(altExp(res2$x)))
+    expect_identical(reducedDim(res2$x, "PCA"), reducedDim(altExp(res$x, "ADT"), "PCA"))
+    expect_identical(reducedDim(altExp(res2$x, "RNA"), "PCA"), reducedDim(res$x, "PCA"))
+    expect_identical(dim(reducedDim(res2$x, "combined")), dim(reducedDim(res$x, "combined")))
 
     expect_identical(res$markers, res2$markers)
+
+    # Confirm that scaled coordinates are actually used downstream.
+    ref <- runAllNeighborSteps(as.matrix(t(reducedDim(res$x, "combined"))), runTsne.args=list(max.iterations=10), runUmap.args=list(num.epochs=5), num.threads=1)
+    expect_identical(ref$clusterGraph$membership, res$x$graph.cluster)
+    expect_identical(ref$runTsne, reducedDim(res$x, "TSNE"))
 
     # Fails if neither ADT or RNA is supplied.
     expect_error(analyze.se(sce, use.rna.pcs=FALSE, use.adt.pcs=FALSE), "at least one")
@@ -119,21 +132,23 @@ test_that("analyze.se works correctly with ADT only", {
     expect_identical(names(res$markers), "adt")
 
     # Works after ignoring RNA in the main experiment.
+    # This checks that the use of a named character vector for 'target.embedding' is respected within analyze.se().
     sce <- as(se, "SingleCellExperiment")
     altExp(sce, "ADT") <- ase
 
     res2 <- analyze.se(sce, rna.altexp=NULL, adt.altexp="ADT", more.tsne.args=list(max.iterations=10), more.umap.args=list(num.epochs=5), num.threads=1)
-    expect_false("PCA" %in% reducedDimNames(res2$x))
-    expect_true("PCA" %in% reducedDimNames(altExp(res2$x)))
-    expect_true("TSNE" %in% reducedDimNames(res2$x)) # UMAP and TSNE still stored in the main experiment, though.
-    expect_true("UMAP" %in% reducedDimNames(res2$x))
+    expect_identical(reducedDim(altExp(res2$x, "ADT"), "PCA"), reducedDim(res$x, "PCA"))
+    expect_identical(altExp(res2$x)$sizeFactor, res$x$sizeFactor)
+    expect_identical(reducedDim(res2$x, "TSNE"), reducedDim(res$x, "TSNE")) # UMAP, TSNE, clusters still stored in the main experiment, though.
+    expect_identical(reducedDim(res2$x, "UMAP"), reducedDim(res$x, "UMAP"))
+    expect_identical(res2$x$graph.cluster, res$x$graph.cluster)
     expect_identical(res$markers, res2$markers)
 })
 
 test_that("analyze.se works correctly with the CRISPR modality", {
     sce <- as(se, "SingleCellExperiment")
-    mat <- matrix(rpois(1000, 1), ncol=100)
-    rownames(mat) <- paste0("TAG_", seq_len(nrow(mat)))
+    mat <- matrix(rpois(2000, 1), ncol=100)
+    rownames(mat) <- paste0("GUIDE_", seq_len(nrow(mat)))
     altExp(sce, "CRISPR") <- SummarizedExperiment(list(counts=mat))
 
     res <- analyze.se(sce, crispr.altexp="CRISPR", more.tsne.args=list(max.iterations=10), more.umap.args=list(num.epochs=5), num.threads=1)

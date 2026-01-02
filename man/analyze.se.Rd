@@ -17,8 +17,8 @@ analyze.se(
   rna.qc.subsets = list(),
   rna.qc.output.prefix = NULL,
   more.rna.qc.args = list(),
-  adt.qc.output.prefix = NULL,
   adt.qc.subsets = list(),
+  adt.qc.output.prefix = NULL,
   more.adt.qc.args = list(),
   crispr.qc.output.prefix = NULL,
   more.crispr.qc.args = list(),
@@ -60,7 +60,7 @@ analyze.se(
 }
 \arguments{
 \item{x}{A \link[SummarizedExperiment]{SummarizedExperiment} object or one of its subclasses.
-Rows correspond to genes and columns correspond to cells.}
+Rows correspond to genomic features (genes, ADTs or CRISPR guides) and columns correspond to cells.}
 
 \item{rna.altexp}{String or integer specifying the alternative experiment of \code{x} containing the RNA data.
 If \code{NA}, the main experiment is assumed to contain the RNA data.
@@ -99,10 +99,10 @@ Only used if \code{rna.altexp} is not \code{NULL}.}
 \item{more.rna.qc.args}{Named list of additional arguments to pass to \code{\link{quickRnaQc.se}}.
 Only used if \code{rna.altexp} is not \code{NULL}.}
 
-\item{adt.qc.output.prefix}{Passed to \code{\link{quickAdtQc.se}} as the \code{output.prefix} argument.
+\item{adt.qc.subsets}{Passed to \code{\link{quickAdtQc.se}} as the \code{subsets} argument.
 Only used if \code{adt.altexp} is not \code{NULL}.}
 
-\item{adt.qc.subsets}{Passed to \code{\link{quickAdtQc.se}} as the \code{subsets} argument.
+\item{adt.qc.output.prefix}{Passed to \code{\link{quickAdtQc.se}} as the \code{output.prefix} argument.
 Only used if \code{adt.altexp} is not \code{NULL}.}
 
 \item{more.adt.qc.args}{Named list of additional arguments to pass to \code{\link{quickAdtQc.se}}.
@@ -192,8 +192,9 @@ Ignored if \code{kmeans.clusters = NULL}.}
 \item{more.kmeans.args}{Named list of arguments to pass to \code{\link{clusterKmeans.se}}.
 Ignored if \code{kmeans.clusters = NULL}.}
 
-\item{clusters.for.markers}{Character vector of clustering algorithms (either \code{"graph"} or \code{"kmeans"}, specifying the clustering to be used for marker detection.
-The first available clustering will be chosen.}
+\item{clusters.for.markers}{Character vector of clustering algorithms (either \code{"graph"} or \code{"kmeans"}), specifying the clustering to be used for marker detection.
+The first available clustering will be chosen.
+If no clustering is available from the list, markers will not be computed.}
 
 \item{more.rna.marker.args}{Named list of arguments to pass to \code{\link{scoreMarkers.se}} for the RNA data.
 Ignored if no suitable clusterings are available or if \code{rna.altexp=NULL}.}
@@ -209,7 +210,14 @@ Ignored if no suitable clusterings are available or if \code{crispr.altexp=NULL}
 \item{num.threads}{Integer scalar specifying the number of threads to use in each step.}
 }
 \value{
-\code{x} is returned with the results of the analysis.
+List containing:
+\itemize{
+\item \code{x}, a \link[SingleCellExperiment]{SingleCellExperiment} that is a copy of the input \code{x}.
+It is also decorated with the results of each analysis step - see Details.
+\item \code{markers}, a list of list of \link[S4Vectors]{DataFrame}s containing the marker statistics for each modality.
+Each inner list corresponds to a modality (RNA, ADT, etc.) while each DataFrame corresponds to a cluster.
+If no clusterings were generated, this is set to \code{NULL}.
+}
 }
 \description{
 Execute a simple single-cell analysis pipeline, starting from a count matrix and ending with clusters, visualizations and markers.
