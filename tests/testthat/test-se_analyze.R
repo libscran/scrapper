@@ -147,7 +147,8 @@ test_that("analyze.se works correctly with ADT only", {
 
 test_that("analyze.se works correctly with the CRISPR modality", {
     sce <- as(se, "SingleCellExperiment")
-    mat <- matrix(rpois(2000, 1), ncol=100)
+    mat <- matrix(0, 20, 100)
+    mat[cbind(sample(nrow(mat), ncol(mat), replace=TRUE), seq_len(ncol(mat)))] <- rpois(ncol(mat), 10)
     rownames(mat) <- paste0("GUIDE_", seq_len(nrow(mat)))
     altExp(sce, "CRISPR") <- SummarizedExperiment(list(counts=mat))
 
