@@ -103,7 +103,7 @@ runAllNeighborSteps <- function(
             curk <- k.choices[[n]]
             curi <- all.res$index
             curd <- all.res$distance
-            if (curk != nrow(curi)) {
+            if (curk < nrow(curi)) {
                 curi <- curi[seq_len(curk),,drop=FALSE]
                 curd <- curd[seq_len(curk),,drop=FALSE]
             }
