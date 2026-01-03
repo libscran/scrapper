@@ -13,19 +13,36 @@
 \itemize{
 \item Support use of quantiles to average statistics across blocks, via the new \code{block.average.policy=} and \code{block.quantile=} arguments.
 \item Allow calculation of arbitrary quantiles as a summary statistic for the effect sizes of each group, via the new \code{compute.summary.quantiles=} argument.
+\item Output now contains the number of rows, row names and group IDs for easier interpretation by downstream functions.
 }
 \item Added arguments to \code{summarizeEffects()} to disable calculation of certain summary statistics, e.g., by setting \code{compute.summary.median=FALSE}.
 Also support calculation of arbitrary quantiles as described for \code{scoreMarkers()}.
-\item Modified \code{modelGeneVariances()} to allow the use of quantiles to average statistics across blocks,
-via the new \code{block.average.policy=} and \code{block.quantile=} arguments.
-\item Added a \code{subset=} argument to \code{runPca()} to allow users to perform a PCA on a subset of features,
-but still report the full rotation matrix for all features. 
+\item \code{suggest*QcThresholds()} functions now return a \code{block.ids} field that preserves the type of \code{block=}.
+This enables easier matching in the corresponding \code{filter*QcMetrics()} function.
+\item Multiple changes to \code{modelGeneVariances()}:
+\itemize{
+\item Allow the use of quantiles to average statistics across blocks via the new \code{block.average.policy=} and \code{block.quantile=} arguments.
+\item Return a \code{block.ids} field that preserves the type of \code{block=} for easier matching.
+}
+\item Multiple changes to \code{runPca()}:
+\itemize{
+\item Added a \code{subset=} argument that performs a PCA on a subset of features but still reports the full rotation matrix for all features. 
+\item Return a \code{block.ids} field that preserves the type of \code{block=} for easier matching.
+}
+\item \code{clusterKmeans()} now emits a warning upon convergence failure.
+This can be disabled by setting \code{warn=FALSE}.
+\item Simplified the automatic naming performed by \code{combineFactors()} when \code{factors} is unnamed.
 \item Added SummarizedExperiment-compatible wrappers for all functions.
 These can be identified by their \code{*.se} suffix, e.g., \code{aggregateAcrossCells.se()}.
 Some functions execute multiple steps for convenience, e.g., \code{quickRnaQc.se()} runs all of the RNA-related QC functions.
 \item Added \code{analyze.se()} to replace the \code{analyze()} function.
 The former is more convenient it stores most outputs in a SingleCellExperiment and formats the marker tables correctly.
 The latter is now deprecated.
+\item \code{compute*QcMetrics()} functions now return a DataFrame for more convenient inspection and manipulation.
+\item All functions that previously returned a base data.frame will now return a DataFrame from \pkg{S4Vectors}.
+This is a little prettier and we already load \pkg{S4Vectors} anyway.
+\item Removed checks on \code{num.neighbors=} when pre-computed neighbor search results are supplied in \code{runUmap()}, \code{buildSnnGraph()} and \code{subsampleByNeighbors()}.
+Any differences between \code{num.neighbors=} and the number of neighbors in the pre-computed results are now ignored.
 }}
 
 \section{Version 1.4.0}{\itemize{
