@@ -73,7 +73,7 @@
 #' Greater values will improve accuracy but increase compute time. 
 #' @param num.neighbors Integer scalar specifying the number of neighbors to use to define the fuzzy sets.
 #' Larger values improve connectivity and favor preservation of global structure, at the cost of increased compute time.
-#' If \code{x} contains pre-computed neighbor search result, the number of neighbors should be equal to \code{num.neighbors}.
+#' Ignored if \code{x} contains pre-computed neighbor search results. 
 #' @param optimize.seed Numeric scalar specifying the seed to use for the optimization epochs. 
 #' @param num.threads Integer scalar specifying the number of threads to use.
 #' @param parallel.optimization Logical scalar specifying whether to parallelize the optimization step.
@@ -131,7 +131,7 @@ runUmap <- function(
     if (!is.list(x)) {
         x <- findKNN(x, k=num.neighbors, transposed=TRUE, get.index="transposed", get.distance="transposed", num.threads=num.threads, BNPARAM=BNPARAM)
     } else {
-        .checkNeighborIndices(x$index, num.neighbors)
+        .checkNeighborResults(x$index, x$distance)
     }
 
     if (!is.null(initial.coordinates)) {

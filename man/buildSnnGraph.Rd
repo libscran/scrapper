@@ -25,7 +25,8 @@ The number of neighbors for each cell should be equal to \code{num.neighbors}, o
 Alternatively, an index constructed by \code{\link[BiocNeighbors]{buildIndex}}.}
 
 \item{num.neighbors}{Integer scalar specifying the number of neighbors to use to construct the graph.
-Larger values increase the connectivity of the graph and reduce the granularity of subsequent community detection steps, at the cost of speed.}
+Larger values increase the connectivity of the graph and reduce the granularity of subsequent community detection steps, at the cost of speed.
+Ignored if \code{x} contains pre-computed neighbor search results.}
 
 \item{weight.scheme}{String specifying the weighting scheme to use for constructing the SNN graph.
 This can be one of:

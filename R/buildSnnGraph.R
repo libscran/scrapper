@@ -17,6 +17,7 @@
 #' Alternatively, an index constructed by \code{\link[BiocNeighbors]{buildIndex}}.
 #' @param num.neighbors Integer scalar specifying the number of neighbors to use to construct the graph.
 #' Larger values increase the connectivity of the graph and reduce the granularity of subsequent community detection steps, at the cost of speed.
+#' Ignored if \code{x} contains pre-computed neighbor search results. 
 #' @param weight.scheme String specifying the weighting scheme to use for constructing the SNN graph.
 #' This can be one of:
 #' \itemize{
@@ -70,7 +71,7 @@ buildSnnGraph <- function(x, num.neighbors=10, weight.scheme="ranked", num.threa
     if (!is.list(x)) {
         x <- findKNN(x, k=num.neighbors, transposed=TRUE, get.index="transposed", get.distance=FALSE, num.threads=num.threads, BNPARAM=BNPARAM)
     } else {
-        .checkNeighborIndices(x$index, num.neighbors)
+        .checkNeighborResults(x$index, NULL)
     }
 
     out <- build_snn_graph(x$index, scheme=weight.scheme, num_threads=num.threads)

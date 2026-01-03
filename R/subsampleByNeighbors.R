@@ -19,7 +19,7 @@
 #' The number of neighbors should be equal to \code{num.neighbors}, otherwise a warning is raised.
 #' @param num.neighbors Integer scalar specifying the number of neighbors to use.
 #' Larger values result in stronger downsampling. 
-#' Only used if \code{x} does not contain existing nearest-neighbor results.
+#' Ignored if \code{x} contains pre-computed neighbor search results.
 #' @param BNPARAM A \link[BiocNeighbors]{BiocNeighborParam} object specifying the algorithm to use.
 #' Only used if \code{x} does not contain existing nearest-neighbor results.
 #' @param min.remaining Integer scalar specifying the minimum number of remaining neighbors that a cell must have in order to be considered for selection.
@@ -58,7 +58,7 @@ subsampleByNeighbors <- function(x, num.neighbors=20, min.remaining=10, num.thre
     if (!is.list(x)) {
         x <- findKNN(x, k=num.neighbors, transposed=TRUE, get.index="transposed", get.distance="transposed", num.threads=num.threads, BNPARAM=BNPARAM)
     } else {
-        .checkNeighborIndices(x$index, num.neighbors)
+        .checkNeighborResults(x$index, x$distance)
     }
     subsample_by_neighbors(x$index, x$distance, min_remaining=min.remaining) 
 }

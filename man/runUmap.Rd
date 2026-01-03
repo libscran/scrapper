@@ -135,7 +135,7 @@ Greater values will improve accuracy but increase compute time.}
 
 \item{num.neighbors}{Integer scalar specifying the number of neighbors to use to define the fuzzy sets.
 Larger values improve connectivity and favor preservation of global structure, at the cost of increased compute time.
-If \code{x} contains pre-computed neighbor search result, the number of neighbors should be equal to \code{num.neighbors}.}
+Ignored if \code{x} contains pre-computed neighbor search results.}
 
 \item{optimize.seed}{Numeric scalar specifying the seed to use for the optimization epochs.}
 

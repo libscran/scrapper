@@ -15,6 +15,8 @@
 #' @param perplexity Numeric scalar specifying the perplexity to use in the t-SNE algorithm.
 #' Higher perplexities will focus on global structure, at the cost of increased runtime and decreased local resolution.
 #' @param num.neighbors Integer scalar specifying the number of neighbors, typically derived from \code{perplexity}.
+#' If \code{x} contains pre-computed neighbor search results with a different number of neighbors than \code{num.neighbors}, an error is thrown;
+#' this can be suppressed by setting \code{num.neighbors = NULL}.
 #' @param theta Numeric scalar specifying the approximation level for the Barnes-Hut calculation of repulsive forces.
 #' Lower values increase accuracy at the cost of increased compute time.
 #' All values should be non-negative.
@@ -93,7 +95,10 @@ runTsne <- function(
     if (!is.list(x)) {
         x <- findKNN(x, k=num.neighbors, transposed=TRUE, get.index="transposed", get.distance="transposed", num.threads=num.threads, BNPARAM=BNPARAM)
     } else {
-        .checkNeighborIndices(x$index, num.neighbors)
+        .checkNeighborResults(x$index, x$distance)
+        if (!is.null(num.neighbors) && nrow(x$index) != num.neighbors) {
+            warning("'nrow(x$index)' is not consistent with 'num.neighbors'")
+        }
     }
 
     output <- run_tsne(

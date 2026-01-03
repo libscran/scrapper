@@ -41,7 +41,9 @@ Alternatively, an index constructed by \code{\link[BiocNeighbors]{buildIndex}}.}
 \item{perplexity}{Numeric scalar specifying the perplexity to use in the t-SNE algorithm.
 Higher perplexities will focus on global structure, at the cost of increased runtime and decreased local resolution.}
 
-\item{num.neighbors}{Integer scalar specifying the number of neighbors, typically derived from \code{perplexity}.}
+\item{num.neighbors}{Integer scalar specifying the number of neighbors, typically derived from \code{perplexity}.
+If \code{x} contains pre-computed neighbor search results with a different number of neighbors than \code{num.neighbors}, an error is thrown;
+this can be suppressed by setting \code{num.neighbors = NULL}.}
 
 \item{theta}{Numeric scalar specifying the approximation level for the Barnes-Hut calculation of repulsive forces.
 Lower values increase accuracy at the cost of increased compute time.

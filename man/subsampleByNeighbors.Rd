@@ -30,7 +30,7 @@ The number of neighbors should be equal to \code{num.neighbors}, otherwise a war
 
 \item{num.neighbors}{Integer scalar specifying the number of neighbors to use.
 Larger values result in stronger downsampling. 
-Only used if \code{x} does not contain existing nearest-neighbor results.}
+Ignored if \code{x} contains pre-computed neighbor search results.}
 
 \item{min.remaining}{Integer scalar specifying the minimum number of remaining neighbors that a cell must have in order to be considered for selection.
 This should be less than or equal to \code{num.neighbors}.
