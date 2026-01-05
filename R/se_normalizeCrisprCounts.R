@@ -15,6 +15,7 @@
 #' @param mode How to center size factors in different blocks, see \code{?\link{centerSizeFactors}} for more details.
 #' @param log Whether to log-transform the normalized expression values, see \code{?\link{normalizeCounts}} for more details.
 #' @param pseudo.count The pseudo-count for log-transformation, see \code{?\link{normalizeCounts}} for more details.
+#' @param more.norm.args Named list of additional arguments to pass to \code{\link{normalizeCounts}}.
 #' @param assay.type Integer or string specifying the assay of \code{x} with the count matrix.
 #' @param output.name String containing the name of the assay to store the normalized matrix.
 #' @param factor.name String containing the name of the \code{\link[SummarizedExperiment]{colData}} column in which to store the size factors in the output object.
@@ -42,6 +43,7 @@ normalizeCrisprCounts.se <- function(
     mode = "lowest",
     log = TRUE,
     pseudo.count = 1,
+    more.norm.args = list(),
     assay.type = "counts",
     output.name = "logcounts",
     factor.name = "sizeFactor"
@@ -55,7 +57,13 @@ normalizeCrisprCounts.se <- function(
         size.factors <- centerSizeFactors(size.factors, block=block, mode=mode)
     }
 
-    SummarizedExperiment::assay(x, output.name) <- normalizeCounts(y, size.factors=size.factors, log=log, pseudo.count=pseudo.count)
+    SummarizedExperiment::assay(x, output.name) <- .call(
+        normalizeCounts,
+        list(y, size.factors=size.factors),
+        list(log=log, pseudo.count=pseudo.count),
+        more.norm.args
+    )
+
     if (!is.null(factor.name)) {
         SummarizedExperiment::colData(x)[[factor.name]] <- size.factors
     }

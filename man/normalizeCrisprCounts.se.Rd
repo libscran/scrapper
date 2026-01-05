@@ -12,6 +12,7 @@ normalizeCrisprCounts.se(
   mode = "lowest",
   log = TRUE,
   pseudo.count = 1,
+  more.norm.args = list(),
   assay.type = "counts",
   output.name = "logcounts",
   factor.name = "sizeFactor"
@@ -35,6 +36,8 @@ see \code{?\link{centerSizeFactors}} for more details.}
 \item{log}{Whether to log-transform the normalized expression values, see \code{?\link{normalizeCounts}} for more details.}
 
 \item{pseudo.count}{The pseudo-count for log-transformation, see \code{?\link{normalizeCounts}} for more details.}
+
+\item{more.norm.args}{Named list of additional arguments to pass to \code{\link{normalizeCounts}}.}
 
 \item{assay.type}{Integer or string specifying the assay of \code{x} with the count matrix.}
 
