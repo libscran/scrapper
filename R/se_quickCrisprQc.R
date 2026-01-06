@@ -8,6 +8,8 @@
 #' Rows correspond to CRISPR guides and columns correspond to cells.
 #' @param num.threads Number of threads, to pass to \code{\link{computeCrisprQcMetrics}}.
 #' @param block Block assignment for each cell, to pass to \code{\link{suggestCrisprQcThresholds}} and \code{\link{filterCrisprQcMetrics}}.
+#' @param thresholds List containing pre-defined thresholds for each QC metric,
+#' see the return value of \code{\link{suggestRnaQcThresholds}} for the expected format.
 #' @param more.suggest.args Named list of additional arguments to pass to \code{\link{suggestCrisprQcThresholds}}.
 #' @param assay.type Integer or string specifying the assay of \code{x} containing the CRISPR count matrix.
 #' @param output.prefix String containing a prefix to add to the names of the \code{link[SummarizedExperiment]{colData}} columns containing the output statistics.
@@ -38,6 +40,7 @@
 quickCrisprQc.se <- function( 
     x,
     num.threads = 1,
+    thresholds = NULL,
     block = NULL,
     more.suggest.args = list(),
     assay.type = "counts",
@@ -46,12 +49,14 @@ quickCrisprQc.se <- function(
 ) {
     metrics <- computeCrisprQcMetrics(SummarizedExperiment::assay(x, assay.type, withDimnames=FALSE), num.threads=num.threads)
 
-    thresholds <- .call(
-        suggestCrisprQcThresholds,
-        list(metrics),
-        list(block=block),
-        more.suggest.args
-    )
+    if (is.null(thresholds)) {
+        thresholds <- .call(
+            suggestCrisprQcThresholds,
+            list(metrics),
+            list(block=block),
+            more.suggest.args
+        )
+    }
 
     keep <- filterCrisprQcMetrics(thresholds, metrics, block=block)
 

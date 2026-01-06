@@ -40,3 +40,12 @@ test_that("quickRnaQc.se works with alternative experiments", {
     expect_type(out$WHEE.subset.proportion.ERCC, "double")
     expect_equal(1 / (1 + out$WHEE.sum / altExp(out, "ERCC")$WHEE.sum), out$WHEE.subset.proportion.ERCC)
 })
+
+test_that("quickRnaQc.se works with custom thresholds", {
+    fixed <- list(sum=1, detected=1)
+    out <- quickRnaQc.se(se, subsets=list(), thresholds=fixed)
+
+    refixed <- fixed
+    refixed$subset.proportion <- setNames(numeric(0), character(0))
+    expect_identical(metadata(out)$qc$thresholds, refixed)
+})

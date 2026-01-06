@@ -27,3 +27,12 @@ test_that("quickAdtQc.se works as expected", {
     out4 <- quickAdtQc.se(se, subsets=list(), meta.name=NULL)
     expect_null(metadata(out4)$qc)
 })
+
+test_that("quickRnaQc.se works with custom thresholds", {
+    fixed <- list(sum=1, detected=1)
+    out <- quickAdtQc.se(se, subsets=list(), thresholds=fixed)
+
+    refixed <- fixed
+    refixed$subset.sum <- setNames(numeric(0), character(0))
+    expect_identical(metadata(out)$qc$thresholds, refixed)
+})

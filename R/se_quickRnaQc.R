@@ -9,6 +9,8 @@
 #' @param subsets List of subsets of control genes, see \code{?\link{computeRnaQcMetrics}} for more details.
 #' @param num.threads Number of threads, to pass to \code{\link{computeRnaQcMetrics}}.
 #' @param block Block assignment for each cell, to pass to \code{\link{suggestRnaQcThresholds}} and \code{\link{filterRnaQcMetrics}}.
+#' @param thresholds List containing pre-defined thresholds for each QC metric,
+#' see the return value of \code{\link{suggestRnaQcThresholds}} for the expected format.
 #' @param more.suggest.args Named list of additional arguments to pass to \code{\link{suggestRnaQcThresholds}}.
 #' @param altexp.proportions Alternative experiments for which to compute QC metrics.
 #' This is typically used to refer to alternative experiments holding spike-in data.
@@ -73,6 +75,7 @@ quickRnaQc.se <- function(
     x,
     subsets,
     num.threads = 1,
+    thresholds = NULL,
     block = NULL,
     more.suggest.args = list(),
     altexp.proportions = NULL,
@@ -83,12 +86,17 @@ quickRnaQc.se <- function(
 ) {
     metrics <- computeRnaQcMetricsWithAltExps(x, subsets, altexp.proportions=altexp.proportions, num.threads=num.threads)
 
-    thresholds <- .call(
-        suggestRnaQcThresholds,
-        list(metrics$main),
-        list(block=block),
-        more.suggest.args
-    )
+    if (is.null(thresholds)) {
+        thresholds <- .call(
+            suggestRnaQcThresholds,
+            list(metrics$main),
+            list(block=block),
+            more.suggest.args
+        )
+    } else {
+        names(thresholds)[names(thresholds) == "subset.proportion"] <- "subsets"
+        thresholds <- .populateSubsetThresholds(thresholds, "subsets", !is.null(block))
+    }
 
     keep <- filterRnaQcMetrics(thresholds, metrics$main, block=block)
 

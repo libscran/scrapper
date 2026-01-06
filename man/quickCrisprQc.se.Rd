@@ -8,6 +8,7 @@
 quickCrisprQc.se(
   x,
   num.threads = 1,
+  thresholds = NULL,
   block = NULL,
   more.suggest.args = list(),
   assay.type = "counts",
@@ -22,6 +23,9 @@ formatComputeCrisprQcMetricsResult(compute.res)
 Rows correspond to CRISPR guides and columns correspond to cells.}
 
 \item{num.threads}{Number of threads, to pass to \code{\link{computeCrisprQcMetrics}}.}
+
+\item{thresholds}{List containing pre-defined thresholds for each QC metric,
+see the return value of \code{\link{suggestRnaQcThresholds}} for the expected format.}
 
 \item{block}{Block assignment for each cell, to pass to \code{\link{suggestCrisprQcThresholds}} and \code{\link{filterCrisprQcMetrics}}.}
 

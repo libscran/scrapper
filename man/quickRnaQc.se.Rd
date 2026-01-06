@@ -10,6 +10,7 @@ quickRnaQc.se(
   x,
   subsets,
   num.threads = 1,
+  thresholds = NULL,
   block = NULL,
   more.suggest.args = list(),
   altexp.proportions = NULL,
@@ -36,6 +37,9 @@ Rows correspond to genes and columns correspond to cells.}
 \item{subsets}{List of subsets of control genes, see \code{?\link{computeRnaQcMetrics}} for more details.}
 
 \item{num.threads}{Number of threads, to pass to \code{\link{computeRnaQcMetrics}}.}
+
+\item{thresholds}{List containing pre-defined thresholds for each QC metric,
+see the return value of \code{\link{suggestRnaQcThresholds}} for the expected format.}
 
 \item{block}{Block assignment for each cell, to pass to \code{\link{suggestRnaQcThresholds}} and \code{\link{filterRnaQcMetrics}}.}
 

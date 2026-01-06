@@ -9,6 +9,8 @@
 #' @param subsets List of subsets of control tags, see \code{?\link{computeAdtQcMetrics}} for more details.
 #' @param num.threads Number of threads, to pass to \code{\link{computeAdtQcMetrics}}.
 #' @param block Block assignment for each cell, to pass to \code{\link{suggestAdtQcThresholds}} and \code{\link{filterAdtQcMetrics}}.
+#' @param thresholds List containing pre-defined thresholds for each QC metric,
+#' see the return value of \code{\link{suggestAdtQcThresholds}} for the expected format.
 #' @param more.suggest.args Named list of additional arguments to pass to \code{\link{suggestAdtQcThresholds}}.
 #' @param assay.type Integer or string specifying the assay of \code{x} containing the ADT count matrix.
 #' @param output.prefix String containing a prefix to add to the names of the \code{link[SummarizedExperiment]{colData}} columns containing the output statistics.
@@ -42,6 +44,7 @@ quickAdtQc.se <- function(
     x,
     subsets,
     num.threads = 1,
+    thresholds = NULL,
     block = NULL,
     more.suggest.args = list(),
     assay.type = "counts",
@@ -51,12 +54,17 @@ quickAdtQc.se <- function(
 ) {
     metrics <- computeAdtQcMetrics(SummarizedExperiment::assay(x, assay.type, withDimnames=FALSE), subsets, num.threads=num.threads)
 
-    thresholds <- .call(
-        suggestAdtQcThresholds,
-        list(metrics=metrics),
-        list(block=block),
-        more.suggest.args
-    )
+    if (is.null(thresholds)) {
+        thresholds <- .call(
+            suggestAdtQcThresholds,
+            list(metrics=metrics),
+            list(block=block),
+            more.suggest.args
+        )
+    } else {
+        names(thresholds)[names(thresholds) == "subset.sum"] <- "subsets"
+        thresholds <- .populateSubsetThresholds(thresholds, "subsets", !is.null(block))
+    }
 
     keep <- filterAdtQcMetrics(thresholds, metrics, block=block)
 
@@ -85,4 +93,17 @@ formatComputeAdtQcMetricsResult <- function(compute.res, flatten = TRUE) {
         colnames(compute.res)[colnames(compute.res) == "subsets"] <- "subset.sum"
         compute.res
     }
+}
+
+.populateSubsetThresholds <- function(thresholds, subset.field, has.block) {
+    if (is.null(thresholds[[subset.field]])) {
+        if (has.block) {
+            stub <- list()
+        } else {
+            stub <- numeric(0)
+        }
+        names(stub) <- character(0)
+        thresholds[[subset.field]] <- stub
+    }
+    thresholds
 }
