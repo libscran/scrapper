@@ -65,7 +65,7 @@ test_that("suggestRnaQcThresholds works as expected with blocking", {
     last <- block == 3
     last_observed <- filterRnaQcMetrics(
         thresholds,
-        list(sum=qc$sum[last], detected=qc$detected[last], subsets=list(qc$subsets[[1]][last])),
+        list(sum=qc$sum[last], detected=qc$detected[last], subsets=list(Mito=qc$subsets[[1]][last])),
         block=block[last]
     )
     expect_identical(observed[last], last_observed)

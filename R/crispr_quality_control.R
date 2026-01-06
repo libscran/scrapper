@@ -122,5 +122,6 @@ filterCrisprQcMetrics <- function(thresholds, metrics, block=NULL) {
     block <- .matchBlockThresholds(block, thresholds$block.ids)
     metrics <- as.list(metrics)
     metrics$max.index <- metrics$max.index - 1L # restore 0-based indexing.
+    .checkThresholdNames(thresholds, c("max.value"), NULL, NULL)
     filter_crispr_qc_metrics(thresholds, metrics, block=block)
 }

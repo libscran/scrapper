@@ -49,16 +49,15 @@ public:
     ConvertedRnaQcMetrics(Rcpp::List metrics) {
         check_names(metrics, { "sum", "detected", "subsets" });
 
-        sums = metrics["sum"];
+        sums = parse_metrics<Rcpp::NumericVector, REALSXP>(metrics["sum"], "sum");
         const auto ncells = sums.size();
 
-        detected = metrics["detected"];
+        detected = parse_metrics<Rcpp::IntegerVector, INTSXP>(metrics["detected"], "detected");
         if (!sanisizer::is_equal(ncells, detected.size())) {
             throw std::runtime_error("all 'metrics' vectors should have the same length");
         }
 
-        Rcpp::List tmp(metrics["subsets"]);
-        check_subset_metrics(ncells, tmp, subsets);
+        check_subset_metrics(ncells, metrics["subsets"], subsets);
     }
 
 private:
@@ -145,10 +144,9 @@ Rcpp::LogicalVector filter_rna_qc_metrics(Rcpp::List filters, Rcpp::List metrics
 
         scran_qc::RnaQcBlockedFilters filt;
 
-        Rcpp::NumericVector sum(filters["sum"]);
-        const auto nblocks = sum.size();
-        copy_filters_blocked(nblocks, sum, filt.get_sum());
-        copy_filters_blocked(nblocks, filters["detected"], filt.get_detected());
+        std::optional<std::size_t> nblocks;
+        copy_filters_blocked(nblocks, filters["sum"], "sum", filt.get_sum());
+        copy_filters_blocked(nblocks, filters["detected"], "detected", filt.get_detected());
         copy_subset_filters_blocked(nsubs, nblocks, filters["subsets"], filt.get_subset_proportion());
 
         filt.filter(sanisizer::cast<std::size_t>(ncells), mbuffers, ptr, kptr);

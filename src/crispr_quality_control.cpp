@@ -45,20 +45,20 @@ public:
     ConvertedCrisprQcMetrics(Rcpp::List metrics) {
         check_names(metrics, { "sum", "detected", "max.value", "max.index" });
 
-        sums = metrics["sum"];
+        sums = parse_metrics<Rcpp::NumericVector, REALSXP>(metrics["sum"], "sum");
         const auto ncells = sums.size();
 
-        detected = metrics["detected"];
+        detected = parse_metrics<Rcpp::IntegerVector, INTSXP>(metrics["detected"], "detected");
         if (!sanisizer::is_equal(ncells, detected.size())) {
             throw std::runtime_error("all 'metrics' vectors should have the same length");
         }
 
-        max_value = metrics["max.value"];
+        max_value = parse_metrics<Rcpp::NumericVector, REALSXP>(metrics["max.value"], "max.value");
         if (!sanisizer::is_equal(ncells, max_value.size())) {
             throw std::runtime_error("all 'metrics' vectors should have the same length");
         }
 
-        max_index = metrics["max.index"];
+        max_index = parse_metrics<Rcpp::IntegerVector, INTSXP>(metrics["max.index"], "max.index");
         if (!sanisizer::is_equal(ncells, max_index.size())) {
             throw std::runtime_error("all 'metrics' vectors should have the same length");
         }
@@ -132,9 +132,8 @@ Rcpp::LogicalVector filter_crispr_qc_metrics(Rcpp::List filters, Rcpp::List metr
 
         scran_qc::CrisprQcBlockedFilters filt;
 
-        Rcpp::NumericVector max_value(filters["max.value"]);
-        const auto nblocks = max_value.size();
-        copy_filters_blocked(nblocks, max_value, filt.get_max_value());
+        std::optional<std::size_t> nblocks;
+        copy_filters_blocked(nblocks, filters["max.value"], "max.value", filt.get_max_value());
 
         filt.filter(sanisizer::cast<std::size_t>(ncells), mbuffers, ptr, kptr);
 

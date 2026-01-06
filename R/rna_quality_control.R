@@ -123,6 +123,7 @@ suggestRnaQcThresholds <- function(metrics, block=NULL, num.mads=3) {
 filterRnaQcMetrics <- function(thresholds, metrics, block=NULL) {
     block <- .matchBlockThresholds(block, thresholds$block.ids)
     metrics <- .simplifyQcMetrics(metrics)
+    .checkThresholdNames(thresholds, c("sum", "detected"), "subsets", names(metrics$subsets))
     filter_rna_qc_metrics(thresholds, metrics, block=block)
 }
 
@@ -143,6 +144,31 @@ filterRnaQcMetrics <- function(thresholds, metrics, block=NULL) {
     metrics <- as.list(df)
     metrics$subsets <- as.list(metrics$subsets)
     metrics
+}
+
+.checkThresholdNames <- function(thresholds, regular.fields, subset.field, subset.names) {
+    if (!is.null(subset.field)) {
+        if (!identical(names(thresholds[[subset.field]]), subset.names)) {
+            stop("expected identical names for 'thresholds$", subset.field, "' and 'metrics$", subset.field, "'")
+        }
+    }
+
+    if (!is.null(thresholds$block.ids)) {
+        block.names <- as.character(thresholds$block.ids)
+        for (r in regular.fields) {
+            if (!identical(names(thresholds[[r]]), block.names)) {
+                stop("expected names for 'thresholds$", r, "' to be identical to 'thresholds$block.ids'")
+            }
+        }
+
+        if (!is.null(subset.field)) {
+            for (s in subset.names) {
+                if (!identical(names(thresholds[[subset.field]][[s]]), block.names)) {
+                    stop("expected names for each entry of 'thresholds$", subset.field, "' to be identical to 'thresholds$block.ids'")
+                }
+            }
+        }
+    }
 }
 
 .subsetToLogical <- function(x, n, names) {

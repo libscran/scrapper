@@ -125,5 +125,6 @@ suggestAdtQcThresholds <- function(metrics, block=NULL, min.detected.drop=0.1, n
 filterAdtQcMetrics <- function(thresholds, metrics, block=NULL) {
     block <- .matchBlockThresholds(block, thresholds$block.ids)
     metrics <- .simplifyQcMetrics(metrics)
+    .checkThresholdNames(thresholds, c("detected"), "subsets", names(metrics$subsets))
     filter_adt_qc_metrics(thresholds, metrics, block=block)
 }
