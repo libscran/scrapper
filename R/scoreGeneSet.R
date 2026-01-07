@@ -8,6 +8,7 @@
 #' @param set Vector specifying the rows of \code{x} that belong to the gene set.
 #' This may be an integer vector of row indices, a logical vector of length equal to the number of rows, or a character vector of row names.
 #' For integer and character vectors, duplicate entries are ignored.
+#' For a character vector, any string not present in \code{rownames(x)} is ignored.
 #' @param rank Integer scalar specifying the rank of the approximation.
 #' The default value of 1 assumes that each gene set only describes a single coordinated biological function.
 #' @inheritParams runPca

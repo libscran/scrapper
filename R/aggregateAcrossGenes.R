@@ -8,6 +8,7 @@
 #' @param sets List of vectors where each entry corresponds to a gene set.
 #' Each entry may be an integer vector of row indices, a logical vector of length equal to the number of rows, or a character vector of row names.
 #' For integer and character vectors, duplicate elements are ignored.
+#' For character vectors, any strings not present in \code{rownames(x)} are ignored.
 #'
 #' Alternatively, each entry may be a list of two vectors.
 #' The first vector should be either integer (row indices) or character (row names), specifying the genes in the set. 

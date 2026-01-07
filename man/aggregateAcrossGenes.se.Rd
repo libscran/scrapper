@@ -17,7 +17,7 @@ aggregateAcrossGenes.se(
 \item{x}{A \link[SummarizedExperiment]{SummarizedExperiment} object or one of its subclasses.
 Rows correspond to genes and columns correspond to cells.}
 
-\item{sets}{List of gene sets, see \code{\link{aggregateAcrossCells}} for more details.
+\item{sets}{List of gene sets, see \code{\link{aggregateAcrossGenes}} for more details.
 
 Alternatively, \code{sets} may be a \link[S4Vectors]{List} subclass,
 in which case the \code{\link[S4Vectors]{mcols}} are used as the \code{\link[SummarizedExperiment]{rowData}} of the output object.
@@ -47,7 +47,7 @@ library(SingleCellExperiment)
 sce <- getTestRnaData.se("norm")
 
 library(org.Mm.eg.db)
-some.sets <- select(
+set.df <- select(
     org.Mm.eg.db,
     keytype="GO",
     keys=c(
@@ -57,8 +57,7 @@ some.sets <- select(
     ),
     columns="SYMBOL"
 )
-some.sets <- some.sets[some.sets$SYMBOL \%in\% rownames(sce),]
-sets <- splitAsList(some.sets$SYMBOL, some.sets$GO)
+sets <- splitAsList(set.df$SYMBOL, set.df$GO)
 
 aggregated <- aggregateAcrossGenes.se(sce, sets)
 aggregated

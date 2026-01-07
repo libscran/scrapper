@@ -23,7 +23,8 @@ filterAdtQcMetrics(thresholds, metrics, block = NULL)
 Values are expected to be counts.}
 
 \item{subsets}{Named list of vectors specifying tag subsets of interest, typically control tags like IgGs.
-Each vector may be logical (whether to keep each row), integer (row indices) or character (row names).}
+Each vector may be logical (whether to keep each row), integer (row indices) or character (row names).
+For character vectors, strings not present in \code{rownames(x)} are ignored.}
 
 \item{num.threads}{Integer scalar specifying the number of threads to use.}
 

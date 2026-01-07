@@ -15,6 +15,11 @@ test_that("computeRnaQcMetrics works as expected", {
     expect_error(computeRnaQcMetrics(x, list(foo=TRUE)), "number of rows")
     expect_error(computeRnaQcMetrics(x, list(foo=-1)), "out-of-range")
     expect_error(computeRnaQcMetrics(x, list(foo="foo")), "no row names")
+
+    # Works with strings, where missing values are ignored..
+    rownames(x) <- sprintf("GENE-%s", seq_len(nrow(x)))
+    qc2 <- computeRnaQcMetrics(x, list(Mito=c("FOO", rownames(x)[sub$Mito], "BAR")))
+    expect_identical(qc, qc2)
 })
 
 test_that("suggestRnaQcThresholds works as expected", { 

@@ -87,13 +87,14 @@ test_that("aggregateAcrossGenes works for other vector types", {
 
     expect_identical(agg, refagg)
 
-    # Duplicated and missing names are just ignored.
+    # Duplicated and missing names are just ignored, with or without weights.
     sets2 <- sets
+    sets2$bar <- c("foo", sets$bar, "whee", sets$bar)
     sets2$stuff <- local({
-        first <- sets$stuff[[1]]
+        idx <- sets$stuff[[1]]
         list(
-            c(rep(first, 2), "absent"),
-            c(sets$stuff[[2]], runif(length(first)), pi)
+            c(rep(idx, 2), "absent"),
+            c(sets$stuff[[2]], runif(length(idx)), pi)
         )
     })
     expect_identical(aggregateAcrossGenes(x, sets2), agg)

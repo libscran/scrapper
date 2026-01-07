@@ -7,6 +7,7 @@
 #' Values are expected to be counts.
 #' @param subsets Named list of vectors specifying gene subsets of interest, typically for control-like features like mitochondrial genes or spike-in transcripts.
 #' Each vector may be logical (whether to keep each row), integer (row indices) or character (row names).
+#' For character vectors, strings not present in \code{rownames(x)} are ignored.
 #' @param num.threads Integer scalar specifying the number of threads to use.
 #' @param metrics \link[S4Vectors]{DataFrame} of per-cell QC metrics.
 #' This should have the same structure as the return value of \code{computeRnaQcMetrics}.
