@@ -11,4 +11,6 @@ test_that("computeClrm1Factors works against a reference", {
 
     par <- computeClrm1Factors(x, num.threads=2)
     expect_equal(obs, par)
+
+    expect_error(computeClrm1Factors(SummarizedExperiment::SummarizedExperiment(x)), "not supported")
 })

@@ -56,6 +56,8 @@
 #' @export
 #' @importFrom beachmat initializeCpp
 aggregateAcrossGenes <- function(x, sets, average = FALSE, convert = TRUE, num.threads = 1) {
+    .checkSEX(x, "aggregateAcrossGenes.se")
+
     if (convert) {
         nr <- nrow(x)
         rn <- rownames(x)

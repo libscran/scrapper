@@ -8,6 +8,13 @@
     }
 }
 
+#' @importFrom methods is
+.checkSEX <- function(x, alt) {
+    if (is(x, "SummarizedExperiment")) {
+        stop("SummarizedExperiment inputs are not supported, use '", alt, "()' or extract the relevant 'assay()' instead")
+    }
+}
+
 .checkNeighborResults <- function(index, distance) {
     stopifnot(length(dim(index)) == 2L)
     r <- range(index)

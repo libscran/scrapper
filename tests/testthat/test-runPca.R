@@ -25,6 +25,8 @@ test_that("runPCA works more or less as expected", {
     # Works with scaling.
     spcs <- runPca(normed, scale=TRUE)
     expect_identical(length(spcs$scale), 1000L)
+
+    expect_error(runPca(SummarizedExperiment::SummarizedExperiment(x)), "not supported")
 })
 
 test_that("runPCA works with blocking", {

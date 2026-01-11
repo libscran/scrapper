@@ -20,6 +20,8 @@ test_that("aggregateAcrossCells works for single factors", {
     }
 
     expect_identical(agg$counts, as.integer(table(clusters)))
+
+    expect_error(aggregateAcrossCells(SummarizedExperiment::SummarizedExperiment(x), list(cluster=clusters)), "not supported")
 })
 
 test_that("aggregateAcrossCells works for multiple factors", {

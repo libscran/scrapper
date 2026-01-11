@@ -109,6 +109,8 @@ clusterKmeans <- function(
     warn=TRUE,
     num.threads=1
 ) {
+    .checkSEX(x, "clusterKmeans.se")
+
     tatami <- FALSE
     x0 <- x
     if (!is.matrix(x) || !is.numeric(x)) {

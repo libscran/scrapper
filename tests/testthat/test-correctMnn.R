@@ -17,4 +17,6 @@ test_that("correctMnn works correctly in simple cases", {
     means <- vapply(split(colMeans(corrected$corrected), b), mean, 0)
     expect_lt(abs(means[2] - means[1]), 1) # means are within 1 SD of the truth.
     expect_lt(abs(means[3] - means[1]), 1)
+
+    expect_error(correctMnn(SummarizedExperiment::SummarizedExperiment(x)), "not supported")
 })

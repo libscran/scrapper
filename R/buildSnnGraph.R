@@ -68,6 +68,8 @@
 #' @export 
 #' @importFrom BiocNeighbors findKNN AnnoyParam
 buildSnnGraph <- function(x, num.neighbors=10, weight.scheme="ranked", num.threads=1, BNPARAM=AnnoyParam(), as.pointer=FALSE) {
+    .checkSEX(x, "clusterGraph.se")
+
     if (!is.list(x)) {
         x <- findKNN(x, k=num.neighbors, transposed=TRUE, get.index="transposed", get.distance=FALSE, num.threads=num.threads, BNPARAM=BNPARAM)
     } else {

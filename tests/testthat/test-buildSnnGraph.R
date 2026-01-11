@@ -20,4 +20,6 @@ test_that("buildSnnGraph works correctly", {
 #    # Something sensible happens with a pointer.
 #    out <- buildSnnGraph(data, as.pointer=TRUE)
 #    expect_type(out, "externalptr")
+
+    expect_error(buildSnnGraph(SummarizedExperiment::SummarizedExperiment(data)), "not supported")
 })

@@ -52,6 +52,7 @@ runAllNeighborSteps <- function(
     collapse.search=TRUE,
     num.threads=3
 ) {
+    .checkSEX(x, "runAllNeighborSteps.se")
     k.choices <- list()
 
     if (!is.null(runUmap.args)) {

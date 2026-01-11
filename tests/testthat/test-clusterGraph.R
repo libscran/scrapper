@@ -35,6 +35,8 @@ test_that("clusterGraph works correctly for multilevel", {
     igraph::E(g)$weight <- out$weights
     clusti <- clusterGraph(g, method="multilevel")
     expect_identical(clust, clusti)
+
+    expect_error(clusterGraph(SummarizedExperiment::SummarizedExperiment(data)), "not supported")
 })
 
 test_that("clusterGraph works correctly for Leiden", {

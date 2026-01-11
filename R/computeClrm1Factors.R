@@ -25,6 +25,7 @@
 #' @export
 #' @importFrom beachmat initializeCpp
 computeClrm1Factors <- function(x, num.threads=1) {
+    .checkSEX(x, "normalizeAdtCounts.se")
     ptr <- initializeCpp(x, .check.na=FALSE)
     compute_clrm1_factors(ptr, num_threads=num.threads)
 }

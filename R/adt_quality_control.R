@@ -91,7 +91,11 @@
 #' @importFrom beachmat initializeCpp tatami.dim
 #' @importFrom S4Vectors DataFrame I
 computeAdtQcMetrics <- function(x, subsets, num.threads = 1) {
-    stopifnot(length(subsets) == 0 || !is.null(names(subsets)))
+    if (length(subsets) > 0 && is.null(names(subsets))) {
+        stop("subsets should be a named list")
+    }
+    .checkSEX(x, "quickAdtQc.se")
+
     ptr <- initializeCpp(x, .check.na=FALSE)
 
     subsets <- as.list(subsets)

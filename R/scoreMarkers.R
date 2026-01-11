@@ -206,6 +206,8 @@ scoreMarkers <- function(
     min.rank.limit=500,
     num.threads=1
 ) {
+    .checkSEX(x, "scoreMarkers.se")
+
     rn <- rownames(x)
     ngenes <- nrow(x)
     x <- initializeCpp(x, .check.na=FALSE)

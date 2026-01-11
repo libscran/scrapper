@@ -24,6 +24,8 @@ test_that("modelGeneVariances works without blocking", {
     fit2 <- fitVarianceTrend(out2$means, out2$variances, span=0.5)
     expect_equal(out2$fitted, fit2$fitted)
     expect_equal(out2$residuals, fit2$residuals)
+
+    expect_error(modelGeneVariances(SummarizedExperiment::SummarizedExperiment(x)), "not supported")
 })
 
 test_that("modelGeneVariances works with blocking", {

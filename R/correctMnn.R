@@ -76,6 +76,7 @@ correctMnn <- function(
     BNPARAM=AnnoyParam(),
     num.threads=1)
 {
+    .checkSEX(x, "correctMnn.se")
     block <- .transformFactor(block)
 
     if (!is.null(num.mads)) {

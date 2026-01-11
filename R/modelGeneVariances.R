@@ -76,6 +76,7 @@ modelGeneVariances <- function(
     min.window.count=200,
     num.threads=1
 ) {
+    .checkSEX(x, "chooseRnaHvgs.se")
     block <- .transformFactor(block)
 
     stats <- model_gene_variances(

@@ -26,6 +26,8 @@ test_that("scaleByNeighbors works as expected", {
 
     expect_identical(ncol(out$combined), ncol(pcs[[1]]))
     expect_identical(nrow(out$combined), sum(vapply(pcs, nrow, 0L)))
+
+    expect_error(scaleByNeighbors(SummarizedExperiment::SummarizedExperiment()), "not supported")
 })
 
 test_that("scaleByNeighbors works as expected with blocking", {

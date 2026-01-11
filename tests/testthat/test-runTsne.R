@@ -23,4 +23,6 @@ test_that("runTSNE works in basic mode", {
     expect_warning(runTsne(res), "not consistent with 'num.neighbors'")
     expect_warning(runTsne(res, num.neighbors=30), NA)
     expect_warning(runTsne(res, num.neighbors=NULL), NA)
+
+    expect_error(runTsne(SummarizedExperiment::SummarizedExperiment(x)), "not supported")
 })

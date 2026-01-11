@@ -60,8 +60,9 @@ clusterGraph <- function(
     leiden.resolution=1, 
     leiden.objective=c("modularity", "cpm", "er"),
     walktrap.steps=4,
-    seed=42)
-{
+    seed=42
+) {
+    .checkSEX(x, "clusterGraph.se")
     if (is(x, "igraph")) {
         x <- list(
             vertices=igraph::vcount(x),

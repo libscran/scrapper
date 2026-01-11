@@ -21,6 +21,8 @@ test_that("runAllNeighborSteps gives the same results as the reference", {
     expect_null(res$buildSnnGraph)
     cluster.single <- runAllNeighborSteps(x, runUmap.args=NULL, runTsne.args=NULL)
     expect_identical(cluster.single$clusterGraph, clustering)
+
+    expect_error(runAllNeighborSteps(SummarizedExperiment::SummarizedExperiment(x)), "not supported")
 })
 
 test_that("runAllNeighborSteps works with collapsed neighbors", {

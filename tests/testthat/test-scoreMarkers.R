@@ -50,6 +50,8 @@ test_that("scoreMarkers works as expected for simple cases", {
     # Works without anything.
     empty <- scoreMarkers(x, g, compute.auc=FALSE, compute.cohens.d=FALSE, compute.delta.detected=FALSE, compute.delta.mean=FALSE)
     expect_identical(names(empty), c("mean", "detected", "nrow", "group.ids"))
+
+    expect_error(scoreMarkers(SummarizedExperiment::SummarizedExperiment(x), g), "not supported")
 })
 
 test_that("scoreMarkers works with blocking", {

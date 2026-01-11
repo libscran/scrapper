@@ -10,6 +10,12 @@ test_that("computeAdtQcMetrics works as expected", {
     expect_identical(qc$sum, Matrix::colSums(x))
     expect_identical(qc$detected, Matrix::colSums(x > 0))
     expect_identical(qc$subsets$IgG, Matrix::colSums(x[sub$IgG,]))
+
+    nosub <- computeAdtQcMetrics(x, list())
+    expect_identical(qc$sum, nosub$sum)
+
+    expect_error(computeAdtQcMetrics(x, list(1)), "should be a named list")
+    expect_error(computeAdtQcMetrics(SummarizedExperiment::SummarizedExperiment(x), NULL), "not supported")
 })
 
 test_that("suggestAdtQcThresholds works as expected", { 

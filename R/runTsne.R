@@ -92,6 +92,8 @@ runTsne <- function(
     num.threads=1,
     BNPARAM=AnnoyParam())
 {
+    .checkSEX(x, "runTsne.se")
+
     if (!is.list(x)) {
         x <- findKNN(x, k=num.neighbors, transposed=TRUE, get.index="transposed", get.distance="transposed", num.threads=num.threads, BNPARAM=BNPARAM)
     } else {

@@ -51,6 +51,8 @@ scoreGeneSet <- function(
     realized=TRUE,
     num.threads=1) 
 {
+    .checkSEX(x, "scoreGeneSet.se")
+
     block <- .transformFactor(block)
     ptr <- initializeCpp(x, .check.na=FALSE)
 

@@ -109,6 +109,7 @@ runPca <- function(
     warn=TRUE,
     num.threads=1
 ) {
+    .checkSEX(x, "runPca.se")
     block <- .transformFactor(block)
 
     if (!is.null(subset)) {

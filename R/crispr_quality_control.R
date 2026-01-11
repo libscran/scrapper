@@ -94,6 +94,7 @@
 #' @name crispr_quality_control
 #' @importFrom S4Vectors DataFrame
 computeCrisprQcMetrics <- function(x, num.threads = 1) {
+    .checkSEX(x, "quickCrisprQc.se")
     y <- initializeCpp(x, .check.na=FALSE)
     output <- compute_crispr_qc_metrics(y, num_threads=num.threads)
     output$max.index <- output$max.index + 1L

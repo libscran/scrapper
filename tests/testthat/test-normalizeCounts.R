@@ -36,4 +36,6 @@ test_that("normalizeCounts gives the same results in all modes", {
     z <- normalizeCounts(beachmat::initializeCpp(x), sf, pseudo.count=3, preserve.sparsity=TRUE)
     expect_equal(y[1,], beachmat:::tatami_row(z, 1))
     expect_equal(y[,1], beachmat:::tatami_column(z, 1))
+
+    expect_error(normalizeCounts(SummarizedExperiment::SummarizedExperiment(x)), "not supported")
 })

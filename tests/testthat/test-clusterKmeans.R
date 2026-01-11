@@ -16,6 +16,8 @@ test_that("clusterKmeans works in basic mode", {
     library(DelayedArray)
     delayed <- clusterKmeans(DelayedArray(x), 10)
     expect_identical(clustering, delayed)
+
+    expect_error(clusterKmeans(SummarizedExperiment::SummarizedExperiment(x)), "not supported")
 })
 
 test_that("clusterKmeans automatically ignores too many clusters", {

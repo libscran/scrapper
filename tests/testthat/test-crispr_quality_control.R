@@ -16,6 +16,8 @@ test_that("computeCrisprQcMetrics works as expected", {
     # Can't compare top and top2 directly in case of ties.
     top2 <- qc$max.index
     expect_equal(qc$max.value, z[cbind(top2, seq_along(top2))])
+
+    expect_error(computeCrisprQcMetrics(SummarizedExperiment::SummarizedExperiment(x)), "not supported")
 })
 
 test_that("suggestCrisprQcFilters works as expected", { 

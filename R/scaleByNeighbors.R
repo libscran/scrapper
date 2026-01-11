@@ -54,6 +54,8 @@ scaleByNeighbors <- function(
     weights=NULL,
     BNPARAM=AnnoyParam()
 ) {
+    .checkSEX(x, "scaleByNeighbors.se")
+
     x <- as.list(x)
     nmod <- length(x)
     ref.ncol <- ncol(x[[1]])

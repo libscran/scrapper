@@ -51,6 +51,7 @@
 #' @importFrom methods is
 #' @importFrom DelayedArray DelayedArray t
 normalizeCounts <- function(x, size.factors, log=TRUE, pseudo.count=1, log.base=2, preserve.sparsity=FALSE, delayed=TRUE) {
+    .checkSEX(x, "normalizeRnaCounts.se")
     if (is(x, "externalptr")) {
         return(normalize_counts(x, size.factors, log=log, log_base=log.base, pseudo_count=pseudo.count, preserve_sparsity=preserve.sparsity))
     }

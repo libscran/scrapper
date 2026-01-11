@@ -26,6 +26,7 @@ test_that("aggregateAcrossGenes works for unweighted sets", {
     }
 
     expect_error(aggregateAcrossGenes(x, list(-1L)), "out-of-range")
+    expect_error(aggregateAcrossGenes(SummarizedExperiment::SummarizedExperiment(x), sets), "not supported")
 })
 
 test_that("aggregateAcrossGenes works for weighted sets", {

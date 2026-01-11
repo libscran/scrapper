@@ -50,6 +50,8 @@
 #' @importFrom beachmat initializeCpp
 #' @importFrom S4Vectors DataFrame
 aggregateAcrossCells <- function(x, factors, num.threads = 1) {
+    .checkSEX(x, "aggregateAcrossCells.se")
+
     combined <- combineFactors(factors)
 
     ptr <- initializeCpp(x, .check.na=FALSE)
