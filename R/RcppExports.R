@@ -57,8 +57,8 @@ cluster_walktrap <- function(ptr0, steps) {
     .Call('_scrapper_cluster_walktrap', PACKAGE = 'scrapper', ptr0, steps)
 }
 
-cluster_kmeans <- function(data, nclusters, init_method, refine_method, var_part_optimize_partition, var_part_size_adjustment, lloyd_iterations, hartigan_wong_iterations, hartigan_wong_quick_transfer_iterations, hartigan_wong_quit_quick_transfer_failure, seed, nthreads) {
-    .Call('_scrapper_cluster_kmeans', PACKAGE = 'scrapper', data, nclusters, init_method, refine_method, var_part_optimize_partition, var_part_size_adjustment, lloyd_iterations, hartigan_wong_iterations, hartigan_wong_quick_transfer_iterations, hartigan_wong_quit_quick_transfer_failure, seed, nthreads)
+cluster_kmeans <- function(x, nclusters, tatami, init_method, refine_method, var_part_optimize_partition, var_part_size_adjustment, lloyd_iterations, hartigan_wong_iterations, hartigan_wong_quick_transfer_iterations, hartigan_wong_quit_quick_transfer_failure, seed, nthreads) {
+    .Call('_scrapper_cluster_kmeans', PACKAGE = 'scrapper', x, nclusters, tatami, init_method, refine_method, var_part_optimize_partition, var_part_size_adjustment, lloyd_iterations, hartigan_wong_iterations, hartigan_wong_quick_transfer_iterations, hartigan_wong_quit_quick_transfer_failure, seed, nthreads)
 }
 
 combine_factors <- function(factors, keep_unused, nlevels) {

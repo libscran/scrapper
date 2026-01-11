@@ -2,8 +2,9 @@
 #'
 #' Perform k-means clustering with a variety of different initialization and refinement algorithms.
 #'
-#' @param x Numeric matrix where rows are dimensions and columns are cells.
-#' This typically contains a low-dimensional representation from, e.g., \code{\link{runPca}}.
+#' @param x Matrix-like object where rows are dimensions and columns are cells.
+#' This is typically a dense double-precision matrix containing a low-dimensional representation from, e.g., \code{\link{runPca}}.
+#' However, any matrix representation supported by \code{\link{initializeCpp}} can also be used.
 #' @param k Integer scalar specifying the number of clusters.
 #' @param init.method String specifying the initialization method for the centers:
 #' \itemize{
@@ -92,6 +93,7 @@
 #' table(clustering$clusters, iris[,"Species"])
 #'
 #' @export
+#' @importFrom beachmat initializeCpp
 clusterKmeans <- function(
     x,
     k,
@@ -107,9 +109,17 @@ clusterKmeans <- function(
     warn=TRUE,
     num.threads=1
 ) {
+    tatami <- FALSE
+    x0 <- x
+    if (!is.matrix(x) || !is.numeric(x)) {
+        x0 <- initializeCpp(x)
+        tatami <- TRUE
+    }
+
     output <- cluster_kmeans(
-        x,
+        x0,
         k,
+        tatami=tatami,
         init_method=match.arg(init.method),
         refine_method=match.arg(refine.method),
         var_part_optimize_partition=var.part.optimize.partition,

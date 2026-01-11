@@ -21,8 +21,9 @@ clusterKmeans(
 )
 }
 \arguments{
-\item{x}{Numeric matrix where rows are dimensions and columns are cells.
-This typically contains a low-dimensional representation from, e.g., \code{\link{runPca}}.}
+\item{x}{Matrix-like object where rows are dimensions and columns are cells.
+This is typically a dense double-precision matrix containing a low-dimensional representation from, e.g., \code{\link{runPca}}.
+However, any matrix representation supported by \code{\link{initializeCpp}} can also be used.}
 
 \item{k}{Integer scalar specifying the number of clusters.}
 

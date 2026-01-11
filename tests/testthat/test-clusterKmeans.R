@@ -11,6 +11,11 @@ test_that("clusterKmeans works in basic mode", {
     # Randomness should be fully controlled.
     again <- clusterKmeans(x, 10)
     expect_identical(clustering, again)
+
+    # same results when wrapped in a DelayedArray.
+    library(DelayedArray)
+    delayed <- clusterKmeans(DelayedArray(x), 10)
+    expect_identical(clustering, delayed)
 })
 
 test_that("clusterKmeans automatically ignores too many clusters", {

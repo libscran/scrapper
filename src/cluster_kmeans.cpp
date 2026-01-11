@@ -8,14 +8,16 @@
 #include <algorithm>
 
 #include "kmeans/kmeans.hpp"
+#include "kmeans_tatami/kmeans_tatami.hpp"
 #include "sanisizer/sanisizer.hpp"
 
 #include "utils_other.h"
 
 //[[Rcpp::export(rng=false)]]
 Rcpp::List cluster_kmeans(
-    Rcpp::NumericMatrix data,
+    SEXP x,
     int nclusters,
+    bool tatami,
     std::string init_method,
     std::string refine_method,
     bool var_part_optimize_partition,
@@ -27,10 +29,23 @@ Rcpp::List cluster_kmeans(
     double seed,
     int nthreads
 ) {
-    const auto ndim = data.nrow();
-    const auto nobs = data.ncol();
-    auto ptr = static_cast<const double*>(data.begin());
+    std::optional<Rcpp::NumericMatrix> data;
+    std::unique_ptr<kmeans::Matrix<int, double> > mptr;
 
+    if (!tatami) {
+        data = x;
+        mptr.reset(new kmeans::SimpleMatrix<int, double>(
+            sanisizer::cast<std::size_t>(sanisizer::attest_gez(data->rows())),
+            sanisizer::cast<int>(sanisizer::attest_gez(data->cols())),
+            static_cast<const double*>(data->begin())
+        ));
+    } else {
+        auto mat = Rtatami::BoundNumericPointer(x);
+        mptr.reset(new kmeans_tatami::Matrix<int, double, double, int>(mat->ptr));
+    }
+
+    const auto ndim = mptr->num_dimensions();
+    const auto nobs = mptr->num_observations();
     auto centers = create_matrix<Rcpp::NumericMatrix>(ndim, nclusters);
     auto clusters = sanisizer::create<Rcpp::IntegerVector>(nobs);
     auto center_ptr = static_cast<double*>(centers.begin());
@@ -76,12 +91,8 @@ Rcpp::List cluster_kmeans(
         rptr.reset(ptr);
     }
 
-    // Explicitly casting to avoid troubles later on.
-    const auto ndim_s = sanisizer::cast<std::size_t>(ndim);
-    const auto nobs_i = sanisizer::cast<int>(nobs);
-    auto out = kmeans::compute(kmeans::SimpleMatrix<int, double>(ndim_s, nobs_i, ptr), *iptr, *rptr, nclusters, center_ptr, cluster_ptr);
-
-    const auto actual_k = kmeans::remove_unused_centers(ndim_s, nobs_i, cluster_ptr, nclusters, center_ptr, out.sizes);
+    auto out = kmeans::compute(*mptr, *iptr, *rptr, nclusters, center_ptr, cluster_ptr);
+    const auto actual_k = kmeans::remove_unused_centers(ndim, nobs, cluster_ptr, nclusters, center_ptr, out.sizes);
     if (actual_k != nclusters) {
         auto new_centers = create_matrix<Rcpp::NumericMatrix>(ndim, actual_k);
         std::copy_n(centers.begin(), new_centers.size(), new_centers.begin());
