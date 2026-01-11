@@ -22,6 +22,8 @@ formatScoreMarkersResult(marker.res, extra.columns = NULL, order.by = TRUE)
 previewMarkers(
   marker.df,
   columns = c("mean", "detected", lfc = "delta.mean.mean"),
+  pre.columns = NULL,
+  post.columns = NULL,
   rows = 10,
   order.by = NULL,
   include.order.by = !is.null(order.by)
@@ -53,8 +55,11 @@ If \code{NULL} or \code{FALSE}, no ordering is performed.}
 
 \item{marker.df}{DataFrame containing the marker statistics for a single group.}
 
-\item{columns}{Character vector of the columns to retain in the preview.
+\item{columns}{Character vector of the names of columns to retain in the preview.
 This may be named, in which the names are used as the column names.}
+
+\item{pre.columns, post.columns}{Character vector of the names of additional columns to retain in the preview.
+These are added before or after the columns in \code{columns}, for \code{pre.columns} and \code{post.columns} respectively.}
 
 \item{rows}{Integer specifying the number of rows to show.
 If \code{NULL}, all rows are returned.}
@@ -82,7 +87,7 @@ by calling \code{\link{scoreMarkers}} on an assay of a \link[SummarizedExperimen
 \examples{
 sce <- getTestRnaData.se("cluster")
 markers <- scoreMarkers.se(sce, sce$clusters)
-previewMarkers(markers[["1"]], c(effect="cohens.d.mean"))
+previewMarkers(markers[["1"]])
 
 }
 \author{

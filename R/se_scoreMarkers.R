@@ -18,8 +18,10 @@
 #' If \code{NULL} or \code{FALSE}, no ordering is performed.
 #' @param marker.res List containing the result of \code{\link{scoreMarkers}}.
 #' @param marker.df DataFrame containing the marker statistics for a single group.
-#' @param columns Character vector of the columns to retain in the preview.
+#' @param columns Character vector of the names of columns to retain in the preview.
 #' This may be named, in which the names are used as the column names.
+#' @param pre.columns,post.columns Character vector of the names of additional columns to retain in the preview.
+#' These are added before or after the columns in \code{columns}, for \code{pre.columns} and \code{post.columns} respectively.
 #' @param include.order.by Boolean indicating whether the column specified by \code{order.by} should be included in the output DataFrame.
 #' A string may also be supplied and will be treated as \code{TRUE}; the value of the string will be used as the column name in the output DataFrame.
 #' @param rows Integer specifying the number of rows to show.
@@ -43,7 +45,7 @@
 #' @examples
 #' sce <- getTestRnaData.se("cluster")
 #' markers <- scoreMarkers.se(sce, sce$clusters)
-#' previewMarkers(markers[["1"]], c(effect="cohens.d.mean"))
+#' previewMarkers(markers[["1"]])
 #'
 #' @export
 scoreMarkers.se <- function(
@@ -153,10 +155,19 @@ formatScoreMarkersResult <- function(marker.res, extra.columns = NULL, order.by 
 #' @export
 #' @rdname scoreMarkers.se
 #' @importFrom utils head
-previewMarkers <- function(marker.df, columns = c("mean", "detected", lfc="delta.mean.mean"), rows = 10, order.by = NULL, include.order.by = !is.null(order.by)) {
+previewMarkers <- function(
+    marker.df, 
+    columns = c("mean", "detected", lfc="delta.mean.mean"),
+    pre.columns = NULL,
+    post.columns = NULL,
+    rows = 10,
+    order.by = NULL,
+    include.order.by = !is.null(order.by)
+) {
     if (is.null(columns)) {
         columns <- as.character(0)
     }
+    columns <- c(pre.columns, columns, post.columns)
 
     order.by <- .findOrderBy(marker.df, order.by)
     if (!is.null(order.by) && !isFALSE(include.order.by)) {

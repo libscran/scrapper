@@ -126,6 +126,9 @@ test_that("previewMarkers works as expected", {
     expect_identical(nrow(eff_preview), 10L)
     expect_identical(rownames(order_preview), rownames(eff_preview))
 
+    more_preview <- previewMarkers(out[[1]], pre.columns=c("auc.median"), post.columns=c(DD="delta.detected.min"))
+    expect_identical(more_preview, previewMarkers(out[[1]], columns=c("auc.median", "mean", "detected", lfc="delta.mean.mean", DD="delta.detected.min")))
+
     preview <- previewMarkers(out[[1]], rows=NULL)
     expect_identical(rownames(preview), rownames(out[[1]]))
 
