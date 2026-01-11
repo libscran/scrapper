@@ -36,7 +36,7 @@ Rcpp::List run_pca(
     bool realized,
     int irlba_work,
     int irlba_iterations,
-    int irlba_seed,
+    double irlba_seed,
     int num_threads
 ) {
     auto mat = Rtatami::BoundNumericPointer(x);

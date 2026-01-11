@@ -382,7 +382,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // run_pca
-Rcpp::List run_pca(SEXP x, int number, Rcpp::Nullable<Rcpp::IntegerVector> block, std::string block_weight_policy, Rcpp::NumericVector variable_block_weight, bool components_from_residuals, bool scale, Rcpp::Nullable<Rcpp::IntegerVector> subset, bool realized, int irlba_work, int irlba_iterations, int irlba_seed, int num_threads);
+Rcpp::List run_pca(SEXP x, int number, Rcpp::Nullable<Rcpp::IntegerVector> block, std::string block_weight_policy, Rcpp::NumericVector variable_block_weight, bool components_from_residuals, bool scale, Rcpp::Nullable<Rcpp::IntegerVector> subset, bool realized, int irlba_work, int irlba_iterations, double irlba_seed, int num_threads);
 RcppExport SEXP _scrapper_run_pca(SEXP xSEXP, SEXP numberSEXP, SEXP blockSEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP components_from_residualsSEXP, SEXP scaleSEXP, SEXP subsetSEXP, SEXP realizedSEXP, SEXP irlba_workSEXP, SEXP irlba_iterationsSEXP, SEXP irlba_seedSEXP, SEXP num_threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -397,7 +397,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type realized(realizedSEXP);
     Rcpp::traits::input_parameter< int >::type irlba_work(irlba_workSEXP);
     Rcpp::traits::input_parameter< int >::type irlba_iterations(irlba_iterationsSEXP);
-    Rcpp::traits::input_parameter< int >::type irlba_seed(irlba_seedSEXP);
+    Rcpp::traits::input_parameter< double >::type irlba_seed(irlba_seedSEXP);
     Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
     rcpp_result_gen = Rcpp::wrap(run_pca(x, number, block, block_weight_policy, variable_block_weight, components_from_residuals, scale, subset, realized, irlba_work, irlba_iterations, irlba_seed, num_threads));
     return rcpp_result_gen;
