@@ -7,7 +7,7 @@ sf <- centerSizeFactors(Matrix::colSums(x))
 
 test_that("normalizeCounts gives the same results in all modes", {
     y <- normalizeCounts(x, sf)
-    expect_s4_class(y, "DelayedMatrix")
+    expect_s4_class(y, "LogNormalizedMatrix")
     z <- normalizeCounts(beachmat::initializeCpp(x), sf)
     expect_equal(y[1,], beachmat:::tatami_row(z, 1))
     expect_equal(y[,1], beachmat:::tatami_column(z, 1))
@@ -18,7 +18,13 @@ test_that("normalizeCounts gives the same results in all modes", {
     expect_equal(y[,1], beachmat:::tatami_column(z, 1))
 
     y <- normalizeCounts(x, sf, log=FALSE)
+    expect_s4_class(y, "DelayedMatrix")
     z <- normalizeCounts(beachmat::initializeCpp(x), sf, log=FALSE)
+    expect_equal(y[1,], beachmat:::tatami_row(z, 1))
+    expect_equal(y[,1], beachmat:::tatami_column(z, 1))
+
+    y <- normalizeCounts(x, sf, log=FALSE, delayed=FALSE)
+    expect_s4_class(y, "dgCMatrix")
     expect_equal(y[1,], beachmat:::tatami_row(z, 1))
     expect_equal(y[,1], beachmat:::tatami_column(z, 1))
 

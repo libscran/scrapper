@@ -101,6 +101,10 @@ normalize_counts <- function(x, size_factors, log, pseudo_count, log_base, prese
     .Call('_scrapper_normalize_counts', PACKAGE = 'scrapper', x, size_factors, log, pseudo_count, log_base, preserve_sparsity)
 }
 
+initialize_LogNormalizedMatrix <- function(seed, size_factors, pseudo_count, log_base) {
+    .Call('_scrapper_initialize_LogNormalizedMatrix', PACKAGE = 'scrapper', seed, size_factors, pseudo_count, log_base)
+}
+
 compute_rna_qc_metrics <- function(x, subsets, num_threads) {
     .Call('_scrapper_compute_rna_qc_metrics', PACKAGE = 'scrapper', x, subsets, num_threads)
 }

@@ -1,6 +1,7 @@
 #include "config.h"
 
 #include <vector>
+#include <memory>
 
 #include "scran_norm/scran_norm.hpp"
 
@@ -19,3 +20,18 @@ SEXP normalize_counts(SEXP x, Rcpp::NumericVector size_factors, bool log, double
     return output;
 }
 
+//[[Rcpp::export(rng=false)]]
+SEXP initialize_LogNormalizedMatrix(SEXP seed, Rcpp::NumericVector size_factors, double pseudo_count, double log_base) {
+    Rtatami::BoundNumericPointer mat(seed);
+    auto output = Rtatami::new_BoundNumericMatrix();
+    output->ptr = std::make_shared<tatami::DelayedUnaryIsometricOperation<double, double, int> >(
+        mat->ptr,
+        std::make_shared<scran_norm::DelayedLogNormalizeHelper<double, double, int, std::vector<double> > >(
+            std::vector<double>(size_factors.begin(), size_factors.end()),
+            log_base,
+            pseudo_count
+        )
+    );
+    output->original = mat->original;
+    return output;
+}

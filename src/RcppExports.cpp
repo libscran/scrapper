@@ -345,6 +345,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// initialize_LogNormalizedMatrix
+SEXP initialize_LogNormalizedMatrix(SEXP seed, Rcpp::NumericVector size_factors, double pseudo_count, double log_base);
+RcppExport SEXP _scrapper_initialize_LogNormalizedMatrix(SEXP seedSEXP, SEXP size_factorsSEXP, SEXP pseudo_countSEXP, SEXP log_baseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type seed(seedSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type size_factors(size_factorsSEXP);
+    Rcpp::traits::input_parameter< double >::type pseudo_count(pseudo_countSEXP);
+    Rcpp::traits::input_parameter< double >::type log_base(log_baseSEXP);
+    rcpp_result_gen = Rcpp::wrap(initialize_LogNormalizedMatrix(seed, size_factors, pseudo_count, log_base));
+    return rcpp_result_gen;
+END_RCPP
+}
 // compute_rna_qc_metrics
 Rcpp::List compute_rna_qc_metrics(SEXP x, Rcpp::List subsets, int num_threads);
 RcppExport SEXP _scrapper_compute_rna_qc_metrics(SEXP xSEXP, SEXP subsetsSEXP, SEXP num_threadsSEXP) {
@@ -688,6 +701,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_fit_variance_trend", (DL_FUNC) &_scrapper_fit_variance_trend, 10},
     {"_scrapper_model_gene_variances", (DL_FUNC) &_scrapper_model_gene_variances, 15},
     {"_scrapper_normalize_counts", (DL_FUNC) &_scrapper_normalize_counts, 6},
+    {"_scrapper_initialize_LogNormalizedMatrix", (DL_FUNC) &_scrapper_initialize_LogNormalizedMatrix, 4},
     {"_scrapper_compute_rna_qc_metrics", (DL_FUNC) &_scrapper_compute_rna_qc_metrics, 3},
     {"_scrapper_suggest_rna_qc_thresholds", (DL_FUNC) &_scrapper_suggest_rna_qc_thresholds, 3},
     {"_scrapper_filter_rna_qc_metrics", (DL_FUNC) &_scrapper_filter_rna_qc_metrics, 3},

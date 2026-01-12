@@ -56,23 +56,21 @@ normalizeCounts <- function(x, size.factors, log=TRUE, pseudo.count=1, log.base=
         return(normalize_counts(x, size.factors, log=log, log_base=log.base, pseudo_count=pseudo.count, preserve_sparsity=preserve.sparsity))
     }
 
-    if (log && pseudo.count != 1 && preserve.sparsity) {
+    if (!log) {
+        if (delayed) {
+            x <- DelayedArray(x)
+        }
+        return(t(t(x)/size.factors))
+    }
+
+    if (pseudo.count != 1 && preserve.sparsity) {
         size.factors <- size.factors * pseudo.count
         pseudo.count <- 1
     }
 
-    if (delayed) {
-        x <- DelayedArray(x)
+    if (!delayed) {
+        .log_normalize(x, size.factors, pseudo.count=pseudo.count, log.base=log.base)
+    } else {
+        LogNormalizedMatrix(x, size.factors, pseudo.count=pseudo.count, log.base=log.base)
     }
-
-    normalized <- t(t(x) / size.factors)
-    if (!log) {
-        return(normalized)
-    }
-
-    if (pseudo.count == 1) {
-        return(log1p(normalized) / log(log.base))
-    }
-
-    log(normalized + pseudo.count, log.base)
 }

@@ -43,6 +43,8 @@ The latter is now deprecated.
 This is a little prettier and we already load \pkg{S4Vectors} anyway.
 \item Removed checks on \code{num.neighbors=} when pre-computed neighbor search results are supplied in \code{runUmap()}, \code{buildSnnGraph()} and \code{subsampleByNeighbors()}.
 Any differences between \code{num.neighbors=} and the number of neighbors in the pre-computed results are now ignored.
+\item Implement the LogNormalizedMatrix class for delayed log-transformation.
+Modified \code{normalizeCounts()} to return instances of this class when \code{log=TRUE} and \code{delayed=TRUE}.
 }}
 
 \section{Version 1.4.0}{\itemize{
