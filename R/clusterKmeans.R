@@ -4,7 +4,7 @@
 #'
 #' @param x Matrix-like object where rows are dimensions and columns are cells.
 #' This is typically a dense double-precision matrix containing a low-dimensional representation from, e.g., \code{\link{runPca}}.
-#' However, any matrix representation supported by \code{\link{initializeCpp}} can also be used.
+#' However, any matrix representation supported by \code{\link[beachmat]{initializeCpp}} can also be used.
 #' @param k Integer scalar specifying the number of clusters.
 #' @param init.method String specifying the initialization method for the centers:
 #' \itemize{
