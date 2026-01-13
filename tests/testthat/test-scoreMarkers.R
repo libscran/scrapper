@@ -52,6 +52,8 @@ test_that("scoreMarkers works as expected for simple cases", {
     expect_identical(names(empty), c("mean", "detected", "nrow", "group.ids"))
 
     expect_error(scoreMarkers(SummarizedExperiment::SummarizedExperiment(x), g), "not supported")
+    expect_error(scoreMarkers(x, NULL), "non-NULL")
+    expect_error(scoreMarkers(x, 1), "length equal")
 })
 
 test_that("scoreMarkers works with blocking", {

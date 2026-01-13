@@ -211,7 +211,11 @@ scoreMarkers <- function(
     rn <- rownames(x)
     ngenes <- nrow(x)
     x <- initializeCpp(x, .check.na=FALSE)
+
     groups <- .transformFactor(groups)
+    if (is.null(groups$index)) {
+        stop("'groups' should be non-NULL")
+    }
     block <- .transformFactor(block)
 
     args <- list(
