@@ -45,6 +45,8 @@ This is a little prettier and we already load \pkg{S4Vectors} anyway.
 Any differences between \code{num.neighbors=} and the number of neighbors in the pre-computed results are now ignored.
 \item Implement the LogNormalizedMatrix class for delayed log-transformation.
 Modified \code{normalizeCounts()} to return instances of this class when \code{log=TRUE} and \code{delayed=TRUE}.
+\item Added the \code{countGroupsByBlock()} function to count the number of cells within each combination of group and block.
+This is primarily intended for diagnosing batch effects.
 }}
 
 \section{Version 1.4.0}{\itemize{
