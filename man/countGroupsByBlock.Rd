@@ -8,7 +8,7 @@ countGroupsByBlock(
   groups,
   block,
   normalize.block = FALSE,
-  normalize.group = FALSE
+  normalize.groups = FALSE
 )
 }
 \arguments{
@@ -21,7 +21,7 @@ This is typically used for batches or samples.}
 \item{normalize.block}{Boolean indicating whether to normalize the number of cells across blocks.
 If \code{TRUE}, frequencies are divided by the column sums.}
 
-\item{normalize.group}{Boolean indicating whether to normalize the number of cells across groups.
+\item{normalize.groups}{Boolean indicating whether to normalize the number of cells across groups.
 If \code{TRUE}, frequencies are divided by the row sums.
 This is performed after normalization of the block counts if \code{normalize.block=TRUE}.}
 }
@@ -40,8 +40,8 @@ block <- sample(LETTERS[1:6], 100, replace=TRUE)
 
 countGroupsByBlock(groups, block)
 countGroupsByBlock(groups, block, normalize.block=TRUE)
-countGroupsByBlock(groups, block, normalize.group=TRUE)
-countGroupsByBlock(groups, block, normalize.block=TRUE, normalize.group=TRUE)
+countGroupsByBlock(groups, block, normalize.groups=TRUE)
+countGroupsByBlock(groups, block, normalize.block=TRUE, normalize.groups=TRUE)
 
 }
 \seealso{

@@ -10,7 +10,7 @@
 #' This is typically used for batches or samples.
 #' @param normalize.block Boolean indicating whether to normalize the number of cells across blocks.
 #' If \code{TRUE}, frequencies are divided by the column sums.
-#' @param normalize.group Boolean indicating whether to normalize the number of cells across groups.
+#' @param normalize.groups Boolean indicating whether to normalize the number of cells across groups.
 #' If \code{TRUE}, frequencies are divided by the row sums.
 #' This is performed after normalization of the block counts if \code{normalize.block=TRUE}.
 #' 
@@ -24,20 +24,20 @@
 #'
 #' countGroupsByBlock(groups, block)
 #' countGroupsByBlock(groups, block, normalize.block=TRUE)
-#' countGroupsByBlock(groups, block, normalize.group=TRUE)
-#' countGroupsByBlock(groups, block, normalize.block=TRUE, normalize.group=TRUE)
+#' countGroupsByBlock(groups, block, normalize.groups=TRUE)
+#' countGroupsByBlock(groups, block, normalize.block=TRUE, normalize.groups=TRUE)
 #'
 #' @seealso
 #' \code{\link{table}}, which is used internally by this function.
 #'
 #' @export
-countGroupsByBlock <- function(groups, block, normalize.block=FALSE, normalize.group=FALSE) {
+countGroupsByBlock <- function(groups, block, normalize.block=FALSE, normalize.groups=FALSE) {
     tab <- table(groups, block)
     if (normalize.block) {
-        tab <- tab / rowSums(tab)
-    }
-    if (normalize.group) {
         tab <- t(t(tab) / colSums(tab))
+    }
+    if (normalize.groups) {
+        tab <- tab / rowSums(tab)
     }
     tab
 }
