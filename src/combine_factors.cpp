@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <stdexcept>
 
-#include "scran_aggregate/scran_aggregate.hpp"
+#include "factorize/factorize.hpp"
 #include "sanisizer/sanisizer.hpp"
 
 #include "utils_other.h"
@@ -54,7 +54,7 @@ Rcpp::List combine_factors(Rcpp::List factors, bool keep_unused, Rcpp::IntegerVe
         }
 
         oindices = sanisizer::create<Rcpp::IntegerVector>(ngenes);
-        auto res = scran_aggregate::combine_factors_unused(ngenes, buffers, static_cast<int*>(oindices.begin()));
+        auto res = factorize::combine_to_factor_unused(ngenes, buffers, static_cast<int*>(oindices.begin()));
         olevels = convert_to_index_list(res);
 
     } else {
@@ -65,7 +65,7 @@ Rcpp::List combine_factors(Rcpp::List factors, bool keep_unused, Rcpp::IntegerVe
         }
 
         oindices = Rcpp::IntegerVector(ngenes);
-        auto res = scran_aggregate::combine_factors(ngenes, buffers, static_cast<int*>(oindices.begin()));
+        auto res = factorize::combine_to_factor(ngenes, buffers, static_cast<int*>(oindices.begin()));
         olevels = convert_to_index_list(res);
     }
 
