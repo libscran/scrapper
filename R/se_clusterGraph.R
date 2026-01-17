@@ -53,7 +53,7 @@ clusterGraph.se <- function(
     )
     x <- .addBuildGraphResults(x, graph.out, graph.name=graph.name)
 
-    res.args <- list()
+    res.args <- list(method=method)
     if (!is.null(resolution)) {
         res.args$multilevel.resolution <- resolution
         res.args$leiden.resolution <- resolution
