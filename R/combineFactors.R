@@ -21,7 +21,7 @@
 #' @author Aaron Lun
 #'
 #' @seealso
-#' The \code{combine_to_factor} function in \url{https://ltla.github.io/factorize/}. 
+#' The \code{combine_to_factor} function in \url{https://libscran.github.io/factorize/}. 
 #'
 #' @examples
 #' combineFactors(list(

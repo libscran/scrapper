@@ -68,7 +68,7 @@
 #' }
 #'
 #' @seealso
-#' \url{https://ltla.github.io/CppKmeans/}, which describes the various initialization and refinement algorithms in more detail.
+#' \url{https://libscran.github.io/kmeans/}, which describes the various initialization and refinement algorithms in more detail.
 #'
 #' \code{\link{clusterKmeans.se}}, for k-means clustering on a \link[SingleCellExperiment]{SingleCellExperiment}.
 #'
