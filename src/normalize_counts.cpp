@@ -22,15 +22,16 @@ SEXP normalize_counts(SEXP x, Rcpp::NumericVector size_factors, bool log, double
 
 //[[Rcpp::export(rng=false)]]
 SEXP initialize_LogNormalizedMatrix(SEXP seed, Rcpp::NumericVector size_factors, double pseudo_count, double log_base) {
+    std::vector<double> recip_sf(size_factors.begin(), size_factors.end());
+    for (auto& s : recip_sf) {
+        s = 1.0/s;
+    }
+
     Rtatami::BoundNumericPointer mat(seed);
     auto output = Rtatami::new_BoundNumericMatrix();
     output->ptr = std::make_shared<tatami::DelayedUnaryIsometricOperation<double, double, int> >(
         mat->ptr,
-        std::make_shared<scran_norm::DelayedLogNormalizeHelper<double, double, int, std::vector<double> > >(
-            std::vector<double>(size_factors.begin(), size_factors.end()),
-            log_base,
-            pseudo_count
-        )
+        std::make_shared<scran_norm::DelayedLogNormalizeHelper<double, double, int, std::vector<double> > >(std::move(recip_sf), log_base, pseudo_count)
     );
     output->original = mat->original;
     return output;

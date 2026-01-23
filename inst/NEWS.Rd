@@ -43,8 +43,10 @@ The latter is now deprecated.
 This is a little prettier and we already load \pkg{S4Vectors} anyway.
 \item Removed checks on \code{num.neighbors=} when pre-computed neighbor search results are supplied in \code{runUmap()}, \code{buildSnnGraph()} and \code{subsampleByNeighbors()}.
 Any differences between \code{num.neighbors=} and the number of neighbors in the pre-computed results are now ignored.
-\item Implement the LogNormalizedMatrix class for delayed log-transformation.
+\item Implemented the LogNormalizedMatrix class for delayed log-transformation.
 Modified \code{normalizeCounts()} to return instances of this class when \code{log=TRUE} and \code{delayed=TRUE}.
+This allows downstream C++ code to use a more efficient normalization wrapper via \code{initializeCpp()}.
+Note that there are some very minor differences in the log-normalized values when computed in R via \code{extract_array()} and those in C++ via \pkg{tatami} extraction.
 \item Added the \code{countGroupsByBlock()} function to count the number of cells within each combination of group and block.
 This is primarily intended for diagnosing batch effects.
 }}
