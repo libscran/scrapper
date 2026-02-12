@@ -1,3 +1,4 @@
 #' @importFrom Rcpp sourceCpp
 #' @useDynLib scrapper
-NULL
+#' @name scrapper-package
+"_PACKAGE"
