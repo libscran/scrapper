@@ -19,7 +19,7 @@
 #' If \code{NULL}, additional metrics are not stored.
 #' @param delayed.transpose Logical scalar indicating whether to delay the transposition when storing coordinates in the \code{\link[SingleCellExperiment]{reducedDims}}.
 #'
-#' @return \code{x} is returned with the combined embeddings stored in its \code{rowData}.
+#' @return \code{x} is returned with the combined embeddings stored in its \code{reducedDims}.
 #' The scaling factors for all embeddings are stored in the \code{metadata}.
 #'
 #' @author Aaron Lun

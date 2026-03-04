@@ -46,7 +46,7 @@ If \code{NULL}, additional metrics are not stored.}
 \item{delayed.transpose}{Logical scalar indicating whether to delay the transposition when storing coordinates in the \code{\link[SingleCellExperiment]{reducedDims}}.}
 }
 \value{
-\code{x} is returned with the combined embeddings stored in its \code{rowData}.
+\code{x} is returned with the combined embeddings stored in its \code{reducedDims}.
 The scaling factors for all embeddings are stored in the \code{metadata}.
 }
 \description{
