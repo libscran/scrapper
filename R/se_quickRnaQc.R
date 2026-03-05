@@ -84,7 +84,13 @@ quickRnaQc.se <- function(
     meta.name = "qc",
     flatten = TRUE
 ) {
-    metrics <- computeRnaQcMetricsWithAltExps(x, subsets, altexp.proportions=altexp.proportions, num.threads=num.threads)
+    metrics <- computeRnaQcMetricsWithAltExps(
+        x,
+        subsets,
+        altexp.proportions=altexp.proportions,
+        assay.type=assay.type,
+        num.threads=num.threads
+    )
 
     if (is.null(thresholds)) {
         thresholds <- .call(
