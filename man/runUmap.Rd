@@ -2,7 +2,7 @@
 % Please edit documentation in R/runUmap.R
 \name{runUmap}
 \alias{runUmap}
-\title{Uniform manifold approxation and projection}
+\title{Uniform manifold approximation and projection}
 \usage{
 runUmap(
   x,

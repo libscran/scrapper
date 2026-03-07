@@ -1,4 +1,4 @@
-#' Uniform manifold approxation and projection
+#' Uniform manifold approximation and projection
 #'
 #' Compute UMAP coordinates to visualize similarities between cells.
 #'
