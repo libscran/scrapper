@@ -1,6 +1,6 @@
 Package: scrapper
-Version: 1.5.14
-Date: 2026-03-06
+Version: 1.5.15
+Date: 2026-03-09
 Authors@R: person("Aaron", "Lun", role=c("cre", "aut"), email="infinite.monkeys.with.keyboards@gmail.com")
 Title: Bindings to C++ Libraries for Single-Cell Analysis
 Description: 
@@ -12,7 +12,6 @@ Imports:
     methods,
     Rcpp,
     beachmat (>= 2.25.1),
-    Matrix,
     S4Vectors,
     SparseArray,
     DelayedArray,
@@ -23,8 +22,7 @@ Suggests:
     knitr,
     rmarkdown,
     BiocStyle,
-    MatrixGenerics,
-    sparseMatrixStats,
+    Matrix,
     IRanges,
     SummarizedExperiment,
     SingleCellExperiment,

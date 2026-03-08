@@ -15,7 +15,8 @@ normalizeCrisprCounts.se(
   more.norm.args = list(),
   assay.type = "counts",
   output.name = "logcounts",
-  factor.name = "sizeFactor"
+  factor.name = "sizeFactor",
+  num.threads = 1
 )
 }
 \arguments{
@@ -45,6 +46,9 @@ see \code{?\link{centerSizeFactors}} for more details.}
 
 \item{factor.name}{String containing the name of the \code{\link[SummarizedExperiment]{colData}} column in which to store the size factors in the output object.
 If \code{NULL}, the size factors are not stored.}
+
+\item{num.threads}{Integer specifying the number of threads for computing column sums.
+Only used if \code{size.factors=NULL}.}
 }
 \value{
 \code{x} is returned with a new assay containing the (log-)normalized matrix.

@@ -89,7 +89,7 @@ setMethod("is_sparse", "LogNormalizedMatrixSeed", function(x) is_sparse(x@seed) 
     sf
 }
 
-#' @importFrom Matrix t
+#' @importFrom DelayedArray t
 .log_normalize <- function(mat, sf, pseudo.count, log.base) {
     norm <- t(t(mat)/sf)
     if (pseudo.count == 1) {

@@ -105,11 +105,11 @@ getTestRnaData.se <- function(at = c("start", "qc", "norm", "hvg", "pca", "clust
 #' @export
 #' @rdname getTestData.se
 #' @importFrom methods as
-#' @importClassesFrom Matrix dgCMatrix
 getTestAdtData.se <- function(at = c("start", "qc", "norm", "hvg", "pca")) {
     at <- match.arg(at)
 
     if (!("start" %in% names(cache$adt))) {
+        loadNamespace("Matrix")
         raw.sce <- scRNAseq::fetchDataset("kotliarov-pbmc-2020", "2024-04-18")
         raw.sce <- raw.sce[,1:5000] # Cutting it down a bit for speed.
         SummarizedExperiment::assay(raw.sce) <- as(SummarizedExperiment::assay(raw.sce), "dgCMatrix")
@@ -171,11 +171,11 @@ getTestAdtData.se <- function(at = c("start", "qc", "norm", "hvg", "pca")) {
 #' @export
 #' @rdname getTestData.se
 #' @importFrom methods as
-#' @importClassesFrom Matrix dgCMatrix
 getTestCrisprData.se <- function(at = c("start", "qc")) {
     at <- match.arg(at)
 
     if (!("start" %in% names(cache$crispr))) {
+        loadNamespace("Matrix")
         raw.sce <- scRNAseq::fetchDataset("cao-pancreas-2025", "2025-10-10", "rqc")
         raw.sce <- raw.sce[,1:5000] # Cutting it down a bit for speed.
         SummarizedExperiment::assay(raw.sce) <- as(SummarizedExperiment::assay(raw.sce), "dgCMatrix")

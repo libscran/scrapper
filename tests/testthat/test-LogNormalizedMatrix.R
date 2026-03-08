@@ -32,7 +32,7 @@ test_that("LogNormalizedMatrix works for dense matrices", {
 library(Matrix)
 test_that("LogNormalizedMatrix works for sparse matrices", {
     smat <- abs(rsparsematrix(50, 20, density=0.21))
-    sf <- centerSizeFactors(colSums(smat))
+    sf <- centerSizeFactors(Matrix::colSums(smat))
 
     norm <- LogNormalizedMatrix(smat, sf)
     expect_true(is_sparse(norm))

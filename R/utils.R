@@ -55,7 +55,7 @@
     }
 }
 
-#' @importFrom Matrix t
+#' @importFrom DelayedArray t
 #' @importFrom DelayedArray DelayedArray
 .addTransposedReddim <- function(x, name, mat, delayed) {
     if (delayed) {
@@ -65,7 +65,7 @@
     x
 }
 
-#' @importFrom Matrix t
+#' @importFrom DelayedArray t
 #' @importFrom methods is
 #' @importClassesFrom DelayedArray DelayedArray
 .getTransposedReddim <- function(x, name) {

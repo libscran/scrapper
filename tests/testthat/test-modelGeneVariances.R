@@ -1,13 +1,12 @@
 # library(testthat); library(scrapper); source("test-modelGeneVariances.R")
 
 set.seed(121212)
-library(MatrixGenerics)
 library(Matrix)
 x <- abs(rsparsematrix(1000, 100, 0.1) * 10)
 
 test_that("modelGeneVariances works without blocking", {
     out <- modelGeneVariances(x)$statistics
-    expect_equal(out$variances, rowVars(x))
+    expect_equal(out$variances, apply(as.matrix(x), 1, var))
     expect_equal(out$means, Matrix::rowMeans(x))
     expect_equal(out$variances - out$fitted, out$residuals)
 
@@ -36,7 +35,7 @@ test_that("modelGeneVariances works with blocking", {
     for (b in out$block.ids) {
         sub <- x[,block == b]
         current <- out$per.block[[b]]
-        expect_equal(current$variances, rowVars(sub))
+        expect_equal(current$variances, apply(as.matrix(sub), 1, var))
         expect_equal(current$means, Matrix::rowMeans(sub))
         expect_equal(current$variances - current$fitted, current$residuals)
     }
