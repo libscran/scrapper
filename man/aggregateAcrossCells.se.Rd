@@ -65,7 +65,7 @@ Only relevant if \code{x} is a \link[SingleCellExperiment]{SingleCellExperiment}
 \item{index}{Integer vector containing the index of the factor combination to which each cell in \code{coldata} was assigned.}
 
 \item{number}{Integer specifying the total number of unique factor combinations.
-All elements of \code{index} should be less than \code{number}.}
+All elements of \code{index} should be less than or equal to \code{number}.}
 
 \item{only.atomic}{Logical scalar specifying whether to skip non-atomic, non-factor columns.}
 

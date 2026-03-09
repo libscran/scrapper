@@ -31,7 +31,7 @@
 #' @param coldata \link[S4Vectors]{DataFrame} of column data, containing one row for each cell.
 #' @param index Integer vector containing the index of the factor combination to which each cell in \code{coldata} was assigned.
 #' @param number Integer specifying the total number of unique factor combinations.
-#' All elements of \code{index} should be less than \code{number}.
+#' All elements of \code{index} should be less than or equal to \code{number}.
 #' @param only.atomic Logical scalar specifying whether to skip non-atomic, non-factor columns.
 #' @param placeholder Placeholder value to store in the output column when a factor combination does not have a single unique value. 
 #'
