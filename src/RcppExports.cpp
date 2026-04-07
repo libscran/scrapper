@@ -593,8 +593,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // score_markers_best
-Rcpp::List score_markers_best(SEXP x, int top, Rcpp::IntegerVector groups, int num_groups, Rcpp::Nullable<Rcpp::IntegerVector> block, std::string block_average_policy, std::string block_weight_policy, Rcpp::NumericVector variable_block_weight, double block_quantile, double threshold, int num_threads, bool compute_group_mean, bool compute_group_detected, bool compute_delta_mean, bool compute_delta_detected, bool compute_cohens_d, bool compute_auc);
-RcppExport SEXP _scrapper_score_markers_best(SEXP xSEXP, SEXP topSEXP, SEXP groupsSEXP, SEXP num_groupsSEXP, SEXP blockSEXP, SEXP block_average_policySEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP block_quantileSEXP, SEXP thresholdSEXP, SEXP num_threadsSEXP, SEXP compute_group_meanSEXP, SEXP compute_group_detectedSEXP, SEXP compute_delta_meanSEXP, SEXP compute_delta_detectedSEXP, SEXP compute_cohens_dSEXP, SEXP compute_aucSEXP) {
+Rcpp::List score_markers_best(SEXP x, int top, Rcpp::IntegerVector groups, int num_groups, Rcpp::Nullable<Rcpp::IntegerVector> block, std::string block_average_policy, std::string block_weight_policy, Rcpp::NumericVector variable_block_weight, double block_quantile, double threshold, int num_threads, bool compute_group_mean, bool compute_group_detected, bool compute_delta_mean, bool compute_delta_detected, bool compute_cohens_d, bool compute_auc, bool index_only);
+RcppExport SEXP _scrapper_score_markers_best(SEXP xSEXP, SEXP topSEXP, SEXP groupsSEXP, SEXP num_groupsSEXP, SEXP blockSEXP, SEXP block_average_policySEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP block_quantileSEXP, SEXP thresholdSEXP, SEXP num_threadsSEXP, SEXP compute_group_meanSEXP, SEXP compute_group_detectedSEXP, SEXP compute_delta_meanSEXP, SEXP compute_delta_detectedSEXP, SEXP compute_cohens_dSEXP, SEXP compute_aucSEXP, SEXP index_onlySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
@@ -614,7 +614,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type compute_delta_detected(compute_delta_detectedSEXP);
     Rcpp::traits::input_parameter< bool >::type compute_cohens_d(compute_cohens_dSEXP);
     Rcpp::traits::input_parameter< bool >::type compute_auc(compute_aucSEXP);
-    rcpp_result_gen = Rcpp::wrap(score_markers_best(x, top, groups, num_groups, block, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc));
+    Rcpp::traits::input_parameter< bool >::type index_only(index_onlySEXP);
+    rcpp_result_gen = Rcpp::wrap(score_markers_best(x, top, groups, num_groups, block, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc, index_only));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -714,7 +715,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_score_gene_set", (DL_FUNC) &_scrapper_score_gene_set, 11},
     {"_scrapper_score_markers_summary", (DL_FUNC) &_scrapper_score_markers_summary, 23},
     {"_scrapper_score_markers_pairwise", (DL_FUNC) &_scrapper_score_markers_pairwise, 16},
-    {"_scrapper_score_markers_best", (DL_FUNC) &_scrapper_score_markers_best, 17},
+    {"_scrapper_score_markers_best", (DL_FUNC) &_scrapper_score_markers_best, 18},
     {"_scrapper_set_executor", (DL_FUNC) &_scrapper_set_executor, 1},
     {"_scrapper_subsample_by_neighbors", (DL_FUNC) &_scrapper_subsample_by_neighbors, 3},
     {"_scrapper_summarize_effects", (DL_FUNC) &_scrapper_summarize_effects, 10},

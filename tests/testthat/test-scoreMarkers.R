@@ -193,6 +193,16 @@ test_that("scoreMarkers works as expected for the best pairwise statistics", {
     expect_false("detected" %in% names(aout))
     expect_equal(best$cohens.d, aout$cohens.d)
 
+    # Same results if we only want the top indices.
+    best.index <- scoreMarkers(x, g, all.pairwise=10, compute.auc=FALSE, compute.group=FALSE, compute.group.detected=FALSE, top.index.only=TRUE)
+    expect_identical(names(best.index$cohens.d), names(best$cohens.d))
+    for (n in names(best$cohens.d)) {
+        expect_identical(names(best.index$cohens.d[[n]]), names(best$cohens.d[[n]]))
+        for (n2 in names(best$cohens.d[[n]])) {
+            expect_identical(best.index$cohens.d[[n]][[n2]], best$cohens.d[[n]][[n2]]$index)
+        }
+    }
+
     # Works with blocking.
     b <- rep(1:3, length.out=ncol(x))
     bout <- scoreMarkers(x, g, block=b, block.weight.policy="equal", all.pairwise=10)

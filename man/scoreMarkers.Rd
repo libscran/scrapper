@@ -26,6 +26,7 @@ scoreMarkers(
   compute.summary.min.rank = TRUE,
   threshold = 0,
   all.pairwise = FALSE,
+  top.index.only = FALSE,
   min.rank.limit = 500,
   num.threads = 1
 )
@@ -98,6 +99,10 @@ Larger thresholds will favor genes with large differences at the expense of gene
 Alternatively, an integer scalar indicating the number of top markers to report from each pairwise comparison between groups.
 If \code{FALSE}, only the summary statistics are reported.}
 
+\item{top.index.only}{Boolean indicating whether to only report the indices of the top genes when \code{all.pairwise} is an integer.
+This is more efficient when the effect sizes of the top genes are not required.
+Ignored for all other values of \code{all.pairwise}.}
+
 \item{min.rank.limit}{Integer scalar specifying the maximum value of the min-rank to report.
 Lower values improve memory efficiency at the cost of discarding information about lower-ranked genes.
 Only used if \code{all.pairwise=FALSE}.}
@@ -146,7 +151,7 @@ Omitted if \code{compute.delta.mean=FALSE}.
 Omitted if \code{compute.delta.detected=FALSE}.
 }
 
-If \code{all.pairwise} is an integer, the list also contains:
+If \code{all.pairwise} is an integer and \code{top.index.only=FALSE}, the list also contains:
 \itemize{
 \item \code{cohens.d}, a list of list of \link[S4Vectors]{DataFrame}s containing the top genes with the largest Cohen's d for each pairwise comparison.
 Specifically, \code{cohens.d[[i]][[j]]} is a DataFrame that contains the top \code{all.pairwise} genes from the comparison of group \code{group.ids[i]} over group \code{group.ids[j]}. 
@@ -160,7 +165,18 @@ Omitted if \code{compute.delta.mean=FALSE}.
 Omitted if \code{compute.delta.detected=FALSE}.
 }
 
-All returned lists will also contain:
+If \code{all.pairwise} is an integer and \code{top.index.only=TRUE}, the list also contains:
+\itemize{
+\item \code{cohens.d}, a list of list of integer vectors containing the row indices of the top genes with the largest Cohen's d for each pairwise comparison.
+Specifically, \code{cohens.d[[i]][[j]]} is a vector that contains the top \code{all.pairwise} genes from the comparison of group \code{group.ids[i]} over group \code{group.ids[j]}. 
+Omitted if \code{compute.cohens.d=FALSE}.
+\item \code{auc}, a list of list of DataFrames like \code{cohens.d} but containing the AUCs from each pairwise comparison.
+Omitted if \code{compute.auc=FALSE}.
+\item \code{delta.mean}, a list of list of DataFrames like \code{cohens.d} but containing the delta-mean from each pairwise comparison.
+Omitted if \code{compute.delta.mean=FALSE}.
+\item \code{delta.detected}, a list of list of DataFrames like \code{cohens.d} but containing the delta-detected from each pairwise comparison.
+Omitted if \code{compute.delta.detected=FALSE}.
+}
 }
 \description{
 Score marker genes for each group using a variety of effect sizes from pairwise comparisons between groups.

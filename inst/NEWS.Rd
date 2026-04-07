@@ -14,6 +14,7 @@
 \item Support use of quantiles to average statistics across blocks, via the new \code{block.average.policy=} and \code{block.quantile=} arguments.
 \item Allow calculation of arbitrary quantiles as a summary statistic for the effect sizes of each group, via the new \code{compute.summary.quantiles=} argument.
 \item Output now contains the number of rows, row names and group IDs for easier interpretation by downstream functions.
+\item Added \code{top.index.only=} argument to report only the indices of the top genes when \code{all.pairwise=} is an integer.
 }
 \item Added arguments to \code{summarizeEffects()} to disable calculation of certain summary statistics, e.g., by setting \code{compute.summary.median=FALSE}.
 Also support calculation of arbitrary quantiles as described for \code{scoreMarkers()}.
