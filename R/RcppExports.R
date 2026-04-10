@@ -13,8 +13,8 @@ filter_adt_qc_metrics <- function(filters, metrics, block) {
     .Call('_scrapper_filter_adt_qc_metrics', PACKAGE = 'scrapper', filters, metrics, block)
 }
 
-aggregate_across_cells <- function(x, groups, nthreads) {
-    .Call('_scrapper_aggregate_across_cells', PACKAGE = 'scrapper', x, groups, nthreads)
+aggregate_across_cells <- function(x, groups, compute_sum, compute_detected, compute_median, num_threads) {
+    .Call('_scrapper_aggregate_across_cells', PACKAGE = 'scrapper', x, groups, compute_sum, compute_detected, compute_median, num_threads)
 }
 
 aggregate_across_genes <- function(x, sets, average, nthreads) {

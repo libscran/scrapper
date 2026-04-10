@@ -7,14 +7,22 @@
 #' @param x A matrix-like object where rows correspond to genes or genomic features and columns correspond to cells.
 #' Values are typically expected to be counts.
 #' @param factors A list or data frame (or their equivalents from \pkg{S4Vectors}) containing one or more grouping factors, see \code{\link{combineFactors}}.
+#' @param compute.sum Boolean indicating whether to compute the sum in each group.
+#' @param compute.detected Boolean indicating whether to compute the number of cells with detected expression in each group.
+#' @param compute.median Boolean indicating whether to compute the median in each group.
 #' @param num.threads Integer specifying the number of threads to be used for aggregation.
 #'
 #' @return A list containing:
 #' \itemize{
 #' \item \code{sums}, a numeric matrix where each row corresponds to a gene and each column corresponds to a unique combination of levels from \code{factors}.
 #' Each entry contains the summed expression across all cells with that combination. 
+#' Omitted if \code{compute.sum=FALSE}.
 #' \item \code{detected}, an integer matrix where each row corresponds to a gene and each column corresponds to a unique combination of levels from \code{factors}.
-#' Each entry contains the number of cells with detected expression in that combination.
+#' Each entry contains the number of cells with detected (i.e., positive) expression in that combination.
+#' Omitted if \code{compute.detected=FALSE}.
+#' \item \code{medians}, a numeric matrix where each row corresponds to a gene and each column corresponds to a unique combination of levels from \code{factors}.
+#' Each entry contains the median expression across all cells with that combination. 
+#' Omitted if \code{compute.median=FALSE}.
 #' \item \code{combinations}, a \link[S4Vectors]{DataFrame} containing the unique combination of levels from \code{factors}.
 #' Rows correspond to columns of \code{sums} and \code{detected}, while columns correspond to the factors in \code{factors}.
 #' \item \code{counts}, the number of cells associated with each combination.
@@ -49,14 +57,32 @@
 #' @export
 #' @importFrom beachmat initializeCpp
 #' @importFrom S4Vectors DataFrame
-aggregateAcrossCells <- function(x, factors, num.threads = 1) {
+aggregateAcrossCells <- function(
+    x,
+    factors,
+    compute.sum = TRUE,
+    compute.detected = TRUE,
+    compute.median = TRUE,
+    num.threads = 1
+) {
     .checkSEX(x, "aggregateAcrossCells.se")
 
     combined <- combineFactors(factors)
 
     ptr <- initializeCpp(x, .check.na=FALSE)
-    output <- aggregate_across_cells(ptr, combined$index - 1L, num.threads)
-    rownames(output$sums) <- rownames(output$detected) <- rownames(x)
+    output <- aggregate_across_cells(
+        ptr,
+        combined$index - 1L,
+        compute_sum = compute.sum,
+        compute_detected = compute.detected,
+        compute_median = compute.median,
+        num_threads = num.threads
+    )
+
+    output <- output[!vapply(output, is.null, TRUE)]
+    for (can in names(output)) {
+        rownames(output[[can]]) <- rownames(x)
+    }
 
     output$combinations <- combined$levels
     output$counts <- tabulate(combined$index, nbins=nrow(output$combinations))

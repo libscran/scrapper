@@ -50,6 +50,8 @@ This allows downstream C++ code to use a more efficient normalization wrapper vi
 Note that there are some very minor differences in the log-normalized values when computed in R via \code{extract_array()} and those in C++ via \pkg{tatami} extraction.
 \item Added the \code{countGroupsByBlock()} function to count the number of cells within each combination of group and block.
 This is primarily intended for diagnosing batch effects.
+\item Added options to control which statistics are computed in \code{aggregateAcrossCells()}.
+Also added bindings to compute the per-group medians via the \code{compute.median=} option.
 }}
 
 \section{Version 1.4.0}{\itemize{

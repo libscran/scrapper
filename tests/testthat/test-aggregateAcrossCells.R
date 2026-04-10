@@ -24,6 +24,20 @@ test_that("aggregateAcrossCells works for single factors", {
     expect_error(aggregateAcrossCells(SummarizedExperiment::SummarizedExperiment(x), list(cluster=clusters)), "not supported")
 })
 
+test_that("aggregateAcrossCells works for medians", {
+    x <- matrix(runif(100000), ncol=100)
+    clusters <- sample(LETTERS, 100, replace=TRUE)
+    agg <- aggregateAcrossCells(x, list(cluster=clusters), compute.sum=FALSE, compute.detected=FALSE, compute.median=TRUE)
+
+    for (u in unique(clusters)) {
+        chosen <- clusters == u
+        m <- match(u, agg$combinations[,1])
+        submat <- x[,chosen,drop=FALSE]
+        median.expected <- apply(submat, 1, median)
+        expect_equal(median.expected, agg$medians[,m])
+    }
+})
+
 test_that("aggregateAcrossCells works for multiple factors", {
     x <- round(abs(rsparsematrix(1000, 100, 0.1) * 100))
     clusters <- sample(LETTERS, 100, replace=TRUE)

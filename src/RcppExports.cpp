@@ -48,14 +48,17 @@ BEGIN_RCPP
 END_RCPP
 }
 // aggregate_across_cells
-SEXP aggregate_across_cells(SEXP x, Rcpp::IntegerVector groups, int nthreads);
-RcppExport SEXP _scrapper_aggregate_across_cells(SEXP xSEXP, SEXP groupsSEXP, SEXP nthreadsSEXP) {
+SEXP aggregate_across_cells(SEXP x, Rcpp::IntegerVector groups, bool compute_sum, bool compute_detected, bool compute_median, int num_threads);
+RcppExport SEXP _scrapper_aggregate_across_cells(SEXP xSEXP, SEXP groupsSEXP, SEXP compute_sumSEXP, SEXP compute_detectedSEXP, SEXP compute_medianSEXP, SEXP num_threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
     Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type groups(groupsSEXP);
-    Rcpp::traits::input_parameter< int >::type nthreads(nthreadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(aggregate_across_cells(x, groups, nthreads));
+    Rcpp::traits::input_parameter< bool >::type compute_sum(compute_sumSEXP);
+    Rcpp::traits::input_parameter< bool >::type compute_detected(compute_detectedSEXP);
+    Rcpp::traits::input_parameter< bool >::type compute_median(compute_medianSEXP);
+    Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(aggregate_across_cells(x, groups, compute_sum, compute_detected, compute_median, num_threads));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -680,7 +683,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_compute_adt_qc_metrics", (DL_FUNC) &_scrapper_compute_adt_qc_metrics, 3},
     {"_scrapper_suggest_adt_qc_thresholds", (DL_FUNC) &_scrapper_suggest_adt_qc_thresholds, 4},
     {"_scrapper_filter_adt_qc_metrics", (DL_FUNC) &_scrapper_filter_adt_qc_metrics, 3},
-    {"_scrapper_aggregate_across_cells", (DL_FUNC) &_scrapper_aggregate_across_cells, 3},
+    {"_scrapper_aggregate_across_cells", (DL_FUNC) &_scrapper_aggregate_across_cells, 6},
     {"_scrapper_aggregate_across_genes", (DL_FUNC) &_scrapper_aggregate_across_genes, 4},
     {"_scrapper_build_snn_graph", (DL_FUNC) &_scrapper_build_snn_graph, 3},
     {"_scrapper_graph_to_list", (DL_FUNC) &_scrapper_graph_to_list, 1},
