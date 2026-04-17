@@ -104,7 +104,9 @@ SEXP run_umap(
     opt.negative_sample_rate = negative_sample_rate;
     opt.optimize_seed = sanisizer::from_float<decltype(opt.optimize_seed)>(optimize_seed);
     opt.num_threads = num_threads;
-    opt.parallel_optimization = parallel_optimization;
+    if (parallel_optimization) {
+        opt.num_threads_optimize = num_threads;
+    }
 
     auto status = umappp::initialize(std::move(neighbors), sanisizer::cast<std::size_t>(num_dim), embedding.data(), opt);
     status.run(embedding.data());

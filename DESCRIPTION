@@ -1,6 +1,6 @@
 Package: scrapper
-Version: 1.5.17
-Date: 2026-04-10
+Version: 1.5.18
+Date: 2026-04-17
 Authors@R: person("Aaron", "Lun", role=c("cre", "aut"), email="infinite.monkeys.with.keyboards@gmail.com")
 Title: Bindings to C++ Libraries for Single-Cell Analysis
 Description: 
@@ -32,7 +32,7 @@ Suggests:
     igraph
 LinkingTo:
     Rcpp,
-    assorthead (>= 1.5.3),
+    assorthead (>= 1.5.16),
     beachmat,
     BiocNeighbors,
     Rigraphlib

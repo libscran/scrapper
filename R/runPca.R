@@ -53,7 +53,10 @@
 #' Only reported if \code{block} is provided. 
 #' \item \code{scale}, a numeric vector containing the scaling for each gene.
 #' Only reported if \code{scale=TRUE}.
-#' \item \code{converged}, a boolean indicating whether IRLBA converged successfully.
+#' \item \code{metrics}, a named list containing IRLBA metrics.
+#' This includes \code{converged}, whether the algorithm converged successfully;
+#' \code{iterations}, the number of IRLBA restart iterations;
+#' and \code{multiplications}, the number of matrix multiplications.
 #' }
 #'
 #' @details
@@ -132,7 +135,8 @@ runPca <- function(
         num_threads=num.threads
     )
 
-    if (!out$converged && warn) {
+    out$converged <- out$metrics$converged # For back-compatibility.
+    if (!out$metrics$converged && warn) {
         warning("convergence failure for the approximate PCA")
     }
 
