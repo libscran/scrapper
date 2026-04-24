@@ -109,7 +109,7 @@ aggregateAcrossCells.se <- function(
     if (length(altexps)) {
         CON <- SingleCellExperiment::SingleCellExperiment
     }
-    se <- CON(out[c("sums", "detected")], rowData=SummarizedExperiment::rowData(x))
+    se <- CON(out[intersect(names(out), c("sums", "detected", "medians"))], rowData=SummarizedExperiment::rowData(x))
 
     common.cd <- out$combinations
     colnames(common.cd) <- paste0(output.prefix, colnames(common.cd))
