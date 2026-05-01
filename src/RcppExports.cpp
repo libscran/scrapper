@@ -119,6 +119,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// center_spike_in_factors
+Rcpp::List center_spike_in_factors(Rcpp::NumericVector endogenous, Rcpp::List spike_ins, Rcpp::Nullable<Rcpp::IntegerVector> block, bool lowest);
+RcppExport SEXP _scrapper_center_spike_in_factors(SEXP endogenousSEXP, SEXP spike_insSEXP, SEXP blockSEXP, SEXP lowestSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type endogenous(endogenousSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type spike_ins(spike_insSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type block(blockSEXP);
+    Rcpp::traits::input_parameter< bool >::type lowest(lowestSEXP);
+    rcpp_result_gen = Rcpp::wrap(center_spike_in_factors(endogenous, spike_ins, block, lowest));
+    return rcpp_result_gen;
+END_RCPP
+}
 // choose_highly_variable_genes
 Rcpp::IntegerVector choose_highly_variable_genes(Rcpp::NumericVector stats, int top, bool larger, bool keep_ties, Rcpp::Nullable<Rcpp::NumericVector> bound);
 RcppExport SEXP _scrapper_choose_highly_variable_genes(SEXP statsSEXP, SEXP topSEXP, SEXP largerSEXP, SEXP keep_tiesSEXP, SEXP boundSEXP) {
@@ -690,6 +703,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_graph_to_list", (DL_FUNC) &_scrapper_graph_to_list, 1},
     {"_scrapper_list_to_graph", (DL_FUNC) &_scrapper_list_to_graph, 1},
     {"_scrapper_center_size_factors", (DL_FUNC) &_scrapper_center_size_factors, 3},
+    {"_scrapper_center_spike_in_factors", (DL_FUNC) &_scrapper_center_spike_in_factors, 4},
     {"_scrapper_choose_highly_variable_genes", (DL_FUNC) &_scrapper_choose_highly_variable_genes, 5},
     {"_scrapper_choose_pseudo_count", (DL_FUNC) &_scrapper_choose_pseudo_count, 4},
     {"_scrapper_cluster_multilevel", (DL_FUNC) &_scrapper_cluster_multilevel, 3},

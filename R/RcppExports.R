@@ -37,6 +37,10 @@ center_size_factors <- function(size_factors, block, lowest) {
     .Call('_scrapper_center_size_factors', PACKAGE = 'scrapper', size_factors, block, lowest)
 }
 
+center_spike_in_factors <- function(endogenous, spike_ins, block, lowest) {
+    .Call('_scrapper_center_spike_in_factors', PACKAGE = 'scrapper', endogenous, spike_ins, block, lowest)
+}
+
 choose_highly_variable_genes <- function(stats, top, larger, keep_ties, bound) {
     .Call('_scrapper_choose_highly_variable_genes', PACKAGE = 'scrapper', stats, top, larger, keep_ties, bound)
 }
