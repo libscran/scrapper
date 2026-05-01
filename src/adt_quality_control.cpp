@@ -24,9 +24,9 @@ Rcpp::List compute_adt_qc_metrics(SEXP x, Rcpp::List subsets, int num_threads) {
 
     // Creating output containers.
     scran_qc::ComputeAdtQcMetricsBuffers<double, int> buffers;
-    Rcpp::NumericVector sums(nc);
+    auto sums = sanisizer::create<Rcpp::NumericVector>(nc);
     buffers.sum = sums.begin();
-    Rcpp::IntegerVector detected(nc);
+    auto detected = sanisizer::create<Rcpp::IntegerVector>(nc);
     buffers.detected = detected.begin();
     std::vector<Rcpp::NumericVector> out_subsets;
     prepare_subset_metrics(nc, sub_ptrs.size(), out_subsets, buffers.subset_sum); 
@@ -127,7 +127,7 @@ Rcpp::LogicalVector filter_adt_qc_metrics(Rcpp::List filters, Rcpp::List metrics
 
     check_names(filters, { "detected", "subsets" });
 
-    Rcpp::LogicalVector keep(ncells);
+    auto keep = sanisizer::create<Rcpp::LogicalVector>(ncells);
     auto kptr = static_cast<int*>(keep.begin());
 
     auto block_info = MaybeBlock(block);

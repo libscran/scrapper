@@ -17,14 +17,14 @@ SEXP aggregate_across_genes(SEXP x, Rcpp::List sets, bool average, int nthreads)
     const auto NC = mat->ncol();
 
     // Converting the sets into something nice. We need to make explicit copies
-    // to ensure that we resolve any ALTREPs that might be present.
+    // of the indices to convert them to 0-based values.
     const auto nsets = sets.size();
     std::vector<std::vector<int> > indices;
-    indices.reserve(nsets);
-    std::vector<std::vector<double> > weights;
-    weights.reserve(nsets);
+    sanisizer::reserve(indices, nsets);
+    std::vector<Rcpp::NumericVector> weights;
+    sanisizer::reserve(weights, nsets);
     std::vector<std::tuple<std::size_t, const int*, const double*> > converted_sets;
-    converted_sets.reserve(nsets);
+    sanisizer::reserve(converted_sets, nsets);
 
     for (I<decltype(nsets)> s = 0; s < nsets; ++s) {
         Rcpp::RObject current = sets[s];
@@ -46,8 +46,8 @@ SEXP aggregate_across_genes(SEXP x, Rcpp::List sets, bool average, int nthreads)
                 throw std::runtime_error("list entries of 'sets' should have vectors of equal length");
             }
             indices.emplace_back(idx.begin(), idx.end());
-            weights.emplace_back(wt.begin(), wt.end());
-            wptr = weights.back().data();
+            weights.emplace_back(std::move(wt));
+            wptr = weights.back().begin();
 
         } else {
             throw std::runtime_error("unsupported type of 'sets' entry");
@@ -61,9 +61,9 @@ SEXP aggregate_across_genes(SEXP x, Rcpp::List sets, bool average, int nthreads)
 
     // Constructing the outputs.
     scran_aggregate::AggregateAcrossGenesBuffers<double> buffers;
-    buffers.sum.reserve(nsets);
+    sanisizer::reserve(buffers.sum, nsets);
     std::vector<Rcpp::NumericVector> tmp_output;
-    tmp_output.reserve(nsets);
+    sanisizer::reserve(tmp_output, nsets);
 
     sanisizer::as_size_type<Rcpp::NumericVector>(NC);
     for (I<decltype(nsets)> s = 0; s < nsets; ++s) {

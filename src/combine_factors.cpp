@@ -27,7 +27,7 @@ Rcpp::List combine_factors(Rcpp::List factors, bool keep_unused, Rcpp::IntegerVe
     }
 
     std::vector<Rcpp::IntegerVector> ibuffers;
-    ibuffers.reserve(nfac);
+    sanisizer::reserve(ibuffers, nfac);
     for (I<decltype(nfac)> f = 0; f < nfac; ++f) {
         ibuffers.emplace_back(factors[f]);
     }
@@ -39,7 +39,7 @@ Rcpp::List combine_factors(Rcpp::List factors, bool keep_unused, Rcpp::IntegerVe
         }
     }
 
-    Rcpp::IntegerVector oindices;
+    auto oindices = sanisizer::create<Rcpp::IntegerVector>(ngenes);
     Rcpp::List olevels;
 
     if (keep_unused) {
@@ -48,23 +48,21 @@ Rcpp::List combine_factors(Rcpp::List factors, bool keep_unused, Rcpp::IntegerVe
         }
 
         std::vector<std::pair<const int*, int> > buffers;
-        buffers.reserve(nfac);
+        sanisizer::reserve(buffers, nfac);
         for (I<decltype(nfac)> f = 0; f < nfac; ++f) {
             buffers.emplace_back(ibuffers[f].begin(), nlevels[f]);
         }
 
-        oindices = sanisizer::create<Rcpp::IntegerVector>(ngenes);
         auto res = factorize::combine_to_factor_unused(ngenes, buffers, static_cast<int*>(oindices.begin()));
         olevels = convert_to_index_list(res);
 
     } else {
         std::vector<const int*> buffers;
-        buffers.reserve(nfac);
+        sanisizer::reserve(buffers, nfac);
         for (I<decltype(nfac)> f = 0; f < nfac; ++f) {
             buffers.emplace_back(ibuffers[f].begin());
         }
 
-        oindices = Rcpp::IntegerVector(ngenes);
         auto res = factorize::combine_to_factor(ngenes, buffers, static_cast<int*>(oindices.begin()));
         olevels = convert_to_index_list(res);
     }

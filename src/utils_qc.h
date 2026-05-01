@@ -40,8 +40,8 @@ Vector_ parse_metrics(const Rcpp::RObject& raw_val, const char* field) {
 template<typename Ngenes_>
 void cast_subset_vectors(Ngenes_ ngenes, const Rcpp::List& subsets, std::vector<Rcpp::LogicalVector>& store, std::vector<const int*>& ptrs) {
     const auto nsub = subsets.size();
-    store.reserve(nsub);
-    ptrs.reserve(nsub);
+    sanisizer::reserve(store, nsub);
+    sanisizer::reserve(ptrs, nsub);
 
     for (auto sIt = subsets.begin(); sIt != subsets.end(); ++sIt) {
         store.emplace_back(safe_cast<Rcpp::LogicalVector, LGLSXP>(*sIt, []() -> std::string { return "each entry of 'subsets'"; }));
@@ -55,8 +55,8 @@ void cast_subset_vectors(Ngenes_ ngenes, const Rcpp::List& subsets, std::vector<
 
 template<typename Ncells_, typename Nsubsets_>
 void prepare_subset_metrics(Ncells_ ncells, Nsubsets_ nsubsets, std::vector<Rcpp::NumericVector>& store, std::vector<double*>& ptrs) {
-    store.reserve(nsubsets);
-    ptrs.reserve(nsubsets);
+    sanisizer::reserve(store, nsubsets);
+    sanisizer::reserve(ptrs, nsubsets);
     sanisizer::as_size_type<Rcpp::NumericVector>(ncells);
     for (I<decltype(nsubsets)> s = 0; s < nsubsets; ++s) {
         store.emplace_back(ncells);
@@ -68,7 +68,7 @@ template<typename Ncells_>
 void check_subset_metrics(Ncells_ ncells, const Rcpp::RObject& raw_input, std::vector<Rcpp::NumericVector>& store) {
     auto input = safe_cast<Rcpp::List, VECSXP>(raw_input, []() -> std::string { return "'metrics$subset'"; });
     const auto nsubs = input.size();
-    store.reserve(nsubs);
+    sanisizer::reserve(store, nsubs);
 
     for (I<decltype(nsubs)> s = 0; s < nsubs; ++s) {
         store.emplace_back(safe_cast<Rcpp::NumericVector, REALSXP>(input[s], []() -> std::string { return "each entry of 'metrics$subsets'"; }));
@@ -80,7 +80,7 @@ void check_subset_metrics(Ncells_ ncells, const Rcpp::RObject& raw_input, std::v
 
 inline Rcpp::List create_subset_filters(const std::vector<std::vector<double> >& filters) {
     const auto nsubs = filters.size();
-    Rcpp::List subs(nsubs);
+    auto subs = sanisizer::create<Rcpp::List>(nsubs);
     for (I<decltype(nsubs)> s = 0; s < nsubs; ++s) {
         const auto& current = filters[s];
         subs[s] = Rcpp::NumericVector(current.begin(), current.end());

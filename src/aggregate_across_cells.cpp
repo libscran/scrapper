@@ -34,7 +34,7 @@ SEXP aggregate_across_cells(
     Rcpp::NumericMatrix sums;
     if (compute_sum) {
         sums = create_matrix<Rcpp::NumericMatrix>(NR, ncombos);
-        buffers.sums.reserve(ncombos);
+        sanisizer::reserve(buffers.sums, ncombos);
         double* osum = sums.begin();
         for (I<decltype(ncombos)> i = 0; i < ncombos; ++i) {
             buffers.sums.push_back(osum + sanisizer::product_unsafe<std::size_t>(NR, i));
@@ -44,7 +44,7 @@ SEXP aggregate_across_cells(
     Rcpp::IntegerMatrix detected;
     if (compute_detected) {
         detected = create_matrix<Rcpp::IntegerMatrix>(NR, ncombos);
-        buffers.detected.reserve(ncombos);
+        sanisizer::reserve(buffers.detected, ncombos);
         int* odet = detected.begin();
         for (I<decltype(ncombos)> i = 0; i < ncombos; ++i) {
             buffers.detected.push_back(odet + sanisizer::product_unsafe<std::size_t>(NR, i));
@@ -54,7 +54,7 @@ SEXP aggregate_across_cells(
     Rcpp::NumericMatrix medians;
     if (compute_median) {
         medians = create_matrix<Rcpp::NumericMatrix>(NR, ncombos);
-        buffers.medians.reserve(ncombos);
+        sanisizer::resize(buffers.medians, ncombos);
         double* omedian = medians.begin();
         for (I<decltype(ncombos)> i = 0; i < ncombos; ++i) {
             buffers.medians.push_back(omedian + sanisizer::product_unsafe<std::size_t>(NR, i));

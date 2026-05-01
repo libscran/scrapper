@@ -19,7 +19,7 @@ Rcpp::NumericVector test_enrichment(Rcpp::IntegerVector overlap, int num_interes
     opt.upper_tail = true;
     opt.log = log;
 
-    Rcpp::NumericVector output(nsets);
+    auto output = sanisizer::create<Rcpp::NumericVector>(nsets);
     double* optr = output.begin(); // avoid Rcpp inside the parallel section.
     const int* olptr = overlap.begin();
     const int* ssptr = set_sizes.begin();

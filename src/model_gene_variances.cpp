@@ -95,11 +95,11 @@ Rcpp::List model_gene_variances(
         sanisizer::resize(bbuffers.per_block, nblocks);
 
         std::vector<Rcpp::NumericVector> block_mean, block_var, block_fit, block_res;
-        block_mean.reserve(nblocks);
-        block_var.reserve(nblocks);
+        sanisizer::reserve(block_mean, nblocks);
+        sanisizer::reserve(block_var, nblocks);
         if (fit_trend) {
-            block_fit.reserve(nblocks);
-            block_res.reserve(nblocks);
+            sanisizer::reserve(block_fit, nblocks);
+            sanisizer::reserve(block_res, nblocks);
         }
 
         for (I<decltype(nblocks)> b = 0; b < nblocks; ++b) {

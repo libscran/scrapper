@@ -19,7 +19,7 @@ std::vector<std::vector<std::pair<Index_, Distance_> > > unpack_neighbors(Rcpp::
     auto neighbors = sanisizer::create<std::vector<std::vector<std::pair<Index_, Distance_> > > >(nobs);
     for (I<decltype(nobs)> i = 0; i < nobs; ++i) {
         auto& current = neighbors[i];
-        current.reserve(nneighbors);
+        sanisizer::reserve(current, nneighbors);
         for (I<decltype(nneighbors)> k = 0; k < nneighbors; ++k) {
             const auto offset = sanisizer::nd_offset<std::size_t>(k, nneighbors, i);
             current.emplace_back(iptr[offset] - 1, dptr[offset]);

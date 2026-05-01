@@ -15,7 +15,7 @@
 template<typename Nrow_, typename Ngroups_>
 void configure_group_vectors(Rcpp::NumericMatrix& store, std::vector<double*>& ptrs, Nrow_ NR, Ngroups_ num_groups) { 
     store = create_matrix<Rcpp::NumericMatrix>(NR, num_groups);
-    ptrs.reserve(num_groups);
+    sanisizer::reserve(ptrs, num_groups);
     for (I<decltype(num_groups)> g = 0; g < num_groups; ++g) {
         const auto out_offset = sanisizer::product_unsafe<std::size_t>(g, NR);
         ptrs.emplace_back(store.begin() + out_offset);
@@ -313,7 +313,12 @@ Rcpp::List score_markers_pairwise(
         configure_group_vectors(detected, buffers.detected, NR, num_groups);
     }
 
-    Rcpp::Dimension dim(num_groups, num_groups, NR);
+    Rcpp::Dimension dim(
+        sanisizer::cast<std::size_t>(num_groups),
+        num_groups, // also a size_t, but safety is covered by the previous statement.
+        sanisizer::cast<std::size_t>(NR)
+    );
+
     Rcpp::NumericVector cohens_d, auc, delta_mean, delta_detected;
     if (compute_cohens_d) {
         cohens_d = Rcpp::NumericVector(dim);
@@ -438,9 +443,9 @@ Rcpp::List score_markers_best(
     }
 
     const auto transfer_effects = [&](Rcpp::List& store, std::vector<std::vector<std::vector<std::pair<int, double> > > >& vecs) -> void {
-        store = Rcpp::List(num_groups);
+        store = sanisizer::create<Rcpp::List>(num_groups);
         for (I<decltype(num_groups)> g = 0; g < num_groups; ++g) {
-            Rcpp::List current(num_groups);
+            auto current = sanisizer::create<Rcpp::List>(num_groups);
             for (I<decltype(num_groups)> g2 = 0; g2 < num_groups; ++g2) {
                 if (g == g2) {
                     continue;

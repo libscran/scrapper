@@ -32,7 +32,7 @@ Rcpp::List cluster_multilevel(SEXP ptr0, double resolution, double seed) {
     scran_graph_cluster::cluster_multilevel(graph.get(), weight_view_ptr, opt, res);
 
     const auto nlevels = res.levels.nrow();
-    Rcpp::List levels(nlevels);
+    auto levels = sanisizer::create<Rcpp::List>(nlevels);
     for (I<decltype(nlevels)> l = 0; l < nlevels; ++l) {
         auto incol = res.levels.row(l);
         levels[l] = Rcpp::IntegerVector(incol.begin(), incol.end());

@@ -9,6 +9,7 @@
 #include <optional>
 
 #include "scran_markers/scran_markers.hpp"
+#include "sanisizer/sanisizer.hpp"
 
 #include "utils_other.h"
 
@@ -30,25 +31,25 @@ inline void initialize_summary_buffers(
     const bool compute_min_rank,
     std::vector<Rcpp::IntegerVector>& min_rank
 ) {
-    ptrs.resize(num_groups);
+    sanisizer::resize(ptrs, num_groups);
 
     if (compute_min) {
-        min.reserve(num_groups);
+        sanisizer::reserve(min, num_groups);
     }
     if (compute_mean) {
-        mean.reserve(num_groups);
+        sanisizer::reserve(mean, num_groups);
     }
     if (compute_median) {
-        median.reserve(num_groups);
+        sanisizer::reserve(median, num_groups);
     }
     if (compute_max) {
-        max.reserve(num_groups);
+        sanisizer::reserve(max, num_groups);
     }
     if (num_quantiles) {
-        quantiles.reserve(num_groups);
+        sanisizer::reserve(quantiles, num_groups);
     }
     if (compute_min_rank) {
-        min_rank.reserve(num_groups);
+        sanisizer::reserve(min_rank, num_groups);
     }
 
     for (I<decltype(num_groups)> g = 0; g < num_groups; ++g) {
@@ -71,9 +72,9 @@ inline void initialize_summary_buffers(
         }
         if (num_quantiles) {
             quantiles.emplace_back();
-            quantiles.back().reserve(num_quantiles);
+            sanisizer::reserve(quantiles.back(), num_quantiles);
             curptr.quantiles.emplace();
-            curptr.quantiles->reserve(num_quantiles);
+            sanisizer::reserve(*(curptr.quantiles), num_quantiles);
             for (I<decltype(num_groups)> q = 0; q < num_quantiles; ++q) {
                 quantiles.back().emplace_back(num_genes);
                 curptr.quantiles->push_back(quantiles.back().back().begin());

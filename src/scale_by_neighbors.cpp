@@ -23,7 +23,7 @@ Rcpp::NumericVector scale_by_neighbors(
 ) {
     const auto nmod = embedding.size();
     std::vector<std::pair<double, double> > values;
-    values.reserve(nmod);
+    sanisizer::reserve(values, nmod);
 
     auto block_info = MaybeBlock(block);
     auto ptr = block_info.get();
