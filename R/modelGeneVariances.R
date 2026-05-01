@@ -10,7 +10,7 @@
 #' The weighted average of each statistic across all blocks is reported for each gene.
 #' Alternatively \code{NULL}, if all cells are from the same block.
 #' @param block.average.policy String specifying the policy to use for average statistics across blocks.
-#' This can either be a (weighted) \code{"mean"} or a \code{"quantile"}.
+#' This can either be \code{"mean"} (to compute a weighted mean), \code{"quantile"} (to compute a quantile) or \code{"none"} (no averaging).
 #' Only used if \code{block} is not \code{NULL}. 
 #' @param block.weight.policy String specifying the policy to use for weighting different blocks when computing the average for each statistic.
 #' See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
@@ -21,6 +21,9 @@
 #' @param block.quantile Number specifying the probability of the quantile of statistics across blocks. 
 #' Defaults to 0.5, i.e., the median of per-block statistics.
 #' Only used if \code{block} is not \code{NULL} and \code{block.average.policy="quantile"}.
+#' @param fit.trend Boolean indicating whether a mean-variance trend should be fitted.
+#' If \code{FALSE}, only the means and variances are computed.
+#' This can occasionally be useful when the trend is computed separately (e.g., spike-ins).
 #' @inheritParams fitVarianceTrend
 #' @param num.threads Integer scalar specifying the number of threads to use.
 #'
@@ -38,6 +41,10 @@
 #' If \code{block} is supplied, each of the column vectors described above contains the average across all blocks.
 #' The list will also contain \code{per.block}, a list of DataFrames containing the equivalent statistics for each block;
 #' and \code{block.ids}, a vector containing the identities of the unique blocks in the same order as \code{per.block}.
+#'
+#' If \code{block} is supplied and \code{block.average.policy = "none"}, the \code{statistics} DataFrame will have no columns.
+#'
+#' If \code{fit.trend = FALSE}, the \code{fitted} and \code{residuals} columns will be omitted from all DataFrames.
 #'
 #' @author Aaron Lun
 #'
@@ -62,31 +69,34 @@
 #' @importFrom S4Vectors DataFrame
 modelGeneVariances <- function(
     x,
-    block=NULL,
-    block.average.policy=c("mean", "quantile"),
-    block.weight.policy=c("variable", "equal", "none"),
-    variable.block.weight=c(0, 1000),
-    block.quantile=0.5,
-    mean.filter=TRUE,
-    min.mean=0.1, 
-    transform=TRUE, 
-    span=0.3,
-    use.min.width=FALSE,
-    min.width=1,
-    min.window.count=200,
-    num.threads=1
+    block = NULL,
+    block.average.policy = c("mean", "quantile", "none"),
+    block.weight.policy = c("variable", "equal", "none"),
+    variable.block.weight = c(0, 1000),
+    block.quantile = 0.5,
+    fit.trend = TRUE,
+    mean.filter = TRUE,
+    min.mean = 0.1, 
+    transform = TRUE, 
+    span = 0.3,
+    use.min.width = FALSE,
+    min.width = 1,
+    min.window.count = 200,
+    num.threads = 1
 ) {
     .checkSEX(x, "chooseRnaHvgs.se")
     block <- .transformFactor(block)
+    block.average.policy <- match.arg(block.average.policy);
 
-    stats <- model_gene_variances(
+    computed <- model_gene_variances(
         initializeCpp(x, .check.na=FALSE),
         block=block$index,
         nblocks=length(block$names),
-        block_average_policy=match.arg(block.average.policy),
+        block_average_policy = block.average.policy,
         block_weight_policy=match.arg(block.weight.policy),
         variable_block_weight=variable.block.weight,
         block_quantile=block.quantile,
+        fit_trend = fit.trend,
         mean_filter=mean.filter,
         min_mean=min.mean,
         transform=transform,
@@ -97,27 +107,28 @@ modelGeneVariances <- function(
         num_threads=num.threads
     )
 
-    output <- list(
-        statistics = DataFrame(
-            means = stats$means,
-            variances = stats$variances,
-            fitted = stats$fitted,
-            residuals = stats$residuals,
-            row.names = rownames(x)
-        )
-    )
+    if (block.average.policy == "none") {
+        stats <- make_zero_col_DFrame(nrow(x))
+    } else {
+        stats <- DataFrame(means = computed$means, variances = computed$variances)
+        if (fit.trend) {
+            stats$fitted <- computed$fitted
+            stats$residuals <- computed$residuals
+        }
+    }
+    rownames(stats) <- rownames(x)
+    output <- list(statistics = stats)
 
     if (!is.null(block$index)) {
-        pb <- stats$per.block
+        pb <- computed$per.block
         for (i in seq_along(pb)) {
-            curstats <- pb[[i]]
-            pb[[i]] <- DataFrame( 
-                means = curstats$means,
-                variances = curstats$variances,
-                fitted = curstats$fitted,
-                residuals = curstats$residuals,
-                row.names = rownames(x)
-            )
+            curcomp <- pb[[i]]
+            curstats <- DataFrame(means = curcomp$means, variances = curcomp$variances, row.names = rownames(x))
+            if (fit.trend) {
+                curstats$fitted <- curcomp$fitted
+                curstats$residuals <- curcomp$residuals
+            }
+            pb[[i]] <- curstats
         }
         names(pb) <- block$names
         output$per.block <- pb

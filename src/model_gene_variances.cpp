@@ -19,6 +19,7 @@ Rcpp::List model_gene_variances(
     std::string block_weight_policy,
     Rcpp::NumericVector variable_block_weight,
     double block_quantile,
+    bool fit_trend,
     bool mean_filter,
     double min_mean,
     bool transform,
@@ -38,12 +39,15 @@ Rcpp::List model_gene_variances(
     opt.fit_variance_trend_options.minimum_window_count = min_window_count;
     opt.num_threads = num_threads;
 
-    if (block_average_policy == "mean") {
-        opt.block_average_policy = scran_variances::BlockAveragePolicy::MEAN;
-    } else if (block_average_policy == "quantile") {
-        opt.block_average_policy = scran_variances::BlockAveragePolicy::QUANTILE;
-    } else {
-        throw std::runtime_error("block average policy should be either 'mean' or 'quantile'");
+    const bool average_block = (block_average_policy != "none");
+    if (average_block) {
+        if (block_average_policy == "mean") {
+            opt.block_average_policy = scran_variances::BlockAveragePolicy::MEAN;
+        } else if (block_average_policy == "quantile") {
+            opt.block_average_policy = scran_variances::BlockAveragePolicy::QUANTILE;
+        } else {
+            throw std::runtime_error("block average policy should be either 'mean' or 'quantile'");
+        }
     }
 
     opt.block_weight_policy = parse_block_weight_policy(block_weight_policy);
@@ -56,12 +60,28 @@ Rcpp::List model_gene_variances(
     const auto nr = mat->nrow();
 
     sanisizer::as_size_type<Rcpp::NumericVector>(nr);
-    Rcpp::NumericVector means(nr), variances(nr), fitted(nr), residuals(nr);
+    Rcpp::NumericVector means(average_block ? nr : 0),
+        variances(average_block ? nr : 0),
+        fitted(average_block && fit_trend ? nr : 0),
+        residuals(average_block && fit_trend ? nr : 0);
+
     scran_variances::ModelGeneVariancesBuffers<double> buffers;
-    buffers.means = means.begin();
-    buffers.variances = variances.begin();
-    buffers.fitted = fitted.begin();
-    buffers.residuals = residuals.begin();
+    if (average_block) {
+        buffers.means = means.begin();
+        buffers.variances = variances.begin();
+        if (fit_trend) {
+            buffers.fitted = fitted.begin();
+            buffers.residuals = residuals.begin();
+        } else {
+            buffers.fitted = NULL;
+            buffers.residuals = NULL;
+        }
+    } else {
+        buffers.means = NULL;
+        buffers.variances = NULL;
+        buffers.fitted = NULL;
+        buffers.residuals = NULL;
+    }
 
     auto block_info = MaybeBlock(block);
     auto ptr = block_info.get();
@@ -77,47 +97,61 @@ Rcpp::List model_gene_variances(
         std::vector<Rcpp::NumericVector> block_mean, block_var, block_fit, block_res;
         block_mean.reserve(nblocks);
         block_var.reserve(nblocks);
-        block_fit.reserve(nblocks);
-        block_res.reserve(nblocks);
+        if (fit_trend) {
+            block_fit.reserve(nblocks);
+            block_res.reserve(nblocks);
+        }
 
         for (I<decltype(nblocks)> b = 0; b < nblocks; ++b) {
             block_mean.emplace_back(nr);
             bbuffers.per_block[b].means = block_mean.back().begin();
             block_var.emplace_back(nr);
             bbuffers.per_block[b].variances = block_var.back().begin();
-            block_fit.emplace_back(nr);
-            bbuffers.per_block[b].fitted = block_fit.back().begin();
-            block_res.emplace_back(nr);
-            bbuffers.per_block[b].residuals = block_res.back().begin();
+            if (fit_trend) {
+                block_fit.emplace_back(nr);
+                bbuffers.per_block[b].fitted = block_fit.back().begin();
+                block_res.emplace_back(nr);
+                bbuffers.per_block[b].residuals = block_res.back().begin();
+            } else {
+                bbuffers.per_block[b].fitted = NULL; 
+                bbuffers.per_block[b].residuals = NULL;
+            }
         }
 
         scran_variances::model_gene_variances_blocked(*mat, ptr, bbuffers, opt);
 
         auto pb = sanisizer::create<Rcpp::List>(nblocks);
         for (I<decltype(nblocks)> b = 0; b < nblocks; ++b) {
-            pb[b] = Rcpp::List::create(
-                Rcpp::Named("means") = block_mean[b],
-                Rcpp::Named("variances") = block_var[b],
-                Rcpp::Named("fitted") = block_fit[b],
-                Rcpp::Named("residuals") = block_res[b]
+            auto block_out = Rcpp::List::create(
+                Rcpp::Named("means") = std::move(block_mean[b]),
+                Rcpp::Named("variances") = std::move(block_var[b])
             );
+            if (fit_trend) {
+                block_out["fitted"] = std::move(block_fit[b]);
+                block_out["residuals"] = std::move(block_res[b]);
+            }
+            pb[b] = std::move(block_out);
         }
 
-        return Rcpp::List::create(
-            Rcpp::Named("means") = means,
-            Rcpp::Named("variances") = variances,
-            Rcpp::Named("fitted") = fitted,
-            Rcpp::Named("residuals") = residuals,
-            Rcpp::Named("per.block") = pb
-        );
+        Rcpp::List output;
+        if (average_block) {
+            output["means"] = std::move(means);
+            output["variances"] = std::move(variances);
+            if (fit_trend) {
+                output["fitted"] = fitted;
+                output["residuals"] = residuals;
+            }
+        }
+        output["per.block"] = pb;
+        return output;
 
     } else {
         scran_variances::model_gene_variances(*mat, buffers, opt);
-        return Rcpp::List::create(
-            Rcpp::Named("means") = means,
-            Rcpp::Named("variances") = variances,
-            Rcpp::Named("fitted") = fitted,
-            Rcpp::Named("residuals") = residuals
-        );
+        auto output = Rcpp::List::create(Rcpp::Named("means") = means, Rcpp::Named("variances") = variances);
+        if (fit_trend) {
+            output["fitted"] = fitted;
+            output["residuals"] = residuals;
+        }
+        return output;
     }
 }

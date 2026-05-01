@@ -93,8 +93,8 @@ fit_variance_trend <- function(means, variances, mean_filter, min_mean, transfor
     .Call('_scrapper_fit_variance_trend', PACKAGE = 'scrapper', means, variances, mean_filter, min_mean, transform, span, use_min_width, min_width, min_window_count, num_threads)
 }
 
-model_gene_variances <- function(x, block, nblocks, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, mean_filter, min_mean, transform, span, use_min_width, min_width, min_window_count, num_threads) {
-    .Call('_scrapper_model_gene_variances', PACKAGE = 'scrapper', x, block, nblocks, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, mean_filter, min_mean, transform, span, use_min_width, min_width, min_window_count, num_threads)
+model_gene_variances <- function(x, block, nblocks, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, fit_trend, mean_filter, min_mean, transform, span, use_min_width, min_width, min_window_count, num_threads) {
+    .Call('_scrapper_model_gene_variances', PACKAGE = 'scrapper', x, block, nblocks, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, fit_trend, mean_filter, min_mean, transform, span, use_min_width, min_width, min_window_count, num_threads)
 }
 
 normalize_counts <- function(x, size_factors, log, pseudo_count, log_base, preserve_sparsity) {

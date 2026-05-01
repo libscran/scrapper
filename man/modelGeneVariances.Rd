@@ -7,10 +7,11 @@
 modelGeneVariances(
   x,
   block = NULL,
-  block.average.policy = c("mean", "quantile"),
+  block.average.policy = c("mean", "quantile", "none"),
   block.weight.policy = c("variable", "equal", "none"),
   variable.block.weight = c(0, 1000),
   block.quantile = 0.5,
+  fit.trend = TRUE,
   mean.filter = TRUE,
   min.mean = 0.1,
   transform = TRUE,
@@ -31,7 +32,7 @@ The weighted average of each statistic across all blocks is reported for each ge
 Alternatively \code{NULL}, if all cells are from the same block.}
 
 \item{block.average.policy}{String specifying the policy to use for average statistics across blocks.
-This can either be a (weighted) \code{"mean"} or a \code{"quantile"}.
+This can either be \code{"mean"} (to compute a weighted mean), \code{"quantile"} (to compute a quantile) or \code{"none"} (no averaging).
 Only used if \code{block} is not \code{NULL}.}
 
 \item{block.weight.policy}{String specifying the policy to use for weighting different blocks when computing the average for each statistic.
@@ -45,6 +46,10 @@ Only used if \code{block} is not \code{NULL}, \code{block.average.policy="mean"}
 \item{block.quantile}{Number specifying the probability of the quantile of statistics across blocks. 
 Defaults to 0.5, i.e., the median of per-block statistics.
 Only used if \code{block} is not \code{NULL} and \code{block.average.policy="quantile"}.}
+
+\item{fit.trend}{Boolean indicating whether a mean-variance trend should be fitted.
+If \code{FALSE}, only the means and variances are computed.
+This can occasionally be useful when the trend is computed separately (e.g., spike-ins).}
 
 \item{mean.filter}{Logical scalar indicating whether to filter on the means before trend fitting.
 The assumption is that there is a bulk of low-abundance genes that are uninteresting and should be removed to avoid skewing the windows of the LOWESS smoother.}
@@ -87,6 +92,10 @@ each of which is a numeric vector containing the statistic of the same name acro
 If \code{block} is supplied, each of the column vectors described above contains the average across all blocks.
 The list will also contain \code{per.block}, a list of DataFrames containing the equivalent statistics for each block;
 and \code{block.ids}, a vector containing the identities of the unique blocks in the same order as \code{per.block}.
+
+If \code{block} is supplied and \code{block.average.policy = "none"}, the \code{statistics} DataFrame will have no columns.
+
+If \code{fit.trend = FALSE}, the \code{fitted} and \code{residuals} columns will be omitted from all DataFrames.
 }
 \description{
 Model the per-gene variances as a function of the mean in single-cell expression data.

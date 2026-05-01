@@ -25,6 +25,9 @@ test_that("modelGeneVariances works without blocking", {
     expect_equal(out2$residuals, fit2$residuals)
 
     expect_error(modelGeneVariances(SummarizedExperiment::SummarizedExperiment(x)), "not supported")
+
+    nofit <- modelGeneVariances(x, fit.trend = FALSE)
+    expect_identical(out[,c("means", "variances")], nofit$statistics)
 })
 
 test_that("modelGeneVariances works with blocking", {
@@ -48,4 +51,17 @@ test_that("modelGeneVariances works with blocking", {
     expect_equal(average.fitted, out$statistics$fitted)
     average.residuals <- rowMeans(do.call(cbind, lapply(out$per.block, function(x) x$residuals)))
     expect_equal(average.residuals, out$statistics$residuals)
+
+    noave <- modelGeneVariances(x, block, block.average.policy="none")
+    expect_identical(dim(noave$statistics), c(nrow(x), 0L))
+    expect_identical(dim(noave$statistics), c(nrow(x), 0L))
+    expect_identical(out$per.block, noave$per.block)
+
+    ref <- modelGeneVariances(x, block)
+    nofit <- modelGeneVariances(x, block, fit.trend = FALSE)
+    expect_identical(ref$block.ids, nofit$block.ids)
+    expect_identical(ref$statistics[,c("means", "variances")], nofit$statistics)
+    for (b in ref$block.ids) {
+        expect_identical(ref$per.block[[b]][,c("means", "variances")], nofit$per.block[[b]])
+    }
 })
