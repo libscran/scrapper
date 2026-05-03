@@ -18,8 +18,9 @@ Rcpp::List score_gene_set(
     Rcpp::NumericVector variable_block_weight,
     bool scale,
     bool realized,
-    int irlba_work,
+    Rcpp::Nullable<Rcpp::IntegerVector> irlba_work,
     int irlba_iterations,
+    double irlba_tolerance,
     double irlba_seed,
     int num_threads
 ) {
@@ -34,8 +35,9 @@ Rcpp::List score_gene_set(
     opt.block_weight_policy = parse_block_weight_policy(block_weight_policy);
     opt.variable_block_weight_parameters = parse_variable_block_weight(variable_block_weight);
     opt.realize_matrix = realized;
-    opt.irlba_options.extra_work = irlba_work;
+    set_optional_integer(irlba_work, opt.irlba_options.extra_work);
     opt.irlba_options.max_iterations = irlba_iterations;
+    opt.irlba_options.convergence_tolerance = irlba_tolerance;
     opt.irlba_options.seed = sanisizer::from_float<I<decltype(opt.irlba_options.seed)> >(irlba_seed);
     opt.num_threads = num_threads;
 

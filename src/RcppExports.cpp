@@ -412,8 +412,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // run_pca
-Rcpp::List run_pca(SEXP x, int number, Rcpp::Nullable<Rcpp::IntegerVector> block, std::string block_weight_policy, Rcpp::NumericVector variable_block_weight, bool components_from_residuals, bool scale, Rcpp::Nullable<Rcpp::IntegerVector> subset, bool realized, int irlba_work, int irlba_iterations, double irlba_seed, int num_threads);
-RcppExport SEXP _scrapper_run_pca(SEXP xSEXP, SEXP numberSEXP, SEXP blockSEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP components_from_residualsSEXP, SEXP scaleSEXP, SEXP subsetSEXP, SEXP realizedSEXP, SEXP irlba_workSEXP, SEXP irlba_iterationsSEXP, SEXP irlba_seedSEXP, SEXP num_threadsSEXP) {
+Rcpp::List run_pca(SEXP x, int number, Rcpp::Nullable<Rcpp::IntegerVector> block, std::string block_weight_policy, Rcpp::NumericVector variable_block_weight, bool components_from_residuals, bool scale, Rcpp::Nullable<Rcpp::IntegerVector> subset, bool realized, Rcpp::Nullable<Rcpp::IntegerVector> irlba_work, int irlba_iterations, double irlba_tolerance, double irlba_seed, int num_threads);
+RcppExport SEXP _scrapper_run_pca(SEXP xSEXP, SEXP numberSEXP, SEXP blockSEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP components_from_residualsSEXP, SEXP scaleSEXP, SEXP subsetSEXP, SEXP realizedSEXP, SEXP irlba_workSEXP, SEXP irlba_iterationsSEXP, SEXP irlba_toleranceSEXP, SEXP irlba_seedSEXP, SEXP num_threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
@@ -425,11 +425,12 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type scale(scaleSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type subset(subsetSEXP);
     Rcpp::traits::input_parameter< bool >::type realized(realizedSEXP);
-    Rcpp::traits::input_parameter< int >::type irlba_work(irlba_workSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type irlba_work(irlba_workSEXP);
     Rcpp::traits::input_parameter< int >::type irlba_iterations(irlba_iterationsSEXP);
+    Rcpp::traits::input_parameter< double >::type irlba_tolerance(irlba_toleranceSEXP);
     Rcpp::traits::input_parameter< double >::type irlba_seed(irlba_seedSEXP);
     Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(run_pca(x, number, block, block_weight_policy, variable_block_weight, components_from_residuals, scale, subset, realized, irlba_work, irlba_iterations, irlba_seed, num_threads));
+    rcpp_result_gen = Rcpp::wrap(run_pca(x, number, block, block_weight_policy, variable_block_weight, components_from_residuals, scale, subset, realized, irlba_work, irlba_iterations, irlba_tolerance, irlba_seed, num_threads));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -533,8 +534,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // score_gene_set
-Rcpp::List score_gene_set(SEXP x, int rank, Rcpp::Nullable<Rcpp::IntegerVector> block, std::string block_weight_policy, Rcpp::NumericVector variable_block_weight, bool scale, bool realized, int irlba_work, int irlba_iterations, double irlba_seed, int num_threads);
-RcppExport SEXP _scrapper_score_gene_set(SEXP xSEXP, SEXP rankSEXP, SEXP blockSEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP scaleSEXP, SEXP realizedSEXP, SEXP irlba_workSEXP, SEXP irlba_iterationsSEXP, SEXP irlba_seedSEXP, SEXP num_threadsSEXP) {
+Rcpp::List score_gene_set(SEXP x, int rank, Rcpp::Nullable<Rcpp::IntegerVector> block, std::string block_weight_policy, Rcpp::NumericVector variable_block_weight, bool scale, bool realized, Rcpp::Nullable<Rcpp::IntegerVector> irlba_work, int irlba_iterations, double irlba_tolerance, double irlba_seed, int num_threads);
+RcppExport SEXP _scrapper_score_gene_set(SEXP xSEXP, SEXP rankSEXP, SEXP blockSEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP scaleSEXP, SEXP realizedSEXP, SEXP irlba_workSEXP, SEXP irlba_iterationsSEXP, SEXP irlba_toleranceSEXP, SEXP irlba_seedSEXP, SEXP num_threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
@@ -544,11 +545,12 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type variable_block_weight(variable_block_weightSEXP);
     Rcpp::traits::input_parameter< bool >::type scale(scaleSEXP);
     Rcpp::traits::input_parameter< bool >::type realized(realizedSEXP);
-    Rcpp::traits::input_parameter< int >::type irlba_work(irlba_workSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type irlba_work(irlba_workSEXP);
     Rcpp::traits::input_parameter< int >::type irlba_iterations(irlba_iterationsSEXP);
+    Rcpp::traits::input_parameter< double >::type irlba_tolerance(irlba_toleranceSEXP);
     Rcpp::traits::input_parameter< double >::type irlba_seed(irlba_seedSEXP);
     Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(score_gene_set(x, rank, block, block_weight_policy, variable_block_weight, scale, realized, irlba_work, irlba_iterations, irlba_seed, num_threads));
+    rcpp_result_gen = Rcpp::wrap(score_gene_set(x, rank, block, block_weight_policy, variable_block_weight, scale, realized, irlba_work, irlba_iterations, irlba_tolerance, irlba_seed, num_threads));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -737,13 +739,13 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_compute_rna_qc_metrics", (DL_FUNC) &_scrapper_compute_rna_qc_metrics, 3},
     {"_scrapper_suggest_rna_qc_thresholds", (DL_FUNC) &_scrapper_suggest_rna_qc_thresholds, 3},
     {"_scrapper_filter_rna_qc_metrics", (DL_FUNC) &_scrapper_filter_rna_qc_metrics, 3},
-    {"_scrapper_run_pca", (DL_FUNC) &_scrapper_run_pca, 13},
+    {"_scrapper_run_pca", (DL_FUNC) &_scrapper_run_pca, 14},
     {"_scrapper_run_tsne", (DL_FUNC) &_scrapper_run_tsne, 15},
     {"_scrapper_perplexity_to_neighbors", (DL_FUNC) &_scrapper_perplexity_to_neighbors, 1},
     {"_scrapper_run_umap", (DL_FUNC) &_scrapper_run_umap, 25},
     {"_scrapper_sanitize_size_factors", (DL_FUNC) &_scrapper_sanitize_size_factors, 5},
     {"_scrapper_scale_by_neighbors", (DL_FUNC) &_scrapper_scale_by_neighbors, 8},
-    {"_scrapper_score_gene_set", (DL_FUNC) &_scrapper_score_gene_set, 11},
+    {"_scrapper_score_gene_set", (DL_FUNC) &_scrapper_score_gene_set, 12},
     {"_scrapper_score_markers_summary", (DL_FUNC) &_scrapper_score_markers_summary, 23},
     {"_scrapper_score_markers_pairwise", (DL_FUNC) &_scrapper_score_markers_pairwise, 16},
     {"_scrapper_score_markers_best", (DL_FUNC) &_scrapper_score_markers_best, 18},

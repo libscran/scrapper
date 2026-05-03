@@ -34,8 +34,9 @@ Rcpp::List run_pca(
     bool scale,
     Rcpp::Nullable<Rcpp::IntegerVector> subset,
     bool realized,
-    int irlba_work,
+    Rcpp::Nullable<Rcpp::IntegerVector> irlba_work,
     int irlba_iterations,
+    double irlba_tolerance,
     double irlba_seed,
     int num_threads
 ) {
@@ -44,8 +45,9 @@ Rcpp::List run_pca(
     auto ptr = block_info.get();
 
     irlba::Options iopt;
-    iopt.extra_work = irlba_work;
+    set_optional_integer(irlba_work, iopt.extra_work);
     iopt.max_iterations = irlba_iterations;
+    iopt.convergence_tolerance = irlba_tolerance;
     iopt.seed = sanisizer::from_float<I<decltype(iopt.seed)> >(irlba_seed);
     iopt.cap_number = true;
 

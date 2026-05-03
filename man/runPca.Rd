@@ -13,8 +13,9 @@ runPca(
   variable.block.weight = c(0, 1000),
   components.from.residuals = FALSE,
   subset = NULL,
-  extra.work = 7,
+  extra.work = NULL,
   iterations = 1000,
+  tolerance = 1e-05,
   seed = 5489,
   realized = TRUE,
   warn = TRUE,
@@ -54,11 +55,15 @@ Only used if \code{block} is not \code{NULL}.}
 This yields the same results as \code{runPca} on \code{x[subset,]}, except that entries of the rotation matrix will also be computed for rows outside of the subset.
 If \code{NULL}, all rows of \code{x} are used.}
 
-\item{extra.work}{Integer scalar specifying the extra dimensions for the IRLBA workspace.
-Larger values improve accuracy at the cost of compute time.}
+\item{extra.work}{Integer scalar specifying the number of extra dimensions for the IRLBA workspace.
+Larger values improve accuracy at the cost of compute time.
+If \code{NULL}, it defaults to the larger of 7 and \code{number}.}
 
 \item{iterations}{Integer scalar specifying the maximum number of restart iterations for IRLBA.
 Larger values improve accuracy at the cost of compute time.}
+
+\item{tolerance}{Number specifying the tolerance on the approximation error of the singular triplets, to determine IRLBA convergence.
+Lower values improve accuracy at the cost of compute time.}
 
 \item{seed}{Integer scalar specifying the seed for the initial random vector in IRLBA.}
 

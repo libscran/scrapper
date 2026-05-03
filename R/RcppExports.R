@@ -121,8 +121,8 @@ filter_rna_qc_metrics <- function(filters, metrics, block) {
     .Call('_scrapper_filter_rna_qc_metrics', PACKAGE = 'scrapper', filters, metrics, block)
 }
 
-run_pca <- function(x, number, block, block_weight_policy, variable_block_weight, components_from_residuals, scale, subset, realized, irlba_work, irlba_iterations, irlba_seed, num_threads) {
-    .Call('_scrapper_run_pca', PACKAGE = 'scrapper', x, number, block, block_weight_policy, variable_block_weight, components_from_residuals, scale, subset, realized, irlba_work, irlba_iterations, irlba_seed, num_threads)
+run_pca <- function(x, number, block, block_weight_policy, variable_block_weight, components_from_residuals, scale, subset, realized, irlba_work, irlba_iterations, irlba_tolerance, irlba_seed, num_threads) {
+    .Call('_scrapper_run_pca', PACKAGE = 'scrapper', x, number, block, block_weight_policy, variable_block_weight, components_from_residuals, scale, subset, realized, irlba_work, irlba_iterations, irlba_tolerance, irlba_seed, num_threads)
 }
 
 run_tsne <- function(nnidx, nndist, perplexity, theta, early_exaggeration_iterations, exaggeration_factor, momentum_switch_iterations, start_momentum, final_momentum, eta, max_depth, leaf_approx, max_iter, seed, num_threads) {
@@ -145,8 +145,8 @@ scale_by_neighbors <- function(num_cells, embedding, num_neighbors, block, block
     .Call('_scrapper_scale_by_neighbors', PACKAGE = 'scrapper', num_cells, embedding, num_neighbors, block, block_weight_policy, variable_block_weight, num_threads, nn_builder)
 }
 
-score_gene_set <- function(x, rank, block, block_weight_policy, variable_block_weight, scale, realized, irlba_work, irlba_iterations, irlba_seed, num_threads) {
-    .Call('_scrapper_score_gene_set', PACKAGE = 'scrapper', x, rank, block, block_weight_policy, variable_block_weight, scale, realized, irlba_work, irlba_iterations, irlba_seed, num_threads)
+score_gene_set <- function(x, rank, block, block_weight_policy, variable_block_weight, scale, realized, irlba_work, irlba_iterations, irlba_tolerance, irlba_seed, num_threads) {
+    .Call('_scrapper_score_gene_set', PACKAGE = 'scrapper', x, rank, block, block_weight_policy, variable_block_weight, scale, realized, irlba_work, irlba_iterations, irlba_tolerance, irlba_seed, num_threads)
 }
 
 score_markers_summary <- function(x, groups, num_groups, block, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc, compute_summary_min, compute_summary_mean, compute_summary_median, compute_summary_max, compute_summary_quantiles, compute_summary_min_rank, min_rank_limit) {

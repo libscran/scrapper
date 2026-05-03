@@ -4,6 +4,7 @@
 #include "config.h"
 
 #include <type_traits>
+#include <optional>
 
 #include "sanisizer/sanisizer.hpp"
 
@@ -16,6 +17,21 @@ Matrix_ create_matrix(Rows_ rows, Cols_ cols) {
         sanisizer::cast<I<decltype(std::declval<Matrix_>().nrow())> >(rows),
         sanisizer::cast<I<decltype(std::declval<Matrix_>().ncol())> >(cols)
     );
+}
+
+template<typename Vector_, typename Type_>
+auto set_optional_integer(const Rcpp::Nullable<Vector_>& source, std::optional<Type_>& target) {
+    if (source.isNull()) {
+        return;
+    }
+
+    static_assert(std::is_same<Vector_, Rcpp::IntegerVector>::value);
+    static_assert(std::is_integral<Type_>::value);
+    Rcpp::IntegerVector src(source);
+    if (src.size() != 1) {
+        throw std::runtime_error("expected an integer scalar or NULL");
+    }
+    target = sanisizer::cast<Type_>(src[0]);
 }
 
 #endif

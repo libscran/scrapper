@@ -45,8 +45,9 @@ scoreGeneSet <- function(
     block=NULL, 
     block.weight.policy=c("variable", "equal", "none"),
     variable.block.weight=c(0, 1000),
-    extra.work=7,
+    extra.work = NULL,
     iterations=1000,
+    tolerance = 1e-5,
     seed=5489,
     realized=TRUE,
     num.threads=1) 
@@ -70,6 +71,7 @@ scoreGeneSet <- function(
         realized=realized,
         irlba_work=extra.work,
         irlba_iterations=iterations,
+        irlba_tolerance = tolerance,
         irlba_seed=seed,
         num_threads=num.threads
     )
