@@ -658,6 +658,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// subsample_by_partition
+SEXP subsample_by_partition(Rcpp::IntegerVector partitions, int target, double seed, bool force_non_empty);
+RcppExport SEXP _scrapper_subsample_by_partition(SEXP partitionsSEXP, SEXP targetSEXP, SEXP seedSEXP, SEXP force_non_emptySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type partitions(partitionsSEXP);
+    Rcpp::traits::input_parameter< int >::type target(targetSEXP);
+    Rcpp::traits::input_parameter< double >::type seed(seedSEXP);
+    Rcpp::traits::input_parameter< bool >::type force_non_empty(force_non_emptySEXP);
+    rcpp_result_gen = Rcpp::wrap(subsample_by_partition(partitions, target, seed, force_non_empty));
+    return rcpp_result_gen;
+END_RCPP
+}
 // summarize_effects
 SEXP summarize_effects(int num_genes, int num_groups, Rcpp::NumericVector effects, bool compute_summary_min, bool compute_summary_mean, bool compute_summary_median, bool compute_summary_max, Rcpp::Nullable<Rcpp::NumericVector> compute_summary_quantiles, bool compute_summary_min_rank, int num_threads);
 RcppExport SEXP _scrapper_summarize_effects(SEXP num_genesSEXP, SEXP num_groupsSEXP, SEXP effectsSEXP, SEXP compute_summary_minSEXP, SEXP compute_summary_meanSEXP, SEXP compute_summary_medianSEXP, SEXP compute_summary_maxSEXP, SEXP compute_summary_quantilesSEXP, SEXP compute_summary_min_rankSEXP, SEXP num_threadsSEXP) {
@@ -736,6 +749,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_score_markers_best", (DL_FUNC) &_scrapper_score_markers_best, 18},
     {"_scrapper_set_executor", (DL_FUNC) &_scrapper_set_executor, 1},
     {"_scrapper_subsample_by_neighbors", (DL_FUNC) &_scrapper_subsample_by_neighbors, 3},
+    {"_scrapper_subsample_by_partition", (DL_FUNC) &_scrapper_subsample_by_partition, 4},
     {"_scrapper_summarize_effects", (DL_FUNC) &_scrapper_summarize_effects, 10},
     {"_scrapper_test_enrichment", (DL_FUNC) &_scrapper_test_enrichment, 6},
     {NULL, NULL, 0}
