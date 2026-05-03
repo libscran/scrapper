@@ -47,7 +47,7 @@ quickCrisprQc.se <- function(
     output.prefix = NULL,
     meta.name = "qc"
 ) {
-    metrics <- computeCrisprQcMetrics(SummarizedExperiment::assay(x, assay.type, withDimnames=FALSE), num.threads=num.threads)
+    metrics <- computeCrisprQcMetrics(SummarizedExperiment::assay(x, assay.type), num.threads=num.threads)
 
     if (is.null(thresholds)) {
         thresholds <- .call(

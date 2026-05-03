@@ -28,7 +28,18 @@ test_that("quickAdtQc.se works as expected", {
     expect_null(metadata(out4)$qc)
 })
 
-test_that("quickRnaQc.se works with custom thresholds", {
+test_that("quickAdtQc.se works with character subsets", {
+    ref <- quickAdtQc.se(se, subsets=list(Mt=1:10))
+
+    # Check that we set the rownames when extracting the assay.
+    copy <- se
+    rownames(copy) <- sprintf("GENE_%s", seq_len(nrow(copy)))
+    out <- quickAdtQc.se(copy, subsets=list(Mt=rownames(copy)[1:10]))
+
+    expect_identical(colData(out), colData(ref))
+})
+
+test_that("quickAdtQc.se works with custom thresholds", {
     fixed <- list(sum=1, detected=1)
     out <- quickAdtQc.se(se, subsets=list(), thresholds=fixed)
 

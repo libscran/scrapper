@@ -52,7 +52,7 @@ quickAdtQc.se <- function(
     meta.name = "qc",
     flatten = TRUE
 ) {
-    metrics <- computeAdtQcMetrics(SummarizedExperiment::assay(x, assay.type, withDimnames=FALSE), subsets, num.threads=num.threads)
+    metrics <- computeAdtQcMetrics(SummarizedExperiment::assay(x, assay.type), subsets, num.threads=num.threads)
 
     if (is.null(thresholds)) {
         thresholds <- .call(

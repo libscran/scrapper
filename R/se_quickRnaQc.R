@@ -133,7 +133,7 @@ quickRnaQc.se <- function(
 #' @export
 #' @rdname quickRnaQc.se
 computeRnaQcMetricsWithAltExps <- function(x, subsets, altexp.proportions, num.threads = 1, assay.type = "counts") {
-    metrics <- computeRnaQcMetrics(SummarizedExperiment::assay(x, assay.type, withDimnames=FALSE), subsets, num.threads=num.threads)
+    metrics <- computeRnaQcMetrics(SummarizedExperiment::assay(x, assay.type), subsets, num.threads=num.threads)
 
     # Adding more proportions from the alternative experiments, mostly for spike-ins.
     altexp.collected <- list()

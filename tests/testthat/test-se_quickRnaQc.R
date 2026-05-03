@@ -28,6 +28,17 @@ test_that("quickRnaQc.se works as expected", {
     expect_null(metadata(out4)$qc)
 })
 
+test_that("quickRnaQc.se works with character subsets", {
+    ref <- quickRnaQc.se(se, subsets=list(Mt=1:10))
+
+    # Check that we set the rownames when extracting the assay.
+    copy <- se
+    rownames(copy) <- sprintf("GENE_%s", seq_len(nrow(copy)))
+    out <- quickRnaQc.se(copy, subsets=list(Mt=rownames(copy)[1:10]))
+
+    expect_identical(colData(out), colData(ref))
+})
+
 test_that("quickRnaQc.se works with alternative experiments", {
     sce <- as(se, "SingleCellExperiment")
     altExp(sce, "ERCC") <- se[1:20,]
