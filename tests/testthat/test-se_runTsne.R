@@ -8,4 +8,9 @@ reducedDim(sce, "PCA") <- matrix(runif(1000), nrow=200)
 test_that("runTsne.se works as expected", {
     out <- runTsne.se(sce)
     expect_true("TSNE" %in% reducedDimNames(out))
+    expect_identical(colnames(reducedDim(out, "TSNE")), c("TSNE1", "TSNE2"))
+
+    out <- runTsne.se(sce, dim.prefix=NULL)
+    expect_true("TSNE" %in% reducedDimNames(out))
+    expect_null(colnames(reducedDim(out, "TSNE")))
 })

@@ -14,6 +14,9 @@
 #' Alternatively, a named integer or character vector of length 1,
 #' where the name specifies an alternative experiment of \code{x} and the value is the name/index of a \code{reducedDim} entry in that alternative experiment.
 #' @param output.name String containing the name of the output \code{\link[SingleCellExperiment]{reducedDim}}. 
+#' @param dim.prefix String containing a prefix for the column names of the t-SNE coordinate matrix.
+#' Each column is named as \code{dim.prefix} followed by its column number.
+#' If \code{NULL}, no column names are added.
 #'
 #' @return \code{x} is returned with the UMAP coordinates stored in the \code{reducedDim}.
 #'
@@ -33,8 +36,9 @@ runUmap.se <- function(
     num.neighbors = 15,
     num.threads = 1,
     more.umap.args = list(),
-    reddim.type = "PCA", 
-    output.name = "UMAP"
+    reddim.type = "PCA",
+    output.name = "UMAP",
+    dim.prefix = "UMAP"
 ) {
     res <- .call(
         runUmap,
@@ -43,10 +47,13 @@ runUmap.se <- function(
         more.umap.args
     )
 
-    .addUmapResults(x, output.name, res)
+    .addUmapResults(x, output.name, res, dim.prefix)
 }
 
-.addUmapResults <- function(x, output.name, res) {
+.addUmapResults <- function(x, output.name, res, dim.prefix) {
+    if (!is.null(dim.prefix)) {
+        colnames(res) <- sprintf("%s%s", dim.prefix, seq_len(ncol(res)))
+    }
     SingleCellExperiment::reducedDim(x, output.name) <- res
     x
 }

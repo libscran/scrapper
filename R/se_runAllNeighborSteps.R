@@ -24,6 +24,10 @@
 #' @param reddim.type String or integer specifying the \code{\link[SingleCellExperiment]{reducedDim}} entry on which to perform a nearest neighbor search.
 #' Alternatively, a named integer or character vector of length 1,
 #' where the name specifies an alternative experiment of \code{x} and the value is the name/index of a \code{reducedDim} entry in that alternative experiment.
+#' @param tsne.dim.prefix String containing a prefix for the column names of the t-SNE coordinate matrix,
+#' see the \code{dim.prefix} argument in \code{\link{runTsne.se}} for details.
+#' @param umap.dim.prefix String containing a prefix for the column names of the UMAP coordinate matrix,
+#' see the \code{dim.prefix} argument in \code{\link{runUmap.se}} for details.
 #'
 #' @return \code{x} is returned with additional coordinates stored in its \code{\link[SingleCellExperiment]{reducedDims}}
 #' and clustering output in its \code{\link[SummarizedExperiment]{colData}}.
@@ -48,8 +52,10 @@
 runAllNeighborSteps.se <- function(
     x,
     umap.output.name = "UMAP",
+    umap.dim.prefix = "UMAP",
     more.umap.args = list(),
     tsne.output.name = "TSNE",
+    tsne.dim.prefix = "TSNE",
     more.tsne.args = list(),
     build.graph.name = NULL,
     more.build.graph.args = list(),
@@ -87,10 +93,10 @@ runAllNeighborSteps.se <- function(
     )
 
     if (!is.null(outputs$runTsne)) {
-        x <- .addTsneResults(x, outputs$runTsne, output.name=tsne.output.name)
+        x <- .addTsneResults(x, outputs$runTsne, output.name=tsne.output.name, dim.prefix=tsne.dim.prefix)
     }
     if (!is.null(outputs$runUmap)) {
-        x <- .addUmapResults(x, outputs$runUmap, output.name=umap.output.name)
+        x <- .addUmapResults(x, outputs$runUmap, output.name=umap.output.name, dim.prefix=umap.dim.prefix)
     }
     if (!is.null(outputs$clusterGraph)) {
         x <- .addBuildGraphResults(x, outputs$buildSnnGraph, graph.name=build.graph.name)

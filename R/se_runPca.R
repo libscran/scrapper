@@ -17,6 +17,9 @@
 #' @param output.name String containing the name of the \code{\link[SingleCellExperiment]{reducedDim}} entry in which to store the PC scores.
 #' @param meta.name String containing the name of the \code{link[S4Vectors]{metadata}} entry in which to store other PCA statistics.
 #' @param delayed.transpose Logical scalar indicating whether to delay the transposition when storing coordinates in the \code{\link[SingleCellExperiment]{reducedDims}}.
+#' @param dim.prefix String containing a prefix for the column names of the score and rotation matrices.
+#' Each column is named as \code{dim.prefix} followed by its column number.
+#' If \code{NULL}, no column names are added.
 #'
 #' @return \code{x} is returned with the principal component scores in the \code{reducedDim}.
 #' (This is converted to a \link[SingleCellExperiment]{SingleCellExperiment} if it wasn't one already.)
@@ -44,6 +47,7 @@ runPca.se <- function(
     assay.type = "logcounts",
     output.name = "PCA",
     meta.name = "PCA",
+    dim.prefix = "PC",
     delayed.transpose = FALSE
 ) {
     y <- SummarizedExperiment::assay(x, assay.type)
@@ -57,6 +61,11 @@ runPca.se <- function(
         list(number=number, block=block, num.threads=num.threads),
         more.pca.args
     )
+
+    if (!is.null(dim.prefix)) {
+        rownames(out$components) <- sprintf("%s%s", dim.prefix, seq_len(nrow(out$components)))
+        colnames(out$rotation) <- sprintf("%s%s", dim.prefix, seq_len(ncol(out$rotation)))
+    }
 
     if (!is(x, "SingleCellExperiment")) {
         loadNamespace("SingleCellExperiment")

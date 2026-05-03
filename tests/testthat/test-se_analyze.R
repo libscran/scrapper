@@ -63,7 +63,7 @@ test_that("analyze.se works correctly with blocking", {
     # Confirm that blocked coordinates are actually used downstream.
     downstream <- runAllNeighborSteps(as.matrix(t(reducedDim(res$x, "MNN"))), runTsne.args=list(max.iterations=10), runUmap.args=list(num.epochs=5), num.threads=1)
     expect_identical(downstream$clusterGraph$membership, res$x$graph.cluster)
-    expect_identical(downstream$runTsne, reducedDim(res$x, "TSNE"))
+    expect_identical(downstream$runTsne, unname(reducedDim(res$x, "TSNE")))
 })
 
 test_that("analyze.se works correctly with combined RNA+ADT", {
@@ -112,7 +112,7 @@ test_that("analyze.se works correctly with combined RNA+ADT", {
     # Confirm that scaled coordinates are actually used downstream.
     ref <- runAllNeighborSteps(as.matrix(t(reducedDim(res$x, "combined"))), runTsne.args=list(max.iterations=10), runUmap.args=list(num.epochs=5), num.threads=1)
     expect_identical(ref$clusterGraph$membership, res$x$graph.cluster)
-    expect_identical(ref$runTsne, reducedDim(res$x, "TSNE"))
+    expect_identical(ref$runTsne, unname(reducedDim(res$x, "TSNE")))
 
     # Fails if neither ADT or RNA is supplied.
     expect_error(analyze.se(sce, use.rna.pcs=FALSE, use.adt.pcs=FALSE), "at least one")

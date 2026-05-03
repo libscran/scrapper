@@ -7,8 +7,10 @@
 runAllNeighborSteps.se(
   x,
   umap.output.name = "UMAP",
+  umap.dim.prefix = "UMAP",
   more.umap.args = list(),
   tsne.output.name = "TSNE",
+  tsne.dim.prefix = "TSNE",
   more.tsne.args = list(),
   build.graph.name = NULL,
   more.build.graph.args = list(),
@@ -28,10 +30,16 @@ Rows correspond to genomic features and columns correspond to cells.}
 \item{umap.output.name}{String containing the name of the \code{\link[SingleCellExperiment]{reducedDim}} entry to store the UMAP coordinates.
 If \code{NULL}, the UMAP is not computed.}
 
+\item{umap.dim.prefix}{String containing a prefix for the column names of the UMAP coordinate matrix,
+see the \code{dim.prefix} argument in \code{\link{runUmap.se}} for details.}
+
 \item{more.umap.args}{Named list of additional arguments to pass to \code{\link{runAllNeighborSteps}} as \code{runUmap.args}.}
 
 \item{tsne.output.name}{String containing the name of the \code{\link[SingleCellExperiment]{reducedDim}} entry to store the t-SNE coordinates.
 If \code{NULL}, the t-SNE is not computed.}
+
+\item{tsne.dim.prefix}{String containing a prefix for the column names of the t-SNE coordinate matrix,
+see the \code{dim.prefix} argument in \code{\link{runTsne.se}} for details.}
 
 \item{more.tsne.args}{Named list of additional arguments to pass to \code{\link{runAllNeighborSteps}} as \code{runTsne.args}.}
 

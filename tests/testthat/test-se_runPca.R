@@ -8,7 +8,9 @@ test_that("runPca.se works as expected", {
     out <- runPca.se(sce, features=1:50) 
     expect_true("PCA" %in% reducedDimNames(out))
     expect_identical(nrow(metadata(out)$PCA$rotation), 50L)
+    expect_identical(colnames(metadata(out)$PCA$rotation), sprintf("PC%i", seq_len(25)))
     expect_identical(length(metadata(out)$PCA$variance.explained), 25L)
+    expect_identical(colnames(reducedDim(out)), sprintf("PC%i", seq_len(25)))
 
     # Works with features set to NULL.
     null <- runPca.se(sce[1:50,], features=NULL) 
@@ -17,6 +19,11 @@ test_that("runPca.se works as expected", {
 
     no.meta <- runPca.se(sce, features=1:10, meta.name=NULL)
     expect_null(metadata(no.meta)$PCA)
+
+    # Works when we strip the dim prefixes.
+    out <- runPca.se(sce, features=1:50, dim.prefix=NULL) 
+    expect_null(colnames(metadata(out)$PCA$rotation))
+    expect_null(colnames(reducedDim(out)))
 })
 
 test_that("runPca.se works with a basic SE", {

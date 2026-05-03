@@ -10,7 +10,8 @@ runTsne.se(
   num.threads = 1,
   more.tsne.args = list(),
   reddim.type = "PCA",
-  output.name = "TSNE"
+  output.name = "TSNE",
+  dim.prefix = "TSNE"
 )
 }
 \arguments{
@@ -28,6 +29,10 @@ Alternatively, a named integer or character vector of length 1,
 where the name specifies an alternative experiment of \code{x} and the value is the name/index of a \code{reducedDim} entry in that alternative experiment.}
 
 \item{output.name}{String containing the name of the output \code{\link[SingleCellExperiment]{reducedDim}}.}
+
+\item{dim.prefix}{String containing a prefix for the column names of the t-SNE coordinate matrix.
+Each column is named as \code{dim.prefix} followed by its column number.
+If \code{NULL}, no column names are added.}
 }
 \value{
 \code{x} is returned with the t-SNE coordinates stored in the \code{reducedDim}.
