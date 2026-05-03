@@ -20,7 +20,8 @@ chooseRnaHvgsWithSpikeIns.se(
 }
 \arguments{
 \item{x}{A \link[SingleCellExperiment]{SingleCellExperiment} or one of its subclasses.
-The main experiment should contain count data for endogenous genes, where rows correspond to genes and columns correspond to cells.}
+The main experiment should contain count data for endogenous genes, where rows correspond to genes and columns correspond to cells.
+There should be one or more alternative experiments containing spike-in data, see \code{spike.altexp}.}
 
 \item{spike.altexp}{Integer or string specifying the name/index of the alternative experiment containing the spike-in data.
 The assay to use is determined by \code{assay.type}.
@@ -64,8 +65,8 @@ Per-transcript modelling statistics are also added to the \code{rowData} of the 
 This has all of the same columns returned by \code{\link{modelGeneVariances}}.
 }
 \description{
-Fit a mean-variance trend to spike-in transcripts, and use this to estimate the technical noise for endogenous genes of similar abundance.
-Highly variable genes are then selected based on the biological component of variation.
+Fit a mean-variance trend to spike-in transcripts, and use this trend to estimate the technical noise for endogenous genes of similar abundance.
+The biological component of variation are defined as the residuals from the trend and used to select highly variable genes.
 }
 \details{
 It is generally expected that normalization has been performed with \code{\link{normalizeRnaCountsWithSpikeIns.se}}.

@@ -1,11 +1,11 @@
 #' Normalize RNA and spike-in counts
 #'
 #' Compute (log-)normalized expression values for endogenous genes and spike-in transcripts after scaling normalization.
-#' Spike-in data should be stored as alternative experiments in a \link[SingleCellExperiment]{SingleCellExperiment}.
 #' All sets of size factors are centered with \code{\link{centerSpikeInFactors}} prior to calling \code{\link{normalizeCounts}} on the relevant assays.
 #'
 #' @param x A \link[SingleCellExperiment]{SingleCellExperiment} or one of its subclasses.
 #' The main experiment should contain count data for endogenous genes, where rows correspond to genes and columns correspond to cells.
+#' There should also be one or more alternative experiments containing spike-in data, see \code{spike.altexps}.
 #' @param spike.altexps Alternative experiments containing spike-in data.
 #' This should be an unnamed integer or character vector containing the names/indices of the alternative experiments of interest.
 #' The assay to use from each alternative experiment is determined by \code{assay.type}.
@@ -29,7 +29,7 @@
 #' This is useful for removing technical differences in scaling while preserving differences in total RNA content between cells.
 #'
 #' Alternatively, this may be a string specifying the name of the spike-in set from which to obtain size factors for normalization of the endogenous counts.
-#' Any string should be present in \code{spike.altexps}.
+#' This should refer to one of the alternative experiments in \code{spike.altexps}.
 #'
 #' @return \code{x} is returned with new assays containing (log-)normalized matrices for endogenous genes and spike-in transcripts.
 #' Size factors are also stored in the \code{\link[SummarizedExperiment]{colData}} for each experiment.

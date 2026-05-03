@@ -9,6 +9,7 @@ Description:
     Additional wrappers are provided for easy construction of end-to-end workflows involving Bioconductor objects like SingleCellExperiments.
 License: MIT + file LICENSE
 Imports:
+    stats,
     methods,
     Rcpp,
     beachmat (>= 2.25.1),
@@ -54,4 +55,4 @@ URL: https://github.com/libscran/scrapper
 BugReports: https://github.com/libscran/scrapper/issues
 VignetteBuilder: knitr
 Encoding: UTF-8
-RoxygenNote: 7.3.3
+Config/roxygen2/version: 8.0.0

@@ -1,6 +1,6 @@
 #' Normalize RNA counts in a SummarizedExperiment
 #'
-#' Compute (log-)normalized expression values after performing scaling normalization of an RNA count matrix.
+#' Compute (log-)normalized expression values for a RNA count matrix after scaling normalization.
 #' This calls \code{\link{normalizeCounts}} on an assay of a \link[SummarizedExperiment]{SummarizedExperiment},
 #' after centering the size factors with \code{\link{centerSizeFactors}}.
 #'
@@ -34,6 +34,9 @@
 #' sce <- normalizeRnaCounts.se(sce, size.factors=sce$sum)
 #' assayNames(sce)
 #' summary(sizeFactors(sce))
+#'
+#' @seealso
+#' \code{\link{normalizeRnaCountsWithSpikeIns.se}}, to normalize RNA data with spike-in transcripts.
 #'
 #' @export
 #' @importFrom beachmat initializeCpp tatami.column.sums

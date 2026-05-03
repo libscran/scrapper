@@ -72,6 +72,9 @@ plot(rowData(sce)$means, rowData(sce)$variances, col=factor(rowData(sce)$hvg))
 curve(approxfun(rowData(sce)$means, rowData(sce)$fitted)(x), col="dodgerblue", add=TRUE)
 
 }
+\seealso{
+\code{\link{chooseRnaHvgsWithSpikeIns.se}}, to choose HVGs with technical noise estimates from spike-in data.
+}
 \author{
 Aaron Lun
 }

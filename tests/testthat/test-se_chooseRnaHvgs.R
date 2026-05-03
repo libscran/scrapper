@@ -9,7 +9,7 @@ se <- normalizeRnaCounts.se(se)
 
 test_that("chooseRnaHvgs.se works as expected", {
     out <- chooseRnaHvgs.se(se, top=20)
-    expect_false(is.null(rowData(out)$means))
+    expect_type(rowData(out)$means, "double")
     expect_true(any(rowData(out)$hvg))
     expect_false(all(rowData(out)$hvg))
 

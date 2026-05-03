@@ -15,7 +15,7 @@
 #' @author Aaron Lun
 #'
 #' @seealso
-#' \code{\link{downsampleByNeighbors}}, for an alternative downsampling strategy.
+#' \code{\link{subsampleByNeighbors}}, for an alternative downsampling strategy.
 #' 
 #' @examples
 #' x <- matrix(rnorm(10000), nrow=5)

@@ -1,10 +1,11 @@
 #' Choose highly variable genes based on spike-ins
 #'
-#' Fit a mean-variance trend to spike-in transcripts, and use this to estimate the technical noise for endogenous genes of similar abundance.
-#' Highly variable genes are then selected based on the biological component of variation.
+#' Fit a mean-variance trend to spike-in transcripts, and use this trend to estimate the technical noise for endogenous genes of similar abundance.
+#' The biological component of variation are defined as the residuals from the trend and used to select highly variable genes. 
 #'
 #' @param x A \link[SingleCellExperiment]{SingleCellExperiment} or one of its subclasses.
 #' The main experiment should contain count data for endogenous genes, where rows correspond to genes and columns correspond to cells.
+#' There should be one or more alternative experiments containing spike-in data, see \code{spike.altexp}.
 #' @param spike.altexp Integer or string specifying the name/index of the alternative experiment containing the spike-in data.
 #' The assay to use is determined by \code{assay.type}.
 #'
@@ -53,6 +54,7 @@
 #' curve(approxfun(spike.rd$means, spike.rd$fitted)(x), col="dodgerblue", add=TRUE)
 #' 
 #' @export
+#' @importFrom stats approx
 chooseRnaHvgsWithSpikeIns.se <- function(
     x,
     spike.altexp,

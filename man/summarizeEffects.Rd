@@ -68,7 +68,7 @@ For example, a large \code{quantile[["20"]]} would mean that the gene is upregul
 The exact definition of \dQuote{large} depends on the choice of effect size.
 For signed effects like Cohen's d, delta-mean and delta-detected, the value must be positive to be considered \dQuote{large}.
 For the AUC, a value greater than 0.5 is considered \dQuote{large}.
-This interpretation is also affected by the choice of \code{threshold=} used to compute each effect size in \code{\link{scoreMarkers}},
+This interpretation is also affected by the choice of \code{threshold} used to compute each effect size in \code{\link{scoreMarkers}},
 e.g., a negative Cohen's d cannot be interpreted as downregulation when the threshold is positive. 
 
 The \code{min.rank} is a more exotic summary statistic, containing the minimum rank for each gene across all comparisons involving the group of interest.
@@ -76,7 +76,7 @@ This is defined by ranking the effect sizes across genes within each comparison,
 Taking all genes with \code{min.rank <= T} will yield a set containing the top \code{T} genes from each comparison.
 The idea is to ensure that there are at least \code{T} genes that can distinguish the group of interest from any other group.
 
-\code{NaN} effect sizes are allowed, e.g., if two groups do not exist in the same block for a blocked analysis in \code{\link{scoreMarkers}} with \code{block=}. 
+\code{NaN} effect sizes are allowed, e.g., if two groups do not exist in the same block for a blocked analysis in \code{\link{scoreMarkers}} with \code{block}. 
 This function will ignore \code{NaN} values when computing each summary.
 If all effects are NaN for a particular group, the summary statistic will also be \code{NaN}.
 }

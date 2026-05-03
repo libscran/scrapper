@@ -41,7 +41,7 @@ table(grouping[keep])
 
 }
 \seealso{
-\code{\link{downsampleByNeighbors}}, for an alternative downsampling strategy.
+\code{\link{subsampleByNeighbors}}, for an alternative downsampling strategy.
 }
 \author{
 Aaron Lun

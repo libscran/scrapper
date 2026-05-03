@@ -26,18 +26,17 @@
 #' snorm <- LogNormalizedMatrix(smat, ssf)
 #' snorm
 #'
-#' @aliases
-#' LogNormalizedMatrix-class
-#' LogNormalizedMatrixSeed-class
-#' dim,LogNormalizedMatrixSeed-method
-#' dimnames,LogNormalizedMatrixSeed-method
-#' type,LogNormalizedMatrixSeed-method
-#' is_sparse,LogNormalizedMatrixSeed-method
-#' extract_array,LogNormalizedMatrixSeed-method
-#' extract_sparse_array,LogNormalizedMatrixSeed-method
-#' matrixClass,LogNormalizedMatrixSeed-method
-#' DelayedArray,LogNormalizedMatrixSeed-method
-#' initializeCpp,LogNormalizedMatrixSeed-method
+#' @aliases LogNormalizedMatrix-class
+#' @aliases LogNormalizedMatrixSeed-class
+#' @aliases dim,LogNormalizedMatrixSeed-method
+#' @aliases dimnames,LogNormalizedMatrixSeed-method
+#' @aliases type,LogNormalizedMatrixSeed-method
+#' @aliases is_sparse,LogNormalizedMatrixSeed-method
+#' @aliases extract_array,LogNormalizedMatrixSeed-method
+#' @aliases extract_sparse_array,LogNormalizedMatrixSeed-method
+#' @aliases matrixClass,LogNormalizedMatrixSeed-method
+#' @aliases DelayedArray,LogNormalizedMatrixSeed-method
+#' @aliases initializeCpp,LogNormalizedMatrixSeed-method
 #'
 #' @export
 LogNormalizedMatrix <- function(x, size.factors, pseudo.count=1, log.base=2) {
