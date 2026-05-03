@@ -62,7 +62,7 @@ aggregateAcrossCells <- function(
     factors,
     compute.sum = TRUE,
     compute.detected = TRUE,
-    compute.median = TRUE,
+    compute.median = FALSE,
     num.threads = 1
 ) {
     .checkSEX(x, "aggregateAcrossCells.se")

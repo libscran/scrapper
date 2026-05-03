@@ -9,7 +9,7 @@ aggregateAcrossCells(
   factors,
   compute.sum = TRUE,
   compute.detected = TRUE,
-  compute.median = TRUE,
+  compute.median = FALSE,
   num.threads = 1
 )
 }

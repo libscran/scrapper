@@ -54,7 +54,7 @@ SEXP aggregate_across_cells(
     Rcpp::NumericMatrix medians;
     if (compute_median) {
         medians = create_matrix<Rcpp::NumericMatrix>(NR, ncombos);
-        sanisizer::resize(buffers.medians, ncombos);
+        sanisizer::reserve(buffers.medians, ncombos);
         double* omedian = medians.begin();
         for (I<decltype(ncombos)> i = 0; i < ncombos; ++i) {
             buffers.medians.push_back(omedian + sanisizer::product_unsafe<std::size_t>(NR, i));
