@@ -14,8 +14,8 @@
 Rcpp::List aggregate_across_genes(
     SEXP x,
     Rcpp::List sets,
-    Rcpp::Nullable<Rcpp::LogicalVector> average,
-    Rcpp::Nullable<Rcpp::IntegerVector> num_threads
+    Rcpp::RObject average,
+    Rcpp::RObject num_threads
 ) {
     auto raw_mat = Rtatami::BoundNumericPointer(x);
     const auto& mat = raw_mat->ptr;

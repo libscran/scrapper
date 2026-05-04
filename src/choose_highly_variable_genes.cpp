@@ -8,13 +8,7 @@
 #include "utils_other.h"
 
 //[[Rcpp::export(rng=false)]]
-Rcpp::IntegerVector choose_highly_variable_genes(
-    Rcpp::NumericVector stats,
-    Rcpp::Nullable<Rcpp::IntegerVector> top,
-    Rcpp::Nullable<Rcpp::LogicalVector> larger,
-    Rcpp::Nullable<Rcpp::LogicalVector> keep_ties,
-    Rcpp::Nullable<Rcpp::NumericVector> bound
-) {
+Rcpp::IntegerVector choose_highly_variable_genes(Rcpp::NumericVector stats, Rcpp::RObject top, Rcpp::RObject larger, Rcpp::RObject keep_ties, Rcpp::RObject bound) {
     scran_variances::ChooseHighlyVariableGenesOptions opt;
     set_integer(top, opt.top, "top");
     set_bool(larger, opt.larger, "larger");

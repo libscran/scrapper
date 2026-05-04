@@ -11,12 +11,7 @@
 #include "utils_norm.h"
 
 //[[Rcpp::export(rng=false)]]
-Rcpp::List center_spike_in_factors(
-    Rcpp::NumericVector endogenous,
-    Rcpp::List spike_ins,
-    Rcpp::Nullable<Rcpp::IntegerVector> block,
-    Rcpp::Nullable<Rcpp::CharacterVector> mode 
-) {
+Rcpp::List center_spike_in_factors(Rcpp::NumericVector endogenous, Rcpp::List spike_ins, Rcpp::Nullable<Rcpp::IntegerVector> block, Rcpp::RObject mode) {
     auto block_info = MaybeBlock(block);
     auto ptr = block_info.get();
     const auto ncells = endogenous.size();

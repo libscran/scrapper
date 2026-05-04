@@ -103,7 +103,7 @@ Each vector is of length equal to the number of levels in \code{block} and is na
 For \code{filterAdtQcMetrics}, a logical vector of length \code{ncol(x)} is returned indicating which cells are of high quality. 
 High-quality cells are defined as those with numbers of detected tags above the \code{detected} threshold and control subset sums below the \code{subsets} threshold.
 
-For \code{computeAdtQcMetricsDefaults} and \code{suggestAdtQcThresholdsDefaults}, a named list is returned containing default values for the respective function arguments.
+For \code{computeAdtQcMetricsDefaults} and \code{suggestAdtQcThresholdsDefaults}, a named list is returned containing default values for the various function arguments.
 }
 \description{
 Compute per-cell QC metrics from an initialized matrix of ADT counts,

@@ -2,17 +2,22 @@
 % Please edit documentation in R/clusterGraph.R
 \name{clusterGraph}
 \alias{clusterGraph}
+\alias{clusterGraphDefaults}
 \title{Graph-based clustering of cells}
 \usage{
 clusterGraph(
   x,
   method = c("multilevel", "leiden", "walktrap"),
-  multilevel.resolution = 1,
-  leiden.resolution = 1,
-  leiden.objective = c("modularity", "cpm", "er"),
-  walktrap.steps = 4,
-  seed = 42
+  seed = 42,
+  multilevel.resolution = NULL,
+  multilevel.seed = seed,
+  leiden.resolution = NULL,
+  leiden.seed = seed,
+  leiden.objective = NULL,
+  walktrap.steps = NULL
 )
+
+clusterGraphDefaults()
 }
 \arguments{
 \item{x}{List containing graph information or an external pointer to a graph, as returned by \code{\link{buildSnnGraph}}.
@@ -28,20 +33,30 @@ see \url{https://igraph.org/c/doc/igraph-Community.html#igraph_community_walktra
 see \url{https://igraph.org/c/doc/igraph-Community.html#igraph_community_leiden} for details.
 }}
 
+\item{seed}{Integer scalar specifying the random seed for some of community detection algorithms.}
+
 \item{multilevel.resolution}{Numeric scalar specifying the resolution when \code{method="multilevel"}.
-Lower values favor fewer, larger communities; higher values favor more, smaller communities.}
+Lower values favor fewer, larger communities; higher values favor more, smaller communities.
+If \code{NULL}, the default value in \code{clusterGraphDefaults} is used.}
+
+\item{multilevel.seed}{Integer scalar specifying the random seed to use for \code{method="multilevel"}.
+If \code{NULL}, the default value in \code{clusterGraphDefaults} is used.}
 
 \item{leiden.resolution}{Numeric scalar specifying the resolution when \code{method="leiden"}.
-Lower values favor fewer, larger communities; higher values favor more, smaller communities.}
+Lower values favor fewer, larger communities; higher values favor more, smaller communities.
+If \code{NULL}, the default value in \code{clusterGraphDefaults} is used.}
+
+\item{leiden.seed}{Integer scalar specifying the random seed to use for \code{method="leiden"}.
+If \code{NULL}, the default value in \code{clusterGraphDefaults} is used.}
 
 \item{leiden.objective}{String specifying the objective function when \code{method="leiden"}.
 \code{"modularity"} uses the generalized modularity, \code{"cpm"} uses the Constant Potts Model, and \code{"er"} uses the Erd\"os-R\'enyi G(n, p) model.
-The CPM typically yields more fine-grained clusters than the modularity at the same \code{leiden.resolution}.}
+The CPM typically yields more fine-grained clusters than the modularity at the same \code{leiden.resolution}.
+If \code{NULL}, the default value in \code{clusterGraphDefaults} is used.}
 
 \item{walktrap.steps}{Integer scalar specifying the number of steps to use when \code{method="walktrap"}.
-This determines the ability of the Walktrap algorithm to distinguish highly interconnected communities from the rest of the graph.}
-
-\item{seed}{Integer scalar specifying the random seed to use for \code{method="multilevel"} or \code{"leiden"}.}
+This determines the ability of the Walktrap algorithm to distinguish highly interconnected communities from the rest of the graph.
+If \code{NULL}, the default value in \code{clusterGraphDefaults} is used.}
 }
 \value{
 A list containing \code{membership}, a factor containing the cluster assignment for each cell.

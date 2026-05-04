@@ -10,7 +10,7 @@
 #include "utils_other.h"
 
 //[[Rcpp::export(rng=false)]]
-Rcpp::List cluster_multilevel(SEXP ptr0, double resolution, double seed) {
+Rcpp::List cluster_multilevel(SEXP ptr0, Rcpp::RObject resolution, Rcpp::RObject seed) {
     GraphComponentsPointer ptr(ptr0);
     const auto& edges = ptr->edges;
 
@@ -25,8 +25,8 @@ Rcpp::List cluster_multilevel(SEXP ptr0, double resolution, double seed) {
     }
 
     scran_graph_cluster::ClusterMultilevelOptions opt;
-    opt.resolution = resolution;
-    opt.seed = sanisizer::from_float<I<decltype(opt.seed)> >(seed);
+    set_number(resolution, opt.resolution, "multilevel.resolution");
+    set_integer(seed, opt.seed, "multilevel.seed");
 
     scran_graph_cluster::ClusterMultilevelResults res;
     scran_graph_cluster::cluster_multilevel(graph.get(), weight_view_ptr, opt, res);
@@ -46,7 +46,7 @@ Rcpp::List cluster_multilevel(SEXP ptr0, double resolution, double seed) {
 }
 
 //[[Rcpp::export(rng=false)]]
-Rcpp::List cluster_leiden(SEXP ptr0, double resolution, std::string objective, double seed) {
+Rcpp::List cluster_leiden(SEXP ptr0, Rcpp::RObject resolution, Rcpp::RObject objective, Rcpp::RObject seed) {
     GraphComponentsPointer ptr(ptr0);
     const auto& edges = ptr->edges;
 
@@ -61,18 +61,21 @@ Rcpp::List cluster_leiden(SEXP ptr0, double resolution, std::string objective, d
     }
 
     scran_graph_cluster::ClusterLeidenOptions opt;
-    opt.resolution = resolution;
-    opt.seed = sanisizer::from_float<I<decltype(opt.seed)> >(seed);
+    set_number(resolution, opt.resolution, "leiden.resolution");
+    set_integer(seed, opt.seed, "leiden.seed");
     opt.report_quality = true;
 
-    if (objective == "modularity") {
-        opt.objective = IGRAPH_LEIDEN_OBJECTIVE_MODULARITY;
-    } else if (objective == "cpm") {
-        opt.objective = IGRAPH_LEIDEN_OBJECTIVE_CPM;
-    } else if (objective == "er") {
-        opt.objective = IGRAPH_LEIDEN_OBJECTIVE_ER;
-    } else {
-        throw std::runtime_error("unknown Leiden objective '" + objective + "'");
+    if (!objective.isNULL()) {
+        const std::string obj = parse_single_string(Rcpp::CharacterVector(objective), "leiden.objective"); 
+        if (obj == "modularity") {
+            opt.objective = IGRAPH_LEIDEN_OBJECTIVE_MODULARITY;
+        } else if (obj == "cpm") {
+            opt.objective = IGRAPH_LEIDEN_OBJECTIVE_CPM;
+        } else if (obj == "er") {
+            opt.objective = IGRAPH_LEIDEN_OBJECTIVE_ER;
+        } else {
+            throw std::runtime_error("unknown Leiden objective '" + obj + "'");
+        }
     }
 
     scran_graph_cluster::ClusterLeidenResults res;
@@ -85,7 +88,7 @@ Rcpp::List cluster_leiden(SEXP ptr0, double resolution, std::string objective, d
 }
 
 //[[Rcpp::export(rng=false)]]
-Rcpp::List cluster_walktrap(SEXP ptr0, int steps) {
+Rcpp::List cluster_walktrap(SEXP ptr0, Rcpp::RObject steps) {
     GraphComponentsPointer ptr(ptr0);
     const auto& edges = ptr->edges;
 
@@ -100,7 +103,7 @@ Rcpp::List cluster_walktrap(SEXP ptr0, int steps) {
     }
 
     scran_graph_cluster::ClusterWalktrapOptions opt;
-    opt.steps = steps;
+    set_integer(steps, opt.steps, "walktrap.steps");
 
     scran_graph_cluster::ClusterWalktrapResults res;
     scran_graph_cluster::cluster_walktrap(graph.get(), weight_view_ptr, opt, res);
@@ -118,4 +121,28 @@ Rcpp::List cluster_walktrap(SEXP ptr0, int steps) {
         Rcpp::Named("merges") = std::move(merges),
         Rcpp::Named("modularity") = Rcpp::NumericVector(res.modularity.begin(), res.modularity.end())
     ); 
+}
+
+//[[Rcpp::export(rng=false)]]
+Rcpp::List cluster_graph_defaults() {
+    Rcpp::List output;
+    output["method"] = "multilevel";
+
+    scran_graph_cluster::ClusterMultilevelOptions m_opt;
+    output["multilevel.resolution"] = m_opt.resolution;
+    output["multilevel.seed"] = m_opt.seed;
+
+    scran_graph_cluster::ClusterLeidenOptions l_opt;
+    output["leiden.resolution"] = l_opt.resolution;
+    output["leiden.seed"] = l_opt.seed;
+    if (l_opt.objective == IGRAPH_LEIDEN_OBJECTIVE_CPM) {
+        output["leiden.objective"] = "cpm";
+    } else {
+        throw std::runtime_error("unexpected leiden.objective default in clusterGraph");
+    }
+
+    scran_graph_cluster::ClusterWalktrapOptions w_opt;
+    output["walktrap.steps"] = w_opt.steps;
+
+    return output;
 }

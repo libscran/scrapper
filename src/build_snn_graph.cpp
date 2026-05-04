@@ -11,7 +11,7 @@
 #include "utils_other.h"
 
 //[[Rcpp::export(rng=false)]]
-SEXP build_snn_graph(Rcpp::IntegerMatrix neighbors, Rcpp::Nullable<Rcpp::CharacterVector> scheme, Rcpp::Nullable<Rcpp::IntegerVector> num_threads) {
+SEXP build_snn_graph(Rcpp::IntegerMatrix neighbors, Rcpp::RObject scheme, Rcpp::RObject num_threads) {
     const int* nptr = neighbors.begin();
     const auto nrow = neighbors.rows();
     const auto ncells = neighbors.cols();
@@ -19,7 +19,7 @@ SEXP build_snn_graph(Rcpp::IntegerMatrix neighbors, Rcpp::Nullable<Rcpp::Charact
     scran_graph_cluster::BuildSnnGraphOptions opt;
     set_integer(num_threads, opt.num_threads, "num.threads");
 
-    if (!scheme.isNull()) {
+    if (!scheme.isNULL()) {
         const std::string sch = parse_single_string(Rcpp::CharacterVector(scheme), "weight.scheme");
         if (sch == "ranked") {
             opt.weighting_scheme = scran_graph_cluster::SnnWeightScheme::RANKED;

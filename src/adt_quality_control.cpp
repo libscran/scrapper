@@ -19,7 +19,7 @@ Rcpp::List compute_adt_qc_metrics_defaults() {
 }
 
 // [[Rcpp::export(rng=false)]]
-Rcpp::List compute_adt_qc_metrics(SEXP x, Rcpp::List subsets, Rcpp::Nullable<Rcpp::IntegerVector> num_threads) {
+Rcpp::List compute_adt_qc_metrics(SEXP x, Rcpp::List subsets, Rcpp::RObject num_threads) {
     auto raw_mat = Rtatami::BoundNumericPointer(x);
     const auto& mat = raw_mat->ptr;
     const auto nc = mat->ncol();
@@ -106,9 +106,9 @@ Rcpp::List suggest_adt_qc_thresholds_defaults() {
 Rcpp::List suggest_adt_qc_thresholds(
     Rcpp::List metrics,
     Rcpp::Nullable<Rcpp::IntegerVector> block,
-    Rcpp::Nullable<Rcpp::NumericVector> min_detected_drop,
-    Rcpp::Nullable<Rcpp::NumericVector> detected_num_mads,
-    Rcpp::Nullable<Rcpp::NumericVector> subset_sum_num_mads 
+    Rcpp::RObject min_detected_drop,
+    Rcpp::RObject detected_num_mads,
+    Rcpp::RObject subset_sum_num_mads 
 ) {
     ConvertedAdtQcMetrics all_metrics(metrics);
     auto buffers = all_metrics.to_buffer();

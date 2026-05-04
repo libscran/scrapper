@@ -6,11 +6,10 @@
 #include "scran_norm/scran_norm.hpp"
 #include "utils_other.h"
 
-inline void set_block_mode(const Rcpp::Nullable<Rcpp::CharacterVector>& mode, scran_norm::CenterBlockMode& target) {
-    if (mode.isNull()) {
+inline void set_block_mode(const Rcpp::RObject& mode, scran_norm::CenterBlockMode& target) {
+    if (mode.isNULL()) {
         return;
     }
-
     const std::string md = parse_single_string(Rcpp::CharacterVector(mode), "mode");
     if (md == "lowest") {
         target = scran_norm::CenterBlockMode::LOWEST;

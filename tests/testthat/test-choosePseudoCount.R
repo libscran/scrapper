@@ -8,3 +8,8 @@ test_that("choosePseudoCount works as expected", {
     expect_lt(out, choosePseudoCount(sf, quantile=0.01))
     expect_lt(out, choosePseudoCount(sf, max.bias=0.5))
 })
+
+test_that("defaults work correctly", {
+    def <- choosePseudoCountDefaults()
+    expect_true(all(names(def) %in% names(formals(choosePseudoCount))))
+})

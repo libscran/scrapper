@@ -5,12 +5,7 @@
 #include "utils_other.h"
 
 //[[Rcpp::export(rng=false)]]
-double choose_pseudo_count(
-    Rcpp::NumericVector size_factors,
-    Rcpp::Nullable<Rcpp::NumericVector> quantile,
-    Rcpp::Nullable<Rcpp::NumericVector> max_bias,
-    Rcpp::Nullable<Rcpp::NumericVector> min_value
-) {
+double choose_pseudo_count(Rcpp::NumericVector size_factors, Rcpp::RObject quantile, Rcpp::RObject max_bias, Rcpp::RObject min_value) {
     scran_norm::ChoosePseudoCountOptions opt;
     set_number(quantile, opt.quantile, "quantile");
     set_number(max_bias, opt.max_bias, "max.bias");

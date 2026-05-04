@@ -11,7 +11,7 @@
 #include "utils_norm.h"
 
 //[[Rcpp::export(rng=false)]]
-Rcpp::NumericVector center_size_factors(Rcpp::NumericVector size_factors, Rcpp::Nullable<Rcpp::IntegerVector> block, Rcpp::Nullable<Rcpp::CharacterVector> mode) {
+Rcpp::NumericVector center_size_factors(Rcpp::NumericVector size_factors, Rcpp::Nullable<Rcpp::IntegerVector> block, Rcpp::RObject mode) {
     auto block_info = MaybeBlock(block);
     auto ptr = block_info.get();
     const auto ncells = size_factors.size();

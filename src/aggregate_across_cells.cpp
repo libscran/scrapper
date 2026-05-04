@@ -13,10 +13,10 @@
 Rcpp::List aggregate_across_cells(
     SEXP x,
     Rcpp::IntegerVector groups,
-    Rcpp::Nullable<Rcpp::LogicalVector> compute_sum,
-    Rcpp::Nullable<Rcpp::LogicalVector> compute_detected,
-    Rcpp::Nullable<Rcpp::LogicalVector> compute_median,
-    Rcpp::Nullable<Rcpp::IntegerVector> num_threads
+    Rcpp::RObject compute_sum,
+    Rcpp::RObject compute_detected,
+    Rcpp::RObject compute_median,
+    Rcpp::RObject num_threads
 ) {
     auto raw_mat = Rtatami::BoundNumericPointer(x);
     const auto& mat = raw_mat->ptr;

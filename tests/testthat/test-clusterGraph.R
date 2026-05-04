@@ -40,19 +40,24 @@ test_that("clusterGraph works correctly for multilevel", {
 })
 
 test_that("clusterGraph works correctly for Leiden", {
-    clust <- clusterGraph(out, method="leiden")
-    expect_identical(length(clust$membership), ncol(data))
-    expect_lte(nlevels(clust$membership), ncol(data))
-    expect_gte(nlevels(clust$membership), 1L)
-    expect_false(anyNA(clust$membership))
+    clust.mod <- clusterGraph(out, method="leiden", leiden.object="modularity")
+    expect_identical(length(clust.mod$membership), ncol(data))
+    expect_lte(nlevels(clust.mod$membership), ncol(data))
+    expect_gte(nlevels(clust.mod$membership), 1L)
+    expect_false(anyNA(clust.mod$membership))
 
     clust.cpm <- clusterGraph(out, method="leiden", leiden.objective="cpm")
     expect_identical(length(clust.cpm$membership), ncol(data))
     expect_gte(nlevels(clust.cpm$membership), 1L)
 
+    clust <- clusterGraph(out, method="leiden")
+    expect_identical(clust, clust.cpm) # works with the default.
+
     clust.er <- clusterGraph(out, method="leiden", leiden.objective="er")
     expect_identical(length(clust.er$membership), ncol(data))
     expect_gte(nlevels(clust.er$membership), 1L)
+
+    expect_error(clusterGraph(out, method="leiden", leiden.objective="foo"), "unknown")
 
     # Something sensible happens without weighting.
     clust.uw <- clusterGraph(unweighted, method="leiden")
@@ -77,4 +82,9 @@ test_that("clusterGraph works correctly for Walktrap", {
     # Something sensible happens with a pointer.
     clust2 <- clusterGraph(ptr, method="walktrap")
     expect_identical(clust, clust2)
+})
+
+test_that("defaults work correctly", {
+    def <- clusterGraphDefaults()
+    expect_true(all(names(def) %in% names(formals(clusterGraph))))
 })

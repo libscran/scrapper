@@ -54,7 +54,7 @@ Each entry corresponds to a row of \code{combinations}.
 This specifies the combination in \code{combinations} to which each cell was assigned.
 }
 
-For \code{aggregateAcrossCellsDefaults}, a named list is returned containing default values for the respective function arguments.
+For \code{aggregateAcrossCellsDefaults}, a named list is returned containing default values for the various function arguments.
 }
 \description{
 Aggregate expression values across cells based on one or more grouping factors.
