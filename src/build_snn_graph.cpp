@@ -11,21 +11,25 @@
 #include "utils_other.h"
 
 //[[Rcpp::export(rng=false)]]
-SEXP build_snn_graph(Rcpp::IntegerMatrix neighbors, std::string scheme, int num_threads) {
+SEXP build_snn_graph(Rcpp::IntegerMatrix neighbors, Rcpp::Nullable<Rcpp::CharacterVector> scheme, Rcpp::Nullable<Rcpp::IntegerVector> num_threads) {
     const int* nptr = neighbors.begin();
     const auto nrow = neighbors.rows();
     const auto ncells = neighbors.cols();
 
     scran_graph_cluster::BuildSnnGraphOptions opt;
-    opt.num_threads = num_threads;
-    if (scheme == "ranked") {
-        opt.weighting_scheme = scran_graph_cluster::SnnWeightScheme::RANKED;
-    } else if (scheme == "number") {
-        opt.weighting_scheme = scran_graph_cluster::SnnWeightScheme::NUMBER;
-    } else if (scheme == "jaccard") {
-        opt.weighting_scheme = scran_graph_cluster::SnnWeightScheme::JACCARD;
-    } else {
-        throw std::runtime_error("unknown weighting scheme '" + scheme + "'");
+    set_integer(num_threads, opt.num_threads, "num.threads");
+
+    if (!scheme.isNull()) {
+        const std::string sch = parse_single_string(Rcpp::CharacterVector(scheme), "weight.scheme");
+        if (sch == "ranked") {
+            opt.weighting_scheme = scran_graph_cluster::SnnWeightScheme::RANKED;
+        } else if (sch == "number") {
+            opt.weighting_scheme = scran_graph_cluster::SnnWeightScheme::NUMBER;
+        } else if (sch == "jaccard") {
+            opt.weighting_scheme = scran_graph_cluster::SnnWeightScheme::JACCARD;
+        } else {
+            throw std::runtime_error("unknown weighting scheme '" + sch + "'");
+        }
     }
 
     scran_graph_cluster::BuildSnnGraphResults<igraph_integer_t, igraph_real_t> buffers;
@@ -46,6 +50,21 @@ SEXP build_snn_graph(Rcpp::IntegerMatrix neighbors, std::string scheme, int num_
     output->weighted = true;
     output->edges = std::move(buffers.edges);
     output->weights = std::move(buffers.weights);
+    return output;
+}
+
+//[[Rcpp::export(rng=false)]]
+Rcpp::List build_snn_graph_defaults() {
+    Rcpp::List output;
+    scran_graph_cluster::BuildSnnGraphOptions opt;
+    output["num.threads"] = opt.num_threads;
+    output["num.neighbors"] = opt.num_neighbors;
+    if (opt.weighting_scheme == scran_graph_cluster::SnnWeightScheme::RANKED) {
+        output["weight.scheme"] = "ranked";
+    } else {
+        // Can't be bothered to implement the others.
+        throw std::runtime_error("unknown scheme default for buildSnnGraph");
+    }
     return output;
 }
 

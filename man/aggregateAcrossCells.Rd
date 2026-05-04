@@ -2,16 +2,19 @@
 % Please edit documentation in R/aggregateAcrossCells.R
 \name{aggregateAcrossCells}
 \alias{aggregateAcrossCells}
+\alias{aggregateAcrossCellsDefaults}
 \title{Aggregate expression across cells}
 \usage{
 aggregateAcrossCells(
   x,
   factors,
-  compute.sum = TRUE,
-  compute.detected = TRUE,
-  compute.median = FALSE,
-  num.threads = 1
+  compute.sum = NULL,
+  compute.detected = NULL,
+  compute.median = NULL,
+  num.threads = NULL
 )
+
+aggregateAcrossCellsDefaults()
 }
 \arguments{
 \item{x}{A matrix-like object where rows correspond to genes or genomic features and columns correspond to cells.
@@ -19,16 +22,20 @@ Values are typically expected to be counts.}
 
 \item{factors}{A list or data frame (or their equivalents from \pkg{S4Vectors}) containing one or more grouping factors, see \code{\link{combineFactors}}.}
 
-\item{compute.sum}{Boolean indicating whether to compute the sum in each group.}
+\item{compute.sum}{Boolean indicating whether to compute the sum in each group.
+If \code{NULL}, the default value in \code{aggregateAcrossCellsDefaults} is used.}
 
-\item{compute.detected}{Boolean indicating whether to compute the number of cells with detected expression in each group.}
+\item{compute.detected}{Boolean indicating whether to compute the number of cells with detected expression in each group.
+If \code{NULL}, the default value in \code{aggregateAcrossCellsDefaults} is used.}
 
-\item{compute.median}{Boolean indicating whether to compute the median in each group.}
+\item{compute.median}{Boolean indicating whether to compute the median in each group.
+If \code{NULL}, the default value in \code{aggregateAcrossCellsDefaults} is used.}
 
-\item{num.threads}{Integer specifying the number of threads to be used for aggregation.}
+\item{num.threads}{Integer specifying the number of threads to be used for aggregation.
+If \code{NULL}, the default value in \code{aggregateAcrossCellsDefaults} is used.}
 }
 \value{
-A list containing:
+For \code{aggregateAcrossCells}, a list is returned containing:
 \itemize{
 \item \code{sums}, a numeric matrix where each row corresponds to a gene and each column corresponds to a unique combination of levels from \code{factors}.
 Each entry contains the summed expression across all cells with that combination. 
@@ -46,6 +53,8 @@ Each entry corresponds to a row of \code{combinations}.
 \item \code{index}, an integer vector of length equal to the number of cells in \code{x}.
 This specifies the combination in \code{combinations} to which each cell was assigned.
 }
+
+For \code{aggregateAcrossCellsDefaults}, a named list is returned containing default values for the respective function arguments.
 }
 \description{
 Aggregate expression values across cells based on one or more grouping factors.

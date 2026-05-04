@@ -19,19 +19,65 @@ Matrix_ create_matrix(Rows_ rows, Cols_ cols) {
     );
 }
 
-template<typename Vector_, typename Type_>
-auto set_optional_integer(const Rcpp::Nullable<Vector_>& source, std::optional<Type_>& target) {
+template<typename Type_>
+void set_integer(const Rcpp::Nullable<Rcpp::IntegerVector>& source, Type_& target, const std::string& arg) {
     if (source.isNull()) {
         return;
     }
-
-    static_assert(std::is_same<Vector_, Rcpp::IntegerVector>::value);
-    static_assert(std::is_integral<Type_>::value);
     Rcpp::IntegerVector src(source);
     if (src.size() != 1) {
-        throw std::runtime_error("expected an integer scalar or NULL");
+        throw std::runtime_error("expected an integer or NULL for '" + arg + "'");
     }
+    static_assert(std::is_integral<Type_>::value);
     target = sanisizer::cast<Type_>(src[0]);
+}
+
+template<typename Type_>
+void set_optional_integer(const Rcpp::Nullable<Rcpp::IntegerVector>& source, std::optional<Type_>& target, const std::string& arg) {
+    if (source.isNull()) {
+        return;
+    }
+    Rcpp::IntegerVector src(source);
+    if (src.size() != 1) {
+        throw std::runtime_error("expected an integer or NULL for '" + arg + "'");
+    }
+    static_assert(std::is_integral<Type_>::value);
+    target = sanisizer::cast<Type_>(src[0]);
+}
+
+template<typename Type_>
+void set_number(const Rcpp::Nullable<Rcpp::NumericVector>& source, Type_& target, const std::string& arg) {
+    if (source.isNull()) {
+        return;
+    }
+    Rcpp::NumericVector src(source);
+    if (src.size() != 1) {
+        throw std::runtime_error("expected a number or NULL for '" + arg + "'");
+    }
+    static_assert(std::is_floating_point<Type_>::value);
+    target = src[0];
+}
+
+inline void set_bool(const Rcpp::Nullable<Rcpp::LogicalVector>& source, bool& target, const std::string& arg) {
+    if (source.isNull()) {
+        return;
+    }
+    Rcpp::LogicalVector src(source);
+    if (src.size() != 1) {
+        throw std::runtime_error("expected a boolean or NULL for '" + arg + "'");
+    }
+    target = src[0];
+}
+
+inline std::string parse_single_string(const Rcpp::CharacterVector& src, const std::string& arg) {
+    if (src.size() != 1) {
+        throw std::runtime_error("expected a single string for '" + arg + "'");
+    }
+    Rcpp::String first = src[0];
+    if (first == NA_STRING) {
+        throw std::runtime_error("expected a non-NA string for '" + arg + "'");
+    }
+    return first.get_cstring();
 }
 
 #endif

@@ -2,16 +2,19 @@
 % Please edit documentation in R/buildSnnGraph.R
 \name{buildSnnGraph}
 \alias{buildSnnGraph}
+\alias{buildSnnGraphDefaults}
 \title{Build a shared nearest neighbor graph}
 \usage{
 buildSnnGraph(
   x,
-  num.neighbors = 10,
-  weight.scheme = "ranked",
-  num.threads = 1,
+  num.neighbors = NULL,
+  weight.scheme = NULL,
+  num.threads = NULL,
   BNPARAM = AnnoyParam(),
   as.pointer = FALSE
 )
+
+buildSnnGraphDefaults()
 }
 \arguments{
 \item{x}{For \code{buildSnnGraph}, a numeric matrix where rows are dimensions and columns are cells,
@@ -26,6 +29,7 @@ Alternatively, an index constructed by \code{\link[BiocNeighbors]{buildIndex}}.}
 
 \item{num.neighbors}{Integer scalar specifying the number of neighbors to use to construct the graph.
 Larger values increase the connectivity of the graph and reduce the granularity of subsequent community detection steps, at the cost of speed.
+If \code{NULL}, the default value in \code{buildSnnGraphDefaults} is used.
 Ignored if \code{x} contains pre-computed neighbor search results.}
 
 \item{weight.scheme}{String specifying the weighting scheme to use for constructing the SNN graph.
@@ -37,9 +41,11 @@ More shared neighbors, or shared neighbors that are close to both observations, 
 This is a simpler scheme that is also slightly faster but does not account for the ranking of neighbors within each set.
 \item \code{"jaccard"}, where the weight of the edge is the Jaccard index of their neighbor sets,
 This is a monotonic transformation of the weight used in \code{"number"}.
-}}
+}
+If \code{NULL}, the default value in \code{buildSnnGraphDefaults} is used.}
 
 \item{num.threads}{Integer scalar specifying the number of threads to use.
+If \code{NULL}, the default value in \code{buildSnnGraphDefaults} is used.
 Only used if \code{x} is not a list of existing nearest-neighbor search results.}
 
 \item{BNPARAM}{A \link[BiocNeighbors]{BiocNeighborParam} object specifying the algorithm to use.
@@ -49,7 +55,7 @@ Only used if \code{x} is not a list of existing nearest-neighbor search results.
 This avoids the extra memory usage caused by conversion to/from an R list.}
 }
 \value{
-If \code{as.pointer=FALSE}, a list is returned containing:
+If \code{as.pointer=FALSE}, \code{buildSnnGraph} returns a list containing:
 \itemize{
 \item \code{vertices}, an integer scalar specifying the number of vertices in the graph (i.e., cells in \code{x}).
 \item \code{edges}, an integer vector of 1-based indices for graph edges.
@@ -59,7 +65,10 @@ i.e., \code{edges[1:2]} form the first edge, \code{edges[3:4]} form the second e
 This has length equal to half the length of \code{edges}.
 }
 
-If \code{as.pointer=TRUE}, an external pointer to the graph is returned that can be directly used in \code{\link{clusterGraph}}.
+If \code{as.pointer=TRUE}, \code{buildSnngraph} returns an external pointer to the graph structure.
+This can be directly used in \code{\link{clusterGraph}}.
+
+\code{buildSnnGraphDefaults} returns a named list of default values for the respective function arguments.
 }
 \description{
 Build a shared nearest neighbor (SNN) graph where each node is a cell.

@@ -2,9 +2,17 @@
 % Please edit documentation in R/choosePseudoCount.R
 \name{choosePseudoCount}
 \alias{choosePseudoCount}
+\alias{choosePseudoCountDefaults}
 \title{Choose a suitable pseudo-count}
 \usage{
-choosePseudoCount(size.factors, quantile = 0.05, max.bias = 1, min.value = 1)
+choosePseudoCount(
+  size.factors,
+  quantile = NULL,
+  max.bias = NULL,
+  min.value = NULL
+)
+
+choosePseudoCountDefaults()
 }
 \arguments{
 \item{size.factors}{Numeric vector of size factors for all cells.

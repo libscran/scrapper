@@ -7,16 +7,21 @@
 #' Typically, the residuals from \code{\link{modelGeneVariances}} are used here.
 #' @param top Integer specifying the number of top genes to retain.
 #' Note that the actual number of retained genes may not be equal to \code{top}, depending on the other options.
+#' If \code{NULL}, the default value in \code{chooseHighlyVariableGenesDefaults} is used.
 #' @param larger Logical scalar indicating whether larger values of \code{stats} correspond to more variable genes.
 #' If \code{TRUE}, HVGs are defined as those with the largest values of \code{stats}.
 #' This is typically the case for variances or related statistics, e.g., residuals.
+#' If \code{NULL}, the default value in \code{chooseHighlyVariableGenesDefaults} is used.
 #' @param keep.ties Logical scalar indicating whether to keep tied values of \code{stats}, even if \code{top} may be exceeded.
 #' @param bound Numeric scalar specifying the lower bound (if \code{larger=TRUE}) or upper bound (otherwise) to be applied to \code{stats}.
 #' Genes are not considered to be HVGs if they do not satisfy this bound, even if they are within the \code{top} genes.
-#' For example, residuals from the fitted trend should be positive, which can be enforced by setting \code{bound} to zero.
-#' Ignored if \code{NULL}.
+#' For example, residuals from the fitted trend should be positive, which can be enforced by setting \code{bound = 0}. 
+#' If \code{NULL}, the default value in \code{chooseHighlyVariableGenesDefaults} is used.
+#' If \code{NA}, no bound is enforced.
 #'
-#' @return Integer vector containing the indices of genes in \code{stats} that are considered to be highly variable.
+#' @return \code{chooseHighlyVariableGenes} returns an integer vector containing the indices of genes in \code{stats} that are considered to be highly variable.
+#'
+#' \code{chooseHighlyVariableGenesDefaults} returns a named list of default values for their function arguments.
 #' 
 #' @examples
 #' resids <- rexp(10000)
@@ -29,8 +34,14 @@
 #'
 #' @author Aaron Lun
 #' @export
-chooseHighlyVariableGenes <- function(stats, top=4000, larger=TRUE, keep.ties=TRUE, bound=0) {
-    top <- min(length(stats), top) # protect against top=Inf, which Rcpp can't cast to an int.
+chooseHighlyVariableGenes <- function(stats, top = NULL, larger = NULL, keep.ties = NULL, bound = NULL) {
+    if (!is.null(top)) {
+        top <- min(length(stats), top) # protect against top=Inf, which Rcpp can't cast to an int.
+    }
     out <- choose_highly_variable_genes(stats, top=top, larger=larger, keep_ties=keep.ties, bound=bound)
     out + 1L
 }
+
+#' @export
+#' @rdname chooseHighlyVariableGenes
+chooseHighlyVariableGenesDefaults <- function() choose_highly_variable_genes_defaults()

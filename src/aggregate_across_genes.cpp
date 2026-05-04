@@ -11,7 +11,12 @@
 #include "utils_other.h"
 
 //[[Rcpp::export(rng=false)]]
-SEXP aggregate_across_genes(SEXP x, Rcpp::List sets, bool average, int nthreads) {
+Rcpp::List aggregate_across_genes(
+    SEXP x,
+    Rcpp::List sets,
+    Rcpp::Nullable<Rcpp::LogicalVector> average,
+    Rcpp::Nullable<Rcpp::IntegerVector> num_threads
+) {
     auto raw_mat = Rtatami::BoundNumericPointer(x);
     const auto& mat = raw_mat->ptr;
     const auto NC = mat->ncol();
@@ -72,13 +77,22 @@ SEXP aggregate_across_genes(SEXP x, Rcpp::List sets, bool average, int nthreads)
     }
 
     scran_aggregate::AggregateAcrossGenesOptions opt;
-    opt.average = average;
-    opt.num_threads = nthreads;
+    set_bool(average, opt.average, "average");
+    set_integer(num_threads, opt.num_threads, "num.threads");
     scran_aggregate::aggregate_across_genes(*mat, converted_sets, buffers, opt);
 
     auto output = sanisizer::create<Rcpp::List>(nsets);
     for (I<decltype(nsets)> s = 0; s < nsets; ++s) {
         output[s] = std::move(tmp_output[s]);
     }
+    return output;
+}
+
+//[[Rcpp::export(rng=false)]]
+Rcpp::List aggregate_across_genes_defaults() {
+    Rcpp::List output;
+    scran_aggregate::AggregateAcrossGenesOptions opt;
+    output["average"] = opt.average;
+    output["num.threads"] = opt.num_threads;
     return output;
 }

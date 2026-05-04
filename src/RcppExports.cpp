@@ -10,28 +10,47 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// compute_adt_qc_metrics_defaults
+Rcpp::List compute_adt_qc_metrics_defaults();
+RcppExport SEXP _scrapper_compute_adt_qc_metrics_defaults() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    rcpp_result_gen = Rcpp::wrap(compute_adt_qc_metrics_defaults());
+    return rcpp_result_gen;
+END_RCPP
+}
 // compute_adt_qc_metrics
-Rcpp::List compute_adt_qc_metrics(SEXP x, Rcpp::List subsets, int num_threads);
+Rcpp::List compute_adt_qc_metrics(SEXP x, Rcpp::List subsets, Rcpp::Nullable<Rcpp::IntegerVector> num_threads);
 RcppExport SEXP _scrapper_compute_adt_qc_metrics(SEXP xSEXP, SEXP subsetsSEXP, SEXP num_threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type subsets(subsetsSEXP);
-    Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type num_threads(num_threadsSEXP);
     rcpp_result_gen = Rcpp::wrap(compute_adt_qc_metrics(x, subsets, num_threads));
     return rcpp_result_gen;
 END_RCPP
 }
+// suggest_adt_qc_thresholds_defaults
+Rcpp::List suggest_adt_qc_thresholds_defaults();
+RcppExport SEXP _scrapper_suggest_adt_qc_thresholds_defaults() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    rcpp_result_gen = Rcpp::wrap(suggest_adt_qc_thresholds_defaults());
+    return rcpp_result_gen;
+END_RCPP
+}
 // suggest_adt_qc_thresholds
-Rcpp::List suggest_adt_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::IntegerVector> block, double min_detected_drop, double num_mads);
-RcppExport SEXP _scrapper_suggest_adt_qc_thresholds(SEXP metricsSEXP, SEXP blockSEXP, SEXP min_detected_dropSEXP, SEXP num_madsSEXP) {
+Rcpp::List suggest_adt_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::IntegerVector> block, Rcpp::Nullable<Rcpp::NumericVector> min_detected_drop, Rcpp::Nullable<Rcpp::NumericVector> detected_num_mads, Rcpp::Nullable<Rcpp::NumericVector> subset_sum_num_mads);
+RcppExport SEXP _scrapper_suggest_adt_qc_thresholds(SEXP metricsSEXP, SEXP blockSEXP, SEXP min_detected_dropSEXP, SEXP detected_num_madsSEXP, SEXP subset_sum_num_madsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type metrics(metricsSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type block(blockSEXP);
-    Rcpp::traits::input_parameter< double >::type min_detected_drop(min_detected_dropSEXP);
-    Rcpp::traits::input_parameter< double >::type num_mads(num_madsSEXP);
-    rcpp_result_gen = Rcpp::wrap(suggest_adt_qc_thresholds(metrics, block, min_detected_drop, num_mads));
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericVector> >::type min_detected_drop(min_detected_dropSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericVector> >::type detected_num_mads(detected_num_madsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericVector> >::type subset_sum_num_mads(subset_sum_num_madsSEXP);
+    rcpp_result_gen = Rcpp::wrap(suggest_adt_qc_thresholds(metrics, block, min_detected_drop, detected_num_mads, subset_sum_num_mads));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -48,42 +67,69 @@ BEGIN_RCPP
 END_RCPP
 }
 // aggregate_across_cells
-SEXP aggregate_across_cells(SEXP x, Rcpp::IntegerVector groups, bool compute_sum, bool compute_detected, bool compute_median, int num_threads);
+Rcpp::List aggregate_across_cells(SEXP x, Rcpp::IntegerVector groups, Rcpp::Nullable<Rcpp::LogicalVector> compute_sum, Rcpp::Nullable<Rcpp::LogicalVector> compute_detected, Rcpp::Nullable<Rcpp::LogicalVector> compute_median, Rcpp::Nullable<Rcpp::IntegerVector> num_threads);
 RcppExport SEXP _scrapper_aggregate_across_cells(SEXP xSEXP, SEXP groupsSEXP, SEXP compute_sumSEXP, SEXP compute_detectedSEXP, SEXP compute_medianSEXP, SEXP num_threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
     Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type groups(groupsSEXP);
-    Rcpp::traits::input_parameter< bool >::type compute_sum(compute_sumSEXP);
-    Rcpp::traits::input_parameter< bool >::type compute_detected(compute_detectedSEXP);
-    Rcpp::traits::input_parameter< bool >::type compute_median(compute_medianSEXP);
-    Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::LogicalVector> >::type compute_sum(compute_sumSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::LogicalVector> >::type compute_detected(compute_detectedSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::LogicalVector> >::type compute_median(compute_medianSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type num_threads(num_threadsSEXP);
     rcpp_result_gen = Rcpp::wrap(aggregate_across_cells(x, groups, compute_sum, compute_detected, compute_median, num_threads));
     return rcpp_result_gen;
 END_RCPP
 }
+// aggregate_across_cells_defaults
+Rcpp::List aggregate_across_cells_defaults();
+RcppExport SEXP _scrapper_aggregate_across_cells_defaults() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    rcpp_result_gen = Rcpp::wrap(aggregate_across_cells_defaults());
+    return rcpp_result_gen;
+END_RCPP
+}
 // aggregate_across_genes
-SEXP aggregate_across_genes(SEXP x, Rcpp::List sets, bool average, int nthreads);
-RcppExport SEXP _scrapper_aggregate_across_genes(SEXP xSEXP, SEXP setsSEXP, SEXP averageSEXP, SEXP nthreadsSEXP) {
+Rcpp::List aggregate_across_genes(SEXP x, Rcpp::List sets, Rcpp::Nullable<Rcpp::LogicalVector> average, Rcpp::Nullable<Rcpp::IntegerVector> num_threads);
+RcppExport SEXP _scrapper_aggregate_across_genes(SEXP xSEXP, SEXP setsSEXP, SEXP averageSEXP, SEXP num_threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type sets(setsSEXP);
-    Rcpp::traits::input_parameter< bool >::type average(averageSEXP);
-    Rcpp::traits::input_parameter< int >::type nthreads(nthreadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(aggregate_across_genes(x, sets, average, nthreads));
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::LogicalVector> >::type average(averageSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type num_threads(num_threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(aggregate_across_genes(x, sets, average, num_threads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// aggregate_across_genes_defaults
+Rcpp::List aggregate_across_genes_defaults();
+RcppExport SEXP _scrapper_aggregate_across_genes_defaults() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    rcpp_result_gen = Rcpp::wrap(aggregate_across_genes_defaults());
     return rcpp_result_gen;
 END_RCPP
 }
 // build_snn_graph
-SEXP build_snn_graph(Rcpp::IntegerMatrix neighbors, std::string scheme, int num_threads);
+SEXP build_snn_graph(Rcpp::IntegerMatrix neighbors, Rcpp::Nullable<Rcpp::CharacterVector> scheme, Rcpp::Nullable<Rcpp::IntegerVector> num_threads);
 RcppExport SEXP _scrapper_build_snn_graph(SEXP neighborsSEXP, SEXP schemeSEXP, SEXP num_threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::IntegerMatrix >::type neighbors(neighborsSEXP);
-    Rcpp::traits::input_parameter< std::string >::type scheme(schemeSEXP);
-    Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::CharacterVector> >::type scheme(schemeSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type num_threads(num_threadsSEXP);
     rcpp_result_gen = Rcpp::wrap(build_snn_graph(neighbors, scheme, num_threads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// build_snn_graph_defaults
+Rcpp::List build_snn_graph_defaults();
+RcppExport SEXP _scrapper_build_snn_graph_defaults() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    rcpp_result_gen = Rcpp::wrap(build_snn_graph_defaults());
     return rcpp_result_gen;
 END_RCPP
 }
@@ -108,54 +154,90 @@ BEGIN_RCPP
 END_RCPP
 }
 // center_size_factors
-Rcpp::NumericVector center_size_factors(Rcpp::NumericVector size_factors, Rcpp::Nullable<Rcpp::IntegerVector> block, bool lowest);
-RcppExport SEXP _scrapper_center_size_factors(SEXP size_factorsSEXP, SEXP blockSEXP, SEXP lowestSEXP) {
+Rcpp::NumericVector center_size_factors(Rcpp::NumericVector size_factors, Rcpp::Nullable<Rcpp::IntegerVector> block, Rcpp::Nullable<Rcpp::CharacterVector> mode);
+RcppExport SEXP _scrapper_center_size_factors(SEXP size_factorsSEXP, SEXP blockSEXP, SEXP modeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type size_factors(size_factorsSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type block(blockSEXP);
-    Rcpp::traits::input_parameter< bool >::type lowest(lowestSEXP);
-    rcpp_result_gen = Rcpp::wrap(center_size_factors(size_factors, block, lowest));
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::CharacterVector> >::type mode(modeSEXP);
+    rcpp_result_gen = Rcpp::wrap(center_size_factors(size_factors, block, mode));
+    return rcpp_result_gen;
+END_RCPP
+}
+// center_size_factors_defaults
+Rcpp::List center_size_factors_defaults();
+RcppExport SEXP _scrapper_center_size_factors_defaults() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    rcpp_result_gen = Rcpp::wrap(center_size_factors_defaults());
     return rcpp_result_gen;
 END_RCPP
 }
 // center_spike_in_factors
-Rcpp::List center_spike_in_factors(Rcpp::NumericVector endogenous, Rcpp::List spike_ins, Rcpp::Nullable<Rcpp::IntegerVector> block, bool lowest);
-RcppExport SEXP _scrapper_center_spike_in_factors(SEXP endogenousSEXP, SEXP spike_insSEXP, SEXP blockSEXP, SEXP lowestSEXP) {
+Rcpp::List center_spike_in_factors(Rcpp::NumericVector endogenous, Rcpp::List spike_ins, Rcpp::Nullable<Rcpp::IntegerVector> block, Rcpp::Nullable<Rcpp::CharacterVector> mode);
+RcppExport SEXP _scrapper_center_spike_in_factors(SEXP endogenousSEXP, SEXP spike_insSEXP, SEXP blockSEXP, SEXP modeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type endogenous(endogenousSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type spike_ins(spike_insSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type block(blockSEXP);
-    Rcpp::traits::input_parameter< bool >::type lowest(lowestSEXP);
-    rcpp_result_gen = Rcpp::wrap(center_spike_in_factors(endogenous, spike_ins, block, lowest));
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::CharacterVector> >::type mode(modeSEXP);
+    rcpp_result_gen = Rcpp::wrap(center_spike_in_factors(endogenous, spike_ins, block, mode));
+    return rcpp_result_gen;
+END_RCPP
+}
+// center_spike_in_factors_defaults
+Rcpp::List center_spike_in_factors_defaults();
+RcppExport SEXP _scrapper_center_spike_in_factors_defaults() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    rcpp_result_gen = Rcpp::wrap(center_spike_in_factors_defaults());
     return rcpp_result_gen;
 END_RCPP
 }
 // choose_highly_variable_genes
-Rcpp::IntegerVector choose_highly_variable_genes(Rcpp::NumericVector stats, int top, bool larger, bool keep_ties, Rcpp::Nullable<Rcpp::NumericVector> bound);
+Rcpp::IntegerVector choose_highly_variable_genes(Rcpp::NumericVector stats, Rcpp::Nullable<Rcpp::IntegerVector> top, Rcpp::Nullable<Rcpp::LogicalVector> larger, Rcpp::Nullable<Rcpp::LogicalVector> keep_ties, Rcpp::Nullable<Rcpp::NumericVector> bound);
 RcppExport SEXP _scrapper_choose_highly_variable_genes(SEXP statsSEXP, SEXP topSEXP, SEXP largerSEXP, SEXP keep_tiesSEXP, SEXP boundSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type stats(statsSEXP);
-    Rcpp::traits::input_parameter< int >::type top(topSEXP);
-    Rcpp::traits::input_parameter< bool >::type larger(largerSEXP);
-    Rcpp::traits::input_parameter< bool >::type keep_ties(keep_tiesSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type top(topSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::LogicalVector> >::type larger(largerSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::LogicalVector> >::type keep_ties(keep_tiesSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericVector> >::type bound(boundSEXP);
     rcpp_result_gen = Rcpp::wrap(choose_highly_variable_genes(stats, top, larger, keep_ties, bound));
     return rcpp_result_gen;
 END_RCPP
 }
+// choose_highly_variable_genes_defaults
+Rcpp::List choose_highly_variable_genes_defaults();
+RcppExport SEXP _scrapper_choose_highly_variable_genes_defaults() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    rcpp_result_gen = Rcpp::wrap(choose_highly_variable_genes_defaults());
+    return rcpp_result_gen;
+END_RCPP
+}
 // choose_pseudo_count
-double choose_pseudo_count(Rcpp::NumericVector size_factors, double quantile, double max_bias, double min_value);
+double choose_pseudo_count(Rcpp::NumericVector size_factors, Rcpp::Nullable<Rcpp::NumericVector> quantile, Rcpp::Nullable<Rcpp::NumericVector> max_bias, Rcpp::Nullable<Rcpp::NumericVector> min_value);
 RcppExport SEXP _scrapper_choose_pseudo_count(SEXP size_factorsSEXP, SEXP quantileSEXP, SEXP max_biasSEXP, SEXP min_valueSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type size_factors(size_factorsSEXP);
-    Rcpp::traits::input_parameter< double >::type quantile(quantileSEXP);
-    Rcpp::traits::input_parameter< double >::type max_bias(max_biasSEXP);
-    Rcpp::traits::input_parameter< double >::type min_value(min_valueSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericVector> >::type quantile(quantileSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericVector> >::type max_bias(max_biasSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericVector> >::type min_value(min_valueSEXP);
     rcpp_result_gen = Rcpp::wrap(choose_pseudo_count(size_factors, quantile, max_bias, min_value));
+    return rcpp_result_gen;
+END_RCPP
+}
+// choose_pseudo_count_defaults
+Rcpp::List choose_pseudo_count_defaults();
+RcppExport SEXP _scrapper_choose_pseudo_count_defaults() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    rcpp_result_gen = Rcpp::wrap(choose_pseudo_count_defaults());
     return rcpp_result_gen;
 END_RCPP
 }
@@ -709,18 +791,27 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_scrapper_compute_adt_qc_metrics_defaults", (DL_FUNC) &_scrapper_compute_adt_qc_metrics_defaults, 0},
     {"_scrapper_compute_adt_qc_metrics", (DL_FUNC) &_scrapper_compute_adt_qc_metrics, 3},
-    {"_scrapper_suggest_adt_qc_thresholds", (DL_FUNC) &_scrapper_suggest_adt_qc_thresholds, 4},
+    {"_scrapper_suggest_adt_qc_thresholds_defaults", (DL_FUNC) &_scrapper_suggest_adt_qc_thresholds_defaults, 0},
+    {"_scrapper_suggest_adt_qc_thresholds", (DL_FUNC) &_scrapper_suggest_adt_qc_thresholds, 5},
     {"_scrapper_filter_adt_qc_metrics", (DL_FUNC) &_scrapper_filter_adt_qc_metrics, 3},
     {"_scrapper_aggregate_across_cells", (DL_FUNC) &_scrapper_aggregate_across_cells, 6},
+    {"_scrapper_aggregate_across_cells_defaults", (DL_FUNC) &_scrapper_aggregate_across_cells_defaults, 0},
     {"_scrapper_aggregate_across_genes", (DL_FUNC) &_scrapper_aggregate_across_genes, 4},
+    {"_scrapper_aggregate_across_genes_defaults", (DL_FUNC) &_scrapper_aggregate_across_genes_defaults, 0},
     {"_scrapper_build_snn_graph", (DL_FUNC) &_scrapper_build_snn_graph, 3},
+    {"_scrapper_build_snn_graph_defaults", (DL_FUNC) &_scrapper_build_snn_graph_defaults, 0},
     {"_scrapper_graph_to_list", (DL_FUNC) &_scrapper_graph_to_list, 1},
     {"_scrapper_list_to_graph", (DL_FUNC) &_scrapper_list_to_graph, 1},
     {"_scrapper_center_size_factors", (DL_FUNC) &_scrapper_center_size_factors, 3},
+    {"_scrapper_center_size_factors_defaults", (DL_FUNC) &_scrapper_center_size_factors_defaults, 0},
     {"_scrapper_center_spike_in_factors", (DL_FUNC) &_scrapper_center_spike_in_factors, 4},
+    {"_scrapper_center_spike_in_factors_defaults", (DL_FUNC) &_scrapper_center_spike_in_factors_defaults, 0},
     {"_scrapper_choose_highly_variable_genes", (DL_FUNC) &_scrapper_choose_highly_variable_genes, 5},
+    {"_scrapper_choose_highly_variable_genes_defaults", (DL_FUNC) &_scrapper_choose_highly_variable_genes_defaults, 0},
     {"_scrapper_choose_pseudo_count", (DL_FUNC) &_scrapper_choose_pseudo_count, 4},
+    {"_scrapper_choose_pseudo_count_defaults", (DL_FUNC) &_scrapper_choose_pseudo_count_defaults, 0},
     {"_scrapper_cluster_multilevel", (DL_FUNC) &_scrapper_cluster_multilevel, 3},
     {"_scrapper_cluster_leiden", (DL_FUNC) &_scrapper_cluster_leiden, 4},
     {"_scrapper_cluster_walktrap", (DL_FUNC) &_scrapper_cluster_walktrap, 2},

@@ -9,6 +9,7 @@
 #' Each vector may be logical (whether to keep each row), integer (row indices) or character (row names).
 #' For character vectors, strings not present in \code{rownames(x)} are ignored.
 #' @param num.threads Integer scalar specifying the number of threads to use.
+#' If \code{NULL}, the default value in \code{computeAdtQcMetricsDefaults} is used.
 #' @param metrics \link[S4Vectors]{DataFrame} of per-cell QC metrics.
 #' This should have the same structure as the return value of \code{computeAdtQcMetrics}.
 #' @param block Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{metrics}.
@@ -16,7 +17,12 @@
 #'
 #' For \code{filterAdtQcMetrics}, a blocking factor should be provided if \code{block} was used to construct \code{thresholds}. 
 #' @param min.detected.drop Minimum drop in the number of detected features from the median, in order to consider a cell to be of low quality.
+#' If \code{NULL}, the default value in \code{suggestAdtQcThresholdDefaults} is used.
 #' @param num.mads Number of median from the median, to define the threshold for outliers in each metric.
+#' @param detected.num.mads Number of median from the median, to define the threshold for outliers in the number of detected tags.
+#' If \code{NULL}, the default value in \code{suggestAdtQcThresholdDefaults} is used.
+#' @param subset.sum.num.mads Number of median from the median, to define the threshold for outliers in the subset sums.
+#' If \code{NULL}, the default value in \code{suggestAdtQcThresholdDefaults} is used.
 #' @param thresholds List with the same structure as produced by \code{suggestAdtQcThresholds}.
 #'
 #' @return For \code{computeAdtQcMetrics}, a \link[S4Vectors]{DataFrame} is returned with one row per cell in \code{x}.
@@ -62,6 +68,8 @@
 #'
 #' For \code{filterAdtQcMetrics}, a logical vector of length \code{ncol(x)} is returned indicating which cells are of high quality. 
 #' High-quality cells are defined as those with numbers of detected tags above the \code{detected} threshold and control subset sums below the \code{subsets} threshold.
+#'
+#' For \code{computeAdtQcMetricsDefaults} and \code{suggestAdtQcThresholdsDefaults}, a named list is returned containing default values for the various function arguments.
 #' 
 #' @seealso
 #' The \code{compute_adt_qc_metrics}, \code{compute_adt_qc_filters} and \code{compute_adt_qc_filters_blocked} functions in \url{https://libscran.github.io/scran_qc/}.
@@ -90,7 +98,7 @@
 #' @name adt_quality_control
 #' @importFrom beachmat initializeCpp tatami.dim
 #' @importFrom S4Vectors DataFrame I
-computeAdtQcMetrics <- function(x, subsets, num.threads = 1) {
+computeAdtQcMetrics <- function(x, subsets, num.threads = NULL) {
     if (length(subsets) > 0 && is.null(names(subsets))) {
         stop("subsets should be a named list")
     }
@@ -106,11 +114,28 @@ computeAdtQcMetrics <- function(x, subsets, num.threads = 1) {
 }
 
 #' @export
+#' @name adt_quality_control
+computeAdtQcMetricsDefaults <- function() compute_adt_qc_metrics_defaults()
+
+#' @export
 #' @rdname adt_quality_control
-suggestAdtQcThresholds <- function(metrics, block=NULL, min.detected.drop=0.1, num.mads=3) {
+suggestAdtQcThresholds <- function(
+    metrics,
+    block = NULL,
+    min.detected.drop = NULL,
+    num.mads = NULL,
+    detected.num.mads = num.mads,
+    subset.sum.num.mads = num.mads
+) {
     block <- .transformFactor(block) 
     metrics <- .simplifyQcMetrics(metrics)
-    thresholds <- suggest_adt_qc_thresholds(metrics, block=block$index, min_detected_drop=min.detected.drop, num_mads=num.mads)
+    thresholds <- suggest_adt_qc_thresholds(
+        metrics,
+        block=block$index,
+        min_detected_drop=min.detected.drop,
+        detected_num_mads=num.mads,
+        subset_sum_num_mads=num.mads
+    )
 
     names(thresholds$subsets) <- names(metrics$subsets)
 
@@ -124,6 +149,10 @@ suggestAdtQcThresholds <- function(metrics, block=NULL, min.detected.drop=0.1, n
 
     thresholds
 }
+
+#' @export
+#' @name adt_quality_control
+suggestAdtQcThresholdsDefaults <- function() suggest_adt_qc_thresholds_defaults()
 
 #' @export
 #' @rdname adt_quality_control

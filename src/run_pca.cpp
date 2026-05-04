@@ -45,7 +45,7 @@ Rcpp::List run_pca(
     auto ptr = block_info.get();
 
     irlba::Options iopt;
-    set_optional_integer(irlba_work, iopt.extra_work);
+    set_optional_integer(irlba_work, iopt.extra_work, "extra.work");
     iopt.max_iterations = irlba_iterations;
     iopt.convergence_tolerance = irlba_tolerance;
     iopt.seed = sanisizer::from_float<I<decltype(iopt.seed)> >(irlba_seed);

@@ -16,13 +16,17 @@
 #' If duplicate genes are present, only the first occurrence is used.
 #' If the first vector contains gene names not present in \code{x}, those genes are ignored.
 #' @param average Logical scalar indicating whether to compute the average rather than the sum.
+#' If \code{NULL}, the default value in \code{aggregateAcrossGenesDefaults} is used.
 #' @param convert Logical scalar indicating whether to convert gene identities to non-duplicate row indices in each entry of \code{sets}.
 #' Can be set to \code{FALSE} for greater efficiency if the \code{sets} already contains non-duplicated integer vectors. 
 #' @param num.threads Integer specifying the number of threads to be used for aggregation.
+#' If \code{NULL}, the default value in \code{aggregateAcrossGenesDefaults} is used.
 #'
-#' @return A list of length equal to that of \code{sets}.
+#' @return For \code{aggregateAcrossGenes}, a list of length equal to that of \code{sets}.
 #' Each entry is a numeric vector of length equal to the number of columns in \code{x}, 
 #' containing the (weighted) sum/mean of expression values for the corresponding set across all cells.
+#'
+#' For \code{aggregateAcrossGenesDefaults}, a named list of default values for the respective function arguments.
 #'
 #' @author Aaron Lun
 #' @seealso
@@ -55,7 +59,7 @@
 #' 
 #' @export
 #' @importFrom beachmat initializeCpp
-aggregateAcrossGenes <- function(x, sets, average = FALSE, convert = TRUE, num.threads = 1) {
+aggregateAcrossGenes <- function(x, sets, average = NULL, convert = TRUE, num.threads = NULL) {
     .checkSEX(x, "aggregateAcrossGenes.se")
 
     if (convert) {
@@ -75,7 +79,7 @@ aggregateAcrossGenes <- function(x, sets, average = FALSE, convert = TRUE, num.t
     }
 
     ptr <- initializeCpp(x, .check.na=FALSE)
-    output <- aggregate_across_genes(ptr, sets, average, num.threads)
+    output <- aggregate_across_genes(ptr, sets, average = average, num_threads = num.threads)
     names(output) <- names(sets)
     output
 }
@@ -117,3 +121,7 @@ aggregateAcrossGenes <- function(x, sets, average = FALSE, convert = TRUE, num.t
     }
     list(genes, weights)
 }
+
+#' @export
+#' @rdname aggregateAcrossGenes
+aggregateAcrossGenesDefaults <- function() aggregate_across_genes_defaults()

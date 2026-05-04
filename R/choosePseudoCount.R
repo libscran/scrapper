@@ -9,13 +9,18 @@
 #' Invalid size factors (e.g., non-positive, non-finite) will be ignored.
 #' @param quantile Numeric scalar specifying the quantile to use for finding the smallest/largest size factors.
 #' Setting this to zero will use the observed minimum and maximum, though in practice, this is usually too sensitive to outliers.
-#' The default is to take the 5th and 95th percentile to obtain a range that captures most of the distribution.
+#' If \code{NULL}, the default value in \code{choosePseudoCountDefaults} is used;
+#' this is set to the 5th and 95th percentile to obtain a range that captures most of the distribution.
 #' @param max.bias Numeric scalar specifying the maximum allowed bias.
 #' This is the maximum absolute value of any spurious log2-fold change between the cells with the smallest and largest size factors.
+#' If \code{NULL}, the default value in \code{choosePseudoCountDefaults} is used.
 #' @param min.value Numeric scalar specifying the minimum value for the pseudo-count.
-#' Defaults to 1 to stabilize near-zero normalized expression values, otherwise these manifest as avoid large negative values.
+#' If \code{NULL}, the default value in \code{choosePseudoCountDefaults} is used;
+#' this is set to 1 to stabilize near-zero normalized expression values, otherwise these manifest as avoid large negative values.
 #'
-#' @return A choice of pseudo-count for \code{\link{normalizeCounts}}.
+#' @return \code{choosePseudoCount} returns a number representing the choice of pseudo-count for \code{\link{normalizeCounts}}.
+#'
+#' \code{choosePseudoCountDefaults} returns a named list of default values for their function arguments.
 #'
 #' @author Aaron Lun
 #'
@@ -34,6 +39,10 @@
 #' choosePseudoCount(sf, max.bias=0.5)
 #'
 #' @export
-choosePseudoCount <- function(size.factors, quantile = 0.05, max.bias = 1, min.value = 1) {
+choosePseudoCount <- function(size.factors, quantile = NULL, max.bias = NULL, min.value = NULL) {
     choose_pseudo_count(size.factors, quantile, max.bias, min.value)
 }
+
+#' @export
+#' @rdname choosePseudoCount
+choosePseudoCountDefaults <- function() choose_pseudo_count_defaults()

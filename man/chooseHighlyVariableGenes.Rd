@@ -2,36 +2,44 @@
 % Please edit documentation in R/chooseHighlyVariableGenes.R
 \name{chooseHighlyVariableGenes}
 \alias{chooseHighlyVariableGenes}
+\alias{chooseHighlyVariableGenesDefaults}
 \title{Choose highly variable genes}
 \usage{
 chooseHighlyVariableGenes(
   stats,
-  top = 4000,
-  larger = TRUE,
-  keep.ties = TRUE,
-  bound = 0
+  top = NULL,
+  larger = NULL,
+  keep.ties = NULL,
+  bound = NULL
 )
+
+chooseHighlyVariableGenesDefaults()
 }
 \arguments{
 \item{stats}{Numeric vector of variances (or a related statistic) across all genes.
 Typically, the residuals from \code{\link{modelGeneVariances}} are used here.}
 
 \item{top}{Integer specifying the number of top genes to retain.
-Note that the actual number of retained genes may not be equal to \code{top}, depending on the other options.}
+Note that the actual number of retained genes may not be equal to \code{top}, depending on the other options.
+If \code{NULL}, the default value in \code{chooseHighlyVariableGenesDefaults} is used.}
 
 \item{larger}{Logical scalar indicating whether larger values of \code{stats} correspond to more variable genes.
 If \code{TRUE}, HVGs are defined as those with the largest values of \code{stats}.
-This is typically the case for variances or related statistics, e.g., residuals.}
+This is typically the case for variances or related statistics, e.g., residuals.
+If \code{NULL}, the default value in \code{chooseHighlyVariableGenesDefaults} is used.}
 
 \item{keep.ties}{Logical scalar indicating whether to keep tied values of \code{stats}, even if \code{top} may be exceeded.}
 
 \item{bound}{Numeric scalar specifying the lower bound (if \code{larger=TRUE}) or upper bound (otherwise) to be applied to \code{stats}.
 Genes are not considered to be HVGs if they do not satisfy this bound, even if they are within the \code{top} genes.
-For example, residuals from the fitted trend should be positive, which can be enforced by setting \code{bound} to zero.
-Ignored if \code{NULL}.}
+For example, residuals from the fitted trend should be positive, which can be enforced by setting \code{bound = 0}. 
+If \code{NULL}, the default value in \code{chooseHighlyVariableGenesDefaults} is used.
+If \code{NA}, no bound is enforced.}
 }
 \value{
-Integer vector containing the indices of genes in \code{stats} that are considered to be highly variable.
+\code{chooseHighlyVariableGenes} returns an integer vector containing the indices of genes in \code{stats} that are considered to be highly variable.
+
+\code{chooseHighlyVariableGenesDefaults} returns a named list of default values for their function arguments.
 }
 \description{
 Choose highly variable genes (HVGs) based on a variance-related statistic.

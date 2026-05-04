@@ -3,18 +3,26 @@
 \name{adt_quality_control}
 \alias{adt_quality_control}
 \alias{computeAdtQcMetrics}
+\alias{computeAdtQcMetricsDefaults}
 \alias{suggestAdtQcThresholds}
+\alias{suggestAdtQcThresholdsDefaults}
 \alias{filterAdtQcMetrics}
 \title{Quality control for ADT count data}
 \usage{
-computeAdtQcMetrics(x, subsets, num.threads = 1)
+computeAdtQcMetrics(x, subsets, num.threads = NULL)
+
+computeAdtQcMetricsDefaults()
 
 suggestAdtQcThresholds(
   metrics,
   block = NULL,
-  min.detected.drop = 0.1,
-  num.mads = 3
+  min.detected.drop = NULL,
+  num.mads = NULL,
+  detected.num.mads = num.mads,
+  subset.sum.num.mads = num.mads
 )
+
+suggestAdtQcThresholdsDefaults()
 
 filterAdtQcMetrics(thresholds, metrics, block = NULL)
 }
@@ -26,7 +34,8 @@ Values are expected to be counts.}
 Each vector may be logical (whether to keep each row), integer (row indices) or character (row names).
 For character vectors, strings not present in \code{rownames(x)} are ignored.}
 
-\item{num.threads}{Integer scalar specifying the number of threads to use.}
+\item{num.threads}{Integer scalar specifying the number of threads to use.
+If \code{NULL}, the default value in \code{computeAdtQcMetricsDefaults} is used.}
 
 \item{metrics}{\link[S4Vectors]{DataFrame} of per-cell QC metrics.
 This should have the same structure as the return value of \code{computeAdtQcMetrics}.}
@@ -36,9 +45,16 @@ Alternatively \code{NULL} if all cells are from the same block.
 
 For \code{filterAdtQcMetrics}, a blocking factor should be provided if \code{block} was used to construct \code{thresholds}.}
 
-\item{min.detected.drop}{Minimum drop in the number of detected features from the median, in order to consider a cell to be of low quality.}
+\item{min.detected.drop}{Minimum drop in the number of detected features from the median, in order to consider a cell to be of low quality.
+If \code{NULL}, the default value in \code{suggestAdtQcThresholdDefaults} is used.}
 
 \item{num.mads}{Number of median from the median, to define the threshold for outliers in each metric.}
+
+\item{detected.num.mads}{Number of median from the median, to define the threshold for outliers in the number of detected tags.
+If \code{NULL}, the default value in \code{suggestAdtQcThresholdDefaults} is used.}
+
+\item{subset.sum.num.mads}{Number of median from the median, to define the threshold for outliers in the subset sums.
+If \code{NULL}, the default value in \code{suggestAdtQcThresholdDefaults} is used.}
 
 \item{thresholds}{List with the same structure as produced by \code{suggestAdtQcThresholds}.}
 }
@@ -86,6 +102,8 @@ Each vector is of length equal to the number of levels in \code{block} and is na
 
 For \code{filterAdtQcMetrics}, a logical vector of length \code{ncol(x)} is returned indicating which cells are of high quality. 
 High-quality cells are defined as those with numbers of detected tags above the \code{detected} threshold and control subset sums below the \code{subsets} threshold.
+
+For \code{computeAdtQcMetricsDefaults} and \code{suggestAdtQcThresholdsDefaults}, a named list is returned containing default values for the respective function arguments.
 }
 \description{
 Compute per-cell QC metrics from an initialized matrix of ADT counts,

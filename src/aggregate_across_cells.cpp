@@ -10,13 +10,13 @@
 #include "utils_other.h"
 
 //[[Rcpp::export(rng=false)]]
-SEXP aggregate_across_cells(
+Rcpp::List aggregate_across_cells(
     SEXP x,
     Rcpp::IntegerVector groups,
-    bool compute_sum,
-    bool compute_detected,
-    bool compute_median,
-    int num_threads
+    Rcpp::Nullable<Rcpp::LogicalVector> compute_sum,
+    Rcpp::Nullable<Rcpp::LogicalVector> compute_detected,
+    Rcpp::Nullable<Rcpp::LogicalVector> compute_median,
+    Rcpp::Nullable<Rcpp::IntegerVector> num_threads
 ) {
     auto raw_mat = Rtatami::BoundNumericPointer(x);
     const auto& mat = raw_mat->ptr;
@@ -31,8 +31,14 @@ SEXP aggregate_across_cells(
     const auto ncombos = tatami_stats::total_groups(gptr, NC);
     scran_aggregate::AggregateAcrossCellsBuffers<double, int, double> buffers;
 
+    scran_aggregate::AggregateAcrossCellsOptions opt;
+    set_integer(num_threads, opt.num_threads, "num.threads");
+    set_bool(compute_sum, opt.compute_sums, "compute.sum"); // setting these for convenience + consistency, even though they have no effect if a buffer is supplied. 
+    set_bool(compute_detected, opt.compute_detected, "compute.detected");
+    set_bool(compute_median, opt.compute_medians, "compute.median");
+
     Rcpp::NumericMatrix sums;
-    if (compute_sum) {
+    if (opt.compute_sums) {
         sums = create_matrix<Rcpp::NumericMatrix>(NR, ncombos);
         sanisizer::reserve(buffers.sums, ncombos);
         double* osum = sums.begin();
@@ -42,7 +48,7 @@ SEXP aggregate_across_cells(
     }
 
     Rcpp::IntegerMatrix detected;
-    if (compute_detected) {
+    if (opt.compute_detected) {
         detected = create_matrix<Rcpp::IntegerMatrix>(NR, ncombos);
         sanisizer::reserve(buffers.detected, ncombos);
         int* odet = detected.begin();
@@ -52,7 +58,7 @@ SEXP aggregate_across_cells(
     }
 
     Rcpp::NumericMatrix medians;
-    if (compute_median) {
+    if (opt.compute_medians) {
         medians = create_matrix<Rcpp::NumericMatrix>(NR, ncombos);
         sanisizer::reserve(buffers.medians, ncombos);
         double* omedian = medians.begin();
@@ -61,22 +67,20 @@ SEXP aggregate_across_cells(
         }
     }
 
-    scran_aggregate::AggregateAcrossCellsOptions opt;
-    opt.num_threads = num_threads;
     scran_aggregate::aggregate_across_cells(*mat, gptr, buffers, opt);
 
     Rcpp::RObject sums2 = R_NilValue;
-    if (compute_sum) {
+    if (opt.compute_sums) {
         sums2 = sums;
     }
 
     Rcpp::RObject detected2 = R_NilValue;
-    if (compute_detected) {
+    if (opt.compute_detected) {
         detected2 = detected;
     }
 
     Rcpp::RObject medians2 = R_NilValue;
-    if (compute_median) {
+    if (opt.compute_medians) {
         medians2 = medians;
     }
 
@@ -85,4 +89,15 @@ SEXP aggregate_across_cells(
         Rcpp::Named("detected") = detected2,
         Rcpp::Named("medians") = medians2
     );
+}
+
+// [[Rcpp::export(rng=false)]]
+Rcpp::List aggregate_across_cells_defaults() {
+    Rcpp::List output;
+    scran_aggregate::AggregateAcrossCellsOptions opt;
+    output["compute.sum"] = opt.compute_sums;
+    output["compute.detected"] = opt.compute_detected;
+    output["compute.median"] = opt.compute_medians;
+    output["num.threads"] = opt.num_threads;
+    return output;
 }
