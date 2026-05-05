@@ -40,3 +40,8 @@ test_that("clusterKmeans works with different methods", {
     expect_identical(length(unique(clustering$clusters)), 5L)
     expect_identical(ncol(clustering$centers), 5L)
 })
+
+test_that("defaults work correctly", {
+    def <- clusterKmeansDefaults()
+    expect_identical(all(names(def) %in% names(formals(clusterKmeans))))
+})

@@ -126,8 +126,6 @@ Rcpp::List cluster_walktrap(SEXP ptr0, Rcpp::RObject steps) {
 //[[Rcpp::export(rng=false)]]
 Rcpp::List cluster_graph_defaults() {
     Rcpp::List output;
-    output["method"] = "multilevel";
-
     scran_graph_cluster::ClusterMultilevelOptions m_opt;
     output["multilevel.resolution"] = m_opt.resolution;
     output["multilevel.seed"] = m_opt.seed;

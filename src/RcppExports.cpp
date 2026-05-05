@@ -287,8 +287,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // cluster_kmeans
-Rcpp::List cluster_kmeans(SEXP x, int nclusters, bool tatami, std::string init_method, std::string refine_method, bool var_part_optimize_partition, double var_part_size_adjustment, int lloyd_iterations, int hartigan_wong_iterations, int hartigan_wong_quick_transfer_iterations, bool hartigan_wong_quit_quick_transfer_failure, double seed, int nthreads);
-RcppExport SEXP _scrapper_cluster_kmeans(SEXP xSEXP, SEXP nclustersSEXP, SEXP tatamiSEXP, SEXP init_methodSEXP, SEXP refine_methodSEXP, SEXP var_part_optimize_partitionSEXP, SEXP var_part_size_adjustmentSEXP, SEXP lloyd_iterationsSEXP, SEXP hartigan_wong_iterationsSEXP, SEXP hartigan_wong_quick_transfer_iterationsSEXP, SEXP hartigan_wong_quit_quick_transfer_failureSEXP, SEXP seedSEXP, SEXP nthreadsSEXP) {
+Rcpp::List cluster_kmeans(SEXP x, int nclusters, bool tatami, std::string init_method, std::string refine_method, Rcpp::RObject random_seed, Rcpp::RObject kmeanspp_seed, Rcpp::RObject var_part_optimize_partition, Rcpp::RObject var_part_size_adjustment, Rcpp::RObject lloyd_iterations, Rcpp::RObject hartigan_wong_iterations, Rcpp::RObject hartigan_wong_quick_transfer_iterations, Rcpp::RObject hartigan_wong_quit_quick_transfer_failure, Rcpp::RObject nthreads);
+RcppExport SEXP _scrapper_cluster_kmeans(SEXP xSEXP, SEXP nclustersSEXP, SEXP tatamiSEXP, SEXP init_methodSEXP, SEXP refine_methodSEXP, SEXP random_seedSEXP, SEXP kmeanspp_seedSEXP, SEXP var_part_optimize_partitionSEXP, SEXP var_part_size_adjustmentSEXP, SEXP lloyd_iterationsSEXP, SEXP hartigan_wong_iterationsSEXP, SEXP hartigan_wong_quick_transfer_iterationsSEXP, SEXP hartigan_wong_quit_quick_transfer_failureSEXP, SEXP nthreadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
@@ -296,15 +296,25 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type tatami(tatamiSEXP);
     Rcpp::traits::input_parameter< std::string >::type init_method(init_methodSEXP);
     Rcpp::traits::input_parameter< std::string >::type refine_method(refine_methodSEXP);
-    Rcpp::traits::input_parameter< bool >::type var_part_optimize_partition(var_part_optimize_partitionSEXP);
-    Rcpp::traits::input_parameter< double >::type var_part_size_adjustment(var_part_size_adjustmentSEXP);
-    Rcpp::traits::input_parameter< int >::type lloyd_iterations(lloyd_iterationsSEXP);
-    Rcpp::traits::input_parameter< int >::type hartigan_wong_iterations(hartigan_wong_iterationsSEXP);
-    Rcpp::traits::input_parameter< int >::type hartigan_wong_quick_transfer_iterations(hartigan_wong_quick_transfer_iterationsSEXP);
-    Rcpp::traits::input_parameter< bool >::type hartigan_wong_quit_quick_transfer_failure(hartigan_wong_quit_quick_transfer_failureSEXP);
-    Rcpp::traits::input_parameter< double >::type seed(seedSEXP);
-    Rcpp::traits::input_parameter< int >::type nthreads(nthreadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(cluster_kmeans(x, nclusters, tatami, init_method, refine_method, var_part_optimize_partition, var_part_size_adjustment, lloyd_iterations, hartigan_wong_iterations, hartigan_wong_quick_transfer_iterations, hartigan_wong_quit_quick_transfer_failure, seed, nthreads));
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type random_seed(random_seedSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type kmeanspp_seed(kmeanspp_seedSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type var_part_optimize_partition(var_part_optimize_partitionSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type var_part_size_adjustment(var_part_size_adjustmentSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type lloyd_iterations(lloyd_iterationsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type hartigan_wong_iterations(hartigan_wong_iterationsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type hartigan_wong_quick_transfer_iterations(hartigan_wong_quick_transfer_iterationsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type hartigan_wong_quit_quick_transfer_failure(hartigan_wong_quit_quick_transfer_failureSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type nthreads(nthreadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(cluster_kmeans(x, nclusters, tatami, init_method, refine_method, random_seed, kmeanspp_seed, var_part_optimize_partition, var_part_size_adjustment, lloyd_iterations, hartigan_wong_iterations, hartigan_wong_quick_transfer_iterations, hartigan_wong_quit_quick_transfer_failure, nthreads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cluster_kmeans_defaults
+Rcpp::List cluster_kmeans_defaults();
+RcppExport SEXP _scrapper_cluster_kmeans_defaults() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    rcpp_result_gen = Rcpp::wrap(cluster_kmeans_defaults());
     return rcpp_result_gen;
 END_RCPP
 }
@@ -825,7 +835,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_cluster_leiden", (DL_FUNC) &_scrapper_cluster_leiden, 4},
     {"_scrapper_cluster_walktrap", (DL_FUNC) &_scrapper_cluster_walktrap, 2},
     {"_scrapper_cluster_graph_defaults", (DL_FUNC) &_scrapper_cluster_graph_defaults, 0},
-    {"_scrapper_cluster_kmeans", (DL_FUNC) &_scrapper_cluster_kmeans, 13},
+    {"_scrapper_cluster_kmeans", (DL_FUNC) &_scrapper_cluster_kmeans, 14},
+    {"_scrapper_cluster_kmeans_defaults", (DL_FUNC) &_scrapper_cluster_kmeans_defaults, 0},
     {"_scrapper_combine_factors", (DL_FUNC) &_scrapper_combine_factors, 3},
     {"_scrapper_compute_block_weights", (DL_FUNC) &_scrapper_compute_block_weights, 3},
     {"_scrapper_compute_clrm1_factors", (DL_FUNC) &_scrapper_compute_clrm1_factors, 2},
