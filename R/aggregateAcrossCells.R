@@ -8,16 +8,15 @@
 #' Values are typically expected to be counts.
 #' @param factors A list or data frame (or their equivalents from \pkg{S4Vectors}) containing one or more grouping factors, see \code{\link{combineFactors}}.
 #' @param compute.sum Boolean indicating whether to compute the sum in each group.
-#' If \code{NULL}, the default value in \code{aggregateAcrossCellsDefaults} is used.
+#' If \code{NULL}, the default value in \code{\link{aggregateAcrossCellsDefaults}} is used.
 #' @param compute.detected Boolean indicating whether to compute the number of cells with detected expression in each group.
-#' If \code{NULL}, the default value in \code{aggregateAcrossCellsDefaults} is used.
+#' If \code{NULL}, the default value in \code{\link{aggregateAcrossCellsDefaults}} is used.
 #' @param compute.median Boolean indicating whether to compute the median in each group.
-#' If \code{NULL}, the default value in \code{aggregateAcrossCellsDefaults} is used.
+#' If \code{NULL}, the default value in \code{\link{aggregateAcrossCellsDefaults}} is used.
 #' @param num.threads Integer specifying the number of threads to be used for aggregation.
-#' If \code{NULL}, the default value in \code{aggregateAcrossCellsDefaults} is used.
+#' If \code{NULL}, the default value in \code{\link{aggregateAcrossCellsDefaults}} is used.
 #'
-#' @return
-#' For \code{aggregateAcrossCells}, a list is returned containing:
+#' @return List containing:
 #' \itemize{
 #' \item \code{sums}, a numeric matrix where each row corresponds to a gene and each column corresponds to a unique combination of levels from \code{factors}.
 #' Each entry contains the summed expression across all cells with that combination. 
@@ -35,8 +34,6 @@
 #' \item \code{index}, an integer vector of length equal to the number of cells in \code{x}.
 #' This specifies the combination in \code{combinations} to which each cell was assigned.
 #' }
-#'
-#' For \code{aggregateAcrossCellsDefaults}, a named list is returned containing default values for the various function arguments.
 #'
 #' @seealso
 #' The \code{aggregate_across_cells} function in \url{https://libscran.github.io/scran_aggregate/}.
@@ -98,6 +95,10 @@ aggregateAcrossCells <- function(
     output
 }
 
+#' Default parameters for \code{\link{aggregateAcrossCells}}
+#' @return Named list containing default values for various function arguments.
+#' @author Aaron Lun
+#' @examples
+#' aggregateAcrossCellsDefaults()
 #' @export
-#' @rdname aggregateAcrossCells
 aggregateAcrossCellsDefaults <- function() aggregate_across_cells_defaults()

@@ -2,12 +2,9 @@
 % Please edit documentation in R/centerSpikeInFactors.R
 \name{centerSpikeInFactors}
 \alias{centerSpikeInFactors}
-\alias{centerSpikeInFactorsDefaults}
 \title{Center spike-in size factors}
 \usage{
 centerSpikeInFactors(endogenous, spike.ins, block = NULL, mode = NULL)
-
-centerSpikeInFactorsDefaults()
 }
 \arguments{
 \item{endogenous}{Numeric vector of size factors for endogenous genes across cells.
@@ -21,17 +18,16 @@ Invalid size factors (e.g., non-positive, non-finite) will be ignored.}
 Alternatively \code{NULL}, in which case all cells are assumed to be in the same block.}
 
 \item{mode}{String specifying how to scale size factors across blocks, see the argument of the same name in \code{\link{centerSizeFactors}}.
+If \code{NULL}, the default value in \code{\link{centerSpikeInFactors}} is used.
 Only used if \code{block} is provided.}
 }
 \value{
-\code{centerSpikeInFactors} returns a list containing:
+List containing:
 \itemize{
 \item \code{endogenous}, a numeric vector containing the centered size factors for the endogenous genes.
 \item \code{spike.ins}, a named list of numeric vectors.
 Each vector is named after an entry of \code{spike.ins} and contains centered size factors for the corresponding spike-in transcripts.
 }
-
-\code{centerSpikeInFactorsDefaults} returns a named list of default values for their respective function arguments.
 }
 \description{
 Center size factors for endogenous genes and spike-in transcripts, following the rationale in \code{\link{centerSizeFactors}}.

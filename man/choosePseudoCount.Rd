@@ -2,7 +2,6 @@
 % Please edit documentation in R/choosePseudoCount.R
 \name{choosePseudoCount}
 \alias{choosePseudoCount}
-\alias{choosePseudoCountDefaults}
 \title{Choose a suitable pseudo-count}
 \usage{
 choosePseudoCount(
@@ -11,8 +10,6 @@ choosePseudoCount(
   max.bias = NULL,
   min.value = NULL
 )
-
-choosePseudoCountDefaults()
 }
 \arguments{
 \item{size.factors}{Numeric vector of size factors for all cells.
@@ -21,21 +18,19 @@ Invalid size factors (e.g., non-positive, non-finite) will be ignored.}
 
 \item{quantile}{Numeric scalar specifying the quantile to use for finding the smallest/largest size factors.
 Setting this to zero will use the observed minimum and maximum, though in practice, this is usually too sensitive to outliers.
-If \code{NULL}, the default value in \code{choosePseudoCountDefaults} is used;
-this is set to the 5th and 95th percentile to obtain a range that captures most of the distribution.}
+If \code{NULL}, the default value in \code{\link{choosePseudoCountDefaults}} is used.
+Specifically, the default uses the 5th and 95th percentile to obtain a range that captures most of the distribution.}
 
 \item{max.bias}{Numeric scalar specifying the maximum allowed bias.
 This is the maximum absolute value of any spurious log2-fold change between the cells with the smallest and largest size factors.
-If \code{NULL}, the default value in \code{choosePseudoCountDefaults} is used.}
+If \code{NULL}, the default value in \code{\link{choosePseudoCountDefaults}} is used.}
 
 \item{min.value}{Numeric scalar specifying the minimum value for the pseudo-count.
-If \code{NULL}, the default value in \code{choosePseudoCountDefaults} is used;
-this is set to 1 to stabilize near-zero normalized expression values, otherwise these manifest as avoid large negative values.}
+If \code{NULL}, the default value in \code{\link{choosePseudoCountDefaults}} is used.
+Specifically, the default is 1 to stabilize near-zero normalized expression values, otherwise these manifest as avoid large negative values.}
 }
 \value{
-\code{choosePseudoCount} returns a number representing the choice of pseudo-count for \code{\link{normalizeCounts}}.
-
-\code{choosePseudoCountDefaults} returns a named list of default values for their function arguments.
+A choice of pseudo-count for \code{\link{normalizeCounts}}.
 }
 \description{
 Choose a suitable pseudo-count to control the bias introduced by log-transformation of normalized counts from \code{\link{normalizeCounts}}.

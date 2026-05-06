@@ -6,12 +6,10 @@
 #' @param x A matrix-like object containing ADT count data.
 #' Rows correspond to tags and columns correspond to cells.
 #' @param num.threads Number of threads to use.
-#' If \code{NULL}, the default value in \code{computeClrm1FactorDefaults} is used.
+#' If \code{NULL}, the default value in \code{\link{computeClrm1FactorDefaults}} is used.
 #'
-#' @return \code{computeClrm1Factors} returns a numeric vector containing the CLRm1 size factor for each cell.
+#' @return Numeric vector containing the CLRm1 size factor for each cell.
 #' Note that these size factors are not centered and should be passed through, e.g., \code{\link{centerSizeFactors}} before normalization.
-#'
-#' \code{computeClrm1FactorsDefaults} returns a named list containing default values for the various function arguments.
 #'
 #' @author Aaron Lun
 #'
@@ -33,6 +31,10 @@ computeClrm1Factors <- function(x, num.threads = NULL) {
     compute_clrm1_factors(ptr, num_threads=num.threads)
 }
 
+#' Default parameters for \code{\link{computeClrm1Factors}}
+#' @return Named list containing default values for various function arguments.
+#' @author Aaron Lun
+#' @examples
+#' computeClrm1FactorsDefaults()
 #' @export
-#' @rdname computeClrm1Factors
 computeClrm1FactorsDefaults <- function() compute_clrm1_factors_defaults()

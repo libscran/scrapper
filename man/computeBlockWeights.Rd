@@ -2,7 +2,6 @@
 % Please edit documentation in R/computeBlockWeights.R
 \name{computeBlockWeights}
 \alias{computeBlockWeights}
-\alias{computeBlockWeightsDefaults}
 \title{Compute block weights}
 \usage{
 computeBlockWeights(
@@ -10,8 +9,6 @@ computeBlockWeights(
   block.weight.policy = c("variable", "equal", "size", "none"),
   variable.block.weight = NULL
 )
-
-computeBlockWeightsDefaults()
 }
 \arguments{
 \item{sizes}{Numeric vector containing the size of (i.e., number of cells in) each block.}
@@ -34,9 +31,7 @@ If \code{NULL}, the default value in \code{computeBlockWeightsDefaults} is used.
 Only used if \code{block.weight.policy = "variable"}.}
 }
 \value{
-\code{computeBlockWeights} returns a numeric vector containing the relative block weights.
-
-\code{computeBlockWeights} returns a named list of default values for various function arguments.
+Numeric vector containing the relative block weights.
 }
 \description{
 Compute a weight for each block based on the number of cells in each block.

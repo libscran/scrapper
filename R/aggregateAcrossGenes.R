@@ -16,17 +16,15 @@
 #' If duplicate genes are present, only the first occurrence is used.
 #' If the first vector contains gene names not present in \code{x}, those genes are ignored.
 #' @param average Logical scalar indicating whether to compute the average rather than the sum.
-#' If \code{NULL}, the default value in \code{aggregateAcrossGenesDefaults} is used.
+#' If \code{NULL}, the default value in \code{\link{aggregateAcrossGenesDefaults}} is used.
 #' @param convert Logical scalar indicating whether to convert gene identities to non-duplicate row indices in each entry of \code{sets}.
 #' Can be set to \code{FALSE} for greater efficiency if the \code{sets} already contains non-duplicated integer vectors. 
 #' @param num.threads Integer specifying the number of threads to be used for aggregation.
-#' If \code{NULL}, the default value in \code{aggregateAcrossGenesDefaults} is used.
+#' If \code{NULL}, the default value in \code{\link{aggregateAcrossGenesDefaults}} is used.
 #'
-#' @return For \code{aggregateAcrossGenes}, a list of length equal to that of \code{sets}.
+#' @return List of length equal to that of \code{sets}.
 #' Each entry is a numeric vector of length equal to the number of columns in \code{x}, 
 #' containing the (weighted) sum/mean of expression values for the corresponding set across all cells.
-#'
-#' For \code{aggregateAcrossGenesDefaults}, a named list of default values for the respective function arguments.
 #'
 #' @author Aaron Lun
 #' @seealso
@@ -122,6 +120,10 @@ aggregateAcrossGenes <- function(x, sets, average = NULL, convert = TRUE, num.th
     list(genes, weights)
 }
 
+#' Default parameters for \code{\link{aggregateAcrossGenes}}
+#' @return Named list containing default values for various function arguments.
+#' @author Aaron Lun
+#' @examples
+#' aggregateAcrossGenesDefaults()
 #' @export
-#' @rdname aggregateAcrossGenes
 aggregateAcrossGenesDefaults <- function() aggregate_across_genes_defaults()

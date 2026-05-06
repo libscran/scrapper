@@ -2,7 +2,6 @@
 % Please edit documentation in R/fitVarianceTrend.R
 \name{fitVarianceTrend}
 \alias{fitVarianceTrend}
-\alias{fitVarianceTrendDefaults}
 \title{Fit a mean-variance trend}
 \usage{
 fitVarianceTrend(
@@ -17,8 +16,6 @@ fitVarianceTrend(
   min.window.count = NULL,
   num.threads = NULL
 )
-
-fitVarianceTrendDefaults()
 }
 \arguments{
 \item{means}{Numeric vector containing the mean (log-)expression for each gene.}

@@ -83,5 +83,5 @@ test_that("modelGeneVariances works with blocking", {
 
 test_that("defaults work as expected", {
     def <- modelGeneVariancesDefaults()
-    expect_true(all(names(ref) %in% names(formals(modelGeneVariances))))
+    expect_true(all(names(def) %in% names(formals(modelGeneVariances))))
 })

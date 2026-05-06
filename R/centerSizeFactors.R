@@ -10,13 +10,10 @@
 #' Alternatively \code{NULL}, in which case all cells are assumed to be in the same block.
 #' @param mode String specifying how to scale size factors across blocks.
 #' This can be either \code{"lowest"} or \code{"per-block"}, see Details.
-#' If \code{NULL}, the default value in \code{centerSizeFactorsDefaults} is used.
+#' If \code{NULL}, the default value in \code{\link{centerSizeFactorsDefaults}} is used.
 #' Only used if \code{block} is provided.
 #' 
-#' @return
-#' \code{centerSizeFactors} returns a numeric vector of length equal to \code{size.factors}, containing the centered size factors.
-#'
-#' \code{centerSizeFactorsDefaults} returns a named list of default values for their respective function arguments.
+#' @return Numeric vector of length equal to \code{size.factors}, containing the centered size factors.
 #'
 #' @details
 #' \code{"lowest"} will compute the average size factor in each block, identify the lowest average across all blocks, and then scale all size factors by that value.
@@ -51,6 +48,10 @@ centerSizeFactors <- function(size.factors, block = NULL, mode = NULL) {
     center_size_factors(size.factors, block$index, mode)
 }
 
+#' Default parameters for \code{\link{centerSizeFactors}}
+#' @return Named list containing default values for various function arguments.
+#' @author Aaron Lun
+#' @examples
+#' centerSizeFactorsDefaults()
 #' @export
-#' @rdname centerSizeFactors
 centerSizeFactorsDefaults <- function() center_size_factors_defaults()

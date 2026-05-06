@@ -2,12 +2,9 @@
 % Please edit documentation in R/centerSizeFactors.R
 \name{centerSizeFactors}
 \alias{centerSizeFactors}
-\alias{centerSizeFactorsDefaults}
 \title{Center size factors}
 \usage{
 centerSizeFactors(size.factors, block = NULL, mode = NULL)
-
-centerSizeFactorsDefaults()
 }
 \arguments{
 \item{size.factors}{Numeric vector of size factors across cells.
@@ -18,13 +15,11 @@ Alternatively \code{NULL}, in which case all cells are assumed to be in the same
 
 \item{mode}{String specifying how to scale size factors across blocks.
 This can be either \code{"lowest"} or \code{"per-block"}, see Details.
-If \code{NULL}, the default value in \code{centerSizeFactorsDefaults} is used.
+If \code{NULL}, the default value in \code{\link{centerSizeFactorsDefaults}} is used.
 Only used if \code{block} is provided.}
 }
 \value{
-\code{centerSizeFactors} returns a numeric vector of length equal to \code{size.factors}, containing the centered size factors.
-
-\code{centerSizeFactorsDefaults} returns a named list of default values for their respective function arguments.
+Numeric vector of length equal to \code{size.factors}, containing the centered size factors.
 }
 \description{
 Scale the size factors so they are centered at unity.

@@ -2,7 +2,6 @@
 % Please edit documentation in R/correctMnn.R
 \name{correctMnn}
 \alias{correctMnn}
-\alias{correctMnnDefaults}
 \title{Batch correction with mutual nearest neighbors}
 \usage{
 correctMnn(
@@ -20,8 +19,6 @@ correctMnn(
   BNPARAM = AnnoyParam(),
   num.threads = NULL
 )
-
-correctMnnDefaults()
 }
 \arguments{
 \item{x}{Numeric matrix where rows are dimensions and columns are cells,
@@ -32,11 +29,11 @@ typically containing coordinates in a low-dimensional embedding (e.g., from \cod
 \item{num.neighbors}{Integer scalar specifying the number of neighbors in the various search steps.
 Larger values improve the stability of the correction by increasing the number of MNN pairs and including more observations in each center of mass.
 However, this comes at the cost of reduced resolution when matching subpopulations across batches.
-If \code{NULL}, the default value in \code{correctMnnDefaults} is used.}
+If \code{NULL}, the default value in \code{\link{correctMnnDefaults}} is used.}
 
 \item{num.steps}{Integer scalar specifying the number of steps for the recursive neighbor search to compute the center of mass.
 Larger values mitigate the kissing effect but increase the risk of including inappropriately distant subpopulations into the center of mass.
-If \code{NULL}, the default value in \code{correctMnnDefaults} is used.}
+If \code{NULL}, the default value in \code{\link{correctMnnDefaults}} is used.}
 
 \item{merge.policy}{String specifying the policy to use to choose the order of batches to merge.
 \itemize{
@@ -52,7 +49,7 @@ The aim is to lower compute time by encouraging more observations to be correcte
 \item \code{"rss"} will merge batches in order of increasing residual sum of squares (RSS).
 This is effectively a compromise between \code{"variance"} and \code{"size"}.
 }
-If \code{NULL}, the default value in \code{correctMnnDefaults} is used.}
+If \code{NULL}, the default value in \code{\link{correctMnnDefaults}} is used.}
 
 \item{num.mads}{Deprecated and ignored.}
 
@@ -69,16 +66,14 @@ If \code{NULL}, the default value in \code{correctMnnDefaults} is used.}
 \item{BNPARAM}{A \link[BiocNeighbors]{BiocNeighborParam} object specifying the nearest-neighbor algorithm to use.}
 
 \item{num.threads}{Integer scalar specifying the number of threads to use.
-If \code{NULL}, the default value in \code{correctMnnDefaults} is used.}
+If \code{NULL}, the default value in \code{\link{correctMnnDefaults}} is used.}
 }
 \value{
-\code{correctMnn} returns a list containing:
+List containing:
 \itemize{
 \item \code{corrected}, a numeric matrix of the same dimensions as \code{x}.
 This contains the MNN-corrected coordinates for each cell (column) across dimensions (rows).
 }
-
-\code{correctMnnDefaults} returns a named list containing the default values for the various function arguments.
 }
 \description{
 Apply mutual nearest neighbor (MNN) correction to remove batch effects from a low-dimensional embedding.

@@ -12,7 +12,7 @@
 #' @param block.average.policy String specifying the policy to use for average statistics across blocks.
 #' This can either be \code{"mean"} (to compute a weighted mean), \code{"quantile"} (to compute a quantile) or \code{"none"} (no averaging).
 #' If \code{NULL}, the default value in \code{\link{modelGeneVariancesDefaults}} is used.
-#' Only used if \code{block} is not \code{NULL}. 
+#' Ignored if \code{block = NULL}.
 #' @param block.weight.policy String specifying the policy to use for weighting different blocks when computing the average for each statistic.
 #' See the argument of the same name in \code{\link{computeBlockWeights}} for more details.
 #' If \code{NULL}, the default value in \code{\link{modelGeneVariancesDefaults}} is used.
@@ -170,9 +170,7 @@ modelGeneVariances <- function(
 }
 
 #' Default parameters for \code{\link{modelGeneVariances}}
-#'
-#' @return Named list of default values for various function arguments in \code{\link{modelGeneVariances}}.
-#' 
+#' @return Named list of default values for various function arguments. 
 #' @author Aaron Lun
 #' @examples
 #' modelGeneVariancesDefaults()

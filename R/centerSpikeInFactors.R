@@ -11,17 +11,15 @@
 #' @param block Vector or factor of length equal to \code{endogenous}, specifying the block of origin for each cell.
 #' Alternatively \code{NULL}, in which case all cells are assumed to be in the same block.
 #' @param mode String specifying how to scale size factors across blocks, see the argument of the same name in \code{\link{centerSizeFactors}}.
+#' If \code{NULL}, the default value in \code{\link{centerSpikeInFactors}} is used.
 #' Only used if \code{block} is provided.
 #' 
-#' @return 
-#' \code{centerSpikeInFactors} returns a list containing:
+#' @return List containing:
 #' \itemize{
 #' \item \code{endogenous}, a numeric vector containing the centered size factors for the endogenous genes.
 #' \item \code{spike.ins}, a named list of numeric vectors.
 #' Each vector is named after an entry of \code{spike.ins} and contains centered size factors for the corresponding spike-in transcripts.
 #' }
-#'
-#' \code{centerSpikeInFactorsDefaults} returns a named list of default values for their respective function arguments.
 #'
 #' @details
 #' This function is effectively a convenient wrapper around \code{\link{centerSizeFactors}},
@@ -50,6 +48,10 @@ centerSpikeInFactors <- function(endogenous, spike.ins, block = NULL, mode = NUL
     output
 }
 
+#' Default parameters for \code{\link{centerSpikeInFactors}}
+#' @return Named list containing default values for various function arguments.
+#' @author Aaron Lun
+#' @examples
+#' centerSpikeInFactorsDefaults()
 #' @export
-#' @rdname centerSpikeInFactors
 centerSpikeInFactorsDefaults <- function() center_spike_in_factors_defaults()

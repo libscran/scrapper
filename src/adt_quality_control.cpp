@@ -11,14 +11,6 @@
 #include "utils_qc.h"
 
 // [[Rcpp::export(rng=false)]]
-Rcpp::List compute_adt_qc_metrics_defaults() {
-    Rcpp::List output;
-    scran_qc::ComputeAdtQcMetricsOptions opt;
-    output["num.threads"] = opt.num_threads;
-    return output;
-}
-
-// [[Rcpp::export(rng=false)]]
 Rcpp::List compute_adt_qc_metrics(SEXP x, Rcpp::List subsets, Rcpp::RObject num_threads) {
     auto raw_mat = Rtatami::BoundNumericPointer(x);
     const auto& mat = raw_mat->ptr;
@@ -49,6 +41,14 @@ Rcpp::List compute_adt_qc_metrics(SEXP x, Rcpp::List subsets, Rcpp::RObject num_
         Rcpp::Named("detected") = detected,
         Rcpp::Named("subsets") = Rcpp::List(out_subsets.begin(), out_subsets.end())
     );
+}
+
+// [[Rcpp::export(rng=false)]]
+Rcpp::List compute_adt_qc_metrics_defaults() {
+    Rcpp::List output;
+    scran_qc::ComputeAdtQcMetricsOptions opt;
+    output["num.threads"] = opt.num_threads;
+    return output;
 }
 
 class ConvertedAdtQcMetrics {
@@ -93,16 +93,6 @@ public:
 };
 
 // [[Rcpp::export(rng=false)]]
-Rcpp::List suggest_adt_qc_thresholds_defaults() {
-    Rcpp::List output;
-    scran_qc::ComputeAdtQcFiltersOptions opt;
-    output["min.detected.drop"] = opt.detected_min_drop;
-    output["detected.num.mads"] = opt.detected_num_mads;
-    output["subset.sum.num.mads"] = opt.detected_num_mads;
-    return output;
-}
-
-// [[Rcpp::export(rng=false)]]
 Rcpp::List suggest_adt_qc_thresholds(
     Rcpp::List metrics,
     Rcpp::Nullable<Rcpp::IntegerVector> block,
@@ -141,6 +131,17 @@ Rcpp::List suggest_adt_qc_thresholds(
         );
     }
 }
+
+// [[Rcpp::export(rng=false)]]
+Rcpp::List suggest_adt_qc_thresholds_defaults() {
+    Rcpp::List output;
+    scran_qc::ComputeAdtQcFiltersOptions opt;
+    output["min.detected.drop"] = opt.detected_min_drop;
+    output["detected.num.mads"] = opt.detected_num_mads;
+    output["subset.sum.num.mads"] = opt.detected_num_mads;
+    return output;
+}
+
 
 //[[Rcpp::export(rng=false)]]
 Rcpp::LogicalVector filter_adt_qc_metrics(Rcpp::List filters, Rcpp::List metrics, Rcpp::Nullable<Rcpp::IntegerVector> block) {

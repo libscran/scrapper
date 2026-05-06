@@ -17,7 +17,7 @@
 #' Alternatively, an index constructed by \code{\link[BiocNeighbors]{buildIndex}}.
 #' @param num.neighbors Integer scalar specifying the number of neighbors to use to construct the graph.
 #' Larger values increase the connectivity of the graph and reduce the granularity of subsequent community detection steps, at the cost of speed.
-#' If \code{NULL}, the default value in \code{buildSnnGraphDefaults} is used.
+#' If \code{NULL}, the default value in \code{\link{buildSnnGraphDefaults}} is used.
 #' Ignored if \code{x} contains pre-computed neighbor search results. 
 #' @param weight.scheme String specifying the weighting scheme to use for constructing the SNN graph.
 #' This can be one of:
@@ -29,16 +29,16 @@
 #' \item \code{"jaccard"}, where the weight of the edge is the Jaccard index of their neighbor sets,
 #' This is a monotonic transformation of the weight used in \code{"number"}.
 #' }
-#' If \code{NULL}, the default value in \code{buildSnnGraphDefaults} is used.
+#' If \code{NULL}, the default value in \code{\link{buildSnnGraphDefaults}} is used.
 #' @param num.threads Integer scalar specifying the number of threads to use.
-#' If \code{NULL}, the default value in \code{buildSnnGraphDefaults} is used.
+#' If \code{NULL}, the default value in \code{\link{buildSnnGraphDefaults}} is used.
 #' Only used if \code{x} is not a list of existing nearest-neighbor search results.
 #' @param BNPARAM A \link[BiocNeighbors]{BiocNeighborParam} object specifying the algorithm to use.
 #' Only used if \code{x} is not a list of existing nearest-neighbor search results.
 #' @param as.pointer Logical scalar indicating whether to return an external pointer for direct use in \code{\link{clusterGraph}}.
 #' This avoids the extra memory usage caused by conversion to/from an R list.
 #'
-#' @return If \code{as.pointer=FALSE}, \code{buildSnnGraph} returns a list containing:
+#' @return If \code{as.pointer=FALSE}, a list is returned containing:
 #' \itemize{
 #' \item \code{vertices}, an integer scalar specifying the number of vertices in the graph (i.e., cells in \code{x}).
 #' \item \code{edges}, an integer vector of 1-based indices for graph edges.
@@ -48,10 +48,8 @@
 #' This has length equal to half the length of \code{edges}.
 #' }
 #'
-#' If \code{as.pointer=TRUE}, \code{buildSnngraph} returns an external pointer to the graph structure.
+#' If \code{as.pointer=TRUE}, an external pointer to the graph structure is returned.
 #' This can be directly used in \code{\link{clusterGraph}}.
-#'
-#' \code{buildSnnGraphDefaults} returns a named list of default values for the respective function arguments. 
 #'
 #' @author Aaron Lun
 #'
@@ -96,6 +94,10 @@ buildSnnGraph <- function(x, num.neighbors = NULL, weight.scheme = NULL, num.thr
     out
 }
 
+#' Default parameters for \code{\link{buildSnnGraph}}
+#' @return Named list containing default values for various function arguments.
+#' @author Aaron Lun
+#' @examples
+#' buildSnnGraphDefaults()
 #' @export
-#' @rdname buildSnnGraph
 buildSnnGraphDefaults <- function() build_snn_graph_defaults()

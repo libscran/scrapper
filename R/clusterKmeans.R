@@ -26,36 +26,35 @@
 #' }
 #' @param var.part.optimize.partition Boolean indicating whether each partition boundary should be optimized in \code{init.method = "var.part"}.
 #' This reduces the sum of squares in the child partitions, which improves the quality of the partition at the cost of some extra compute time.
-#' If \code{NULL}, the default value in \code{clusterKmeansDefaults} is used.
+#' If \code{NULL}, the default value in \code{\link{clusterKmeansDefaults}} is used.
 #' @param var.part.size.adjustment Number specifying the cluster size adjustment when selecting the next cluster to partition in \code{init.method = "var.part"}.
 #' This should be non-negative and no greater than 1.
 #' Setting it to 0 will select the cluster with the highest variance, ignoring the cluster size.
 #' Setting it to 1 will select the cluster with the highest sum of squares, favoring larger clusters.
-#' If \code{NULL}, the default value in \code{clusterKmeansDefaults} is used.
+#' If \code{NULL}, the default value in \code{\link{clusterKmeansDefaults}} is used.
 #' @param lloyd.iterations Integer specifying the maximum number of iterations for \code{refine.method = "lloyd"}.
 #' Larger values increase the chance of convergence at the cost of increasing compute time.
-#' If \code{NULL}, the default value in \code{clusterKmeansDefaults} is used.
+#' If \code{NULL}, the default value in \code{\link{clusterKmeansDefaults}} is used.
 #' @param hartigan.wong.iterations Integer specifying the maximum number of iterations for \code{refine.method = "hartigan-wong"}.
 #' Larger values increase the chance of convergence at the cost of increasing compute time.
-#' If \code{NULL}, the default value in \code{clusterKmeansDefaults} is used.
+#' If \code{NULL}, the default value in \code{\link{clusterKmeansDefaults}} is used.
 #' @param hartigan.wong.quick.transfer.iterations Integer specifying the maximum number of quick transfer iterations for \code{refine.method = "hartigan-wong"}.
 #' Larger values increase the chance of convergence at the cost of increasing compute time.
-#' If \code{NULL}, the default value in \code{clusterKmeansDefaults} is used.
+#' If \code{NULL}, the default value in \code{\link{clusterKmeansDefaults}} is used.
 #' @param hartigan.wong.quit.quick.transfer.failure Boolean indicating whether to quit kon convergence failure during quick transfer iterations in \code{refine.method = "hartigan-wong"}.
 #' Setting this to \code{FALSE} gives the algorithm another chance to converge by attempting another optimal transfer iteration, at the cost of more compute time.
 #' If \code{TRUE}, the function follows the same behavior as R's \code{\link{kmeans}}.
-#' If \code{NULL}, the default value in \code{clusterKmeansDefaults} is used.
+#' If \code{NULL}, the default value in \code{\link{clusterKmeansDefaults}} is used.
 #' @param seed Integer specifying the seed for random number generation in some of the initialization methods.
 #' @param random.seed Integer specifying the seed for random number generation when \code{init.method = "random"}.
-#' If \code{NULL}, the default value in \code{clusterKmeansDefaults} is used.
+#' If \code{NULL}, the default value in \code{\link{clusterKmeansDefaults}} is used.
 #' @param random.seed Integer specifying the seed for random number generation when \code{init.method = "kmeans++"}.
-#' If \code{NULL}, the default value in \code{clusterKmeansDefaults} is used.
+#' If \code{NULL}, the default value in \code{\link{clusterKmeansDefaults}} is used.
 #' @param warn Boolean specifying whether a warning should be emitted if the k-means algorithm failed to converge.
 #' @param num.threads Integer specifying the number of threads to use.
-#' If \code{NULL}, the default value in \code{clusterKmeansDefaults} is used.
+#' If \code{NULL}, the default value in \code{\link{clusterKmeansDefaults}} is used.
 #' 
-#' @return 
-#' \code{clusterKmeans} returns a list containing:
+#' @return List containing:
 #' \itemize{
 #' \item \code{clusters}, a factor containing the cluster assignment for each cell.
 #' The number of levels is no greater than \code{k}, where each level is an integer that refer to a column of \code{centers}.
@@ -71,8 +70,6 @@
 #' A value of 4 indicates convergence failure in the quick transfer iterations when \code{hartigan.wong.quit.quick.transfer.failure = TRUE}.
 #' }
 #' }
-#'
-#' \code{clusterKmeansDefaults} returns a named list of default values for the various function arguments.
 #'
 #' @seealso
 #' \url{https://libscran.github.io/kmeans/}, which describes the various initialization and refinement algorithms in more detail.
@@ -154,8 +151,12 @@ clusterKmeans <- function(
     output 
 }
 
+#' Default parameters for \code{\link{clusterKmeans}}
+#' @return Named list containing default values for various function arguments.
+#' @author Aaron Lun
+#' @examples
+#' clusterKmeansDefaults()
 #' @export
-#' @rdname clusterKmeans
 clusterKmeansDefaults <- function() {
     def <- cluster_kmeans_defaults()
     def[["init.method"]] <- "var-part"

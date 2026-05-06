@@ -2,7 +2,6 @@
 % Please edit documentation in R/aggregateAcrossGenes.R
 \name{aggregateAcrossGenes}
 \alias{aggregateAcrossGenes}
-\alias{aggregateAcrossGenesDefaults}
 \title{Aggregate expression across genes}
 \usage{
 aggregateAcrossGenes(
@@ -12,8 +11,6 @@ aggregateAcrossGenes(
   convert = TRUE,
   num.threads = NULL
 )
-
-aggregateAcrossGenesDefaults()
 }
 \arguments{
 \item{x}{A matrix-like object where rows correspond to genes or genomic features and columns correspond to cells.
@@ -31,20 +28,18 @@ If duplicate genes are present, only the first occurrence is used.
 If the first vector contains gene names not present in \code{x}, those genes are ignored.}
 
 \item{average}{Logical scalar indicating whether to compute the average rather than the sum.
-If \code{NULL}, the default value in \code{aggregateAcrossGenesDefaults} is used.}
+If \code{NULL}, the default value in \code{\link{aggregateAcrossGenesDefaults}} is used.}
 
 \item{convert}{Logical scalar indicating whether to convert gene identities to non-duplicate row indices in each entry of \code{sets}.
 Can be set to \code{FALSE} for greater efficiency if the \code{sets} already contains non-duplicated integer vectors.}
 
 \item{num.threads}{Integer specifying the number of threads to be used for aggregation.
-If \code{NULL}, the default value in \code{aggregateAcrossGenesDefaults} is used.}
+If \code{NULL}, the default value in \code{\link{aggregateAcrossGenesDefaults}} is used.}
 }
 \value{
-For \code{aggregateAcrossGenes}, a list of length equal to that of \code{sets}.
+List of length equal to that of \code{sets}.
 Each entry is a numeric vector of length equal to the number of columns in \code{x}, 
 containing the (weighted) sum/mean of expression values for the corresponding set across all cells.
-
-For \code{aggregateAcrossGenesDefaults}, a named list of default values for the respective function arguments.
 }
 \description{
 Aggregate expression values across genes, potentially with weights.

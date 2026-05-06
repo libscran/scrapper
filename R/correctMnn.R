@@ -8,16 +8,16 @@
 #' @param num.neighbors Integer scalar specifying the number of neighbors in the various search steps.
 #' Larger values improve the stability of the correction by increasing the number of MNN pairs and including more observations in each center of mass.
 #' However, this comes at the cost of reduced resolution when matching subpopulations across batches.
-#' If \code{NULL}, the default value in \code{correctMnnDefaults} is used.
+#' If \code{NULL}, the default value in \code{\link{correctMnnDefaults}} is used.
 #' @param num.steps Integer scalar specifying the number of steps for the recursive neighbor search to compute the center of mass.
 #' Larger values mitigate the kissing effect but increase the risk of including inappropriately distant subpopulations into the center of mass.
-#' If \code{NULL}, the default value in \code{correctMnnDefaults} is used.
+#' If \code{NULL}, the default value in \code{\link{correctMnnDefaults}} is used.
 #' @param num.mads Deprecated and ignored.
 #' @param robust.iterations Deprecated and ignored.
 #' @param robust.trim Deprecated and ignored.
 #' @param mass.cap Deprecated and ignored.
 #' @param num.threads Integer scalar specifying the number of threads to use.
-#' If \code{NULL}, the default value in \code{correctMnnDefaults} is used.
+#' If \code{NULL}, the default value in \code{\link{correctMnnDefaults}} is used.
 #' @param order Deprecated and ignored, the merge order is now always automatically determined.
 #' @param reference.policy Deprecated, use \code{merge.policy} instead. 
 #' @param merge.policy String specifying the policy to use to choose the order of batches to merge.
@@ -34,16 +34,14 @@
 #' \item \code{"rss"} will merge batches in order of increasing residual sum of squares (RSS).
 #' This is effectively a compromise between \code{"variance"} and \code{"size"}.
 #' }
-#' If \code{NULL}, the default value in \code{correctMnnDefaults} is used.
+#' If \code{NULL}, the default value in \code{\link{correctMnnDefaults}} is used.
 #' @param BNPARAM A \link[BiocNeighbors]{BiocNeighborParam} object specifying the nearest-neighbor algorithm to use.
 #'
-#' @return \code{correctMnn} returns a list containing:
+#' @return List containing:
 #' \itemize{
 #' \item \code{corrected}, a numeric matrix of the same dimensions as \code{x}.
 #' This contains the MNN-corrected coordinates for each cell (column) across dimensions (rows).
 #' }
-#'
-#' \code{correctMnnDefaults} returns a named list containing the default values for the various function arguments.
 #'
 #' @seealso
 #' The \code{compute} function in \url{https://libscran.github.io/mnncorrect/}.
@@ -123,6 +121,10 @@ correctMnn <- function(
     output
 }
 
+#' Default parameters for \code{\link{correctMnn}}
+#' @return Named list containing default values for various function arguments.
+#' @author Aaron Lun
+#' @examples
+#' correctMnnDefaults()
 #' @export
-#' @rdname correctMnn
 correctMnnDefaults <- function() correct_mnn_defaults()

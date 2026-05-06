@@ -10,15 +10,6 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// compute_adt_qc_metrics_defaults
-Rcpp::List compute_adt_qc_metrics_defaults();
-RcppExport SEXP _scrapper_compute_adt_qc_metrics_defaults() {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    rcpp_result_gen = Rcpp::wrap(compute_adt_qc_metrics_defaults());
-    return rcpp_result_gen;
-END_RCPP
-}
 // compute_adt_qc_metrics
 Rcpp::List compute_adt_qc_metrics(SEXP x, Rcpp::List subsets, Rcpp::RObject num_threads);
 RcppExport SEXP _scrapper_compute_adt_qc_metrics(SEXP xSEXP, SEXP subsetsSEXP, SEXP num_threadsSEXP) {
@@ -31,12 +22,12 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// suggest_adt_qc_thresholds_defaults
-Rcpp::List suggest_adt_qc_thresholds_defaults();
-RcppExport SEXP _scrapper_suggest_adt_qc_thresholds_defaults() {
+// compute_adt_qc_metrics_defaults
+Rcpp::List compute_adt_qc_metrics_defaults();
+RcppExport SEXP _scrapper_compute_adt_qc_metrics_defaults() {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    rcpp_result_gen = Rcpp::wrap(suggest_adt_qc_thresholds_defaults());
+    rcpp_result_gen = Rcpp::wrap(compute_adt_qc_metrics_defaults());
     return rcpp_result_gen;
 END_RCPP
 }
@@ -51,6 +42,15 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::RObject >::type detected_num_mads(detected_num_madsSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type subset_sum_num_mads(subset_sum_num_madsSEXP);
     rcpp_result_gen = Rcpp::wrap(suggest_adt_qc_thresholds(metrics, block, min_detected_drop, detected_num_mads, subset_sum_num_mads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// suggest_adt_qc_thresholds_defaults
+Rcpp::List suggest_adt_qc_thresholds_defaults();
+RcppExport SEXP _scrapper_suggest_adt_qc_thresholds_defaults() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    rcpp_result_gen = Rcpp::wrap(suggest_adt_qc_thresholds_defaults());
     return rcpp_result_gen;
 END_RCPP
 }
@@ -891,10 +891,10 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_scrapper_compute_adt_qc_metrics_defaults", (DL_FUNC) &_scrapper_compute_adt_qc_metrics_defaults, 0},
     {"_scrapper_compute_adt_qc_metrics", (DL_FUNC) &_scrapper_compute_adt_qc_metrics, 3},
-    {"_scrapper_suggest_adt_qc_thresholds_defaults", (DL_FUNC) &_scrapper_suggest_adt_qc_thresholds_defaults, 0},
+    {"_scrapper_compute_adt_qc_metrics_defaults", (DL_FUNC) &_scrapper_compute_adt_qc_metrics_defaults, 0},
     {"_scrapper_suggest_adt_qc_thresholds", (DL_FUNC) &_scrapper_suggest_adt_qc_thresholds, 5},
+    {"_scrapper_suggest_adt_qc_thresholds_defaults", (DL_FUNC) &_scrapper_suggest_adt_qc_thresholds_defaults, 0},
     {"_scrapper_filter_adt_qc_metrics", (DL_FUNC) &_scrapper_filter_adt_qc_metrics, 3},
     {"_scrapper_aggregate_across_cells", (DL_FUNC) &_scrapper_aggregate_across_cells, 6},
     {"_scrapper_aggregate_across_cells_defaults", (DL_FUNC) &_scrapper_aggregate_across_cells_defaults, 0},

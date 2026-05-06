@@ -20,9 +20,7 @@
 #' If \code{NULL}, the default value in \code{computeBlockWeightsDefaults} is used.
 #' Only used if \code{block.weight.policy = "variable"}.
 #'
-#' @return \code{computeBlockWeights} returns a numeric vector containing the relative block weights.
-#'
-#' \code{computeBlockWeights} returns a named list of default values for various function arguments.
+#' @return Numeric vector containing the relative block weights.
 #'
 #' @author Aaron Lun
 #' @examples
@@ -42,8 +40,12 @@ computeBlockWeights <- function(
     compute_block_weights(sizes, match.arg(block.weight.policy), variable.block.weight)
 }
 
+#' Default parameters for \code{\link{computeBlockWeights}}
+#' @return Named list containing default values for various function arguments.
+#' @author Aaron Lun
+#' @examples
+#' computeBlockWeightsDefaults()
 #' @export
-#' @rdname computeBlockWeights
 computeBlockWeightsDefaults <- function() {
     def <- compute_block_weights_defaults()
     def[["block.weight.policy"]] <- "variable"

@@ -3,15 +3,11 @@
 \name{crispr_quality_control}
 \alias{crispr_quality_control}
 \alias{computeCrisprQcMetrics}
-\alias{computeCrisprQcMetricsDefaults}
 \alias{suggestCrisprQcThresholds}
-\alias{suggestCrisprQcThresholdsDefaults}
 \alias{filterCrisprQcMetrics}
 \title{Quality control for CRISPR count data}
 \usage{
 computeCrisprQcMetrics(x, num.threads = NULL)
-
-computeCrisprQcMetricsDefaults()
 
 suggestCrisprQcThresholds(
   metrics,
@@ -19,8 +15,6 @@ suggestCrisprQcThresholds(
   num.mads = NULL,
   max.value.num.mads = num.mads
 )
-
-suggestCrisprQcThresholdsDefaults()
 
 filterCrisprQcMetrics(thresholds, metrics, block = NULL)
 }
