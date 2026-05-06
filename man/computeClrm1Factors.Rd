@@ -2,19 +2,25 @@
 % Please edit documentation in R/computeClrm1Factors.R
 \name{computeClrm1Factors}
 \alias{computeClrm1Factors}
+\alias{computeClrm1FactorsDefaults}
 \title{Compute size factors for ADT counts}
 \usage{
-computeClrm1Factors(x, num.threads = 1)
+computeClrm1Factors(x, num.threads = NULL)
+
+computeClrm1FactorsDefaults()
 }
 \arguments{
 \item{x}{A matrix-like object containing ADT count data.
 Rows correspond to tags and columns correspond to cells.}
 
-\item{num.threads}{Number of threads to use.}
+\item{num.threads}{Number of threads to use.
+If \code{NULL}, the default value in \code{computeClrm1FactorDefaults} is used.}
 }
 \value{
-Numeric vector containing the CLRm1 size factor for each cell.
+\code{computeClrm1Factors} returns a numeric vector containing the CLRm1 size factor for each cell.
 Note that these size factors are not centered and should be passed through, e.g., \code{\link{centerSizeFactors}} before normalization.
+
+\code{computeClrm1FactorsDefaults} returns a named list containing default values for the various function arguments.
 }
 \description{
 Compute size factors from an ADT count matrix using the CLRm1 method.

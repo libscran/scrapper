@@ -52,6 +52,18 @@ test_that("modelGeneVariances works with blocking", {
     average.residuals <- rowMeans(do.call(cbind, lapply(out$per.block, function(x) x$residuals)))
     expect_equal(average.residuals, out$statistics$residuals)
 
+    # Default is to use the mean.
+    def <- modelGeneVariances(x, block)
+    out2 <- modelGeneVariances(x, block, block.average.policy="mean")
+    expect_identical(def, out2)
+
+    # Quantile is the same as the mean with equal weights when there are two groups.
+    block2 <- sample(LETTERS[4:5], ncol(x), replace=TRUE)
+    def2 <- modelGeneVariances(x, block2, block.weight.policy="equal")
+    out2 <- modelGeneVariances(x, block2, block.average.policy="quantile")
+    expect_identical(def2, out2)
+
+    # Works if we disable the average policy.
     noave <- modelGeneVariances(x, block, block.average.policy="none")
     expect_identical(dim(noave$statistics), c(nrow(x), 0L))
     expect_identical(dim(noave$statistics), c(nrow(x), 0L))
@@ -64,4 +76,12 @@ test_that("modelGeneVariances works with blocking", {
     for (b in ref$block.ids) {
         expect_identical(ref$per.block[[b]][,c("means", "variances")], nofit$per.block[[b]])
     }
+
+    # Works with other weight policies.
+    noave <- modelGeneVariances(x, block, block.average.policy="none")
+})
+
+test_that("defaults work as expected", {
+    def <- modelGeneVariancesDefaults()
+    expect_true(all(names(ref) %in% names(formals(modelGeneVariances))))
 })

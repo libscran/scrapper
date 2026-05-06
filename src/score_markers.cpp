@@ -22,14 +22,17 @@ void configure_group_vectors(Rcpp::NumericMatrix& store, std::vector<double*>& p
     }
 }
 
-scran_markers::BlockAveragePolicy process_average_policy(const std::string& block_average_policy) {
-    if (block_average_policy == "mean") {
-        return scran_markers::BlockAveragePolicy::MEAN;
-    } else if (block_average_policy == "quantile") {
-        return scran_markers::BlockAveragePolicy::QUANTILE;
+void set_block_average_policy(const Rcpp::RObject& block_average_policy, scran_markers::BlockAveragePolicy& target) {
+    if (block_average_policy.isNULL()) {
+        return;
+    }
+    const auto bap = parse_single_string(block_average_policy, "block.average.policy");
+    if (bap == "mean") {
+        target = scran_markers::BlockAveragePolicy::MEAN;
+    } else if (bap == "quantile") {
+        target = scran_markers::BlockAveragePolicy::QUANTILE;
     } else {
-        throw std::runtime_error("block average policy should be either 'mean' or 'quantile'");
-        return scran_markers::BlockAveragePolicy::MEAN;
+        throw std::runtime_error("block.average.policy should be either 'mean' or 'quantile'");
     }
 }
 
@@ -39,25 +42,25 @@ Rcpp::List score_markers_summary(
     Rcpp::IntegerVector groups,
     int num_groups,
     Rcpp::Nullable<Rcpp::IntegerVector> block,
-    std::string block_average_policy,
-    std::string block_weight_policy,
-    Rcpp::NumericVector variable_block_weight,
-    double block_quantile,
-    double threshold,
-    int num_threads,
-    bool compute_group_mean,
-    bool compute_group_detected,
-    bool compute_delta_mean,
-    bool compute_delta_detected,
-    bool compute_cohens_d,
-    bool compute_auc,
-    bool compute_summary_min,
-    bool compute_summary_mean,
-    bool compute_summary_median,
-    bool compute_summary_max,
-    Rcpp::Nullable<Rcpp::NumericVector> compute_summary_quantiles,
-    bool compute_summary_min_rank,
-    int min_rank_limit
+    Rcpp::RObject block_average_policy,
+    Rcpp::RObject block_weight_policy,
+    Rcpp::RObject variable_block_weight,
+    Rcpp::RObject block_quantile,
+    Rcpp::RObject threshold,
+    Rcpp::RObject num_threads,
+    Rcpp::RObject compute_group_mean,
+    Rcpp::RObject compute_group_detected,
+    Rcpp::RObject compute_delta_mean,
+    Rcpp::RObject compute_delta_detected,
+    Rcpp::RObject compute_cohens_d,
+    Rcpp::RObject compute_auc,
+    Rcpp::RObject compute_summary_min,
+    Rcpp::RObject compute_summary_mean,
+    Rcpp::RObject compute_summary_median,
+    Rcpp::RObject compute_summary_max,
+    Rcpp::RObject compute_summary_quantiles,
+    Rcpp::RObject compute_summary_min_rank,
+    Rcpp::RObject min_rank_limit
 ) {
     auto raw_mat = Rtatami::BoundNumericPointer(x);
     const auto& mat = raw_mat->ptr;
@@ -68,22 +71,33 @@ Rcpp::List score_markers_summary(
     }
 
     scran_markers::ScoreMarkersSummaryOptions opt;
-    opt.threshold = threshold;
-    opt.num_threads = num_threads;
-    opt.min_rank_limit = min_rank_limit;
-    opt.block_average_policy = process_average_policy(block_average_policy);
-    opt.block_weight_policy = parse_block_weight_policy(block_weight_policy);
-    opt.variable_block_weight_parameters = parse_variable_block_weight(variable_block_weight);
-    opt.block_quantile = block_quantile;
-    const auto num_quantiles = setup_quantile_options(compute_summary_quantiles, opt.compute_summary_quantiles);
+    set_block_average_policy(block_average_policy, opt.block_average_policy);
+    set_block_weight_policy(block_weight_policy, opt.block_weight_policy, "block.weight.policy");
+    set_variable_block_weight(variable_block_weight, opt.variable_block_weight_parameters, "variable.block.weight");
+    set_number(block_quantile, opt.block_quantile, "block.quantile");
+    set_number(threshold, opt.threshold, "threshold");
+    set_integer(num_threads, opt.num_threads, "num.threads");
+    set_bool(compute_group_mean, opt.compute_group_mean, "compute.group.mean"); // technically these are not necessary, but we'll set it for consistency.
+    set_bool(compute_group_detected, opt.compute_group_detected, "compute.group.detected");
+    set_bool(compute_delta_mean, opt.compute_delta_mean, "compute.delta.mean");
+    set_bool(compute_delta_detected, opt.compute_delta_detected, "compute.delta.detected");
+    set_bool(compute_cohens_d, opt.compute_cohens_d, "compute.cohens.d");
+    set_bool(compute_auc, opt.compute_auc, "compute.auc");
+    set_bool(compute_summary_min, opt.compute_min, "compute.summary.min");
+    set_bool(compute_summary_mean, opt.compute_mean, "compute.summary.mean");
+    set_bool(compute_summary_median, opt.compute_median, "compute.summary.median");
+    set_bool(compute_summary_max, opt.compute_max, "compute.summary.max");
+    const auto num_quantiles = setup_summary_quantiles(compute_summary_quantiles, opt.compute_summary_quantiles);
+    set_bool(compute_summary_min_rank, opt.compute_min_rank, "compute.summary.min.rank");
+    set_integer(min_rank_limit, opt.min_rank_limit, "min.rank.limit");
 
     scran_markers::ScoreMarkersSummaryBuffers<double, int> buffers;
 
     Rcpp::NumericMatrix means, detected;
-    if (compute_group_mean) {
+    if (opt.compute_group_mean) {
         configure_group_vectors(means, buffers.mean, NR, num_groups);
     }
-    if (compute_group_detected) {
+    if (opt.compute_group_detected) {
         configure_group_vectors(detected, buffers.detected, NR, num_groups);
     }
 
@@ -94,82 +108,82 @@ Rcpp::List score_markers_summary(
     std::vector<std::vector<Rcpp::NumericVector> > cohens_quant, auc_quant, dm_quant, dd_quant;
     std::vector<Rcpp::IntegerVector> cohens_mr, auc_mr, dm_mr, dd_mr;
 
-    if (compute_cohens_d) {
+    if (opt.compute_cohens_d) {
         initialize_summary_buffers(
             num_groups,
             NR,
             buffers.cohens_d,
-            compute_summary_min,
+            opt.compute_min,
             cohens_min,
-            compute_summary_mean,
+            opt.compute_mean,
             cohens_mean,
-            compute_summary_median,
+            opt.compute_median,
             cohens_median,
-            compute_summary_max,
+            opt.compute_max,
             cohens_max,
             num_quantiles,
             cohens_quant,
-            compute_summary_min_rank,
+            opt.compute_min_rank,
             cohens_mr
         );
     }
 
-    if (compute_auc) {
+    if (opt.compute_auc) {
         initialize_summary_buffers(
             num_groups,
             NR,
             buffers.auc,
-            compute_summary_min,
+            opt.compute_min,
             auc_min,
-            compute_summary_mean,
+            opt.compute_mean,
             auc_mean,
-            compute_summary_median,
+            opt.compute_median,
             auc_median,
-            compute_summary_max,
+            opt.compute_max,
             auc_max,
             num_quantiles,
             auc_quant,
-            compute_summary_min_rank,
+            opt.compute_min_rank,
             auc_mr
         );
     }
 
-    if (compute_delta_mean) {
+    if (opt.compute_delta_mean) {
         initialize_summary_buffers(
             num_groups,
             NR,
             buffers.delta_mean,
-            compute_summary_min,
+            opt.compute_min,
             dm_min,
-            compute_summary_mean,
+            opt.compute_mean,
             dm_mean,
-            compute_summary_median,
+            opt.compute_median,
             dm_median,
-            compute_summary_max,
+            opt.compute_max,
             dm_max,
             num_quantiles,
             dm_quant,
-            compute_summary_min_rank,
+            opt.compute_min_rank,
             dm_mr
         );
     }
 
-    if (compute_delta_detected) {
+    if (opt.compute_delta_detected) {
         initialize_summary_buffers(
             num_groups,
             NR,
             buffers.delta_detected,
-            compute_summary_min,
+            opt.compute_min,
             dd_min,
-            compute_summary_mean,
+            opt.compute_mean,
             dd_mean,
-            compute_summary_median,
+            opt.compute_median,
             dd_median,
-            compute_summary_max,
+            opt.compute_max,
             dd_max,
             num_quantiles,
             dd_quant,
-            compute_summary_min_rank,
+            opt.compute_min_rank,
             dd_mr
         );
     }
@@ -186,81 +200,81 @@ Rcpp::List score_markers_summary(
     }
 
     Rcpp::List output;
-    if (compute_group_mean) {
+    if (opt.compute_group_mean) {
         output["mean"] = std::move(means);
     }
-    if (compute_group_detected) {
+    if (opt.compute_group_detected) {
         output["detected"] = std::move(detected);
     }
 
-    if (compute_cohens_d) {
+    if (opt.compute_cohens_d) {
         output["cohens.d"] = format_summary_output(
             num_groups,
-            compute_summary_min,
+            opt.compute_min,
             cohens_min,
-            compute_summary_mean,
+            opt.compute_mean,
             cohens_mean,
-            compute_summary_median,
+            opt.compute_median,
             cohens_median,
-            compute_summary_max,
+            opt.compute_max,
             cohens_max,
             opt.compute_summary_quantiles.has_value(),
             cohens_quant,
-            compute_summary_min_rank,
+            opt.compute_min_rank,
             cohens_mr
         );
     }
 
-    if (compute_auc) {
+    if (opt.compute_auc) {
         output["auc"] = format_summary_output(
             num_groups,
-            compute_summary_min,
+            opt.compute_min,
             auc_min,
-            compute_summary_mean,
+            opt.compute_mean,
             auc_mean,
-            compute_summary_median,
+            opt.compute_median,
             auc_median,
-            compute_summary_max,
+            opt.compute_max,
             auc_max,
             opt.compute_summary_quantiles.has_value(),
             auc_quant, 
-            compute_summary_min_rank,
+            opt.compute_min_rank,
             auc_mr
         );
     }
 
-    if (compute_delta_mean) {
+    if (opt.compute_delta_mean) {
         output["delta.mean"] = format_summary_output(
             num_groups,
-            compute_summary_min,
+            opt.compute_min,
             dm_min,
-            compute_summary_mean,
+            opt.compute_mean,
             dm_mean,
-            compute_summary_median,
+            opt.compute_median,
             dm_median,
-            compute_summary_max,
+            opt.compute_max,
             dm_max,
             opt.compute_summary_quantiles.has_value(),
             dm_quant,
-            compute_summary_min_rank,
+            opt.compute_min_rank,
             dm_mr
         );
     }
 
-    if (compute_delta_detected) {
+    if (opt.compute_delta_detected) {
         output["delta.detected"] = format_summary_output(
             num_groups,
-            compute_summary_min,
+            opt.compute_min,
             dd_min,
-            compute_summary_mean,
+            opt.compute_mean,
             dd_mean,
-            compute_summary_median,
+            opt.compute_median,
             dd_median,
-            compute_summary_max,
+            opt.compute_max,
             dd_max,
             opt.compute_summary_quantiles.has_value(),
             dd_quant,
-            compute_summary_min_rank,
+            opt.compute_min_rank,
             dd_mr
         );
     }
@@ -274,19 +288,19 @@ Rcpp::List score_markers_pairwise(
     Rcpp::IntegerVector groups,
     int num_groups,
     Rcpp::Nullable<Rcpp::IntegerVector> block,
-    std::string block_average_policy,
-    std::string block_weight_policy,
-    Rcpp::NumericVector variable_block_weight,
-    double block_quantile,
-    double threshold,
-    int num_threads,
-    bool compute_group_mean,
-    bool compute_group_detected,
-    bool compute_delta_mean,
-    bool compute_delta_detected,
-    bool compute_cohens_d,
-    bool compute_auc)
-{
+    Rcpp::RObject block_average_policy,
+    Rcpp::RObject block_weight_policy,
+    Rcpp::RObject variable_block_weight,
+    Rcpp::RObject block_quantile,
+    Rcpp::RObject threshold,
+    Rcpp::RObject num_threads,
+    Rcpp::RObject compute_group_mean,
+    Rcpp::RObject compute_group_detected,
+    Rcpp::RObject compute_delta_mean,
+    Rcpp::RObject compute_delta_detected,
+    Rcpp::RObject compute_cohens_d,
+    Rcpp::RObject compute_auc
+) {
     auto raw_mat = Rtatami::BoundNumericPointer(x);
     const auto& mat = raw_mat->ptr;
     const auto NC = mat->ncol();
@@ -296,20 +310,26 @@ Rcpp::List score_markers_pairwise(
     }
 
     scran_markers::ScoreMarkersPairwiseOptions opt;
-    opt.threshold = threshold;
-    opt.num_threads = num_threads;
-    opt.block_average_policy = process_average_policy(block_average_policy);
-    opt.block_weight_policy = parse_block_weight_policy(block_weight_policy);
-    opt.variable_block_weight_parameters = parse_variable_block_weight(variable_block_weight);
-    opt.block_quantile = block_quantile;
+    set_block_average_policy(block_average_policy, opt.block_average_policy);
+    set_block_weight_policy(block_weight_policy, opt.block_weight_policy, "block.weight.policy");
+    set_variable_block_weight(variable_block_weight, opt.variable_block_weight_parameters, "variable.block.weight");
+    set_number(block_quantile, opt.block_quantile, "block.quantile");
+    set_number(threshold, opt.threshold, "threshold");
+    set_integer(num_threads, opt.num_threads, "num.threads");
+    set_bool(compute_group_mean, opt.compute_group_mean, "compute.group.mean"); // technically these are not necessary, but we'll set it for consistency.
+    set_bool(compute_group_detected, opt.compute_group_detected, "compute.group.detected");
+    set_bool(compute_delta_mean, opt.compute_delta_mean, "compute.delta.mean");
+    set_bool(compute_delta_detected, opt.compute_delta_detected, "compute.delta.detected");
+    set_bool(compute_cohens_d, opt.compute_cohens_d, "compute.cohens.d");
+    set_bool(compute_auc, opt.compute_auc, "compute.auc");
 
     scran_markers::ScoreMarkersPairwiseBuffers<double> buffers;
 
     Rcpp::NumericMatrix means, detected;
-    if (compute_group_mean) {
+    if (opt.compute_group_mean) {
         configure_group_vectors(means, buffers.mean, NR, num_groups);
     }
-    if (compute_group_detected) {
+    if (opt.compute_group_detected) {
         configure_group_vectors(detected, buffers.detected, NR, num_groups);
     }
 
@@ -320,19 +340,19 @@ Rcpp::List score_markers_pairwise(
     );
 
     Rcpp::NumericVector cohens_d, auc, delta_mean, delta_detected;
-    if (compute_cohens_d) {
+    if (opt.compute_cohens_d) {
         cohens_d = Rcpp::NumericVector(dim);
         buffers.cohens_d = cohens_d.begin();
     }
-    if (compute_delta_mean) {
+    if (opt.compute_delta_mean) {
         delta_mean = Rcpp::NumericVector(dim);
         buffers.delta_mean = delta_mean.begin();
     }
-    if (compute_delta_detected) {
+    if (opt.compute_delta_detected) {
         delta_detected = Rcpp::NumericVector(dim);
         buffers.delta_detected = delta_detected.begin();
     }
-    if (compute_auc) {
+    if (opt.compute_auc) {
         auc = Rcpp::NumericVector(dim);
         buffers.auc = auc.begin();
     }
@@ -349,23 +369,23 @@ Rcpp::List score_markers_pairwise(
     }
 
     Rcpp::List output;
-    if (compute_group_mean) {
+    if (opt.compute_group_mean) {
         output["mean"] = std::move(means);
     }
-    if (compute_group_detected) {
+    if (opt.compute_group_detected) {
         output["detected"] = std::move(detected);
     }
 
-    if (compute_cohens_d) {
+    if (opt.compute_cohens_d) {
         output["cohens.d"] = std::move(cohens_d);
     }
-    if (compute_auc) {
+    if (opt.compute_auc) {
         output["auc"] = std::move(auc);
     }
-    if (compute_delta_mean) {
+    if (opt.compute_delta_mean) {
         output["delta.mean"] = std::move(delta_mean);
     }
-    if (compute_delta_detected) {
+    if (opt.compute_delta_detected) {
         output["delta.detected"] = std::move(delta_detected);
     }
 
@@ -379,18 +399,18 @@ Rcpp::List score_markers_best(
     Rcpp::IntegerVector groups,
     int num_groups,
     Rcpp::Nullable<Rcpp::IntegerVector> block,
-    std::string block_average_policy,
-    std::string block_weight_policy,
-    Rcpp::NumericVector variable_block_weight,
-    double block_quantile,
-    double threshold,
-    int num_threads,
-    bool compute_group_mean,
-    bool compute_group_detected,
-    bool compute_delta_mean,
-    bool compute_delta_detected,
-    bool compute_cohens_d,
-    bool compute_auc,
+    Rcpp::RObject block_average_policy,
+    Rcpp::RObject block_weight_policy,
+    Rcpp::RObject variable_block_weight,
+    Rcpp::RObject block_quantile,
+    Rcpp::RObject threshold,
+    Rcpp::RObject num_threads,
+    Rcpp::RObject compute_group_mean,
+    Rcpp::RObject compute_group_detected,
+    Rcpp::RObject compute_delta_mean,
+    Rcpp::RObject compute_delta_detected,
+    Rcpp::RObject compute_cohens_d,
+    Rcpp::RObject compute_auc,
     bool index_only
 ) {
     auto raw_mat = Rtatami::BoundNumericPointer(x);
@@ -402,19 +422,18 @@ Rcpp::List score_markers_best(
     }
 
     scran_markers::ScoreMarkersBestOptions opt;
-    opt.threshold = threshold;
-    opt.num_threads = num_threads;
-    opt.block_average_policy = process_average_policy(block_average_policy);
-    opt.block_weight_policy = parse_block_weight_policy(block_weight_policy);
-    opt.variable_block_weight_parameters = parse_variable_block_weight(variable_block_weight);
-    opt.block_quantile = block_quantile;
-
-    opt.compute_group_mean = compute_group_mean;
-    opt.compute_group_detected = compute_group_detected;
-    opt.compute_cohens_d = compute_cohens_d;
-    opt.compute_auc = compute_auc;
-    opt.compute_delta_mean = compute_delta_mean;
-    opt.compute_delta_detected = compute_delta_detected;
+    set_block_average_policy(block_average_policy, opt.block_average_policy);
+    set_block_weight_policy(block_weight_policy, opt.block_weight_policy, "block.weight.policy");
+    set_variable_block_weight(variable_block_weight, opt.variable_block_weight_parameters, "variable.block.weight");
+    set_number(threshold, opt.threshold, "threshold");
+    set_integer(num_threads, opt.num_threads, "num.threads");
+    set_number(block_quantile, opt.block_quantile, "block.quantile");
+    set_bool(compute_group_mean, opt.compute_group_mean, "compute.group.mean");
+    set_bool(compute_group_detected, opt.compute_group_detected, "compute.group.detected");
+    set_bool(compute_delta_mean, opt.compute_delta_mean, "compute.delta.mean");
+    set_bool(compute_delta_detected, opt.compute_delta_detected, "compute.delta.detected");
+    set_bool(compute_cohens_d, opt.compute_cohens_d, "compute.cohens.d");
+    set_bool(compute_auc, opt.compute_auc, "compute.auc");
 
     auto block_info = MaybeBlock(block);
     auto ptr = block_info.get();
@@ -435,10 +454,10 @@ Rcpp::List score_markers_best(
         }
     };
     Rcpp::NumericMatrix means, detected;
-    if (compute_group_mean) {
+    if (opt.compute_group_mean) {
         transfer_groupwise(means, res.mean);
     }
-    if (compute_group_detected) {
+    if (opt.compute_group_detected) {
         transfer_groupwise(detected, res.detected);
     }
 
@@ -486,37 +505,37 @@ Rcpp::List score_markers_best(
     };
 
     Rcpp::List cohens_d, auc, delta_mean, delta_detected;
-    if (compute_cohens_d) {
+    if (opt.compute_cohens_d) {
         transfer_effects(cohens_d, res.cohens_d);
     }
-    if (compute_auc) {
+    if (opt.compute_auc) {
         transfer_effects(auc, res.auc);
     }
-    if (compute_delta_mean) {
+    if (opt.compute_delta_mean) {
         transfer_effects(delta_mean, res.delta_mean);
     }
-    if (compute_delta_detected) {
+    if (opt.compute_delta_detected) {
         transfer_effects(delta_detected, res.delta_detected);
     }
 
     Rcpp::List output;
-    if (compute_group_mean) {
+    if (opt.compute_group_mean) {
         output["mean"] = std::move(means);
     }
-    if (compute_group_detected) {
+    if (opt.compute_group_detected) {
         output["detected"] = std::move(detected);
     }
 
-    if (compute_cohens_d) {
+    if (opt.compute_cohens_d) {
         output["cohens.d"] = std::move(cohens_d);
     }
-    if (compute_auc) {
+    if (opt.compute_auc) {
         output["auc"] = std::move(auc);
     }
-    if (compute_delta_mean) {
+    if (opt.compute_delta_mean) {
         output["delta.mean"] = std::move(delta_mean);
     }
-    if (compute_delta_detected) {
+    if (opt.compute_delta_detected) {
         output["delta.detected"] = std::move(delta_detected);
     }
 

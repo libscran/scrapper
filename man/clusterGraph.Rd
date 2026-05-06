@@ -8,7 +8,7 @@
 clusterGraph(
   x,
   method = c("multilevel", "leiden", "walktrap"),
-  seed = 42,
+  seed = NULL,
   multilevel.resolution = NULL,
   multilevel.seed = seed,
   leiden.resolution = NULL,

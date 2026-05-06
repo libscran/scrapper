@@ -6,9 +6,12 @@
 #' @param x A matrix-like object containing ADT count data.
 #' Rows correspond to tags and columns correspond to cells.
 #' @param num.threads Number of threads to use.
+#' If \code{NULL}, the default value in \code{computeClrm1FactorDefaults} is used.
 #'
-#' @return Numeric vector containing the CLRm1 size factor for each cell.
+#' @return \code{computeClrm1Factors} returns a numeric vector containing the CLRm1 size factor for each cell.
 #' Note that these size factors are not centered and should be passed through, e.g., \code{\link{centerSizeFactors}} before normalization.
+#'
+#' \code{computeClrm1FactorsDefaults} returns a named list containing default values for the various function arguments.
 #'
 #' @author Aaron Lun
 #'
@@ -24,8 +27,12 @@
 #'
 #' @export
 #' @importFrom beachmat initializeCpp
-computeClrm1Factors <- function(x, num.threads=1) {
+computeClrm1Factors <- function(x, num.threads = NULL) {
     .checkSEX(x, "normalizeAdtCounts.se")
     ptr <- initializeCpp(x, .check.na=FALSE)
     compute_clrm1_factors(ptr, num_threads=num.threads)
 }
+
+#' @export
+#' @rdname computeClrm1Factors
+computeClrm1FactorsDefaults <- function() compute_clrm1_factors_defaults()

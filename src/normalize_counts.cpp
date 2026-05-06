@@ -5,18 +5,31 @@
 
 #include "scran_norm/scran_norm.hpp"
 
+#include "utils_other.h"
+
 //[[Rcpp::export(rng=false)]]
-SEXP normalize_counts(SEXP x, Rcpp::NumericVector size_factors, bool log, double pseudo_count, double log_base, bool preserve_sparsity) {
+SEXP normalize_counts(SEXP x, Rcpp::NumericVector size_factors, Rcpp::RObject log, Rcpp::RObject pseudo_count, Rcpp::RObject log_base, Rcpp::RObject preserve_sparsity) {
     scran_norm::NormalizeCountsOptions opt;
-    opt.log = log;
-    opt.pseudo_count = pseudo_count;
-    opt.log_base = log_base;
-    opt.preserve_sparsity = preserve_sparsity;
+    set_bool(log, opt.log, "log");
+    set_number(pseudo_count, opt.pseudo_count, "pseudo.count");
+    set_number(log_base, opt.log_base, "log.base");
+    set_bool(preserve_sparsity, opt.preserve_sparsity, "preserve.sparsity");
 
     Rtatami::BoundNumericPointer mat(x);
     auto output = Rtatami::new_BoundNumericMatrix();
     output->ptr = scran_norm::normalize_counts(mat->ptr, std::vector<double>(size_factors.begin(), size_factors.end()), opt);
     output->original = mat->original;
+    return output;
+}
+
+//[[Rcpp::export(rng=false)]]
+Rcpp::List normalize_counts_defaults() {
+    Rcpp::List output;
+    scran_norm::NormalizeCountsOptions opt;
+    output["log"] = opt.log;
+    output["pseudo_count"] = opt.pseudo_count;
+    output["log_base"] = opt.log_base;
+    output["preserve.sparsity"] = opt.preserve_sparsity;
     return output;
 }
 

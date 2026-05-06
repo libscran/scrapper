@@ -81,10 +81,9 @@ If \code{NULL}, the default value in \code{clusterKmeansDefaults} is used.}
 Larger values increase the chance of convergence at the cost of increasing compute time.
 If \code{NULL}, the default value in \code{clusterKmeansDefaults} is used.}
 
-\item{hartigan.wong.quit.quick.transfer.failure}{Boolean indicating whether to quit the Hartigan-Wong algorithm upon convergence failure during quick transfer iterations.
+\item{hartigan.wong.quit.quick.transfer.failure}{Boolean indicating whether to quit kon convergence failure during quick transfer iterations in \code{refine.method = "hartigan-wong"}.
 Setting this to \code{FALSE} gives the algorithm another chance to converge by attempting another optimal transfer iteration, at the cost of more compute time.
 If \code{TRUE}, the function follows the same behavior as R's \code{\link{kmeans}}.
-Only used if \code{refine.method = "hartigan-wong"}.
 If \code{NULL}, the default value in \code{clusterKmeansDefaults} is used.}
 
 \item{num.threads}{Integer specifying the number of threads to use.

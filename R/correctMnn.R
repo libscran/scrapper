@@ -8,13 +8,16 @@
 #' @param num.neighbors Integer scalar specifying the number of neighbors in the various search steps.
 #' Larger values improve the stability of the correction by increasing the number of MNN pairs and including more observations in each center of mass.
 #' However, this comes at the cost of reduced resolution when matching subpopulations across batches.
+#' If \code{NULL}, the default value in \code{correctMnnDefaults} is used.
 #' @param num.steps Integer scalar specifying the number of steps for the recursive neighbor search to compute the center of mass.
 #' Larger values mitigate the kissing effect but increase the risk of including inappropriately distant subpopulations into the center of mass.
+#' If \code{NULL}, the default value in \code{correctMnnDefaults} is used.
 #' @param num.mads Deprecated and ignored.
 #' @param robust.iterations Deprecated and ignored.
 #' @param robust.trim Deprecated and ignored.
 #' @param mass.cap Deprecated and ignored.
 #' @param num.threads Integer scalar specifying the number of threads to use.
+#' If \code{NULL}, the default value in \code{correctMnnDefaults} is used.
 #' @param order Deprecated and ignored, the merge order is now always automatically determined.
 #' @param reference.policy Deprecated, use \code{merge.policy} instead. 
 #' @param merge.policy String specifying the policy to use to choose the order of batches to merge.
@@ -31,9 +34,16 @@
 #' \item \code{"rss"} will merge batches in order of increasing residual sum of squares (RSS).
 #' This is effectively a compromise between \code{"variance"} and \code{"size"}.
 #' }
+#' If \code{NULL}, the default value in \code{correctMnnDefaults} is used.
 #' @param BNPARAM A \link[BiocNeighbors]{BiocNeighborParam} object specifying the nearest-neighbor algorithm to use.
 #'
-#' @return List containing \code{corrected}, a numeric matrix of the same dimensions as \code{x}, containing the corrected values.
+#' @return \code{correctMnn} returns a list containing:
+#' \itemize{
+#' \item \code{corrected}, a numeric matrix of the same dimensions as \code{x}.
+#' This contains the MNN-corrected coordinates for each cell (column) across dimensions (rows).
+#' }
+#'
+#' \code{correctMnnDefaults} returns a named list containing the default values for the various function arguments.
 #'
 #' @seealso
 #' The \code{compute} function in \url{https://libscran.github.io/mnncorrect/}.
@@ -64,18 +74,18 @@
 correctMnn <- function(
     x,
     block,
-    num.neighbors=15,
-    num.steps=1,
-    merge.policy=c("rss", "size", "variance", "input"),
+    num.neighbors = NULL, 
+    num.steps = NULL,
+    merge.policy = NULL,
     num.mads=NULL,
     robust.iterations=NULL,
     robust.trim=NULL,
     mass.cap=NULL,
     order=NULL,
-    reference.policy=NULL,
+    reference.policy = NULL,
     BNPARAM=AnnoyParam(),
-    num.threads=1)
-{
+    num.threads = NULL
+) {
     .checkSEX(x, "correctMnn.se")
     block <- .transformFactor(block)
 
@@ -99,7 +109,6 @@ correctMnn <- function(
         merge.policy <- sub("^max-", "", reference.policy)
         .Deprecated(old=sprintf("reference.policy=%s", deparse(reference.policy)), new=sprintf("merge.policy=%s", deparse(merge.policy)))
     }
-    merge.policy <- match.arg(merge.policy)
 
     output <- correct_mnn(
         x, 
@@ -113,3 +122,7 @@ correctMnn <- function(
 
     output
 }
+
+#' @export
+#' @rdname correctMnn
+correctMnnDefaults <- function() correct_mnn_defaults()

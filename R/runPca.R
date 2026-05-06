@@ -101,20 +101,20 @@
 #' @importFrom beachmat initializeCpp
 runPca <- function(
     x,
-    number=25,
-    scale=FALSE,
-    block=NULL, 
-    block.weight.policy=c("variable", "equal", "none"),
-    variable.block.weight=c(0, 1000),
-    components.from.residuals=FALSE,
-    subset=NULL,
+    number = NULL,
+    scale = NULL,
+    block = NULL, 
+    block.weight.policy = NULL,
+    variable.block.weight = NULL,
+    components.from.residuals = NULL,
+    subset = NULL,
     extra.work = NULL,
-    iterations=1000,
-    tolerance = 1e-5,
-    seed=5489,
-    realized=TRUE,
-    warn=TRUE,
-    num.threads=1
+    iterations = NULL,
+    tolerance = NULL,
+    seed = NULL,
+    realized = NULL,
+    warn = TRUE,
+    num.threads = NULL
 ) {
     .checkSEX(x, "runPca.se")
     block <- .transformFactor(block)
@@ -128,7 +128,7 @@ runPca <- function(
         number=number,
         scale=scale,
         block=block$index,
-        block_weight_policy=match.arg(block.weight.policy),
+        block_weight_policy=block.weight.policy,
         variable_block_weight=variable.block.weight,
         components_from_residuals=components.from.residuals,
         subset=subset,
@@ -164,3 +164,6 @@ runPca <- function(
     out
 }
 
+#' @export
+#' @rdname runPca
+runPcaDefaults <- function() run_pca_defaults()

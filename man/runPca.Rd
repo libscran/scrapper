@@ -2,25 +2,28 @@
 % Please edit documentation in R/runPca.R
 \name{runPca}
 \alias{runPca}
+\alias{runPcaDefaults}
 \title{Principal components analysis}
 \usage{
 runPca(
   x,
-  number = 25,
-  scale = FALSE,
+  number = NULL,
+  scale = NULL,
   block = NULL,
-  block.weight.policy = c("variable", "equal", "none"),
-  variable.block.weight = c(0, 1000),
-  components.from.residuals = FALSE,
+  block.weight.policy = NULL,
+  variable.block.weight = NULL,
+  components.from.residuals = NULL,
   subset = NULL,
   extra.work = NULL,
-  iterations = 1000,
-  tolerance = 1e-05,
-  seed = 5489,
-  realized = TRUE,
+  iterations = NULL,
+  tolerance = NULL,
+  seed = NULL,
+  realized = NULL,
   warn = TRUE,
-  num.threads = 1
+  num.threads = NULL
 )
+
+runPcaDefaults()
 }
 \arguments{
 \item{x}{A matrix-like object where rows correspond to genes or genomic features and columns correspond to cells.

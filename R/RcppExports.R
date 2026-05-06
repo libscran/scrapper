@@ -117,20 +117,40 @@ compute_block_weights <- function(sizes, policy, variable_block_weight) {
     .Call('_scrapper_compute_block_weights', PACKAGE = 'scrapper', sizes, policy, variable_block_weight)
 }
 
+compute_block_weights_defaults <- function() {
+    .Call('_scrapper_compute_block_weights_defaults', PACKAGE = 'scrapper')
+}
+
 compute_clrm1_factors <- function(x, num_threads) {
     .Call('_scrapper_compute_clrm1_factors', PACKAGE = 'scrapper', x, num_threads)
+}
+
+compute_clrm1_factors_defaults <- function() {
+    .Call('_scrapper_compute_clrm1_factors_defaults', PACKAGE = 'scrapper')
 }
 
 correct_mnn <- function(x, block, num_neighbors, num_steps, num_threads, merge_policy, builder) {
     .Call('_scrapper_correct_mnn', PACKAGE = 'scrapper', x, block, num_neighbors, num_steps, num_threads, merge_policy, builder)
 }
 
+correct_mnn_defaults <- function() {
+    .Call('_scrapper_correct_mnn_defaults', PACKAGE = 'scrapper')
+}
+
 compute_crispr_qc_metrics <- function(x, num_threads) {
     .Call('_scrapper_compute_crispr_qc_metrics', PACKAGE = 'scrapper', x, num_threads)
 }
 
-suggest_crispr_qc_thresholds <- function(metrics, block, num_mads) {
-    .Call('_scrapper_suggest_crispr_qc_thresholds', PACKAGE = 'scrapper', metrics, block, num_mads)
+compute_crispr_qc_metrics_defaults <- function() {
+    .Call('_scrapper_compute_crispr_qc_metrics_defaults', PACKAGE = 'scrapper')
+}
+
+suggest_crispr_qc_thresholds <- function(metrics, block, max_value_num_mads) {
+    .Call('_scrapper_suggest_crispr_qc_thresholds', PACKAGE = 'scrapper', metrics, block, max_value_num_mads)
+}
+
+suggest_crispr_qc_thresholds_defaults <- function() {
+    .Call('_scrapper_suggest_crispr_qc_thresholds_defaults', PACKAGE = 'scrapper')
 }
 
 filter_crispr_qc_metrics <- function(filters, metrics, block) {
@@ -141,12 +161,24 @@ fit_variance_trend <- function(means, variances, mean_filter, min_mean, transfor
     .Call('_scrapper_fit_variance_trend', PACKAGE = 'scrapper', means, variances, mean_filter, min_mean, transform, span, use_min_width, min_width, min_window_count, num_threads)
 }
 
+fit_variance_trend_defaults <- function() {
+    .Call('_scrapper_fit_variance_trend_defaults', PACKAGE = 'scrapper')
+}
+
 model_gene_variances <- function(x, block, nblocks, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, fit_trend, mean_filter, min_mean, transform, span, use_min_width, min_width, min_window_count, num_threads) {
     .Call('_scrapper_model_gene_variances', PACKAGE = 'scrapper', x, block, nblocks, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, fit_trend, mean_filter, min_mean, transform, span, use_min_width, min_width, min_window_count, num_threads)
 }
 
+model_gene_variances_defaults <- function() {
+    .Call('_scrapper_model_gene_variances_defaults', PACKAGE = 'scrapper')
+}
+
 normalize_counts <- function(x, size_factors, log, pseudo_count, log_base, preserve_sparsity) {
     .Call('_scrapper_normalize_counts', PACKAGE = 'scrapper', x, size_factors, log, pseudo_count, log_base, preserve_sparsity)
+}
+
+normalize_counts_defaults <- function() {
+    .Call('_scrapper_normalize_counts_defaults', PACKAGE = 'scrapper')
 }
 
 initialize_LogNormalizedMatrix <- function(seed, size_factors, pseudo_count, log_base) {
@@ -167,6 +199,10 @@ filter_rna_qc_metrics <- function(filters, metrics, block) {
 
 run_pca <- function(x, number, block, block_weight_policy, variable_block_weight, components_from_residuals, scale, subset, realized, irlba_work, irlba_iterations, irlba_tolerance, irlba_seed, num_threads) {
     .Call('_scrapper_run_pca', PACKAGE = 'scrapper', x, number, block, block_weight_policy, variable_block_weight, components_from_residuals, scale, subset, realized, irlba_work, irlba_iterations, irlba_tolerance, irlba_seed, num_threads)
+}
+
+run_pca_defaults <- function() {
+    .Call('_scrapper_run_pca_defaults', PACKAGE = 'scrapper')
 }
 
 run_tsne <- function(nnidx, nndist, perplexity, theta, early_exaggeration_iterations, exaggeration_factor, momentum_switch_iterations, start_momentum, final_momentum, eta, max_depth, leaf_approx, max_iter, seed, num_threads) {

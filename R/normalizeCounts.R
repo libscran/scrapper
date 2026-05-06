@@ -14,19 +14,27 @@
 #' @param log Logical scalar indicating whether log-transformation should be performed.
 #' This ensures that downstream analyses like t-tests and distance calculations focus on relative fold-changes rather than absolute differences.
 #' The log-transformation also provides some measure of variance stabilization so that the downstream analyses are not dominated by sampling noise at large counts.
+#' If \code{NULL}, the default value in \code{normalizeCountsDefaults} is used.
 #' @param pseudo.count Numeric scalar specifying the positive pseudo-count to add before any log-transformation.
 #' Larger values shrink the differences between cells towards zero, reducing spurious differences (but also signal) at low counts - see \code{\link{choosePseudoCount}} for comments.
+#' If \code{NULL}, the default value in \code{normalizeCountsDefaults} is used.
 #' Ignored if \code{log=FALSE}.
 #' @param log.base Numeric scalar specifying the base of the log-transformation.
+#' If \code{NULL}, the default value in \code{normalizeCountsDefaults} is used.
 #' Ignored if \code{log=FALSE}.
 #' @param preserve.sparsity Logical scalar indicating whether to preserve sparsity for \code{pseudo.count != 1}.
 #' If \code{TRUE}, users should manually add \code{log(pseudo.count, log.base)} to the returned matrix to obtain the desired log-transformed expression values.
+#' If \code{NULL}, the default value in \code{normalizeCountsDefaults} is used.
 #' Ignored if \code{log = FALSE} or \code{pseudo.count = 1}.
 #'
-#' @return If \code{x} is a matrix-like object and \code{delayed=TRUE}, a \link[DelayedArray]{DelayedArray} is returned containing the (log-transformed) normalized expression matrix.
-#' If \code{delayed=FALSE}, the type of the (log-)normalized matrix will depend on the operations applied to \code{x}.
+#' @return \code{normalizeCounts} returns the normalized expression matrix in varying forms:
+#' \itemize{
+#' \item If \code{x} is a matrix-like object, a matrix-like object is returned containing the (log-transformed) normalized expression matrix.
+#' If \code{delayed=TRUE}, the returned object is a \link[DelayedArray]{DelayedArray}, otherwise the return type depends on the type of \code{x} and the operations involved.
+#' \item If \code{x} is an external pointer produced by \code{\link[beachmat]{initializeCpp}}, a new external pointer is returned containing the normalized expression matrix.
+#' }
 #'
-#' If \code{x} is an external pointer produced by \code{\link[beachmat]{initializeCpp}}, a new external pointer is returned containing the normalized expression matrix.
+#' \code{normalizeCountsDefaults} returns a named list of default values for various function arguments.
 #'
 #' @seealso
 #' The \code{normalize_counts} function in \url{https://libscran.github.io/scran_norm/}.
@@ -50,10 +58,24 @@
 #' @export
 #' @importFrom methods is
 #' @importFrom DelayedArray DelayedArray t
-normalizeCounts <- function(x, size.factors, log=TRUE, pseudo.count=1, log.base=2, preserve.sparsity=FALSE, delayed=TRUE) {
+normalizeCounts <- function(x, size.factors, log = NULL, pseudo.count = NULL, log.base = NULL, preserve.sparsity = NULL, delayed=TRUE) {
     .checkSEX(x, "normalizeRnaCounts.se")
     if (is(x, "externalptr")) {
         return(normalize_counts(x, size.factors, log=log, log_base=log.base, pseudo_count=pseudo.count, preserve_sparsity=preserve.sparsity))
+    }
+
+    def <- normalizeCountsDefaults()
+    if (is.null(log)) {
+        log <- def$log
+    }
+    if (is.null(pseudo.count)) {
+        pseudo.count <- def$pseudo.count
+    }
+    if (is.null(log.base)) {
+        log.base <- def$log.base
+    }
+    if (is.null(preserve.sparsity)) {
+        preserve.sparsity <- def$preserve.sparsity
     }
 
     if (!log) {
@@ -74,3 +96,7 @@ normalizeCounts <- function(x, size.factors, log=TRUE, pseudo.count=1, log.base=
         LogNormalizedMatrix(x, size.factors, pseudo.count=pseudo.count, log.base=log.base)
     }
 }
+
+#' @export
+#' @rdname normalizeCounts
+normalizeCountsDefaults <- function() normalize_counts_defaults()

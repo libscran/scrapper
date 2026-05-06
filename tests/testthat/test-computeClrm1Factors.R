@@ -14,3 +14,8 @@ test_that("computeClrm1Factors works against a reference", {
 
     expect_error(computeClrm1Factors(SummarizedExperiment::SummarizedExperiment(x)), "not supported")
 })
+
+test_that("defaults work correctly", {
+    def <- computeClrm1FactorsDefaults()
+    expect_true(all(names(def) %in% names(formals(computeClrm1Factors))))
+})

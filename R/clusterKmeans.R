@@ -156,4 +156,10 @@ clusterKmeans <- function(
 
 #' @export
 #' @rdname clusterKmeans
-clusterKmeansDefaults <- function() cluster_kmeans_defaults()
+clusterKmeansDefaults <- function() {
+    def <- cluster_kmeans_defaults()
+    def[["init.method"]] <- "var-part"
+    def[["refine.method"]] <- "hartigan-wong"
+    def[["warn"]] <- TRUE
+    def
+}

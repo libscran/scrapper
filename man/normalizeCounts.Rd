@@ -2,17 +2,20 @@
 % Please edit documentation in R/normalizeCounts.R
 \name{normalizeCounts}
 \alias{normalizeCounts}
+\alias{normalizeCountsDefaults}
 \title{Normalize the count matrix}
 \usage{
 normalizeCounts(
   x,
   size.factors,
-  log = TRUE,
-  pseudo.count = 1,
-  log.base = 2,
-  preserve.sparsity = FALSE,
+  log = NULL,
+  pseudo.count = NULL,
+  log.base = NULL,
+  preserve.sparsity = NULL,
   delayed = TRUE
 )
+
+normalizeCountsDefaults()
 }
 \arguments{
 \item{x}{A matrix-like object where rows correspond to genes or genomic features and columns correspond to cells.
@@ -25,27 +28,35 @@ For most applications, these size factors should also be centered with \code{\li
 
 \item{log}{Logical scalar indicating whether log-transformation should be performed.
 This ensures that downstream analyses like t-tests and distance calculations focus on relative fold-changes rather than absolute differences.
-The log-transformation also provides some measure of variance stabilization so that the downstream analyses are not dominated by sampling noise at large counts.}
+The log-transformation also provides some measure of variance stabilization so that the downstream analyses are not dominated by sampling noise at large counts.
+If \code{NULL}, the default value in \code{normalizeCountsDefaults} is used.}
 
 \item{pseudo.count}{Numeric scalar specifying the positive pseudo-count to add before any log-transformation.
 Larger values shrink the differences between cells towards zero, reducing spurious differences (but also signal) at low counts - see \code{\link{choosePseudoCount}} for comments.
+If \code{NULL}, the default value in \code{normalizeCountsDefaults} is used.
 Ignored if \code{log=FALSE}.}
 
 \item{log.base}{Numeric scalar specifying the base of the log-transformation.
+If \code{NULL}, the default value in \code{normalizeCountsDefaults} is used.
 Ignored if \code{log=FALSE}.}
 
 \item{preserve.sparsity}{Logical scalar indicating whether to preserve sparsity for \code{pseudo.count != 1}.
 If \code{TRUE}, users should manually add \code{log(pseudo.count, log.base)} to the returned matrix to obtain the desired log-transformed expression values.
+If \code{NULL}, the default value in \code{normalizeCountsDefaults} is used.
 Ignored if \code{log = FALSE} or \code{pseudo.count = 1}.}
 
 \item{delayed}{Logical scalar indicating whether operations on a matrix-like \code{x} should be delayed.
 This improves memory efficiency at the cost of some speed in downstream operations.}
 }
 \value{
-If \code{x} is a matrix-like object and \code{delayed=TRUE}, a \link[DelayedArray]{DelayedArray} is returned containing the (log-transformed) normalized expression matrix.
-If \code{delayed=FALSE}, the type of the (log-)normalized matrix will depend on the operations applied to \code{x}.
+\code{normalizeCounts} returns the normalized expression matrix in varying forms:
+\itemize{
+\item If \code{x} is a matrix-like object, a matrix-like object is returned containing the (log-transformed) normalized expression matrix.
+If \code{delayed=TRUE}, the returned object is a \link[DelayedArray]{DelayedArray}, otherwise the return type depends on the type of \code{x} and the operations involved.
+\item If \code{x} is an external pointer produced by \code{\link[beachmat]{initializeCpp}}, a new external pointer is returned containing the normalized expression matrix.
+}
 
-If \code{x} is an external pointer produced by \code{\link[beachmat]{initializeCpp}}, a new external pointer is returned containing the normalized expression matrix.
+\code{normalizeCountsDefaults} returns a named list of default values for various function arguments.
 }
 \description{
 Apply scaling normalization and log-transformation to a count matrix.

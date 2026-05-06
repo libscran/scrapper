@@ -7,10 +7,10 @@
 modelGeneVariances(
   x,
   block = NULL,
-  block.average.policy = c("mean", "quantile", "none"),
-  block.weight.policy = c("variable", "equal", "none"),
-  variable.block.weight = c(0, 1000),
-  block.quantile = 0.5,
+  block.average.policy = NULL,
+  block.weight.policy = NULL,
+  variable.block.weight = NULL,
+  block.quantile = NULL,
   fit.trend = TRUE,
   mean.filter = TRUE,
   min.mean = 0.1,
@@ -33,56 +33,64 @@ Alternatively \code{NULL}, if all cells are from the same block.}
 
 \item{block.average.policy}{String specifying the policy to use for average statistics across blocks.
 This can either be \code{"mean"} (to compute a weighted mean), \code{"quantile"} (to compute a quantile) or \code{"none"} (no averaging).
+If \code{NULL}, the default value in \code{\link{modelGeneVariancesDefaults}} is used.
 Only used if \code{block} is not \code{NULL}.}
 
 \item{block.weight.policy}{String specifying the policy to use for weighting different blocks when computing the average for each statistic.
-See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
-Only used if \code{block} is not \code{NULL} and \code{block.average.policy="mean"}.}
+See the argument of the same name in \code{\link{computeBlockWeights}} for more details.
+If \code{NULL}, the default value in \code{\link{modelGeneVariancesDefaults}} is used.
+Only used if \code{block} is not \code{NULL} and \code{block.average.policy = "mean"}.}
 
 \item{variable.block.weight}{Numeric vector of length 2, specifying the parameters for variable block weighting.
-See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
-Only used if \code{block} is not \code{NULL}, \code{block.average.policy="mean"} and \code{block.weight.policy = "variable"}.}
+See the argument of the same name in \code{\link{computeBlockWeights}} for more details.
+If \code{NULL}, the default value in \code{\link{modelGeneVariancesDefaults}} is used.
+Only used if \code{block} is not \code{NULL}, \code{block.average.policy = "mean"} and \code{block.weight.policy = "variable"}.}
 
 \item{block.quantile}{Number specifying the probability of the quantile of statistics across blocks. 
-Defaults to 0.5, i.e., the median of per-block statistics.
-Only used if \code{block} is not \code{NULL} and \code{block.average.policy="quantile"}.}
+If \code{NULL}, the default value in \code{\link{modelGeneVariancesDefaults}} is used; this is set to 0.5, i.e., the median of per-block statistics.
+Only used if \code{block} is not \code{NULL} and \code{block.average.policy = "quantile"}.}
 
 \item{fit.trend}{Boolean indicating whether a mean-variance trend should be fitted.
 If \code{FALSE}, only the means and variances are computed.
-This can occasionally be useful when the trend is computed separately (e.g., spike-ins).}
+This can occasionally be useful when the trend is computed separately (e.g., spike-ins).
+If \code{NULL}, the default value in \code{\link{modelGeneVariancesDefaults}} is used.}
 
 \item{mean.filter}{Logical scalar indicating whether to filter on the means before trend fitting.
-The assumption is that there is a bulk of low-abundance genes that are uninteresting and should be removed to avoid skewing the windows of the LOWESS smoother.}
+See the argument of the same name in \code{\link{fitVarianceTrend}} for more details.
+If \code{NULL}, the default value in \code{\link{modelGeneVariancesDefaults}} is used.
+Only used if \code{fit.trend = TRUE}.}
 
-\item{min.mean}{Numeric scalar specifying the minimum mean of genes to use in trend fitting.
-Genes with lower means do not participate in the LOWESS fit, to ensure that windows are not skewed towards the majority of low-abundance genes.
-Instead, the fitted values for these genes are defined by extrapolating the left edge of the fitted trend is extrapolated to the origin.
-The default value is chosen based on the typical distribution of means of log-expression values across genes.
-Only used if \code{mean.filter=TRUE}.}
+\item{min.mean}{Number specifying the minimum mean of genes to use in trend fitting.
+See the argument of the same name in \code{\link{fitVarianceTrend}} for more details.
+If \code{NULL}, the default value in \code{\link{modelGeneVariancesDefaults}} is used.
+Only used if \code{fit.trend = TRUE}.}
 
 \item{transform}{Logical scalar indicating whether a quarter-root transformation should be applied before trend fitting.
-This transformation is copied from \code{limma::voom} and shrinks all values towards 1, flattening any sharp gradients in the trend for an easier fit.
-The default of \code{TRUE} assumes that the variances are computed from log-expression values, in which case there is typically a strong \dQuote{hump} in the mean-variance relationship.}
+See the argument of the same name in \code{\link{fitVarianceTrend}} for more details.
+If \code{NULL}, the default value in \code{\link{modelGeneVariancesDefaults}} is used.}
 
 \item{span}{Numeric scalar specifying the span of the LOWESS smoother, as a proportion of the total number of points.
-Larger values improve stability at the cost of sensitivity to changes in low-density regions.
-Ignored if \code{use.min.width=TRUE}.}
+See the argument of the same name in \code{\link{fitVarianceTrend}} for more details.
+If \code{NULL}, the default value in \code{\link{modelGeneVariancesDefaults}} is used.
+Only used if \code{fit.trend = TRUE}.}
 
 \item{use.min.width}{Logical scalar indicating whether a minimum width constraint should be applied to the LOWESS smoother.
-This replaces the proportion-based span for defining each window.
-Instead, the window for each point must be of a minimum width and is extended until it contains a minimum number of points. 
-Setting this to `TRUE` ensures that sensitivity is maintained in the trend fit at low-density regions for the distribution of means, e.g., at high abundances.
-It also avoids overfitting from very small windows in high-density intervals.}
+See the argument of the same name in \code{\link{fitVarianceTrend}} for more details.
+If \code{NULL}, the default value in \code{\link{modelGeneVariancesDefaults}} is used.
+Only used if \code{fit.trend = TRUE}.}
 
 \item{min.width}{Minimum width of the window to use when \code{use.min.width=TRUE}.
-The default value is chosen based on the typical range of means in single-cell RNA-seq data.}
+See the argument of the same name in \code{\link{fitVarianceTrend}} for more details.
+If \code{NULL}, the default value in \code{\link{modelGeneVariancesDefaults}} is used.
+Only used if \code{fit.trend = TRUE}.}
 
 \item{min.window.count}{Minimum number of observations in each window.
-This ensures that each window contains at least a given number of observations for a stable fit.
-If the minimum width window contains fewer observations, it is extended using the standard LOWESS logic until the minimum number is achieved.
-Only used if \code{use.min.width=TRUE}.}
+See the argument of the same name in \code{\link{fitVarianceTrend}} for more details.
+If \code{NULL}, the default value in \code{\link{modelGeneVariancesDefaults}} is used.
+Only used if \code{fit.trend = TRUE}.}
 
-\item{num.threads}{Integer scalar specifying the number of threads to use.}
+\item{num.threads}{Integer scalar specifying the number of threads to use.
+If \code{NULL}, the default value in \code{\link{modelGeneVariancesDefaults}} is used.}
 }
 \value{
 A list containing \code{statistics}, a \link[S4Vectors]{DataFrame} with number of rows equal to the number of genes.

@@ -26,19 +26,19 @@ static Rcpp::NumericVector transfer(const Eigen::VectorXd& x) {
 //[[Rcpp::export(rng=false)]]
 Rcpp::List run_pca(
     SEXP x,
-    int number,
+    Rcpp::RObject number,
     Rcpp::Nullable<Rcpp::IntegerVector> block, 
-    std::string block_weight_policy,
-    Rcpp::NumericVector variable_block_weight,
-    bool components_from_residuals,
-    bool scale,
+    Rcpp::RObject block_weight_policy,
+    Rcpp::RObject variable_block_weight,
+    Rcpp::RObject components_from_residuals,
+    Rcpp::RObject scale,
     Rcpp::Nullable<Rcpp::IntegerVector> subset,
-    bool realized,
-    Rcpp::Nullable<Rcpp::IntegerVector> irlba_work,
-    int irlba_iterations,
-    double irlba_tolerance,
-    double irlba_seed,
-    int num_threads
+    Rcpp::RObject realized,
+    Rcpp::RObject irlba_work,
+    Rcpp::RObject irlba_iterations,
+    Rcpp::RObject irlba_tolerance,
+    Rcpp::RObject irlba_seed,
+    Rcpp::RObject num_threads
 ) {
     auto mat = Rtatami::BoundNumericPointer(x);
     auto block_info = MaybeBlock(block);
@@ -46,17 +46,17 @@ Rcpp::List run_pca(
 
     irlba::Options iopt;
     set_optional_integer(irlba_work, iopt.extra_work, "extra.work");
-    iopt.max_iterations = irlba_iterations;
-    iopt.convergence_tolerance = irlba_tolerance;
-    iopt.seed = sanisizer::from_float<I<decltype(iopt.seed)> >(irlba_seed);
+    set_integer(irlba_iterations, iopt.max_iterations, "iterations");
+    set_number(irlba_tolerance, iopt.convergence_tolerance, "tolerance");
+    set_integer(irlba_seed, iopt.seed, "seed");
     iopt.cap_number = true;
 
     const auto fill_common_options = [&](auto& opt) -> void {
-        opt.number = number;
-        opt.scale = scale;
-        opt.realize_matrix = realized;
+        set_integer(number, opt.number, "number");
+        set_bool(scale, opt.scale, "scale");
+        set_bool(realized, opt.realize_matrix, "realized");
         opt.irlba_options = iopt;
-        opt.num_threads = num_threads;
+        set_integer(num_threads, opt.num_threads, "num.threads");
     };
 
     Rcpp::List output;
@@ -83,9 +83,9 @@ Rcpp::List run_pca(
 
         const auto fill_block_options = [&](auto& opt) -> void {
             fill_common_options(opt);
-            opt.block_weight_policy = parse_block_weight_policy(block_weight_policy);
-            opt.variable_block_weight_parameters = parse_variable_block_weight(variable_block_weight);
-            opt.components_from_residuals = components_from_residuals;
+            set_block_weight_policy(block_weight_policy, opt.block_weight_policy, "block.weight.policy");
+            set_variable_block_weight(variable_block_weight, opt.variable_block_weight_parameters, "variable.block.weight");
+            set_bool(components_from_residuals, opt.components_from_residuals, "components.from.residuals");
         };
 
         if (subset.isNull()) {
@@ -116,3 +116,36 @@ Rcpp::List run_pca(
 
     return output;
 }
+
+//[[Rcpp::export(rng=false)]]
+Rcpp::List run_pca_defaults() {
+    Rcpp::List output;
+
+    {
+        scran_pca::SimplePcaOptions opt;
+        output["number"] = opt.number;
+        output["scale"] = opt.scale;
+
+        if (opt.irlba_options.extra_work.has_value()) {
+            output["extra.work"] = R_NilValue;
+        } else {
+            throw std::runtime_error("unexpected extra.work default for runPca"); 
+        }
+
+        output["iterations"] = opt.irlba_options.max_iterations;
+        output["tolerance"] = opt.irlba_options.convergence_tolerance;
+        output["seed"] = opt.irlba_options.seed;
+        output["realized"] = opt.realize_matrix;
+        output["num.threads"] = opt.num_threads;
+    }
+
+    {
+        scran_pca::BlockedPcaOptions opt;
+        report_block_weight_policy_default(output, opt.block_weight_policy, "block.weight.policy", "runPca");
+        report_variable_block_weight_default(output, opt.variable_block_weight_parameters, "variable.block.weight");
+        output["components.from.residuals"] = opt.components_from_residuals;
+    }
+
+    return output;
+}
+

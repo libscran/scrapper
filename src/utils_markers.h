@@ -87,9 +87,12 @@ inline void initialize_summary_buffers(
     }
 }
 
-inline auto setup_quantile_options(const Rcpp::Nullable<Rcpp::NumericVector>& input, std::optional<std::vector<double> >& output) {
-    if (input.isNull()) {
+inline auto setup_summary_quantiles(const Rcpp::RObject& input, std::optional<std::vector<double> >& output) {
+    if (input.isNULL()) {
         return sanisizer::as_size_type<Rcpp::NumericVector>(0);
+    }
+    if (input.sexp_type() != REALSXP) {
+        throw std::runtime_error("expected numeric vector for summary.quantiles");
     }
     Rcpp::NumericVector squantiles(input);
     output.emplace(squantiles.begin(), squantiles.end());

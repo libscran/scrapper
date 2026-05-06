@@ -64,7 +64,7 @@
 clusterGraph <- function(
     x,
     method = c("multilevel", "leiden", "walktrap"),
-    seed = 42,
+    seed = NULL,
     multilevel.resolution = NULL, 
     multilevel.seed = seed,
     leiden.resolution = NULL, 
@@ -101,4 +101,8 @@ clusterGraph <- function(
 
 #' @export
 #' @rdname clusterGraph
-clusterGraphDefaults <- function() cluster_graph_defaults()
+clusterGraphDefaults <- function() {
+    def <- cluster_graph_defaults()
+    def[["method"]] <- "multilevel"
+    def
+}
