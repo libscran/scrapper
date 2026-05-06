@@ -17,8 +17,10 @@
 #' Alternatively, an index constructed by \code{\link[BiocNeighbors]{buildIndex}}.
 #' @param num.neighbors Integer scalar specifying the number of neighbors to use to construct the graph.
 #' Larger values increase the connectivity of the graph and reduce the granularity of subsequent community detection steps, at the cost of speed.
+#'
 #' If \code{NULL}, the default value in \code{\link{buildSnnGraphDefaults}} is used.
-#' Ignored if \code{x} contains pre-computed neighbor search results. 
+#'
+#' This argument is ignored if \code{x} contains pre-computed neighbor search results. 
 #' @param weight.scheme String specifying the weighting scheme to use for constructing the SNN graph.
 #' This can be one of:
 #' \itemize{
@@ -31,10 +33,13 @@
 #' }
 #' If \code{NULL}, the default value in \code{\link{buildSnnGraphDefaults}} is used.
 #' @param num.threads Integer scalar specifying the number of threads to use.
+#'
 #' If \code{NULL}, the default value in \code{\link{buildSnnGraphDefaults}} is used.
-#' Only used if \code{x} is not a list of existing nearest-neighbor search results.
+#'
+#' This argument is only used if \code{x} is not a list of existing nearest-neighbor search results.
 #' @param BNPARAM A \link[BiocNeighbors]{BiocNeighborParam} object specifying the algorithm to use.
-#' Only used if \code{x} is not a list of existing nearest-neighbor search results.
+#' 
+#' This argument is only used if \code{x} is not a list of existing nearest-neighbor search results.
 #' @param as.pointer Logical scalar indicating whether to return an external pointer for direct use in \code{\link{clusterGraph}}.
 #' This avoids the extra memory usage caused by conversion to/from an R list.
 #'

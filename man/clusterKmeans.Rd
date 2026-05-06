@@ -54,36 +54,44 @@ This is slower but has a greater chance of convergence.
 \item{seed}{Integer specifying the seed for random number generation in some of the initialization methods.}
 
 \item{random.seed}{Integer specifying the seed for random number generation when \code{init.method = "kmeans++"}.
+
 If \code{NULL}, the default value in \code{\link{clusterKmeansDefaults}} is used.}
 
 \item{var.part.optimize.partition}{Boolean indicating whether each partition boundary should be optimized in \code{init.method = "var.part"}.
 This reduces the sum of squares in the child partitions, which improves the quality of the partition at the cost of some extra compute time.
+
 If \code{NULL}, the default value in \code{\link{clusterKmeansDefaults}} is used.}
 
 \item{var.part.size.adjustment}{Number specifying the cluster size adjustment when selecting the next cluster to partition in \code{init.method = "var.part"}.
 This should be non-negative and no greater than 1.
 Setting it to 0 will select the cluster with the highest variance, ignoring the cluster size.
 Setting it to 1 will select the cluster with the highest sum of squares, favoring larger clusters.
+
 If \code{NULL}, the default value in \code{\link{clusterKmeansDefaults}} is used.}
 
 \item{lloyd.iterations}{Integer specifying the maximum number of iterations for \code{refine.method = "lloyd"}.
 Larger values increase the chance of convergence at the cost of increasing compute time.
+
 If \code{NULL}, the default value in \code{\link{clusterKmeansDefaults}} is used.}
 
 \item{hartigan.wong.iterations}{Integer specifying the maximum number of iterations for \code{refine.method = "hartigan-wong"}.
 Larger values increase the chance of convergence at the cost of increasing compute time.
+
 If \code{NULL}, the default value in \code{\link{clusterKmeansDefaults}} is used.}
 
 \item{hartigan.wong.quick.transfer.iterations}{Integer specifying the maximum number of quick transfer iterations for \code{refine.method = "hartigan-wong"}.
 Larger values increase the chance of convergence at the cost of increasing compute time.
+
 If \code{NULL}, the default value in \code{\link{clusterKmeansDefaults}} is used.}
 
 \item{hartigan.wong.quit.quick.transfer.failure}{Boolean indicating whether to quit kon convergence failure during quick transfer iterations in \code{refine.method = "hartigan-wong"}.
 Setting this to \code{FALSE} gives the algorithm another chance to converge by attempting another optimal transfer iteration, at the cost of more compute time.
+
 If \code{TRUE}, the function follows the same behavior as R's \code{\link{kmeans}}.
 If \code{NULL}, the default value in \code{\link{clusterKmeansDefaults}} is used.}
 
 \item{num.threads}{Integer specifying the number of threads to use.
+
 If \code{NULL}, the default value in \code{\link{clusterKmeansDefaults}} is used.}
 }
 \value{

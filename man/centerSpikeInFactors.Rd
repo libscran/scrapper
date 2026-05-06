@@ -18,8 +18,10 @@ Invalid size factors (e.g., non-positive, non-finite) will be ignored.}
 Alternatively \code{NULL}, in which case all cells are assumed to be in the same block.}
 
 \item{mode}{String specifying how to scale size factors across blocks, see the argument of the same name in \code{\link{centerSizeFactors}}.
+
 If \code{NULL}, the default value in \code{\link{centerSpikeInFactors}} is used.
-Only used if \code{block} is provided.}
+
+This argument is only used if \code{block} is provided.}
 }
 \value{
 List containing:

@@ -8,12 +8,16 @@
 #' Values are typically expected to be counts.
 #' @param factors A list or data frame (or their equivalents from \pkg{S4Vectors}) containing one or more grouping factors, see \code{\link{combineFactors}}.
 #' @param compute.sum Boolean indicating whether to compute the sum in each group.
+#'
 #' If \code{NULL}, the default value in \code{\link{aggregateAcrossCellsDefaults}} is used.
 #' @param compute.detected Boolean indicating whether to compute the number of cells with detected expression in each group.
+#'
 #' If \code{NULL}, the default value in \code{\link{aggregateAcrossCellsDefaults}} is used.
 #' @param compute.median Boolean indicating whether to compute the median in each group.
+#'
 #' If \code{NULL}, the default value in \code{\link{aggregateAcrossCellsDefaults}} is used.
 #' @param num.threads Integer specifying the number of threads to be used for aggregation.
+#'
 #' If \code{NULL}, the default value in \code{\link{aggregateAcrossCellsDefaults}} is used.
 #'
 #' @return List containing:

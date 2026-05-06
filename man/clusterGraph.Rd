@@ -34,25 +34,31 @@ see \url{https://igraph.org/c/doc/igraph-Community.html#igraph_community_leiden}
 
 \item{multilevel.resolution}{Numeric scalar specifying the resolution when \code{method="multilevel"}.
 Lower values favor fewer, larger communities; higher values favor more, smaller communities.
+
 If \code{NULL}, the default value in \code{\link{clusterGraphDefaults}} is used.}
 
 \item{multilevel.seed}{Integer scalar specifying the random seed to use for \code{method="multilevel"}.
+
 If \code{NULL}, the default value in \code{\link{clusterGraphDefaults}} is used.}
 
 \item{leiden.resolution}{Numeric scalar specifying the resolution when \code{method="leiden"}.
 Lower values favor fewer, larger communities; higher values favor more, smaller communities.
+
 If \code{NULL}, the default value in \code{\link{clusterGraphDefaults}} is used.}
 
 \item{leiden.seed}{Integer scalar specifying the random seed to use for \code{method="leiden"}.
+
 If \code{NULL}, the default value in \code{\link{clusterGraphDefaults}} is used.}
 
 \item{leiden.objective}{String specifying the objective function when \code{method="leiden"}.
 \code{"modularity"} uses the generalized modularity, \code{"cpm"} uses the Constant Potts Model, and \code{"er"} uses the Erd\"os-R\'enyi G(n, p) model.
 The CPM typically yields more fine-grained clusters than the modularity at the same \code{leiden.resolution}.
+
 If \code{NULL}, the default value in \code{\link{clusterGraphDefaults}} is used.}
 
 \item{walktrap.steps}{Integer scalar specifying the number of steps to use when \code{method="walktrap"}.
 This determines the ability of the Walktrap algorithm to distinguish highly interconnected communities from the rest of the graph.
+
 If \code{NULL}, the default value in \code{\link{clusterGraphDefaults}} is used.}
 }
 \value{

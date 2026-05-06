@@ -9,14 +9,17 @@
 #' Invalid size factors (e.g., non-positive, non-finite) will be ignored.
 #' @param quantile Numeric scalar specifying the quantile to use for finding the smallest/largest size factors.
 #' Setting this to zero will use the observed minimum and maximum, though in practice, this is usually too sensitive to outliers.
+#'
 #' If \code{NULL}, the default value in \code{\link{choosePseudoCountDefaults}} is used.
-#' Specifically, the default uses the 5th and 95th percentile to obtain a range that captures most of the distribution.
+#' The default uses the 5th and 95th percentile to obtain a range that captures most of the distribution.
 #' @param max.bias Numeric scalar specifying the maximum allowed bias.
 #' This is the maximum absolute value of any spurious log2-fold change between the cells with the smallest and largest size factors.
+#'
 #' If \code{NULL}, the default value in \code{\link{choosePseudoCountDefaults}} is used.
 #' @param min.value Numeric scalar specifying the minimum value for the pseudo-count.
+#'
 #' If \code{NULL}, the default value in \code{\link{choosePseudoCountDefaults}} is used.
-#' Specifically, the default is 1 to stabilize near-zero normalized expression values, otherwise these manifest as avoid large negative values.
+#' The default of 1 will stabilize near-zero normalized expression values, otherwise these manifest as avoid large negative values.
 #'
 #' @return A choice of pseudo-count for \code{\link{normalizeCounts}}.
 #'

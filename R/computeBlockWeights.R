@@ -18,7 +18,8 @@
 #' @param variable.block.weight Numeric vector of length 2, specifying the parameters for variable block weighting.
 #' The first and second values are used as the lower and upper bounds, respectively, for the variable weight calculation.
 #' If \code{NULL}, the default value in \code{computeBlockWeightsDefaults} is used.
-#' Only used if \code{block.weight.policy = "variable"}.
+#'
+#' This argument is only used if \code{block.weight.policy = "variable"}.
 #'
 #' @return Numeric vector containing the relative block weights.
 #'

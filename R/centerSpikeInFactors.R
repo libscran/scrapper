@@ -11,8 +11,10 @@
 #' @param block Vector or factor of length equal to \code{endogenous}, specifying the block of origin for each cell.
 #' Alternatively \code{NULL}, in which case all cells are assumed to be in the same block.
 #' @param mode String specifying how to scale size factors across blocks, see the argument of the same name in \code{\link{centerSizeFactors}}.
+#'
 #' If \code{NULL}, the default value in \code{\link{centerSpikeInFactors}} is used.
-#' Only used if \code{block} is provided.
+#'
+#' This argument is only used if \code{block} is provided.
 #' 
 #' @return List containing:
 #' \itemize{

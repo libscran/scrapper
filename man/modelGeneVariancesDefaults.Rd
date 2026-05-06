@@ -7,7 +7,7 @@
 modelGeneVariancesDefaults()
 }
 \value{
-Named list of default values for various function arguments in \code{\link{modelGeneVariances}}.
+Named list of default values for various function arguments.
 }
 \description{
 Default parameters for \code{\link{modelGeneVariances}}

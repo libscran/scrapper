@@ -23,7 +23,7 @@ filterCrisprQcMetrics(thresholds, metrics, block = NULL)
 Values are expected to be counts.}
 
 \item{num.threads}{Integer scalar specifying the number of threads to use.
-If \code{NULL}, the default value in \code{computeCrisprQcMetricsDefaults} is used.}
+If \code{NULL}, the default value in \code{\link{computeCrisprQcMetricsDefaults}} is used.}
 
 \item{metrics}{\link[S4Vectors]{DataFrame} of per-cell QC metrics.
 This should have the same structure as the return value of \code{computeCrisprQcMetrics}.}
@@ -36,7 +36,7 @@ For \code{filterCrisprQcMetrics}, a blocking factor should be provided if \code{
 \item{num.mads}{Number of median from the median, to define the threshold for outliers in each metric.}
 
 \item{max.value.num.mads}{Number of median from the median, to define the threshold for the maximum count in each cell.
-If \code{NULL}, the default value in \code{suggestCrisprQcThresholdsDefaults} is used.}
+If \code{NULL}, the default value in \code{\link{suggestCrisprQcThresholdsDefaults}} is used.}
 
 \item{thresholds}{List with the same structure as produced by \code{suggestCrisprQcThresholds}.}
 }
@@ -74,8 +74,6 @@ Each vector is of length equal to the number of levels in \code{block} and is na
 
 For \code{filterCrisprQcMetrics}, a logical vector of length \code{ncol(x)} is returned indicating which cells are of high quality. 
 High-quality cells are defined as those with maximum counts above the \code{max.value} threshold.
-
-For \code{computeCrisprQcMetricsDefaults} and \code{suggestCrisprQcThresholdsDefaults}, a named list is returned containing default values for the various function arguments.
 }
 \description{
 Compute per-cell QC metrics from an initialized matrix of CRISPR counts,

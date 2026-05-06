@@ -14,27 +14,34 @@
 #' @param log Logical scalar indicating whether log-transformation should be performed.
 #' This ensures that downstream analyses like t-tests and distance calculations focus on relative fold-changes rather than absolute differences.
 #' The log-transformation also provides some measure of variance stabilization so that the downstream analyses are not dominated by sampling noise at large counts.
-#' If \code{NULL}, the default value in \code{normalizeCountsDefaults} is used.
+#'
+#' If \code{NULL}, the default value in \code{\link{normalizeCountsDefaults}} is used.
 #' @param pseudo.count Numeric scalar specifying the positive pseudo-count to add before any log-transformation.
 #' Larger values shrink the differences between cells towards zero, reducing spurious differences (but also signal) at low counts - see \code{\link{choosePseudoCount}} for comments.
-#' If \code{NULL}, the default value in \code{normalizeCountsDefaults} is used.
-#' Ignored if \code{log=FALSE}.
-#' @param log.base Numeric scalar specifying the base of the log-transformation.
-#' If \code{NULL}, the default value in \code{normalizeCountsDefaults} is used.
-#' Ignored if \code{log=FALSE}.
-#' @param preserve.sparsity Logical scalar indicating whether to preserve sparsity for \code{pseudo.count != 1}.
-#' If \code{TRUE}, users should manually add \code{log(pseudo.count, log.base)} to the returned matrix to obtain the desired log-transformed expression values.
-#' If \code{NULL}, the default value in \code{normalizeCountsDefaults} is used.
-#' Ignored if \code{log = FALSE} or \code{pseudo.count = 1}.
 #'
-#' @return \code{normalizeCounts} returns the normalized expression matrix in varying forms:
+#' If \code{NULL}, the default value in \code{\link{normalizeCountsDefaults}} is used.
+#'
+#' This argument is ignored if \code{log = FALSE}.
+#' @param log.base Numeric scalar specifying the base of the log-transformation.
+#' This is typically set to 2 or 10 for convenient interpretation of the log-values.
+#'
+#' If \code{NULL}, the default value in \code{\link{normalizeCountsDefaults}} is used.
+#'
+#' This argument is ignored if \code{log = FALSE}.
+#' @param preserve.sparsity Logical scalar indicating whether to preserve sparsity for \code{pseudo.count != 1}.
+#' This improves memory and compute efficiency in downstream steps but changes the interpretation of the returned matrix. 
+#' Specifically, if \code{TRUE}, users should manually add \code{log(pseudo.count, log.base)} to the returned matrix to obtain the desired log-transformed expression values.
+#'
+#' If \code{NULL}, the default value in \code{\link{normalizeCountsDefaults}} is used.
+#'
+#' This argument is ignored if \code{log = FALSE} or \code{pseudo.count = 1}.
+#'
+#' @return A normalized expression matrix in varying forms:
 #' \itemize{
 #' \item If \code{x} is a matrix-like object, a matrix-like object is returned containing the (log-transformed) normalized expression matrix.
 #' If \code{delayed=TRUE}, the returned object is a \link[DelayedArray]{DelayedArray}, otherwise the return type depends on the type of \code{x} and the operations involved.
 #' \item If \code{x} is an external pointer produced by \code{\link[beachmat]{initializeCpp}}, a new external pointer is returned containing the normalized expression matrix.
 #' }
-#'
-#' \code{normalizeCountsDefaults} returns a named list of default values for various function arguments.
 #'
 #' @seealso
 #' The \code{normalize_counts} function in \url{https://libscran.github.io/scran_norm/}.
@@ -97,6 +104,10 @@ normalizeCounts <- function(x, size.factors, log = NULL, pseudo.count = NULL, lo
     }
 }
 
+#' Default parameters for \code{\link{normalizeCounts}}
+#' @return Named list of default values for various function arguments. 
+#' @author Aaron Lun
+#' @examples
+#' normalizeCountsDefaults()
 #' @export
-#' @rdname normalizeCounts
 normalizeCountsDefaults <- function() normalize_counts_defaults()

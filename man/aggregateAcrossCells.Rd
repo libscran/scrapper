@@ -20,15 +20,19 @@ Values are typically expected to be counts.}
 \item{factors}{A list or data frame (or their equivalents from \pkg{S4Vectors}) containing one or more grouping factors, see \code{\link{combineFactors}}.}
 
 \item{compute.sum}{Boolean indicating whether to compute the sum in each group.
+
 If \code{NULL}, the default value in \code{\link{aggregateAcrossCellsDefaults}} is used.}
 
 \item{compute.detected}{Boolean indicating whether to compute the number of cells with detected expression in each group.
+
 If \code{NULL}, the default value in \code{\link{aggregateAcrossCellsDefaults}} is used.}
 
 \item{compute.median}{Boolean indicating whether to compute the median in each group.
+
 If \code{NULL}, the default value in \code{\link{aggregateAcrossCellsDefaults}} is used.}
 
 \item{num.threads}{Integer specifying the number of threads to be used for aggregation.
+
 If \code{NULL}, the default value in \code{\link{aggregateAcrossCellsDefaults}} is used.}
 }
 \value{

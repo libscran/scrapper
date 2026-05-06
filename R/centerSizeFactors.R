@@ -10,8 +10,10 @@
 #' Alternatively \code{NULL}, in which case all cells are assumed to be in the same block.
 #' @param mode String specifying how to scale size factors across blocks.
 #' This can be either \code{"lowest"} or \code{"per-block"}, see Details.
+#'
 #' If \code{NULL}, the default value in \code{\link{centerSizeFactorsDefaults}} is used.
-#' Only used if \code{block} is provided.
+#'
+#' This argument is only used if \code{block} is provided.
 #' 
 #' @return Numeric vector of length equal to \code{size.factors}, containing the centered size factors.
 #'

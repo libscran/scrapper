@@ -29,6 +29,7 @@ Each vector may be logical (whether to keep each row), integer (row indices) or 
 For character vectors, strings not present in \code{rownames(x)} are ignored.}
 
 \item{num.threads}{Integer scalar specifying the number of threads to use.
+
 If \code{NULL}, the default value in \code{\link{computeAdtQcMetricsDefaults}} is used.}
 
 \item{metrics}{\link[S4Vectors]{DataFrame} of per-cell QC metrics.
@@ -40,14 +41,17 @@ Alternatively \code{NULL} if all cells are from the same block.
 For \code{filterAdtQcMetrics}, a blocking factor should be provided if \code{block} was used to construct \code{thresholds}.}
 
 \item{min.detected.drop}{Minimum drop in the number of detected features from the median, in order to consider a cell to be of low quality.
+
 If \code{NULL}, the default value in \code{\link{suggestAdtQcThresholdDefaults}} is used.}
 
 \item{num.mads}{Number of median from the median, to define the threshold for outliers in each metric.}
 
 \item{detected.num.mads}{Number of median from the median, to define the threshold for outliers in the number of detected tags.
+
 If \code{NULL}, the default value in \code{\link{suggestAdtQcThresholdDefaults}} is used.}
 
 \item{subset.sum.num.mads}{Number of median from the median, to define the threshold for outliers in the subset sums.
+
 If \code{NULL}, the default value in \code{\link{suggestAdtQcThresholdDefaults}} is used.}
 
 \item{thresholds}{List with the same structure as produced by \code{suggestAdtQcThresholds}.}

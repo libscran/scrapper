@@ -12,7 +12,8 @@
 #' Instead, the fitted values for these genes are defined by extrapolating the left edge of the fitted trend is extrapolated to the origin.
 #' If \code{NULL}, the default value in \code{\link{fitVarianceTrendDefaults}} is used;
 #' this is chosen based on the typical distribution of means of log-expression values across genes.
-#' Ignored if \code{mean.filter=FALSE}.
+#'
+#' This argument is ignored if \code{mean.filter=FALSE}.
 #' @param transform Logical scalar indicating whether a quarter-root transformation should be applied before trend fitting.
 #' This transformation is copied from \code{limma::voom} and shrinks all values towards 1, flattening any sharp gradients in the trend for an easier fit.
 #' For example, variances are computed from log-expression values typically exhibit a strong \dQuote{hump} in the mean-variance relationship.
@@ -20,7 +21,8 @@
 #' @param span Numeric scalar specifying the span of the LOWESS smoother, as a proportion of the total number of points.
 #' Larger values improve stability at the cost of sensitivity to changes in low-density regions.
 #' If \code{NULL}, the default value in \code{\link{fitVarianceTrendDefaults}} is used.
-#' Ignored if \code{use.min.width=TRUE}.
+#'
+#' This argument is ignored if \code{use.min.width=TRUE}.
 #' @param use.min.width Logical scalar indicating whether a minimum width constraint should be applied to the LOWESS smoother.
 #' This replaces the proportion-based span for defining each window.
 #' Instead, the window for each point must be of a minimum width and is extended until it contains a minimum number of points. 
@@ -34,7 +36,8 @@
 #' This ensures that each window contains at least a given number of observations for a stable fit.
 #' If the minimum width window contains fewer observations, it is extended using the standard LOWESS logic until the minimum number is achieved.
 #' If \code{NULL}, the default value in \code{\link{fitVarianceTrendDefaults}} is used.
-#' Ignored if \code{use.min.width = FALSE}.
+#'
+#' This argument is ignored if \code{use.min.width = FALSE}.
 #' @param num.threads Number of threads to use.
 #' If \code{NULL}, the default value in \code{\link{fitVarianceTrendDefaults}} is used.
 #'
