@@ -33,3 +33,8 @@ test_that("sanitizeGeneSet works as expected", {
     expect_identical(scrapper:::.sanitizeGeneSet(rep(LETTERS, each=2), n=100, names=LETTERS), 1:26)  # removes duplicates
     expect_identical(scrapper:::.sanitizeGeneSet(LETTERS[2:5], n=10, names=LETTERS[1:4]), c(2L, 3L, 4L)) # ignores missing values
 })
+
+test_that("defaults work correctly", {
+    def <- scoreGeneSetDefaults()
+    expect_true(all(names(def) %in% names(formals(scoreGeneSet))))
+})

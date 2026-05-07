@@ -170,4 +170,3 @@ Rcpp::List run_pca_defaults(bool use_block, bool use_subset) {
 
     return output;
 }
-

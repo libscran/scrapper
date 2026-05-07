@@ -31,9 +31,9 @@ Rcpp::List score_gene_set(
 
     gsdecon::Options opt;
     set_integer(rank, opt.rank, "rank");
-    set_bool(scale, opt.scale, "scale");
     set_block_weight_policy(block_weight_policy, opt.block_weight_policy, "block.weight.policy");
     set_variable_block_weight(variable_block_weight, opt.variable_block_weight_parameters, "variable.block.weight");
+    set_bool(scale, opt.scale, "scale");
     set_bool(realized, opt.realize_matrix, "realized");
     set_optional_integer(irlba_work, opt.irlba_options.extra_work, "extra.work");
     set_integer(irlba_iterations, opt.irlba_options.max_iterations, "iterations");
@@ -63,4 +63,29 @@ Rcpp::List score_gene_set(
         Rcpp::Named("scores") = scores,
         Rcpp::Named("weights") = weights
     );
+}
+
+//[[Rcpp::export(rng=false)]]
+Rcpp::List score_gene_set_defaults() {
+    Rcpp::List output;
+    gsdecon::Options opt;
+    output["rank"] = opt.rank;
+
+    report_block_weight_policy_default(output, opt.block_weight_policy, "block.weight.policy", "scoreGeneSet");
+    report_variable_block_weight_default(output, opt.variable_block_weight_parameters, "variable.block.weight");
+
+    output["scale"] = opt.scale;
+    output["realized"] = opt.realize_matrix;
+
+    if (!opt.irlba_options.extra_work.has_value()) {
+        output["extra.work"] = R_NilValue;
+    } else {
+        throw std::runtime_error("unexpected extra.work default for runPca"); 
+    }
+
+    output["iterations"] = opt.irlba_options.max_iterations;
+    output["tolerance"] = opt.irlba_options.convergence_tolerance;
+    output["seed"] = opt.irlba_options.seed;
+    output["num.threads"] = opt.num_threads;
+    return output;
 }

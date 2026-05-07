@@ -795,6 +795,15 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// score_gene_set_defaults
+Rcpp::List score_gene_set_defaults();
+RcppExport SEXP _scrapper_score_gene_set_defaults() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    rcpp_result_gen = Rcpp::wrap(score_gene_set_defaults());
+    return rcpp_result_gen;
+END_RCPP
+}
 // score_markers_summary
 Rcpp::List score_markers_summary(SEXP x, Rcpp::IntegerVector groups, int num_groups, Rcpp::Nullable<Rcpp::IntegerVector> block, Rcpp::RObject block_average_policy, Rcpp::RObject block_weight_policy, Rcpp::RObject variable_block_weight, Rcpp::RObject block_quantile, Rcpp::RObject threshold, Rcpp::RObject num_threads, Rcpp::RObject compute_group_mean, Rcpp::RObject compute_group_detected, Rcpp::RObject compute_delta_mean, Rcpp::RObject compute_delta_detected, Rcpp::RObject compute_cohens_d, Rcpp::RObject compute_auc, Rcpp::RObject compute_summary_min, Rcpp::RObject compute_summary_mean, Rcpp::RObject compute_summary_median, Rcpp::RObject compute_summary_max, Rcpp::RObject compute_summary_quantiles, Rcpp::RObject compute_summary_min_rank, Rcpp::RObject min_rank_limit);
 RcppExport SEXP _scrapper_score_markers_summary(SEXP xSEXP, SEXP groupsSEXP, SEXP num_groupsSEXP, SEXP blockSEXP, SEXP block_average_policySEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP block_quantileSEXP, SEXP thresholdSEXP, SEXP num_threadsSEXP, SEXP compute_group_meanSEXP, SEXP compute_group_detectedSEXP, SEXP compute_delta_meanSEXP, SEXP compute_delta_detectedSEXP, SEXP compute_cohens_dSEXP, SEXP compute_aucSEXP, SEXP compute_summary_minSEXP, SEXP compute_summary_meanSEXP, SEXP compute_summary_medianSEXP, SEXP compute_summary_maxSEXP, SEXP compute_summary_quantilesSEXP, SEXP compute_summary_min_rankSEXP, SEXP min_rank_limitSEXP) {
@@ -1013,6 +1022,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_scale_by_neighbors", (DL_FUNC) &_scrapper_scale_by_neighbors, 8},
     {"_scrapper_scale_by_neighbors_defaults", (DL_FUNC) &_scrapper_scale_by_neighbors_defaults, 1},
     {"_scrapper_score_gene_set", (DL_FUNC) &_scrapper_score_gene_set, 12},
+    {"_scrapper_score_gene_set_defaults", (DL_FUNC) &_scrapper_score_gene_set_defaults, 0},
     {"_scrapper_score_markers_summary", (DL_FUNC) &_scrapper_score_markers_summary, 23},
     {"_scrapper_score_markers_pairwise", (DL_FUNC) &_scrapper_score_markers_pairwise, 16},
     {"_scrapper_score_markers_best", (DL_FUNC) &_scrapper_score_markers_best, 18},

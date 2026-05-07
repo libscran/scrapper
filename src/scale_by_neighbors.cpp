@@ -88,7 +88,7 @@ Rcpp::List scale_by_neighbors_defaults(bool use_block) {
         output["num.threads"] = opt.num_threads;
     }
 
-    // Setting this for consistency, regardless of whether use_block = true or not..
+    // Setting this for consistency, regardless of whether use_block = true or not.
     mumosa::BlockedOptions opt;
     report_block_weight_policy_default(output, opt.block_weight_policy, "block.weight.policy", "scaleByNeighbors");
     report_variable_block_weight_default(output, opt.variable_block_weight_parameters, "variable.block.weight");

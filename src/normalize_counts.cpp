@@ -27,8 +27,8 @@ Rcpp::List normalize_counts_defaults() {
     Rcpp::List output;
     scran_norm::NormalizeCountsOptions opt;
     output["log"] = opt.log;
-    output["pseudo_count"] = opt.pseudo_count;
-    output["log_base"] = opt.log_base;
+    output["pseudo.count"] = opt.pseudo_count;
+    output["log.base"] = opt.log_base;
     output["preserve.sparsity"] = opt.preserve_sparsity;
     return output;
 }

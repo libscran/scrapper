@@ -11,7 +11,43 @@
 #' For a character vector, any string not present in \code{rownames(x)} is ignored.
 #' @param rank Integer scalar specifying the rank of the approximation.
 #' The default value of 1 assumes that each gene set only describes a single coordinated biological function.
-#' @inheritParams runPca
+#'
+#' If \code{NULL}, the default value in \code{\link{scoreGeneSetDefaults}} is used.
+#' @param block.weight.policy String specifying the policy to use for weighting the contribution of different blocks to the PCA.
+#' See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
+#'
+#' If \code{NULL}, the default value in \code{\link{scoreGeneSetDefaults}} is used.
+#'
+#' This argument is only used if \code{block} is not \code{NULL}.
+#' @param variable.block.weight Numeric vector of length 2, specifying the parameters for variable block weighting.
+#' See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
+#'
+#' If \code{NULL}, the default value in \code{\link{scoreGeneSetDefaults}} is used.
+#'
+#' This argument is only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.
+#' @param extra.work Integer scalar specifying the number of extra dimensions for the IRLBA workspace.
+#' Larger values improve accuracy at the cost of compute time.
+#'
+#' If \code{NULL}, the default value in \code{\link{scoreGeneSetDefaults}} is used.
+#' Specifically, this defaults to the larger of 7 and \code{number}.
+#' @param tolerance Number specifying the tolerance on the approximation error of the singular triplets, to determine IRLBA convergence.
+#' Lower values improve accuracy at the cost of compute time.
+#'
+#' If \code{NULL}, the default value in \code{\link{scoreGeneSetDefaults}} is used.
+#' @param iterations Integer scalar specifying the maximum number of restart iterations for IRLBA.
+#' Larger values improve accuracy at the cost of compute time.
+#'
+#' If \code{NULL}, the default value in \code{\link{scoreGeneSetDefaults}} is used.
+#' @param seed Integer scalar specifying the seed for the initial random vector in IRLBA.
+#'
+#' If \code{NULL}, the default value in \code{\link{scoreGeneSetDefaults}} is used.
+#' @param realized Logical scalar indicating whether to realize \code{x} into an optimal memory layout for IRLBA.
+#' This speeds up computation at the cost of increased memory usage.
+#'
+#' If \code{NULL}, the default value in \code{\link{scoreGeneSetDefaults}} is used.
+#' @param num.threads Number of threads to use.
+#'
+#' If \code{NULL}, the default value in \code{\link{scoreGeneSetDefaults}} is used.
 #'
 #' @return List containing:
 #' \itemize{
@@ -40,18 +76,18 @@
 scoreGeneSet <- function(
     x,
     set,
-    rank=1, 
-    scale=FALSE,
-    block=NULL, 
-    block.weight.policy=c("variable", "equal", "none"),
-    variable.block.weight=c(0, 1000),
+    rank = NULL,
+    scale = NULL,
+    block = NULL, 
+    block.weight.policy = NULL,
+    variable.block.weight = NULL,
     extra.work = NULL,
-    iterations=1000,
-    tolerance = 1e-5,
-    seed=5489,
-    realized=TRUE,
-    num.threads=1) 
-{
+    iterations = NULL,
+    tolerance = NULL,
+    seed = NULL,
+    realized = NULL,
+    num.threads = NULL 
+) {
     .checkSEX(x, "scoreGeneSet.se")
 
     block <- .transformFactor(block)
@@ -66,7 +102,7 @@ scoreGeneSet <- function(
         block=block$index,
         rank=rank,
         scale=scale,
-        block_weight_policy=match.arg(block.weight.policy),
+        block_weight_policy=block.weight.policy,
         variable_block_weight=variable.block.weight,
         realized=realized,
         irlba_work=extra.work,
@@ -116,3 +152,11 @@ scoreGeneSet <- function(
         return(set)
     }
 }
+
+#' Default parameters for \code{\link{scoreGeneSet}}
+#' @return Named list containing default values for various function arguments.
+#' @author Aaron Lun
+#' @examples
+#' scoreGeneSetDefaults()
+#' @export
+scoreGeneSetDefaults <- function() score_gene_set_defaults()
