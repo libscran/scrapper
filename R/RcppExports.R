@@ -237,8 +237,16 @@ sanitize_size_factors <- function(size_factors, handle_zero, handle_negative, ha
     .Call('_scrapper_sanitize_size_factors', PACKAGE = 'scrapper', size_factors, handle_zero, handle_negative, handle_nan, handle_infinite)
 }
 
+sanitize_size_factors_defaults <- function() {
+    .Call('_scrapper_sanitize_size_factors_defaults', PACKAGE = 'scrapper')
+}
+
 scale_by_neighbors <- function(num_cells, embedding, num_neighbors, block, block_weight_policy, variable_block_weight, num_threads, nn_builder) {
     .Call('_scrapper_scale_by_neighbors', PACKAGE = 'scrapper', num_cells, embedding, num_neighbors, block, block_weight_policy, variable_block_weight, num_threads, nn_builder)
+}
+
+scale_by_neighbors_defaults <- function(use_block) {
+    .Call('_scrapper_scale_by_neighbors_defaults', PACKAGE = 'scrapper', use_block)
 }
 
 score_gene_set <- function(x, rank, block, block_weight_policy, variable_block_weight, scale, realized, irlba_work, irlba_iterations, irlba_tolerance, irlba_seed, num_threads) {

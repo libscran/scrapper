@@ -725,16 +725,25 @@ BEGIN_RCPP
 END_RCPP
 }
 // sanitize_size_factors
-Rcpp::NumericVector sanitize_size_factors(Rcpp::NumericVector size_factors, bool handle_zero, bool handle_negative, bool handle_nan, bool handle_infinite);
+Rcpp::NumericVector sanitize_size_factors(Rcpp::NumericVector size_factors, Rcpp::RObject handle_zero, Rcpp::RObject handle_negative, Rcpp::RObject handle_nan, Rcpp::RObject handle_infinite);
 RcppExport SEXP _scrapper_sanitize_size_factors(SEXP size_factorsSEXP, SEXP handle_zeroSEXP, SEXP handle_negativeSEXP, SEXP handle_nanSEXP, SEXP handle_infiniteSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type size_factors(size_factorsSEXP);
-    Rcpp::traits::input_parameter< bool >::type handle_zero(handle_zeroSEXP);
-    Rcpp::traits::input_parameter< bool >::type handle_negative(handle_negativeSEXP);
-    Rcpp::traits::input_parameter< bool >::type handle_nan(handle_nanSEXP);
-    Rcpp::traits::input_parameter< bool >::type handle_infinite(handle_infiniteSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type handle_zero(handle_zeroSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type handle_negative(handle_negativeSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type handle_nan(handle_nanSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type handle_infinite(handle_infiniteSEXP);
     rcpp_result_gen = Rcpp::wrap(sanitize_size_factors(size_factors, handle_zero, handle_negative, handle_nan, handle_infinite));
+    return rcpp_result_gen;
+END_RCPP
+}
+// sanitize_size_factors_defaults
+Rcpp::List sanitize_size_factors_defaults();
+RcppExport SEXP _scrapper_sanitize_size_factors_defaults() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    rcpp_result_gen = Rcpp::wrap(sanitize_size_factors_defaults());
     return rcpp_result_gen;
 END_RCPP
 }
@@ -752,6 +761,16 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::RObject >::type num_threads(num_threadsSEXP);
     Rcpp::traits::input_parameter< SEXP >::type nn_builder(nn_builderSEXP);
     rcpp_result_gen = Rcpp::wrap(scale_by_neighbors(num_cells, embedding, num_neighbors, block, block_weight_policy, variable_block_weight, num_threads, nn_builder));
+    return rcpp_result_gen;
+END_RCPP
+}
+// scale_by_neighbors_defaults
+Rcpp::List scale_by_neighbors_defaults(bool use_block);
+RcppExport SEXP _scrapper_scale_by_neighbors_defaults(SEXP use_blockSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< bool >::type use_block(use_blockSEXP);
+    rcpp_result_gen = Rcpp::wrap(scale_by_neighbors_defaults(use_block));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -990,7 +1009,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_run_umap", (DL_FUNC) &_scrapper_run_umap, 25},
     {"_scrapper_run_umap_defaults", (DL_FUNC) &_scrapper_run_umap_defaults, 0},
     {"_scrapper_sanitize_size_factors", (DL_FUNC) &_scrapper_sanitize_size_factors, 5},
+    {"_scrapper_sanitize_size_factors_defaults", (DL_FUNC) &_scrapper_sanitize_size_factors_defaults, 0},
     {"_scrapper_scale_by_neighbors", (DL_FUNC) &_scrapper_scale_by_neighbors, 8},
+    {"_scrapper_scale_by_neighbors_defaults", (DL_FUNC) &_scrapper_scale_by_neighbors_defaults, 1},
     {"_scrapper_score_gene_set", (DL_FUNC) &_scrapper_score_gene_set, 12},
     {"_scrapper_score_markers_summary", (DL_FUNC) &_scrapper_score_markers_summary, 23},
     {"_scrapper_score_markers_pairwise", (DL_FUNC) &_scrapper_score_markers_pairwise, 16},

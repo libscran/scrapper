@@ -103,4 +103,10 @@ test_that("runPCA works with subsets", {
 test_that("defaults work as expected", {
     def <- runPcaDefaults()
     expect_true(all(names(def) %in% names(formals(runPca))))
+    def <- runPcaDefaults(subset=1)
+    expect_true(all(names(def) %in% names(formals(runPca))))
+    def <- runPcaDefaults(block=1)
+    expect_true(all(names(def) %in% names(formals(runPca))))
+    def <- runPcaDefaults(block=1, subset=1)
+    expect_true(all(names(def) %in% names(formals(runPca))))
 })
