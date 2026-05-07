@@ -2,7 +2,6 @@
 % Please edit documentation in R/runPca.R
 \name{runPca}
 \alias{runPca}
-\alias{runPcaDefaults}
 \title{Principal components analysis}
 \usage{
 runPca(
@@ -22,8 +21,6 @@ runPca(
   warn = TRUE,
   num.threads = NULL
 )
-
-runPcaDefaults()
 }
 \arguments{
 \item{x}{A matrix-like object where rows correspond to genes or genomic features and columns correspond to cells.
@@ -31,12 +28,16 @@ Typically, the matrix is expected to contain log-expression values (see \code{\l
 
 \item{number}{Integer scalar specifying the number of top PCs to retain.
 More PCs will capture more biological signal at the cost of increasing noise and compute time.
-If this is greater than the maximum number of PCs (i.e., the smaller dimension of \code{x}), only the maximum number of PCs will be reported in the results.}
+If this is greater than the maximum number of PCs (i.e., the smaller dimension of \code{x}), only the maximum number of PCs will be reported in the results.
+
+If \code{NULL}, the default value in \code{\link{runPcaDefaults}} is used.}
 
 \item{scale}{Logical scalar indicating whether to scale all genes to have the same variance.
 This ensures that each gene contributes equally to the PCA, favoring consistent variation across many genes rather than large variation in a few genes.
 If \code{block} is specified, each gene's variance is calculated as a weighted sum of the variances from each block. 
-Genes with zero variance are ignored.}
+Genes with zero variance are ignored.
+
+If \code{NULL}, the default value in \code{\link{runPcaDefaults}} is used.}
 
 \item{block}{Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{x}.
 The PCA will be performed on the residuals after regressing out the block effect, ensuring that differences between block do not dominate the variation in the dataset.
@@ -44,15 +45,24 @@ Alternatively \code{NULL} if all cells are from the same block.}
 
 \item{block.weight.policy}{String specifying the policy to use for weighting the contribution of different blocks to the PCA.
 See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
-Only used if \code{block} is not \code{NULL}.}
+
+If \code{NULL}, the default value in \code{\link{runPcaDefaults}} is used.
+
+This argument is only used if \code{block} is not \code{NULL}.}
 
 \item{variable.block.weight}{Numeric vector of length 2, specifying the parameters for variable block weighting.
 See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
-Only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.}
+
+If \code{NULL}, the default value in \code{\link{runPcaDefaults}} is used.
+
+This argument is only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.}
 
 \item{components.from.residuals}{Logical scalar indicating whether to compute the PC scores from the residuals in the presence of a blocking factor.
 By default, the residuals are only used to compute the rotation matrix, and the original expression values of the cells are projected onto this new space (see Details).
-Only used if \code{block} is not \code{NULL}.}
+
+If \code{NULL}, the default value in \code{\link{runPcaDefaults}} is used.
+
+This argument is only used if \code{block} is not \code{NULL}.}
 
 \item{subset}{Integer, logical or character vector specifying the rows of \code{x} to use for the PCA.
 This yields the same results as \code{runPca} on \code{x[subset,]}, except that entries of the rotation matrix will also be computed for rows outside of the subset.
@@ -60,22 +70,34 @@ If \code{NULL}, all rows of \code{x} are used.}
 
 \item{extra.work}{Integer scalar specifying the number of extra dimensions for the IRLBA workspace.
 Larger values improve accuracy at the cost of compute time.
-If \code{NULL}, it defaults to the larger of 7 and \code{number}.}
+
+If \code{NULL}, the default value in \code{\link{runPcaDefaults}} is used.
+Specifically, this defaults to the larger of 7 and \code{number}.}
 
 \item{iterations}{Integer scalar specifying the maximum number of restart iterations for IRLBA.
-Larger values improve accuracy at the cost of compute time.}
+Larger values improve accuracy at the cost of compute time.
+
+If \code{NULL}, the default value in \code{\link{runPcaDefaults}} is used.}
 
 \item{tolerance}{Number specifying the tolerance on the approximation error of the singular triplets, to determine IRLBA convergence.
-Lower values improve accuracy at the cost of compute time.}
+Lower values improve accuracy at the cost of compute time.
 
-\item{seed}{Integer scalar specifying the seed for the initial random vector in IRLBA.}
+If \code{NULL}, the default value in \code{\link{runPcaDefaults}} is used.}
+
+\item{seed}{Integer scalar specifying the seed for the initial random vector in IRLBA.
+
+If \code{NULL}, the default value in \code{\link{runPcaDefaults}} is used.}
 
 \item{realized}{Logical scalar indicating whether to realize \code{x} into an optimal memory layout for IRLBA.
-This speeds up computation at the cost of increased memory usage.}
+This speeds up computation at the cost of increased memory usage.
+
+If \code{NULL}, the default value in \code{\link{runPcaDefaults}} is used.}
 
 \item{warn}{Boolean specifying whether a warning should be emitted if IRLBA failed to converge.}
 
-\item{num.threads}{Number of threads to use.}
+\item{num.threads}{Number of threads to use.
+
+If \code{NULL}, the default value in \code{\link{runPcaDefaults}} is used.}
 }
 \value{
 List containing:

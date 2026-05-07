@@ -99,3 +99,8 @@ test_that("runPCA works with subsets", {
     expect_equal(ref$rotation, out$rotation[seq_len(nrow(normed)),], tolerance=1e-5)
     expect_equal(ref$rotation, out$rotation[nrow(normed) + seq_len(nrow(normed)),])
 })
+
+test_that("defaults work as expected", {
+    def <- runPcaDefaults()
+    expect_true(all(names(def) %in% names(formals(runPca))))
+})

@@ -9,13 +9,24 @@
 #' Each vector may be logical (whether to keep each row), integer (row indices) or character (row names).
 #' For character vectors, strings not present in \code{rownames(x)} are ignored.
 #' @param num.threads Integer scalar specifying the number of threads to use.
+#'
+#' If \code{NULL}, the default value in \code{\link{computeRnaQcMetricsDefaults}} is used.
 #' @param metrics \link[S4Vectors]{DataFrame} of per-cell QC metrics.
 #' This should have the same structure as the return value of \code{computeRnaQcMetrics}.
 #' @param block Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{metrics}.
 #' Alternatively \code{NULL} if all cells are from the same block.
 #'
 #' For \code{filterRnaQcMetrics}, a blocking factor should be provided if \code{block} was used to construct \code{thresholds}. 
-#' @param num.mads Number of median from the median, to define the threshold for outliers in each metric.
+#' @param num.mads Number of median absolute deviations (MADs) from the median to define the threshold for outliers in each metric.
+#' @param sum.num.mads Number of MADS from the median to define the threshold for outliers in the total sum of counts.
+#'
+#' If \code{NULL}, the default value in \code{\link{suggestRnaQcThresholdsDefaults}} is used.
+#' @param detected.num.mads Number of MADS from the median to define the threshold for outliers in the number of detected genes.
+#'
+#' If \code{NULL}, the default value in \code{\link{suggestRnaQcThresholdsDefaults}} is used.
+#' @param subset.proportion.num.mads Number of MADS from the median to define the threshold for outliers in the subset proportions.
+#'
+#' If \code{NULL}, the default value in \code{\link{suggestRnaQcThresholdsDefaults}} is used.
 #' @param thresholds List with the same structure as produced by \code{suggestRnaQcThresholds}.
 #'
 #' @return For \code{computeRnaQcMetrics}, a \link[S4Vectors]{DataFrame} is returned with one row per cell in \code{x}.
@@ -87,7 +98,7 @@
 #' @export
 #' @name rna_quality_control
 #' @importFrom beachmat initializeCpp tatami.dim
-computeRnaQcMetrics <- function(x, subsets, num.threads = 1) {
+computeRnaQcMetrics <- function(x, subsets, num.threads = NULL) {
     if (length(subsets) > 0 && is.null(names(subsets))) {
         stop("subsets should be a named list")
     }
@@ -104,10 +115,16 @@ computeRnaQcMetrics <- function(x, subsets, num.threads = 1) {
 
 #' @export
 #' @rdname rna_quality_control
-suggestRnaQcThresholds <- function(metrics, block=NULL, num.mads=3) {
+suggestRnaQcThresholds <- function(metrics, block = NULL, num.mads = NULL, sum.num.mads = num.mads, detected.num.mads = num.mads, subset.proportion.num.mads = num.mads) {
     block <- .transformFactor(block)
     metrics <- .simplifyQcMetrics(metrics)
-    thresholds <- suggest_rna_qc_thresholds(metrics, block=block$index, num_mads=num.mads)
+    thresholds <- suggest_rna_qc_thresholds(
+        metrics,
+        block=block$index,
+        sum_num_mads=sum.num.mads,
+        detected_num_mads=detected.num.mads,
+        subset_proportion_num_mads=subset.proportion.num.mads
+    )
 
     names(thresholds$subsets) <- names(metrics$subsets)
 
@@ -215,3 +232,17 @@ filterRnaQcMetrics <- function(thresholds, metrics, block=NULL) {
 
     m - 1L
 }
+
+#' Default parameters for RNA quality control
+#' @return Named list containing default values for the various function arguments.
+#' @author Aaron Lun
+#' @examples
+#' computeRnaQcMetricsDefaults()
+#' suggestRnaQcThresholdsDefaults()
+#' @export
+#' @name rna_quality_control_defaults
+computeRnaQcMetricsDefaults <- function() compute_rna_qc_metrics_defaults()
+
+#' @export
+#' @rdname rna_quality_control_defaults
+suggestRnaQcThresholdsDefaults <- function() suggest_rna_qc_thresholds_defaults()

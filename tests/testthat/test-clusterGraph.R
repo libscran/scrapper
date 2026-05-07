@@ -40,18 +40,19 @@ test_that("clusterGraph works correctly for multilevel", {
 })
 
 test_that("clusterGraph works correctly for Leiden", {
-    clust.mod <- clusterGraph(out, method="leiden", leiden.object="modularity")
-    expect_identical(length(clust.mod$membership), ncol(data))
-    expect_lte(nlevels(clust.mod$membership), ncol(data))
-    expect_gte(nlevels(clust.mod$membership), 1L)
-    expect_false(anyNA(clust.mod$membership))
+    clust <- clusterGraph(out, method="leiden")
+    expect_identical(length(clust$membership), ncol(data))
+    expect_lte(nlevels(clust$membership), ncol(data))
+    expect_gte(nlevels(clust$membership), 1L)
+    expect_false(anyNA(clust$membership))
+
+    clust.mod <- clusterGraph(out, method="leiden", leiden.objective="modularity")
+    expect_identical(clust, clust.mod)
 
     clust.cpm <- clusterGraph(out, method="leiden", leiden.objective="cpm")
     expect_identical(length(clust.cpm$membership), ncol(data))
     expect_gte(nlevels(clust.cpm$membership), 1L)
-
-    clust <- clusterGraph(out, method="leiden")
-    expect_identical(clust, clust.cpm) # works with the default.
+    expect_identical(clust.cpm, clusterGraph(out, method="leiden", leiden.objective=NULL)) # works with the C++ default.
 
     clust.er <- clusterGraph(out, method="leiden", leiden.objective="er")
     expect_identical(length(clust.er$membership), ncol(data))

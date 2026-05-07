@@ -10,7 +10,8 @@ clusterGraphDefaults()
 Named list containing default values for various function arguments.
 }
 \description{
-Default parameters for \code{\link{clusterGraph}}
+Default parameters from the underlying C++ library.
+Some of these may be overridden by defaults in the \code{\link{clusterGraph}} function signature.
 }
 \examples{
 clusterGraphDefaults()

@@ -161,15 +161,11 @@ clusterKmeans <- function(
 }
 
 #' Default parameters for \code{\link{clusterKmeans}}
+#' @description Default parameters from the underlying C++ library.
+#' These may be overridden by defaults in the \code{\link{clusterKmeans}} function signature.
 #' @return Named list containing default values for various function arguments.
 #' @author Aaron Lun
 #' @examples
 #' clusterKmeansDefaults()
 #' @export
-clusterKmeansDefaults <- function() {
-    def <- cluster_kmeans_defaults()
-    def[["init.method"]] <- "var-part"
-    def[["refine.method"]] <- "hartigan-wong"
-    def[["warn"]] <- TRUE
-    def
-}
+clusterKmeansDefaults <- function() cluster_kmeans_defaults()

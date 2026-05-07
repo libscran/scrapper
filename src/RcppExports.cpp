@@ -549,26 +549,46 @@ BEGIN_RCPP
 END_RCPP
 }
 // compute_rna_qc_metrics
-Rcpp::List compute_rna_qc_metrics(SEXP x, Rcpp::List subsets, int num_threads);
+Rcpp::List compute_rna_qc_metrics(SEXP x, Rcpp::List subsets, Rcpp::RObject num_threads);
 RcppExport SEXP _scrapper_compute_rna_qc_metrics(SEXP xSEXP, SEXP subsetsSEXP, SEXP num_threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type subsets(subsetsSEXP);
-    Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type num_threads(num_threadsSEXP);
     rcpp_result_gen = Rcpp::wrap(compute_rna_qc_metrics(x, subsets, num_threads));
     return rcpp_result_gen;
 END_RCPP
 }
+// compute_rna_qc_metrics_defaults
+Rcpp::List compute_rna_qc_metrics_defaults();
+RcppExport SEXP _scrapper_compute_rna_qc_metrics_defaults() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    rcpp_result_gen = Rcpp::wrap(compute_rna_qc_metrics_defaults());
+    return rcpp_result_gen;
+END_RCPP
+}
 // suggest_rna_qc_thresholds
-Rcpp::List suggest_rna_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::IntegerVector> block, double num_mads);
-RcppExport SEXP _scrapper_suggest_rna_qc_thresholds(SEXP metricsSEXP, SEXP blockSEXP, SEXP num_madsSEXP) {
+Rcpp::List suggest_rna_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::IntegerVector> block, Rcpp::RObject sum_num_mads, Rcpp::RObject detected_num_mads, Rcpp::RObject subset_proportion_num_mads);
+RcppExport SEXP _scrapper_suggest_rna_qc_thresholds(SEXP metricsSEXP, SEXP blockSEXP, SEXP sum_num_madsSEXP, SEXP detected_num_madsSEXP, SEXP subset_proportion_num_madsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type metrics(metricsSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type block(blockSEXP);
-    Rcpp::traits::input_parameter< double >::type num_mads(num_madsSEXP);
-    rcpp_result_gen = Rcpp::wrap(suggest_rna_qc_thresholds(metrics, block, num_mads));
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type sum_num_mads(sum_num_madsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type detected_num_mads(detected_num_madsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type subset_proportion_num_mads(subset_proportion_num_madsSEXP);
+    rcpp_result_gen = Rcpp::wrap(suggest_rna_qc_thresholds(metrics, block, sum_num_mads, detected_num_mads, subset_proportion_num_mads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// suggest_rna_qc_thresholds_defaults
+Rcpp::List suggest_rna_qc_thresholds_defaults();
+RcppExport SEXP _scrapper_suggest_rna_qc_thresholds_defaults() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    rcpp_result_gen = Rcpp::wrap(suggest_rna_qc_thresholds_defaults());
     return rcpp_result_gen;
 END_RCPP
 }
@@ -608,35 +628,37 @@ BEGIN_RCPP
 END_RCPP
 }
 // run_pca_defaults
-Rcpp::List run_pca_defaults();
-RcppExport SEXP _scrapper_run_pca_defaults() {
+Rcpp::List run_pca_defaults(bool use_block, bool use_subset);
+RcppExport SEXP _scrapper_run_pca_defaults(SEXP use_blockSEXP, SEXP use_subsetSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    rcpp_result_gen = Rcpp::wrap(run_pca_defaults());
+    Rcpp::traits::input_parameter< bool >::type use_block(use_blockSEXP);
+    Rcpp::traits::input_parameter< bool >::type use_subset(use_subsetSEXP);
+    rcpp_result_gen = Rcpp::wrap(run_pca_defaults(use_block, use_subset));
     return rcpp_result_gen;
 END_RCPP
 }
 // run_tsne
-SEXP run_tsne(Rcpp::IntegerMatrix nnidx, Rcpp::NumericMatrix nndist, double perplexity, double theta, int early_exaggeration_iterations, double exaggeration_factor, int momentum_switch_iterations, double start_momentum, double final_momentum, double eta, int max_depth, int leaf_approx, int max_iter, double seed, int num_threads);
-RcppExport SEXP _scrapper_run_tsne(SEXP nnidxSEXP, SEXP nndistSEXP, SEXP perplexitySEXP, SEXP thetaSEXP, SEXP early_exaggeration_iterationsSEXP, SEXP exaggeration_factorSEXP, SEXP momentum_switch_iterationsSEXP, SEXP start_momentumSEXP, SEXP final_momentumSEXP, SEXP etaSEXP, SEXP max_depthSEXP, SEXP leaf_approxSEXP, SEXP max_iterSEXP, SEXP seedSEXP, SEXP num_threadsSEXP) {
+SEXP run_tsne(Rcpp::IntegerMatrix nnidx, Rcpp::NumericMatrix nndist, Rcpp::RObject perplexity, Rcpp::RObject theta, Rcpp::RObject early_exaggeration_iterations, Rcpp::RObject exaggeration_factor, Rcpp::RObject momentum_switch_iterations, Rcpp::RObject start_momentum, Rcpp::RObject final_momentum, Rcpp::RObject eta, Rcpp::RObject max_depth, Rcpp::RObject leaf_approximation, Rcpp::RObject max_iterations, double seed, Rcpp::RObject num_threads);
+RcppExport SEXP _scrapper_run_tsne(SEXP nnidxSEXP, SEXP nndistSEXP, SEXP perplexitySEXP, SEXP thetaSEXP, SEXP early_exaggeration_iterationsSEXP, SEXP exaggeration_factorSEXP, SEXP momentum_switch_iterationsSEXP, SEXP start_momentumSEXP, SEXP final_momentumSEXP, SEXP etaSEXP, SEXP max_depthSEXP, SEXP leaf_approximationSEXP, SEXP max_iterationsSEXP, SEXP seedSEXP, SEXP num_threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::IntegerMatrix >::type nnidx(nnidxSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type nndist(nndistSEXP);
-    Rcpp::traits::input_parameter< double >::type perplexity(perplexitySEXP);
-    Rcpp::traits::input_parameter< double >::type theta(thetaSEXP);
-    Rcpp::traits::input_parameter< int >::type early_exaggeration_iterations(early_exaggeration_iterationsSEXP);
-    Rcpp::traits::input_parameter< double >::type exaggeration_factor(exaggeration_factorSEXP);
-    Rcpp::traits::input_parameter< int >::type momentum_switch_iterations(momentum_switch_iterationsSEXP);
-    Rcpp::traits::input_parameter< double >::type start_momentum(start_momentumSEXP);
-    Rcpp::traits::input_parameter< double >::type final_momentum(final_momentumSEXP);
-    Rcpp::traits::input_parameter< double >::type eta(etaSEXP);
-    Rcpp::traits::input_parameter< int >::type max_depth(max_depthSEXP);
-    Rcpp::traits::input_parameter< int >::type leaf_approx(leaf_approxSEXP);
-    Rcpp::traits::input_parameter< int >::type max_iter(max_iterSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type perplexity(perplexitySEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type early_exaggeration_iterations(early_exaggeration_iterationsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type exaggeration_factor(exaggeration_factorSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type momentum_switch_iterations(momentum_switch_iterationsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type start_momentum(start_momentumSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type final_momentum(final_momentumSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type eta(etaSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type max_depth(max_depthSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type leaf_approximation(leaf_approximationSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type max_iterations(max_iterationsSEXP);
     Rcpp::traits::input_parameter< double >::type seed(seedSEXP);
-    Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(run_tsne(nnidx, nndist, perplexity, theta, early_exaggeration_iterations, exaggeration_factor, momentum_switch_iterations, start_momentum, final_momentum, eta, max_depth, leaf_approx, max_iter, seed, num_threads));
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type num_threads(num_threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(run_tsne(nnidx, nndist, perplexity, theta, early_exaggeration_iterations, exaggeration_factor, momentum_switch_iterations, start_momentum, final_momentum, eta, max_depth, leaf_approximation, max_iterations, seed, num_threads));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -650,37 +672,55 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// run_tsne_defaults
+Rcpp::List run_tsne_defaults();
+RcppExport SEXP _scrapper_run_tsne_defaults() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    rcpp_result_gen = Rcpp::wrap(run_tsne_defaults());
+    return rcpp_result_gen;
+END_RCPP
+}
 // run_umap
-SEXP run_umap(Rcpp::IntegerMatrix nnidx, Rcpp::NumericMatrix nndist, int num_dim, double local_connectivity, double bandwidth, double mix_ratio, double spread, double min_dist, Rcpp::Nullable<Rcpp::NumericVector> a, Rcpp::Nullable<Rcpp::NumericVector> b, double repulsion_strength, std::string initialize_method, Rcpp::Nullable<Rcpp::NumericMatrix> initial_coordinates, bool initialize_random_on_spectral_fail, double initialize_spectral_scale, bool initialize_spectral_jitter, double initialize_spectral_jitter_sd, double initialize_random_scale, double initialize_seed, Rcpp::Nullable<Rcpp::IntegerVector> num_epochs, double learning_rate, double negative_sample_rate, double optimize_seed, int num_threads, bool parallel_optimization);
-RcppExport SEXP _scrapper_run_umap(SEXP nnidxSEXP, SEXP nndistSEXP, SEXP num_dimSEXP, SEXP local_connectivitySEXP, SEXP bandwidthSEXP, SEXP mix_ratioSEXP, SEXP spreadSEXP, SEXP min_distSEXP, SEXP aSEXP, SEXP bSEXP, SEXP repulsion_strengthSEXP, SEXP initialize_methodSEXP, SEXP initial_coordinatesSEXP, SEXP initialize_random_on_spectral_failSEXP, SEXP initialize_spectral_scaleSEXP, SEXP initialize_spectral_jitterSEXP, SEXP initialize_spectral_jitter_sdSEXP, SEXP initialize_random_scaleSEXP, SEXP initialize_seedSEXP, SEXP num_epochsSEXP, SEXP learning_rateSEXP, SEXP negative_sample_rateSEXP, SEXP optimize_seedSEXP, SEXP num_threadsSEXP, SEXP parallel_optimizationSEXP) {
+SEXP run_umap(Rcpp::IntegerMatrix nnidx, Rcpp::NumericMatrix nndist, int num_dim, Rcpp::RObject local_connectivity, Rcpp::RObject bandwidth, Rcpp::RObject mix_ratio, Rcpp::RObject spread, Rcpp::RObject min_dist, Rcpp::RObject a, Rcpp::RObject b, Rcpp::RObject repulsion_strength, Rcpp::RObject initialize_method, Rcpp::Nullable<Rcpp::NumericMatrix> initial_coordinates, Rcpp::RObject initialize_random_on_spectral_fail, Rcpp::RObject initialize_spectral_scale, Rcpp::RObject initialize_spectral_jitter, Rcpp::RObject initialize_spectral_jitter_sd, Rcpp::RObject initialize_random_scale, Rcpp::RObject initialize_seed, Rcpp::RObject num_epochs, Rcpp::RObject learning_rate, Rcpp::RObject negative_sample_rate, Rcpp::RObject optimize_seed, Rcpp::RObject num_threads, Rcpp::RObject num_threads_optimize);
+RcppExport SEXP _scrapper_run_umap(SEXP nnidxSEXP, SEXP nndistSEXP, SEXP num_dimSEXP, SEXP local_connectivitySEXP, SEXP bandwidthSEXP, SEXP mix_ratioSEXP, SEXP spreadSEXP, SEXP min_distSEXP, SEXP aSEXP, SEXP bSEXP, SEXP repulsion_strengthSEXP, SEXP initialize_methodSEXP, SEXP initial_coordinatesSEXP, SEXP initialize_random_on_spectral_failSEXP, SEXP initialize_spectral_scaleSEXP, SEXP initialize_spectral_jitterSEXP, SEXP initialize_spectral_jitter_sdSEXP, SEXP initialize_random_scaleSEXP, SEXP initialize_seedSEXP, SEXP num_epochsSEXP, SEXP learning_rateSEXP, SEXP negative_sample_rateSEXP, SEXP optimize_seedSEXP, SEXP num_threadsSEXP, SEXP num_threads_optimizeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::IntegerMatrix >::type nnidx(nnidxSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type nndist(nndistSEXP);
     Rcpp::traits::input_parameter< int >::type num_dim(num_dimSEXP);
-    Rcpp::traits::input_parameter< double >::type local_connectivity(local_connectivitySEXP);
-    Rcpp::traits::input_parameter< double >::type bandwidth(bandwidthSEXP);
-    Rcpp::traits::input_parameter< double >::type mix_ratio(mix_ratioSEXP);
-    Rcpp::traits::input_parameter< double >::type spread(spreadSEXP);
-    Rcpp::traits::input_parameter< double >::type min_dist(min_distSEXP);
-    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericVector> >::type a(aSEXP);
-    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericVector> >::type b(bSEXP);
-    Rcpp::traits::input_parameter< double >::type repulsion_strength(repulsion_strengthSEXP);
-    Rcpp::traits::input_parameter< std::string >::type initialize_method(initialize_methodSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type local_connectivity(local_connectivitySEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type bandwidth(bandwidthSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type mix_ratio(mix_ratioSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type spread(spreadSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type min_dist(min_distSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type a(aSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type b(bSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type repulsion_strength(repulsion_strengthSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type initialize_method(initialize_methodSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericMatrix> >::type initial_coordinates(initial_coordinatesSEXP);
-    Rcpp::traits::input_parameter< bool >::type initialize_random_on_spectral_fail(initialize_random_on_spectral_failSEXP);
-    Rcpp::traits::input_parameter< double >::type initialize_spectral_scale(initialize_spectral_scaleSEXP);
-    Rcpp::traits::input_parameter< bool >::type initialize_spectral_jitter(initialize_spectral_jitterSEXP);
-    Rcpp::traits::input_parameter< double >::type initialize_spectral_jitter_sd(initialize_spectral_jitter_sdSEXP);
-    Rcpp::traits::input_parameter< double >::type initialize_random_scale(initialize_random_scaleSEXP);
-    Rcpp::traits::input_parameter< double >::type initialize_seed(initialize_seedSEXP);
-    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type num_epochs(num_epochsSEXP);
-    Rcpp::traits::input_parameter< double >::type learning_rate(learning_rateSEXP);
-    Rcpp::traits::input_parameter< double >::type negative_sample_rate(negative_sample_rateSEXP);
-    Rcpp::traits::input_parameter< double >::type optimize_seed(optimize_seedSEXP);
-    Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
-    Rcpp::traits::input_parameter< bool >::type parallel_optimization(parallel_optimizationSEXP);
-    rcpp_result_gen = Rcpp::wrap(run_umap(nnidx, nndist, num_dim, local_connectivity, bandwidth, mix_ratio, spread, min_dist, a, b, repulsion_strength, initialize_method, initial_coordinates, initialize_random_on_spectral_fail, initialize_spectral_scale, initialize_spectral_jitter, initialize_spectral_jitter_sd, initialize_random_scale, initialize_seed, num_epochs, learning_rate, negative_sample_rate, optimize_seed, num_threads, parallel_optimization));
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type initialize_random_on_spectral_fail(initialize_random_on_spectral_failSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type initialize_spectral_scale(initialize_spectral_scaleSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type initialize_spectral_jitter(initialize_spectral_jitterSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type initialize_spectral_jitter_sd(initialize_spectral_jitter_sdSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type initialize_random_scale(initialize_random_scaleSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type initialize_seed(initialize_seedSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type num_epochs(num_epochsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type learning_rate(learning_rateSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type negative_sample_rate(negative_sample_rateSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type optimize_seed(optimize_seedSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type num_threads(num_threadsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type num_threads_optimize(num_threads_optimizeSEXP);
+    rcpp_result_gen = Rcpp::wrap(run_umap(nnidx, nndist, num_dim, local_connectivity, bandwidth, mix_ratio, spread, min_dist, a, b, repulsion_strength, initialize_method, initial_coordinates, initialize_random_on_spectral_fail, initialize_spectral_scale, initialize_spectral_jitter, initialize_spectral_jitter_sd, initialize_random_scale, initialize_seed, num_epochs, learning_rate, negative_sample_rate, optimize_seed, num_threads, num_threads_optimize));
+    return rcpp_result_gen;
+END_RCPP
+}
+// run_umap_defaults
+Rcpp::List run_umap_defaults();
+RcppExport SEXP _scrapper_run_umap_defaults() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    rcpp_result_gen = Rcpp::wrap(run_umap_defaults());
     return rcpp_result_gen;
 END_RCPP
 }
@@ -938,13 +978,17 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_normalize_counts_defaults", (DL_FUNC) &_scrapper_normalize_counts_defaults, 0},
     {"_scrapper_initialize_LogNormalizedMatrix", (DL_FUNC) &_scrapper_initialize_LogNormalizedMatrix, 4},
     {"_scrapper_compute_rna_qc_metrics", (DL_FUNC) &_scrapper_compute_rna_qc_metrics, 3},
-    {"_scrapper_suggest_rna_qc_thresholds", (DL_FUNC) &_scrapper_suggest_rna_qc_thresholds, 3},
+    {"_scrapper_compute_rna_qc_metrics_defaults", (DL_FUNC) &_scrapper_compute_rna_qc_metrics_defaults, 0},
+    {"_scrapper_suggest_rna_qc_thresholds", (DL_FUNC) &_scrapper_suggest_rna_qc_thresholds, 5},
+    {"_scrapper_suggest_rna_qc_thresholds_defaults", (DL_FUNC) &_scrapper_suggest_rna_qc_thresholds_defaults, 0},
     {"_scrapper_filter_rna_qc_metrics", (DL_FUNC) &_scrapper_filter_rna_qc_metrics, 3},
     {"_scrapper_run_pca", (DL_FUNC) &_scrapper_run_pca, 14},
-    {"_scrapper_run_pca_defaults", (DL_FUNC) &_scrapper_run_pca_defaults, 0},
+    {"_scrapper_run_pca_defaults", (DL_FUNC) &_scrapper_run_pca_defaults, 2},
     {"_scrapper_run_tsne", (DL_FUNC) &_scrapper_run_tsne, 15},
     {"_scrapper_perplexity_to_neighbors", (DL_FUNC) &_scrapper_perplexity_to_neighbors, 1},
+    {"_scrapper_run_tsne_defaults", (DL_FUNC) &_scrapper_run_tsne_defaults, 0},
     {"_scrapper_run_umap", (DL_FUNC) &_scrapper_run_umap, 25},
+    {"_scrapper_run_umap_defaults", (DL_FUNC) &_scrapper_run_umap_defaults, 0},
     {"_scrapper_sanitize_size_factors", (DL_FUNC) &_scrapper_sanitize_size_factors, 5},
     {"_scrapper_scale_by_neighbors", (DL_FUNC) &_scrapper_scale_by_neighbors, 8},
     {"_scrapper_score_gene_set", (DL_FUNC) &_scrapper_score_gene_set, 12},

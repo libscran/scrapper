@@ -189,8 +189,16 @@ compute_rna_qc_metrics <- function(x, subsets, num_threads) {
     .Call('_scrapper_compute_rna_qc_metrics', PACKAGE = 'scrapper', x, subsets, num_threads)
 }
 
-suggest_rna_qc_thresholds <- function(metrics, block, num_mads) {
-    .Call('_scrapper_suggest_rna_qc_thresholds', PACKAGE = 'scrapper', metrics, block, num_mads)
+compute_rna_qc_metrics_defaults <- function() {
+    .Call('_scrapper_compute_rna_qc_metrics_defaults', PACKAGE = 'scrapper')
+}
+
+suggest_rna_qc_thresholds <- function(metrics, block, sum_num_mads, detected_num_mads, subset_proportion_num_mads) {
+    .Call('_scrapper_suggest_rna_qc_thresholds', PACKAGE = 'scrapper', metrics, block, sum_num_mads, detected_num_mads, subset_proportion_num_mads)
+}
+
+suggest_rna_qc_thresholds_defaults <- function() {
+    .Call('_scrapper_suggest_rna_qc_thresholds_defaults', PACKAGE = 'scrapper')
 }
 
 filter_rna_qc_metrics <- function(filters, metrics, block) {
@@ -201,20 +209,28 @@ run_pca <- function(x, number, block, block_weight_policy, variable_block_weight
     .Call('_scrapper_run_pca', PACKAGE = 'scrapper', x, number, block, block_weight_policy, variable_block_weight, components_from_residuals, scale, subset, realized, irlba_work, irlba_iterations, irlba_tolerance, irlba_seed, num_threads)
 }
 
-run_pca_defaults <- function() {
-    .Call('_scrapper_run_pca_defaults', PACKAGE = 'scrapper')
+run_pca_defaults <- function(use_block, use_subset) {
+    .Call('_scrapper_run_pca_defaults', PACKAGE = 'scrapper', use_block, use_subset)
 }
 
-run_tsne <- function(nnidx, nndist, perplexity, theta, early_exaggeration_iterations, exaggeration_factor, momentum_switch_iterations, start_momentum, final_momentum, eta, max_depth, leaf_approx, max_iter, seed, num_threads) {
-    .Call('_scrapper_run_tsne', PACKAGE = 'scrapper', nnidx, nndist, perplexity, theta, early_exaggeration_iterations, exaggeration_factor, momentum_switch_iterations, start_momentum, final_momentum, eta, max_depth, leaf_approx, max_iter, seed, num_threads)
+run_tsne <- function(nnidx, nndist, perplexity, theta, early_exaggeration_iterations, exaggeration_factor, momentum_switch_iterations, start_momentum, final_momentum, eta, max_depth, leaf_approximation, max_iterations, seed, num_threads) {
+    .Call('_scrapper_run_tsne', PACKAGE = 'scrapper', nnidx, nndist, perplexity, theta, early_exaggeration_iterations, exaggeration_factor, momentum_switch_iterations, start_momentum, final_momentum, eta, max_depth, leaf_approximation, max_iterations, seed, num_threads)
 }
 
 perplexity_to_neighbors <- function(p) {
     .Call('_scrapper_perplexity_to_neighbors', PACKAGE = 'scrapper', p)
 }
 
-run_umap <- function(nnidx, nndist, num_dim, local_connectivity, bandwidth, mix_ratio, spread, min_dist, a, b, repulsion_strength, initialize_method, initial_coordinates, initialize_random_on_spectral_fail, initialize_spectral_scale, initialize_spectral_jitter, initialize_spectral_jitter_sd, initialize_random_scale, initialize_seed, num_epochs, learning_rate, negative_sample_rate, optimize_seed, num_threads, parallel_optimization) {
-    .Call('_scrapper_run_umap', PACKAGE = 'scrapper', nnidx, nndist, num_dim, local_connectivity, bandwidth, mix_ratio, spread, min_dist, a, b, repulsion_strength, initialize_method, initial_coordinates, initialize_random_on_spectral_fail, initialize_spectral_scale, initialize_spectral_jitter, initialize_spectral_jitter_sd, initialize_random_scale, initialize_seed, num_epochs, learning_rate, negative_sample_rate, optimize_seed, num_threads, parallel_optimization)
+run_tsne_defaults <- function() {
+    .Call('_scrapper_run_tsne_defaults', PACKAGE = 'scrapper')
+}
+
+run_umap <- function(nnidx, nndist, num_dim, local_connectivity, bandwidth, mix_ratio, spread, min_dist, a, b, repulsion_strength, initialize_method, initial_coordinates, initialize_random_on_spectral_fail, initialize_spectral_scale, initialize_spectral_jitter, initialize_spectral_jitter_sd, initialize_random_scale, initialize_seed, num_epochs, learning_rate, negative_sample_rate, optimize_seed, num_threads, num_threads_optimize) {
+    .Call('_scrapper_run_umap', PACKAGE = 'scrapper', nnidx, nndist, num_dim, local_connectivity, bandwidth, mix_ratio, spread, min_dist, a, b, repulsion_strength, initialize_method, initial_coordinates, initialize_random_on_spectral_fail, initialize_spectral_scale, initialize_spectral_jitter, initialize_spectral_jitter_sd, initialize_random_scale, initialize_seed, num_epochs, learning_rate, negative_sample_rate, optimize_seed, num_threads, num_threads_optimize)
+}
+
+run_umap_defaults <- function() {
+    .Call('_scrapper_run_umap_defaults', PACKAGE = 'scrapper')
 }
 
 sanitize_size_factors <- function(size_factors, handle_zero, handle_negative, handle_nan, handle_infinite) {

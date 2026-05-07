@@ -73,9 +73,9 @@ clusterGraph <- function(
     seed = NULL,
     multilevel.resolution = NULL, 
     multilevel.seed = seed,
-    leiden.resolution = NULL, 
+    leiden.resolution = NULL,
     leiden.seed = seed,
-    leiden.objective = NULL,
+    leiden.objective = "modularity", 
     walktrap.steps = NULL
 ) {
     .checkSEX(x, "clusterGraph.se")
@@ -106,13 +106,11 @@ clusterGraph <- function(
 }
 
 #' Default parameters for \code{\link{clusterGraph}}
+#' @description Default parameters from the underlying C++ library.
+#' Some of these may be overridden by defaults in the \code{\link{clusterGraph}} function signature.
 #' @return Named list containing default values for various function arguments.
 #' @author Aaron Lun
 #' @examples
 #' clusterGraphDefaults()
 #' @export
-clusterGraphDefaults <- function() {
-    def <- cluster_graph_defaults()
-    def[["method"]] <- "multilevel"
-    def
-}
+clusterGraphDefaults <- function() cluster_graph_defaults()

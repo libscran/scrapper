@@ -11,7 +11,7 @@
 #include "utils_qc.h"
 
 // [[Rcpp::export(rng=false)]]
-Rcpp::List compute_rna_qc_metrics(SEXP x, Rcpp::List subsets, int num_threads) {
+Rcpp::List compute_rna_qc_metrics(SEXP x, Rcpp::List subsets, Rcpp::RObject num_threads) {
     auto raw_mat = Rtatami::BoundNumericPointer(x);
     const auto& mat = raw_mat->ptr;
     const auto nc = mat->ncol();
@@ -34,7 +34,7 @@ Rcpp::List compute_rna_qc_metrics(SEXP x, Rcpp::List subsets, int num_threads) {
 
     // Running QC code.
     scran_qc::ComputeRnaQcMetricsOptions opt;
-    opt.num_threads = num_threads;
+    set_integer(num_threads, opt.num_threads, "num.threads");
     scran_qc::compute_rna_qc_metrics(*mat, sub_ptrs, buffers, opt);
 
     return Rcpp::List::create(
@@ -42,6 +42,14 @@ Rcpp::List compute_rna_qc_metrics(SEXP x, Rcpp::List subsets, int num_threads) {
         Rcpp::Named("detected") = detected,
         Rcpp::Named("subsets") = Rcpp::List(out_subsets.begin(), out_subsets.end())
     );
+}
+
+// [[Rcpp::export(rng=false)]]
+Rcpp::List compute_rna_qc_metrics_defaults() {
+    Rcpp::List output;
+    scran_qc::ComputeRnaQcMetricsOptions opt;
+    output["num.threads"] = opt.num_threads;
+    return output;
 }
 
 class ConvertedRnaQcMetrics {
@@ -86,15 +94,21 @@ public:
 };
 
 // [[Rcpp::export(rng=false)]]
-Rcpp::List suggest_rna_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::IntegerVector> block, double num_mads) {
+Rcpp::List suggest_rna_qc_thresholds(
+    Rcpp::List metrics,
+    Rcpp::Nullable<Rcpp::IntegerVector> block,
+    Rcpp::RObject sum_num_mads,
+    Rcpp::RObject detected_num_mads,
+    Rcpp::RObject subset_proportion_num_mads
+) {
     ConvertedRnaQcMetrics all_metrics(metrics);
     auto buffers = all_metrics.to_buffer();
     const auto ncells = all_metrics.size();
 
     scran_qc::ComputeRnaQcFiltersOptions opt;
-    opt.sum_num_mads = num_mads;
-    opt.detected_num_mads = num_mads;
-    opt.subset_proportion_num_mads = num_mads;
+    set_number(sum_num_mads, opt.sum_num_mads, "sum.num.mads");
+    set_number(detected_num_mads, opt.detected_num_mads, "detected.num.mads");
+    set_number(subset_proportion_num_mads, opt.subset_proportion_num_mads, "subset.proportion.num.mads");
 
     auto block_info = MaybeBlock(block);
     auto ptr = block_info.get();
@@ -121,6 +135,16 @@ Rcpp::List suggest_rna_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::In
             Rcpp::Named("subsets") = Rcpp::NumericVector(ssout.begin(), ssout.end())
         );
     }
+}
+
+// [[Rcpp::export(rng=false)]]
+Rcpp::List suggest_rna_qc_thresholds_defaults() {
+    Rcpp::List output;
+    scran_qc::ComputeRnaQcFiltersOptions opt;
+    output["sum.num.mads"] = opt.sum_num_mads;
+    output["detected.num.mads"] = opt.detected_num_mads;
+    output["subset.proportion.num.mads"] = opt.subset_proportion_num_mads;
+    return output;
 }
 
 //[[Rcpp::export(rng=false)]]

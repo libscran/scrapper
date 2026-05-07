@@ -12,7 +12,7 @@ clusterGraph(
   multilevel.seed = seed,
   leiden.resolution = NULL,
   leiden.seed = seed,
-  leiden.objective = NULL,
+  leiden.objective = "modularity",
   walktrap.steps = NULL
 )
 }

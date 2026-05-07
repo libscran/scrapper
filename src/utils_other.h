@@ -106,6 +106,21 @@ void set_number(const Rcpp::RObject& source, Type_& target, const std::string& a
     }
 }
 
+template<typename Type_>
+void set_optional_number(const Rcpp::RObject& source, std::optional<Type_>& target, const std::string& arg) {
+    if (source.isNULL()) {
+        return;
+    }
+    static_assert(std::is_floating_point<Type_>::value);
+    if (source.sexp_type() == INTSXP) {
+        target = parse_single_integer(Rcpp::IntegerVector(source), arg);
+    } else if (source.sexp_type() == REALSXP) {
+        target = parse_single_number(Rcpp::NumericVector(source), arg);
+    } else {
+        throw std::runtime_error("expected a number or NULL for '" + arg + "'");
+    }
+}
+
 inline void set_bool(const Rcpp::RObject& source, bool& target, const std::string& arg) {
     if (source.isNULL()) {
         return;

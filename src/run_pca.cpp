@@ -118,15 +118,14 @@ Rcpp::List run_pca(
 }
 
 //[[Rcpp::export(rng=false)]]
-Rcpp::List run_pca_defaults() {
+Rcpp::List run_pca_defaults(bool use_block, bool use_subset) {
     Rcpp::List output;
 
-    {
-        scran_pca::SimplePcaOptions opt;
+    auto populate_common = [&](const auto& opt) -> void {
         output["number"] = opt.number;
         output["scale"] = opt.scale;
 
-        if (opt.irlba_options.extra_work.has_value()) {
+        if (!opt.irlba_options.extra_work.has_value()) {
             output["extra.work"] = R_NilValue;
         } else {
             throw std::runtime_error("unexpected extra.work default for runPca"); 
@@ -137,13 +136,36 @@ Rcpp::List run_pca_defaults() {
         output["seed"] = opt.irlba_options.seed;
         output["realized"] = opt.realize_matrix;
         output["num.threads"] = opt.num_threads;
-    }
+    };
 
-    {
-        scran_pca::BlockedPcaOptions opt;
+    auto populate_blocked = [&](const auto& opt) -> void {
         report_block_weight_policy_default(output, opt.block_weight_policy, "block.weight.policy", "runPca");
         report_variable_block_weight_default(output, opt.variable_block_weight_parameters, "variable.block.weight");
         output["components.from.residuals"] = opt.components_from_residuals;
+    };
+
+    if (!use_block) {
+        if (use_subset) {
+            scran_pca::SubsetPcaBlockedOptions opt;
+            populate_common(opt);
+            populate_blocked(opt);
+        } else {
+            scran_pca::BlockedPcaOptions opt;
+            populate_common(opt);
+            populate_blocked(opt);
+        }
+    } else {
+        if (use_subset) {
+            scran_pca::SubsetPcaOptions opt;
+            populate_common(opt);
+        } else {
+            scran_pca::SimplePcaOptions opt;
+            populate_common(opt);
+        }
+
+        // Filling this for completeness.
+        scran_pca::BlockedPcaOptions opt;
+        populate_blocked(opt);
     }
 
     return output;
