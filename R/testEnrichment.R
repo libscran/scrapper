@@ -14,6 +14,8 @@
 #' This is assumed to be greater than or equal to the number of unique genes in \code{x} and \code{sets}. 
 #' @param log Logical scalar indicating whether to report log-transformed p-values.
 #' This may be desirable to avoid underflow at near-zero p-values.
+#'
+#' If \code{NULL}, the default value in \code{\link{testEnrichmentDefaults}} is used.
 #' @param num.threads Integer scalar specifying the number of threads to use.
 #'
 #' @return \link[S4Vectors]{DataFrame} with one row per gene set and the following columns:
@@ -42,7 +44,7 @@
 #' 
 #' @export
 #' @importFrom S4Vectors DataFrame
-testEnrichment <- function(x, sets, universe=NULL, log=FALSE, num.threads=1) {
+testEnrichment <- function(x, sets, universe=NULL, log=NULL, num.threads=1) {
     num.sets <- length(sets)
     all.genes <- unlist(sets)
     set.sizes <- lengths(sets)
@@ -71,3 +73,11 @@ testEnrichment <- function(x, sets, universe=NULL, log=FALSE, num.threads=1) {
         row.names=names(sets)
     )
 }
+
+#' Default parameters for \code{\link{testEnrichment}}
+#' @return Named list containing default values for various function arguments.
+#' @author Aaron Lun
+#' @examples
+#' testEnrichmentDefaults()
+#' @export
+testEnrichmentDefaults <- function() test_enrichment_defaults()

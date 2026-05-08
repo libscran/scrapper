@@ -980,7 +980,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // test_enrichment
-Rcpp::NumericVector test_enrichment(Rcpp::IntegerVector overlap, int num_interest, Rcpp::IntegerVector set_sizes, int universe, bool log, int num_threads);
+Rcpp::NumericVector test_enrichment(Rcpp::IntegerVector overlap, int num_interest, Rcpp::IntegerVector set_sizes, int universe, Rcpp::RObject log, int num_threads);
 RcppExport SEXP _scrapper_test_enrichment(SEXP overlapSEXP, SEXP num_interestSEXP, SEXP set_sizesSEXP, SEXP universeSEXP, SEXP logSEXP, SEXP num_threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -988,9 +988,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type num_interest(num_interestSEXP);
     Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type set_sizes(set_sizesSEXP);
     Rcpp::traits::input_parameter< int >::type universe(universeSEXP);
-    Rcpp::traits::input_parameter< bool >::type log(logSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type log(logSEXP);
     Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
     rcpp_result_gen = Rcpp::wrap(test_enrichment(overlap, num_interest, set_sizes, universe, log, num_threads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// test_enrichment_defaults
+Rcpp::List test_enrichment_defaults();
+RcppExport SEXP _scrapper_test_enrichment_defaults() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    rcpp_result_gen = Rcpp::wrap(test_enrichment_defaults());
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1072,6 +1081,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_summarize_effects", (DL_FUNC) &_scrapper_summarize_effects, 10},
     {"_scrapper_summarize_effects_defaults", (DL_FUNC) &_scrapper_summarize_effects_defaults, 0},
     {"_scrapper_test_enrichment", (DL_FUNC) &_scrapper_test_enrichment, 6},
+    {"_scrapper_test_enrichment_defaults", (DL_FUNC) &_scrapper_test_enrichment_defaults, 0},
     {NULL, NULL, 0}
 };
 

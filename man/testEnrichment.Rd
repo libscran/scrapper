@@ -4,7 +4,7 @@
 \alias{testEnrichment}
 \title{Test for gene set enrichment}
 \usage{
-testEnrichment(x, sets, universe = NULL, log = FALSE, num.threads = 1)
+testEnrichment(x, sets, universe = NULL, log = NULL, num.threads = 1)
 }
 \arguments{
 \item{x}{Vector of identifiers for some interesting genes, e.g., symbols or Ensembl IDs.
@@ -21,7 +21,9 @@ Alternatively, an integer scalar specifying the number of genes in the universe.
 This is assumed to be greater than or equal to the number of unique genes in \code{x} and \code{sets}.}
 
 \item{log}{Logical scalar indicating whether to report log-transformed p-values.
-This may be desirable to avoid underflow at near-zero p-values.}
+This may be desirable to avoid underflow at near-zero p-values.
+
+If \code{NULL}, the default value in \code{\link{testEnrichmentDefaults}} is used.}
 
 \item{num.threads}{Integer scalar specifying the number of threads to use.}
 }

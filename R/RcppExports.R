@@ -305,3 +305,7 @@ test_enrichment <- function(overlap, num_interest, set_sizes, universe, log, num
     .Call('_scrapper_test_enrichment', PACKAGE = 'scrapper', overlap, num_interest, set_sizes, universe, log, num_threads)
 }
 
+test_enrichment_defaults <- function() {
+    .Call('_scrapper_test_enrichment_defaults', PACKAGE = 'scrapper')
+}
+
