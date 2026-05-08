@@ -69,8 +69,8 @@ center_spike_in_factors_defaults <- function() {
     .Call('_scrapper_center_spike_in_factors_defaults', PACKAGE = 'scrapper')
 }
 
-choose_highly_variable_genes <- function(stats, top, larger, keep_ties, bound) {
-    .Call('_scrapper_choose_highly_variable_genes', PACKAGE = 'scrapper', stats, top, larger, keep_ties, bound)
+choose_highly_variable_genes <- function(stats, top, larger, keep_ties, use_bound, bound) {
+    .Call('_scrapper_choose_highly_variable_genes', PACKAGE = 'scrapper', stats, top, larger, keep_ties, use_bound, bound)
 }
 
 choose_highly_variable_genes_defaults <- function() {

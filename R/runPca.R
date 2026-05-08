@@ -130,7 +130,7 @@ runPca <- function(
     block = NULL, 
     block.weight.policy = NULL,
     variable.block.weight = NULL,
-    components.from.residuals = NULL,
+    components.from.residuals = FALSE,
     subset = NULL,
     extra.work = NULL,
     iterations = NULL,
@@ -169,6 +169,7 @@ runPca <- function(
         warning("convergence failure for the approximate PCA")
     }
 
+    # Adding all the dimnames.
     if (!is.null(block$index)) {
         rownames(out$center) <- block$names
         colnames(out$center) <- rownames(x)
@@ -176,19 +177,17 @@ runPca <- function(
     } else {
         names(out$center) <- rownames(x)
     }
-
-    if (!scale) {
-        out <- out[setdiff(names(out), "scale")]
-    } else {
+    if ("scale" %in% names(out)) {
         names(out$scale) <- rownames(x)
     }
-
     rownames(out$rotation) <- rownames(x)
 
     out
 }
 
 #' Default parameters for \code{\link{runPca}}
+#' @description Default parameters from the underlying C++ library.
+#' These may be overridden by defaults in the \code{\link{runPca}} function signature.
 #' @param subset See the argument of the same name in \code{\link{runPca}}.
 #' @param block See the argument of the same name in \code{\link{runPca}}.
 #' @return Named list containing default values for various function arguments.

@@ -11,7 +11,7 @@ runPca(
   block = NULL,
   block.weight.policy = NULL,
   variable.block.weight = NULL,
-  components.from.residuals = NULL,
+  components.from.residuals = FALSE,
   subset = NULL,
   extra.work = NULL,
   iterations = NULL,

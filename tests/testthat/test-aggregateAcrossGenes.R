@@ -103,5 +103,5 @@ test_that("aggregateAcrossGenes works for other vector types", {
 
 test_that("defaults work correctly", {
     def <- aggregateAcrossGenesDefaults()
-    expect_true(all(names(def) %in% names(formals(aggregateAcrossCells))))
+    expect_true(all(names(def) %in% names(formals(aggregateAcrossGenes))))
 })

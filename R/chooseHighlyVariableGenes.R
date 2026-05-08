@@ -17,13 +17,16 @@
 #' @param keep.ties Boolean indicating whether to keep tied values of \code{stats}, even if \code{top} may be exceeded.
 #'
 #' If \code{NULL}, the default value in \code{\link{chooseHighlyVariableGenesDefaults}} is used.
-#' @param bound Number specifying the lower bound (if \code{larger=TRUE}) or upper bound (otherwise) to be applied to \code{stats}.
+#' @param use.bound Boolean indicating whether to ignore genes with \code{stats} below \code{bound} (if \code{larger = TRUE}) or above \code{bound} (otherwise).
 #' Genes are not considered to be HVGs if they do not satisfy this bound, even if they are within the \code{top} genes.
+#'
+#' If \code{NULL}, the default value in \code{\link{chooseHighlyVariableGenesDefaults}} is used.
+#' @param bound Number specifying the lower bound (if \code{larger=TRUE}) or upper bound (otherwise) to be applied to \code{stats} when \code{use.bound = TRUE}.
 #' For example, residuals from the fitted trend should be positive, which can be enforced by setting \code{bound = 0}. 
 #'
 #' If \code{NULL}, the default value in \code{\link{chooseHighlyVariableGenesDefaults}} is used.
 #'
-#' If \code{NA}, no bound is enforced.
+#' This argument is ignored if \code{use.bound = FALSE}.
 #'
 #' @return Integer vector containing the indices of genes in \code{stats} that are considered to be highly variable.
 #' 
@@ -38,11 +41,11 @@
 #'
 #' @author Aaron Lun
 #' @export
-chooseHighlyVariableGenes <- function(stats, top = NULL, larger = NULL, keep.ties = NULL, bound = NULL) {
+chooseHighlyVariableGenes <- function(stats, top = NULL, larger = NULL, keep.ties = NULL, use.bound = NULL, bound = NULL) {
     if (!is.null(top)) {
         top <- min(length(stats), top) # protect against top=Inf, which Rcpp can't cast to an int.
     }
-    out <- choose_highly_variable_genes(stats, top=top, larger=larger, keep_ties=keep.ties, bound=bound)
+    out <- choose_highly_variable_genes(stats, top=top, larger=larger, keep_ties=keep.ties, use_bound=use.bound, bound=bound)
     out + 1L
 }
 

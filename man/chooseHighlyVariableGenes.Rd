@@ -9,6 +9,7 @@ chooseHighlyVariableGenes(
   top = NULL,
   larger = NULL,
   keep.ties = NULL,
+  use.bound = NULL,
   bound = NULL
 )
 }
@@ -31,13 +32,17 @@ If \code{NULL}, the default value in \code{\link{chooseHighlyVariableGenesDefaul
 
 If \code{NULL}, the default value in \code{\link{chooseHighlyVariableGenesDefaults}} is used.}
 
-\item{bound}{Number specifying the lower bound (if \code{larger=TRUE}) or upper bound (otherwise) to be applied to \code{stats}.
+\item{use.bound}{Boolean indicating whether to ignore genes with \code{stats} below \code{bound} (if \code{larger = TRUE}) or above \code{bound} (otherwise).
 Genes are not considered to be HVGs if they do not satisfy this bound, even if they are within the \code{top} genes.
+
+If \code{NULL}, the default value in \code{\link{chooseHighlyVariableGenesDefaults}} is used.}
+
+\item{bound}{Number specifying the lower bound (if \code{larger=TRUE}) or upper bound (otherwise) to be applied to \code{stats} when \code{use.bound = TRUE}.
 For example, residuals from the fitted trend should be positive, which can be enforced by setting \code{bound = 0}. 
 
 If \code{NULL}, the default value in \code{\link{chooseHighlyVariableGenesDefaults}} is used.
 
-If \code{NA}, no bound is enforced.}
+This argument is ignored if \code{use.bound = FALSE}.}
 }
 \value{
 Integer vector containing the indices of genes in \code{stats} that are considered to be highly variable.

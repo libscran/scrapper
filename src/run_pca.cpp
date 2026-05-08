@@ -59,21 +59,23 @@ Rcpp::List run_pca(
         set_integer(num_threads, opt.num_threads, "num.threads");
     };
 
-    Rcpp::List output;
-    const auto deposit_outputs = [&](const auto& out) -> Rcpp::List {
-        return Rcpp::List::create(
+    const auto deposit_outputs = [&](const auto& out, const auto& opt) -> Rcpp::List {
+        auto output = Rcpp::List::create(
             Rcpp::Named("components") = transfer(out.components),
             Rcpp::Named("rotation") = transfer(out.rotation),
             Rcpp::Named("variance.explained") = transfer(out.variance_explained),
             Rcpp::Named("total.variance") = Rcpp::NumericVector::create(out.total_variance),
-            Rcpp::Named("center") = transfer(out.center),
-            Rcpp::Named("scale") = transfer(out.scale),
-            Rcpp::Named("metrics") = Rcpp::List::create(
-                Rcpp::Named("converged") = Rcpp::LogicalVector::create(out.metrics.converged),
-                Rcpp::Named("iterations") = Rcpp::LogicalVector::create(out.metrics.iterations),
-                Rcpp::Named("multiplications") = Rcpp::LogicalVector::create(out.metrics.multiplications)
-            )
+            Rcpp::Named("center") = transfer(out.center)
         );
+        if (opt.scale) {
+            output["scale"] = transfer(out.scale);
+        }
+        output["metrics"] = Rcpp::List::create(
+            Rcpp::Named("converged") = Rcpp::LogicalVector::create(out.metrics.converged),
+            Rcpp::Named("iterations") = Rcpp::LogicalVector::create(out.metrics.iterations),
+            Rcpp::Named("multiplications") = Rcpp::LogicalVector::create(out.metrics.multiplications)
+        );
+        return output;
     };
 
     if (ptr) {
@@ -92,12 +94,12 @@ Rcpp::List run_pca(
             scran_pca::BlockedPcaOptions opt;
             fill_block_options(opt);
             auto res = scran_pca::blocked_pca(*(mat->ptr), ptr, opt);
-            output = deposit_outputs(res);
+            return deposit_outputs(res, opt);
         } else {
             scran_pca::SubsetPcaBlockedOptions opt;
             fill_block_options(opt);
             auto res = scran_pca::subset_pca_blocked(*(mat->ptr), Rcpp::IntegerVector(subset), ptr, opt);
-            output = deposit_outputs(res);
+            return deposit_outputs(res, opt);
         }
 
     } else {
@@ -105,16 +107,14 @@ Rcpp::List run_pca(
             scran_pca::SimplePcaOptions opt;
             fill_common_options(opt);
             auto res = scran_pca::simple_pca(*(mat->ptr), opt);
-            output = deposit_outputs(res);
+            return deposit_outputs(res, opt);
         } else {
             scran_pca::SubsetPcaOptions opt;
             fill_common_options(opt);
             auto res = scran_pca::subset_pca(*(mat->ptr), Rcpp::IntegerVector(subset), opt);
-            output = deposit_outputs(res);
+            return deposit_outputs(res, opt);
         }
     }
-
-    return output;
 }
 
 //[[Rcpp::export(rng=false)]]

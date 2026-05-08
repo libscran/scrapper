@@ -11,7 +11,7 @@ test_that("chooseHighlyVariableGenes works", {
     out <- chooseHighlyVariableGenes(stats, top=Inf)
     expect_identical(out, seq_along(stats))
 
-    out <- chooseHighlyVariableGenes(stats, larger=FALSE, bound=NA)
+    out <- chooseHighlyVariableGenes(stats, larger=FALSE, use.bound=FALSE)
     expect_equal(length(out), 4000)
     expect_lt(max(stats[out]), min(stats[-out]))
 
@@ -19,7 +19,7 @@ test_that("chooseHighlyVariableGenes works", {
     expect_lt(length(out), 2000)
     expect_gt(min(stats[out]), 0.9)
 
-    out <- chooseHighlyVariableGenes(numeric(10000), keep.ties=TRUE, bound=NA)
+    out <- chooseHighlyVariableGenes(numeric(10000), keep.ties=TRUE, use.bound=FALSE)
     expect_equal(out, seq_len(10000))
 })
 

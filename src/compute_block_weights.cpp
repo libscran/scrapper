@@ -8,11 +8,11 @@
 #include "utils_block.h"
 
 //[[Rcpp::export(rng=false)]]
-Rcpp::NumericVector compute_block_weights(Rcpp::NumericVector sizes, std::string policy, Rcpp::NumericVector variable_block_weight) {
+Rcpp::NumericVector compute_block_weights(Rcpp::NumericVector sizes, std::string policy, Rcpp::RObject variable_block_weight) {
     auto weights = sanisizer::create<Rcpp::NumericVector>(sizes.size());
 
     scran_blocks::VariableWeightParameters output;
-    if (variable_block_weight.isNULL()) {
+    if (!variable_block_weight.isNULL()) {
         output = parse_variable_block_weight(variable_block_weight, "variable.block.weight");
     }
 

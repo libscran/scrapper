@@ -197,16 +197,17 @@ BEGIN_RCPP
 END_RCPP
 }
 // choose_highly_variable_genes
-Rcpp::IntegerVector choose_highly_variable_genes(Rcpp::NumericVector stats, Rcpp::RObject top, Rcpp::RObject larger, Rcpp::RObject keep_ties, Rcpp::RObject bound);
-RcppExport SEXP _scrapper_choose_highly_variable_genes(SEXP statsSEXP, SEXP topSEXP, SEXP largerSEXP, SEXP keep_tiesSEXP, SEXP boundSEXP) {
+Rcpp::IntegerVector choose_highly_variable_genes(Rcpp::NumericVector stats, Rcpp::RObject top, Rcpp::RObject larger, Rcpp::RObject keep_ties, Rcpp::RObject use_bound, Rcpp::RObject bound);
+RcppExport SEXP _scrapper_choose_highly_variable_genes(SEXP statsSEXP, SEXP topSEXP, SEXP largerSEXP, SEXP keep_tiesSEXP, SEXP use_boundSEXP, SEXP boundSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type stats(statsSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type top(topSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type larger(largerSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type keep_ties(keep_tiesSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type use_bound(use_boundSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type bound(boundSEXP);
-    rcpp_result_gen = Rcpp::wrap(choose_highly_variable_genes(stats, top, larger, keep_ties, bound));
+    rcpp_result_gen = Rcpp::wrap(choose_highly_variable_genes(stats, top, larger, keep_ties, use_bound, bound));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -331,13 +332,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // compute_block_weights
-Rcpp::NumericVector compute_block_weights(Rcpp::NumericVector sizes, std::string policy, Rcpp::NumericVector variable_block_weight);
+Rcpp::NumericVector compute_block_weights(Rcpp::NumericVector sizes, std::string policy, Rcpp::RObject variable_block_weight);
 RcppExport SEXP _scrapper_compute_block_weights(SEXP sizesSEXP, SEXP policySEXP, SEXP variable_block_weightSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type sizes(sizesSEXP);
     Rcpp::traits::input_parameter< std::string >::type policy(policySEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type variable_block_weight(variable_block_weightSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type variable_block_weight(variable_block_weightSEXP);
     rcpp_result_gen = Rcpp::wrap(compute_block_weights(sizes, policy, variable_block_weight));
     return rcpp_result_gen;
 END_RCPP
@@ -1022,7 +1023,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_center_size_factors_defaults", (DL_FUNC) &_scrapper_center_size_factors_defaults, 0},
     {"_scrapper_center_spike_in_factors", (DL_FUNC) &_scrapper_center_spike_in_factors, 4},
     {"_scrapper_center_spike_in_factors_defaults", (DL_FUNC) &_scrapper_center_spike_in_factors_defaults, 0},
-    {"_scrapper_choose_highly_variable_genes", (DL_FUNC) &_scrapper_choose_highly_variable_genes, 5},
+    {"_scrapper_choose_highly_variable_genes", (DL_FUNC) &_scrapper_choose_highly_variable_genes, 6},
     {"_scrapper_choose_highly_variable_genes_defaults", (DL_FUNC) &_scrapper_choose_highly_variable_genes_defaults, 0},
     {"_scrapper_choose_pseudo_count", (DL_FUNC) &_scrapper_choose_pseudo_count, 4},
     {"_scrapper_choose_pseudo_count_defaults", (DL_FUNC) &_scrapper_choose_pseudo_count_defaults, 0},

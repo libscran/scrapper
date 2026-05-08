@@ -6,7 +6,7 @@ test_that("choosePseudoCount works as expected", {
     out <- choosePseudoCount(sf)
     expect_gt(out, 0)
     expect_lt(out, choosePseudoCount(sf, quantile=0.01))
-    expect_lt(out, choosePseudoCount(sf, max.bias=0.5))
+    expect_lt(out, choosePseudoCount(sf, max.bias=0.01))
 })
 
 test_that("defaults work correctly", {
