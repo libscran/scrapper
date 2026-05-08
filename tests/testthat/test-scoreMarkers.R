@@ -71,11 +71,26 @@ test_that("scoreMarkers works with blocking", {
     check_summaries(out$delta.mean)
     check_summaries(out$delta.detected)
 
-    for (x in names(out$auc)) {
-        collected <- unlist(out$auc[[x]][c("min", "mean", "median", "max")])
+    for (group in names(out$auc)) {
+        collected <- unlist(out$auc[[group]][c("min", "mean", "median", "max")])
         expect_true(all(collected >= 0))
         expect_true(all(collected <= 1))
     }
+
+    # Weighted mean, unweighted mean and quantile are the same when there are only two groups.
+    g2 <- rep(LETTERS[1:2], length.out=ncol(x))
+    b2 <- rep(1:2, each=ncol(x)/2)
+    ref <- scoreMarkers(x, g2, block=b2)
+
+    mout <- scoreMarkers(x, g2, block=b2, block.average.policy="mean", block.weight.policy="equal")
+    expect_equal(ref$mean, mout$mean)
+    expect_equal(ref$cohens.d$mean, mout$cohens.d$mean)
+    expect_equal(ref$auc$median, mout$cohens.d$median)
+
+    qout <- scoreMarkers(x, g2, block=b2, block.average.policy="quantile")
+    expect_equal(ref$detected, qout$detected)
+    expect_equal(ref$delta.mean$min, mout$delta.mean$min)
+    expect_equal(ref$delta.detected$median, mout$delta.detected$median)
 })
 
 test_that("scoreMarkers works with quantile summaries", {
@@ -232,4 +247,13 @@ test_that("reportGroupMarkerStatistics works as expected", {
     df <- reportGroupMarkerStatistics(out, 1)
     expect_identical(rownames(df), rownames(x))
     expect_null(df$auc.median)
+})
+
+test_that("defaults work as expected", {
+    def <- scoreMarkersDefaults()
+    expect_true(all(names(def) %in% names(formals(scoreMarkers))))
+    def <- scoreMarkersDefaults(all.pairwise=TRUE)
+    expect_true(all(names(def) %in% names(formals(scoreMarkers))))
+    def <- scoreMarkersDefaults(all.pairwise=100)
+    expect_true(all(names(def) %in% names(formals(scoreMarkers))))
 })

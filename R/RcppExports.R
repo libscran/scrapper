@@ -269,6 +269,10 @@ score_markers_best <- function(x, top, groups, num_groups, block, block_average_
     .Call('_scrapper_score_markers_best', PACKAGE = 'scrapper', x, top, groups, num_groups, block, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc, index_only)
 }
 
+score_markers_defaults <- function(mode) {
+    .Call('_scrapper_score_markers_defaults', PACKAGE = 'scrapper', mode)
+}
+
 set_executor <- function(ptr) {
     .Call('_scrapper_set_executor', PACKAGE = 'scrapper', ptr)
 }

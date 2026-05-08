@@ -541,3 +541,55 @@ Rcpp::List score_markers_best(
 
     return output;
 }
+
+//[[Rcpp::export(rng=false)]]
+Rcpp::List score_markers_defaults(int mode) {
+    Rcpp::List output;
+
+    auto format_common_defaults = [&](const auto& opt) -> void {
+        if (opt.block_average_policy == scran_markers::BlockAveragePolicy::MEAN) {
+            output["block.average.policy"] = "mean";
+        } else {
+            throw std::runtime_error("unexpected block.average.policy default for scoreMarkers");
+        }
+
+        report_block_weight_policy_default(output, opt.block_weight_policy, "block.weight.policy", "scoreMarkers");
+        report_variable_block_weight_default(output, opt.variable_block_weight_parameters, "variable.block.weight");
+        output["block.quantile"] = opt.block_quantile;
+        output["threshold"] = opt.threshold;
+        output["num.threads"] = opt.num_threads;
+        output["compute.group.mean"] = opt.compute_group_mean;
+        output["compute.group.detected"] = opt.compute_group_detected;
+        output["compute.delta.mean"] = opt.compute_delta_mean;
+        output["compute.delta.detected"] = opt.compute_delta_detected;
+        output["compute.cohens.d"] = opt.compute_cohens_d;
+        output["compute.auc"] = opt.compute_auc;
+    };
+
+    if (mode == 0) {
+        scran_markers::ScoreMarkersSummaryOptions opt;
+        format_common_defaults(opt);
+    } else if (mode == 1) {
+        scran_markers::ScoreMarkersPairwiseOptions opt;
+        format_common_defaults(opt);
+    } else {
+        scran_markers::ScoreMarkersBestOptions opt;
+        format_common_defaults(opt);
+    }
+
+    // Adding all the summary options.
+    scran_markers::ScoreMarkersSummaryOptions opt;
+    output["compute.summary.min"] = opt.compute_min;
+    output["compute.summary.mean"] = opt.compute_mean;
+    output["compute.summary.median"] = opt.compute_median;
+    output["compute.summary.max"] = opt.compute_max;
+    if (opt.compute_summary_quantiles.has_value()) {
+        throw std::runtime_error("unexpected compute.summary.quantiles default for scoreMarkers");
+    } else {
+        output["compute.summary.quantiles"] = R_NilValue;
+    }
+    output["compute.summary.min.rank"] = opt.compute_min_rank;
+    output["min.rank.limit"] = opt.min_rank_limit;
+
+    return output;
+}

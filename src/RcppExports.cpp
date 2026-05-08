@@ -888,6 +888,16 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// score_markers_defaults
+Rcpp::List score_markers_defaults(int mode);
+RcppExport SEXP _scrapper_score_markers_defaults(SEXP modeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< int >::type mode(modeSEXP);
+    rcpp_result_gen = Rcpp::wrap(score_markers_defaults(mode));
+    return rcpp_result_gen;
+END_RCPP
+}
 // set_executor
 SEXP set_executor(SEXP ptr);
 RcppExport SEXP _scrapper_set_executor(SEXP ptrSEXP) {
@@ -1026,6 +1036,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_score_markers_summary", (DL_FUNC) &_scrapper_score_markers_summary, 23},
     {"_scrapper_score_markers_pairwise", (DL_FUNC) &_scrapper_score_markers_pairwise, 16},
     {"_scrapper_score_markers_best", (DL_FUNC) &_scrapper_score_markers_best, 18},
+    {"_scrapper_score_markers_defaults", (DL_FUNC) &_scrapper_score_markers_defaults, 1},
     {"_scrapper_set_executor", (DL_FUNC) &_scrapper_set_executor, 1},
     {"_scrapper_subsample_by_neighbors", (DL_FUNC) &_scrapper_subsample_by_neighbors, 3},
     {"_scrapper_subsample_by_partition", (DL_FUNC) &_scrapper_subsample_by_partition, 4},

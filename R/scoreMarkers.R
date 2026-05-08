@@ -13,50 +13,98 @@
 #' Alternatively \code{NULL}, if all cells are from the same block.
 #' @param block.average.policy String specifying the policy to use for average statistics across blocks.
 #' This can either be a (weighted) \code{"mean"} or a \code{"quantile"}.
-#' Only used if \code{block} is not \code{NULL}. 
+#'
+#' If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.
+#'
+#' This argument is only used if \code{block} is not \code{NULL}. 
 #' @param block.weight.policy String specifying the policy to use for weighting different blocks when computing the average for each statistic.
 #' See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
-#' Only used if \code{block} is not \code{NULL}.
+#'
+#' If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.
+#'
+#' This argument is only used if \code{block} is not \code{NULL}.
 #' @param variable.block.weight Numeric vector of length 2, specifying the parameters for variable block weighting.
 #' See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
-#' Only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.
+#'
+#' If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.
+#'
+#' THis arugment is only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.
 #' @param block.quantile Number specifying the probability of the quantile of statistics across blocks. 
 #' Defaults to 0.5, i.e., the median of per-block statistics.
-#' Only used if \code{block} is not \code{NULL} and \code{block.average.policy="quantile"}.
-#' @param threshold Non-negative numeric scalar specifying the minimum threshold on the differences in means (i.e., the log-fold change, if \code{x} contains log-expression values). 
+#'
+#' If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.
+#'
+#' This argument is only used if \code{block} is not \code{NULL} and \code{block.average.policy="quantile"}.
+#' @param threshold Non-negative number specifying the minimum threshold on the differences in means (i.e., the log-fold change, if \code{x} contains log-expression values). 
 #' This is incorporated into the effect sizes for Cohen's d and the AUC.
 #' Larger thresholds will favor genes with large differences at the expense of genes with low variance that would otherwise have comparable effect sizes.
-#' @param compute.group.mean Logical scalar indicating whether to compute the group-wise mean expression for each gene.
-#' @param compute.group.detected Logical scalar indicating whether to compute the group-wise proportion of detected cells for each gene.
-#' @param compute.delta.mean Logical scalar indicating whether to compute the delta-means, i.e., the log-fold change when \code{x} contains log-expression values.
-#' @param compute.delta.detected Logical scalar indicating whether to compute the delta-detected, i.e., differences in the proportion of cells with detected expression.
-#' @param compute.cohens.d Logical scalar indicating whether to compute Cohen's d.
-#' @param compute.auc Logical scalar indicating whether to compute the AUC.
+#'
+#' If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.
+#' @param compute.group.mean Boolean indicating whether to compute the group-wise mean expression for each gene.
+#'
+#' If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.
+#' @param compute.group.detected Boolean indicating whether to compute the group-wise proportion of detected cells for each gene.
+#'
+#' If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.
+#' @param compute.delta.mean Boolean indicating whether to compute the delta-means, i.e., the log-fold change when \code{x} contains log-expression values.
+#'
+#' If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.
+#' @param compute.delta.detected Boolean indicating whether to compute the delta-detected, i.e., differences in the proportion of cells with detected expression.
+#'
+#' If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.
+#' @param compute.cohens.d Boolean indicating whether to compute Cohen's d.
+#'
+#' If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.
+#' @param compute.auc Boolean indicating whether to compute the AUC.
 #' Setting this to \code{FALSE} can improve speed and memory efficiency.
+#'
+#' If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.
 #' @param compute.summary.min Boolean specifying whether to compute the minimum as a summary statistic for each effect size.
-#' Only used if \code{all.pairwise=FALSE}.
+#'
+#' If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.
+#'
+#' This argument is only used if \code{all.pairwise=FALSE}.
 #' @param compute.summary.mean Boolean specifying whether to compute the mean as a summary statistic for each effect size.
-#' Only used if \code{all.pairwise=FALSE}.
+#'
+#' If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.
+#'
+#' This argument is only used if \code{all.pairwise=FALSE}.
 #' @param compute.summary.median Boolean specifying whether to compute the median as a summary statistic for each effect size.
-#' Only used if \code{all.pairwise=FALSE}.
+#'
+#' If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.
+#'
+#' This argument is only used if \code{all.pairwise=FALSE}.
 #' @param compute.summary.max Boolean specifying whether to compute the maximum as a summary statistic for each effect size.
-#' Only used if \code{all.pairwise=FALSE}.
-#' @param compute.summary.quantiles Numeric scalars containing the probabilities of quantiles to compute as summary statistics for each effect size.
-#' If \code{NULL}, no quantiles are computed.
-#' Only used if \code{all.pairwise=FALSE}.
+#'
+#' If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.
+#'
+#' This argument is only used if \code{all.pairwise=FALSE}.
+#' @param compute.summary.quantiles Numeric vector containing the probabilities of quantiles to compute as summary statistics for each effect size.
+#'
+#' If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.
+#' By default, no summary quantiles are computed.
+#'
+#' This argument is only used if \code{all.pairwise=FALSE}.
 #' @param compute.summary.min.rank Boolean specifying whether to compute the mininum rank as a summary statistic for each effect size.
-#' If \code{NULL}, no quantiles are computed.
-#' Only used if \code{all.pairwise=FALSE}.
-#' @param all.pairwise Logical scalar indicating whether to report the effect sizes for every pairwise comparison between groups.
-#' Alternatively, an integer scalar indicating the number of top markers to report from each pairwise comparison between groups.
+#'
+#' If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.
+#'
+#' This argument is only used if \code{all.pairwise=FALSE}.
+#' @param all.pairwise Boolean indicating whether to report the effect sizes for every pairwise comparison between groups.
+#' Alternatively, an integer indicating the number of top markers to report from each pairwise comparison between groups.
 #' If \code{FALSE}, only the summary statistics are reported.
 #' @param top.index.only Boolean indicating whether to only report the indices of the top genes when \code{all.pairwise} is an integer.
 #' This is more efficient when the effect sizes of the top genes are not required.
 #' Ignored for all other values of \code{all.pairwise}.
-#' @param min.rank.limit Integer scalar specifying the maximum value of the min-rank to report.
+#' @param min.rank.limit Integer specifying the maximum value of the min-rank to report.
 #' Lower values improve memory efficiency at the cost of discarding information about lower-ranked genes.
-#' Only used if \code{all.pairwise=FALSE}.
-#' @param num.threads Integer scalar specifying the number of threads to use.
+#'
+#' If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.
+#'
+#' This argument is only used if \code{all.pairwise=FALSE}.
+#' @param num.threads Integer specifying the number of threads to use.
+#'
+#' If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.
 #'
 #' @return
 #' A named list containing:
@@ -198,28 +246,28 @@
 scoreMarkers <- function(
     x, 
     groups, 
-    block=NULL, 
-    block.average.policy=c("mean", "quantile"),
-    block.weight.policy=c("variable", "equal", "none"),
-    variable.block.weight=c(0, 1000),
-    block.quantile=0.5,
-    compute.group.mean=TRUE,
-    compute.group.detected=TRUE,
-    compute.delta.mean=TRUE,
-    compute.delta.detected=TRUE,
-    compute.cohens.d=TRUE,
-    compute.auc=TRUE,
-    compute.summary.min=TRUE,
-    compute.summary.mean=TRUE,
-    compute.summary.median=TRUE,
-    compute.summary.max=TRUE,
-    compute.summary.quantiles=NULL,
-    compute.summary.min.rank=TRUE,
-    threshold=0, 
-    all.pairwise=FALSE, 
-    top.index.only=FALSE,
-    min.rank.limit=500,
-    num.threads=1
+    block = NULL, 
+    block.average.policy = NULL,
+    block.weight.policy = NULL,
+    variable.block.weight = NULL,
+    block.quantile = NULL,
+    compute.group.mean = NULL,
+    compute.group.detected = NULL,
+    compute.delta.mean = NULL,
+    compute.delta.detected = NULL,
+    compute.cohens.d = NULL,
+    compute.auc = NULL,
+    compute.summary.min = NULL,
+    compute.summary.mean = NULL,
+    compute.summary.median = NULL,
+    compute.summary.max = NULL,
+    compute.summary.quantiles = NULL,
+    compute.summary.min.rank = NULL,
+    threshold = NULL, 
+    all.pairwise = FALSE, 
+    top.index.only = FALSE,
+    min.rank.limit = NULL,
+    num.threads = NULL
 ) {
     .checkSEX(x, "scoreMarkers.se")
 
@@ -237,8 +285,8 @@ scoreMarkers <- function(
         groups=groups$index,
         num_groups=length(groups$names),
         block=block$index,
-        block_average_policy=match.arg(block.average.policy),
-        block_weight_policy=match.arg(block.weight.policy),
+        block_average_policy=block.average.policy,
+        block_weight_policy=block.weight.policy,
         variable_block_weight=variable.block.weight,
         block_quantile=block.quantile,
         threshold=threshold,
@@ -303,10 +351,10 @@ scoreMarkers <- function(
     output$row.names <- rn
     output$group.ids <- groups$names
 
-    if (compute.group.mean) {
+    if ("mean" %in% names(output)) {
         dimnames(output$mean) <- list(rn, groups$names)
     }
-    if (compute.group.detected) {
+    if ("detected" %in% names(output)) {
         dimnames(output$detected) <- list(rn, groups$names)
     }
 
@@ -319,13 +367,13 @@ scoreMarkers <- function(
 #' Users can pick one of the columns for sorting potential marker genes. 
 #'
 #' @param results Named list of marker statistics, typically generated by \code{\link{scoreMarkers}} with \code{all.pairwise=FALSE}.
-#' @param group String or integer scalar specifying the group of interest.
+#' @param group String or integer specifying the group of interest.
 #' @param effect.sizes Character vector specifying the effect sizes of interest.
 #' If \code{NULL}, all effect sizes are reported in the returned data frame.
 #' @param summaries Character vector specifying the summary statistics of interest.
 #' If \code{NULL}, all summaries are reported in the returned data frame.
-#' @param include.mean Logical scalar indicating whether the mean expression should be reported in the returned data frame.
-#' @param include.detected Logical scalar indicating whether the proportion of detected cells should be reported in the returned data frame.
+#' @param include.mean Boolean indicating whether the mean expression should be reported in the returned data frame.
+#' @param include.detected Boolean indicating whether the proportion of detected cells should be reported in the returned data frame.
 #'
 #' @return Data frame where each row corresponds to a gene.
 #' Each column contains the requested statistics for \code{group}.
@@ -375,4 +423,23 @@ reportGroupMarkerStatistics <- function(
     }
 
     current
+}
+
+#' Default parameters for \code{\link{scoreMarkers}}
+#' @param all.pairwise See the argument of the same name in \code{\link{scoreMarkers}}.
+#' @return Named list containing default values for various function arguments.
+#' These defaults may change depending on the values for \code{all.pairwise}.
+#' @examples
+#' scoreMarkersDefaults()
+#' @export
+scoreMarkersDefaults <- function(all.pairwise = FALSE) {
+    mode <- 0L
+    if (isTRUE(all.pairwise)) {
+        ;
+    } else if (isFALSE(all.pairwise)) {
+        mode <- 1L
+    } else {
+        mode <- 2L
+    }
+    score_markers_defaults(mode)
 }
