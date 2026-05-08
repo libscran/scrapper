@@ -71,8 +71,7 @@ If \code{NULL}, all rows of \code{x} are used.}
 \item{extra.work}{Integer scalar specifying the number of extra dimensions for the IRLBA workspace.
 Larger values improve accuracy at the cost of compute time.
 
-If \code{NULL}, the default value in \code{\link{runPcaDefaults}} is used.
-Specifically, this defaults to the larger of 7 and \code{number}.}
+If \code{NULL}, this defaults to the larger of 7 and \code{number}.}
 
 \item{iterations}{Integer scalar specifying the maximum number of restart iterations for IRLBA.
 Larger values improve accuracy at the cost of compute time.

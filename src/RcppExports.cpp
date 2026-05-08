@@ -970,6 +970,15 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// summarize_effects_defaults
+Rcpp::List summarize_effects_defaults();
+RcppExport SEXP _scrapper_summarize_effects_defaults() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    rcpp_result_gen = Rcpp::wrap(summarize_effects_defaults());
+    return rcpp_result_gen;
+END_RCPP
+}
 // test_enrichment
 Rcpp::NumericVector test_enrichment(Rcpp::IntegerVector overlap, int num_interest, Rcpp::IntegerVector set_sizes, int universe, bool log, int num_threads);
 RcppExport SEXP _scrapper_test_enrichment(SEXP overlapSEXP, SEXP num_interestSEXP, SEXP set_sizesSEXP, SEXP universeSEXP, SEXP logSEXP, SEXP num_threadsSEXP) {
@@ -1061,6 +1070,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_subsample_by_partition", (DL_FUNC) &_scrapper_subsample_by_partition, 4},
     {"_scrapper_subsample_by_partition_defaults", (DL_FUNC) &_scrapper_subsample_by_partition_defaults, 0},
     {"_scrapper_summarize_effects", (DL_FUNC) &_scrapper_summarize_effects, 10},
+    {"_scrapper_summarize_effects_defaults", (DL_FUNC) &_scrapper_summarize_effects_defaults, 0},
     {"_scrapper_test_enrichment", (DL_FUNC) &_scrapper_test_enrichment, 6},
     {NULL, NULL, 0}
 };

@@ -6,13 +6,13 @@
 \usage{
 summarizeEffects(
   effects,
-  compute.summary.min = TRUE,
-  compute.summary.mean = TRUE,
-  compute.summary.median = TRUE,
-  compute.summary.max = TRUE,
+  compute.summary.min = NULL,
+  compute.summary.mean = NULL,
+  compute.summary.median = NULL,
+  compute.summary.max = NULL,
   compute.summary.quantiles = NULL,
-  compute.summary.min.rank = TRUE,
-  num.threads = 1
+  compute.summary.min.rank = NULL,
+  num.threads = NULL
 )
 }
 \arguments{
@@ -21,20 +21,33 @@ The extents of the first two dimensions are equal to the number of groups, while
 The entry \code{[i, j, k]} represents the effect size from the comparison of group \code{j} against group \code{i} for gene \code{k}.
 See also the output of \code{\link{scoreMarkers}} with \code{all.pairwise=TRUE}.}
 
-\item{compute.summary.min}{Boolean specifying whether to compute the minimum as a summary statistic.}
+\item{compute.summary.min}{Boolean specifying whether to compute the minimum as a summary statistic.
 
-\item{compute.summary.mean}{Boolean specifying whether to compute the mean as a summary statistic.}
+If \code{NULL}, the default value in \code{\link{summarizeEffectsDefaults}} is used.}
 
-\item{compute.summary.median}{Boolean specifying whether to compute the median as a summary statistic.}
+\item{compute.summary.mean}{Boolean specifying whether to compute the mean as a summary statistic. 
 
-\item{compute.summary.max}{Boolean specifying whether to compute the maximum as a summary statistic.}
+If \code{NULL}, the default value in \code{\link{summarizeEffectsDefaults}} is used.}
+
+\item{compute.summary.median}{Boolean specifying whether to compute the median as a summary statistic. 
+
+If \code{NULL}, the default value in \code{\link{summarizeEffectsDefaults}} is used.}
+
+\item{compute.summary.max}{Boolean specifying whether to compute the maximum as a summary statistic. 
+
+If \code{NULL}, the default value in \code{\link{summarizeEffectsDefaults}} is used.}
 
 \item{compute.summary.quantiles}{Numeric scalars containing the probabilities of quantiles to compute as summary statistics. 
+
 If \code{NULL}, no quantiles are computed.}
 
-\item{compute.summary.min.rank}{Boolean specifying whether to compute the mininum rank as a summary statistic.}
+\item{compute.summary.min.rank}{Boolean specifying whether to compute the mininum rank as a summary statistic. 
 
-\item{num.threads}{Integer scalar specifying the number of threads to use.}
+If \code{NULL}, the default value in \code{\link{summarizeEffectsDefaults}} is used.}
+
+\item{num.threads}{Integer scalar specifying the number of threads to use.
+
+If \code{NULL}, the default value in \code{\link{summarizeEffectsDefaults}} is used.}
 }
 \value{
 List of \link[S4Vectors]{DataFrame}s containing summary statistics for the effect sizes.

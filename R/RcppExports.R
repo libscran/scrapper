@@ -297,6 +297,10 @@ summarize_effects <- function(num_genes, num_groups, effects, compute_summary_mi
     .Call('_scrapper_summarize_effects', PACKAGE = 'scrapper', num_genes, num_groups, effects, compute_summary_min, compute_summary_mean, compute_summary_median, compute_summary_max, compute_summary_quantiles, compute_summary_min_rank, num_threads)
 }
 
+summarize_effects_defaults <- function() {
+    .Call('_scrapper_summarize_effects_defaults', PACKAGE = 'scrapper')
+}
+
 test_enrichment <- function(overlap, num_interest, set_sizes, universe, log, num_threads) {
     .Call('_scrapper_test_enrichment', PACKAGE = 'scrapper', overlap, num_interest, set_sizes, universe, log, num_threads)
 }

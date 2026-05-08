@@ -83,3 +83,21 @@ SEXP summarize_effects(
         mr
     );
 }
+
+//[[Rcpp::export(rng=false)]]
+Rcpp::List summarize_effects_defaults() {
+    Rcpp::List output;
+    scran_markers::SummarizeEffectsOptions opt;
+    output["compute.summary.min"] = opt.compute_min;
+    output["compute.summary.mean"] = opt.compute_mean;
+    output["compute.summary.median"] = opt.compute_median;
+    output["compute.summary.max"] = opt.compute_max;
+    if (opt.compute_quantiles.has_value()) {
+        throw std::runtime_error("unexpected compute.summary.quantiles default for summarizeEffects");
+    } else {
+        output["compute.summary.quantiles"] = R_NilValue;
+    }
+    output["compute.summary.min.rank"] = opt.compute_min_rank;
+    output["num.threads"] = opt.num_threads;
+    return output;
+}
