@@ -4,7 +4,7 @@
 \alias{centerSizeFactors}
 \title{Center size factors}
 \usage{
-centerSizeFactors(size.factors, block = NULL, mode = c("lowest", "per-block"))
+centerSizeFactors(size.factors, block = NULL, mode = NULL)
 }
 \arguments{
 \item{size.factors}{Numeric vector of size factors across cells.
@@ -15,7 +15,10 @@ Alternatively \code{NULL}, in which case all cells are assumed to be in the same
 
 \item{mode}{String specifying how to scale size factors across blocks.
 This can be either \code{"lowest"} or \code{"per-block"}, see Details.
-Only used if \code{block} is provided.}
+
+If \code{NULL}, the default value in \code{\link{centerSizeFactorsDefaults}} is used.
+
+This argument is only used if \code{block} is provided.}
 }
 \value{
 Numeric vector of length equal to \code{size.factors}, containing the centered size factors.

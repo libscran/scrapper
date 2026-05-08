@@ -100,3 +100,8 @@ test_that("aggregateAcrossGenes works for other vector types", {
     })
     expect_identical(aggregateAcrossGenes(x, sets2), agg)
 })
+
+test_that("defaults work correctly", {
+    def <- aggregateAcrossGenesDefaults()
+    expect_true(all(names(def) %in% names(formals(aggregateAcrossGenes))))
+})

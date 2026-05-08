@@ -58,7 +58,7 @@ runAllNeighborSteps <- function(
     if (!is.null(runUmap.args)) {
         umap.k <- runUmap.args$num.neighbors
         if (is.null(umap.k)) {
-            umap.k <- formals(runUmap)$num.neighbors
+            umap.k <- runUmapDefaults()$num.neighbors
         }
         k.choices$runUmap <- umap.k
     }
@@ -66,7 +66,7 @@ runAllNeighborSteps <- function(
     if (!is.null(runTsne.args)) {
         tsne.perplexity <- runTsne.args$perplexity
         if (is.null(tsne.perplexity)) {
-            tsne.perplexity <- formals(runTsne)$perplexity 
+            tsne.perplexity <- runTsneDefaults()$perplexity 
         }
         k.choices$runTsne <- tsnePerplexityToNeighbors(tsne.perplexity)
     }
@@ -74,7 +74,7 @@ runAllNeighborSteps <- function(
     if (!is.null(clusterGraph.args)) {
         snn.k <- buildSnnGraph.args$num.neighbors
         if (is.null(snn.k)) {
-            snn.k <- formals(buildSnnGraph)$num.neighbors
+            snn.k <- buildSnnGraphDefaults()$num.neighbors
         }
         k.choices$clusterGraph <- snn.k
     }

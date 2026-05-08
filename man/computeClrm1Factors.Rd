@@ -4,13 +4,15 @@
 \alias{computeClrm1Factors}
 \title{Compute size factors for ADT counts}
 \usage{
-computeClrm1Factors(x, num.threads = 1)
+computeClrm1Factors(x, num.threads = NULL)
 }
 \arguments{
 \item{x}{A matrix-like object containing ADT count data.
 Rows correspond to tags and columns correspond to cells.}
 
-\item{num.threads}{Number of threads to use.}
+\item{num.threads}{Number of threads to use.
+
+If \code{NULL}, the default value in \code{\link{computeClrm1FactorsDefaults}} is used.}
 }
 \value{
 Numeric vector containing the CLRm1 size factor for each cell.

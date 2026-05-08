@@ -20,3 +20,31 @@ test_that("correctMnn works correctly in simple cases", {
 
     expect_error(correctMnn(SummarizedExperiment::SummarizedExperiment(x)), "not supported")
 })
+
+test_that("correctMnn works with different merge policies", {
+    x <- matrix(rnorm(10000), nrow=10)
+    b <- rep(1:3, c(500, 300, 200))
+    x[,b==2] <- x[,b==2] + 3
+    x[,b==3] <- x[,b==3] + 5
+
+    ref <- correctMnn(x, b)
+    out <- correctMnn(x, b, merge.policy="rss")
+    expect_identical(ref, out)
+
+    means <- vapply(split(colMeans(x), b), mean, 0)
+    expect_gt(means[2] - means[1], 2)
+    expect_gt(means[3] - means[1], 4)
+
+    for (pol in c("size", "variance", "input")) {
+        out <- correctMnn(x, b, merge.policy=pol)
+        expect_identical(dim(out$corrected), dim(x))
+        means <- vapply(split(colMeans(out$corrected), b), mean, 0)
+        expect_lt(abs(means[2] - means[1]), 1) # means are within 1 SD of the truth.
+        expect_lt(abs(means[3] - means[1]), 1)
+    }
+})
+
+test_that("defaults work correctly", {
+    def <- correctMnnDefaults()
+    expect_true(all(names(def) %in% names(formals(correctMnn))))
+})

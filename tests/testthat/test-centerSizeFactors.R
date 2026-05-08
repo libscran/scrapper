@@ -26,6 +26,16 @@ test_that("centerSizeFactors works with blocking", {
     cf <- centerSizeFactors(f, b)
     expect_equal(f / min(scaling), cf)
 
+    cf2 <- centerSizeFactors(f, b, mode="lowest")
+    expect_equal(cf, cf2)
+
     cf <- centerSizeFactors(f, b, mode="per-block")
     expect_equal(f / unname(scaling[b]), cf)
+
+    expect_error(centerSizeFactors(f, b, mode="WHEE"), "unknown")
+})
+
+test_that("defaults work correctly", {
+    def <- centerSizeFactorsDefaults()
+    expect_true(all(names(def) %in% names(formals(centerSizeFactors))))
 })

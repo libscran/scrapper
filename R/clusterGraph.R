@@ -14,25 +14,39 @@
 #' \item \code{"leiden"} uses the Leiden algorithm,
 #' see \url{https://igraph.org/c/doc/igraph-Community.html#igraph_community_leiden} for details.
 #' }
-#' @param multilevel.resolution Numeric scalar specifying the resolution when \code{method="multilevel"}.
+#' @param multilevel.resolution Number specifying the resolution when \code{method="multilevel"}.
 #' Lower values favor fewer, larger communities; higher values favor more, smaller communities.
-#' @param leiden.resolution Numeric scalar specifying the resolution when \code{method="leiden"}.
+#'
+#' If \code{NULL}, the default value in \code{\link{clusterGraphDefaults}} is used.
+#' @param leiden.resolution Number specifying the resolution when \code{method="leiden"}.
 #' Lower values favor fewer, larger communities; higher values favor more, smaller communities.
+#'
+#' If \code{NULL}, the default value in \code{\link{clusterGraphDefaults}} is used.
 #' @param leiden.objective String specifying the objective function when \code{method="leiden"}.
 #' \code{"modularity"} uses the generalized modularity, \code{"cpm"} uses the Constant Potts Model, and \code{"er"} uses the Erd\"os-R\'enyi G(n, p) model.
 #' The CPM typically yields more fine-grained clusters than the modularity at the same \code{leiden.resolution}.
-#' @param walktrap.steps Integer scalar specifying the number of steps to use when \code{method="walktrap"}.
+#'
+#' If \code{NULL}, the default value in \code{\link{clusterGraphDefaults}} is used.
+#' @param walktrap.steps Integer specifying the number of steps to use when \code{method="walktrap"}.
 #' This determines the ability of the Walktrap algorithm to distinguish highly interconnected communities from the rest of the graph.
-#' @param seed Integer scalar specifying the random seed to use for \code{method="multilevel"} or \code{"leiden"}.
+#'
+#' If \code{NULL}, the default value in \code{\link{clusterGraphDefaults}} is used.
+#' @param seed Integer specifying the random seed for some of community detection algorithms.
+#' @param multilevel.seed Integer specifying the random seed to use for \code{method="multilevel"}.
+#'
+#' If \code{NULL}, the default value in \code{\link{clusterGraphDefaults}} is used.
+#' @param leiden.seed Integer specifying the random seed to use for \code{method="leiden"}.
+#'
+#' If \code{NULL}, the default value in \code{\link{clusterGraphDefaults}} is used.
 #'
 #' @return A list containing \code{membership}, a factor containing the cluster assignment for each cell.
 #' Additional fields may be present depending on the \code{method}:
 #' \itemize{
 #' \item For \code{method="multilevel"}, the \code{levels} list contains the clustering result at each level of the algorithm.
 #' A \code{modularity} numeric vector also contains the modularity at each level, the highest of which corresponds to the reported \code{membership}.
-#' \item For \code{method="leiden"}, a \code{quality} numeric scalar containg the quality of the partitioning.
-#' \item For \code{method="walktrap"}, a \code{merges} matrix specifies the pair of cells or clusters that were merged at each step of the algorithm.
-#' A \code{modularity} numeric scalar also contains the modularity of the final partitioning.
+#' \item For \code{method="leiden"}, the \code{quality} number contains the quality of the partitioning.
+#' \item For \code{method="walktrap"}, the \code{merges} matrix specifies the pair of cells or clusters that were merged at each step of the algorithm.
+#' The \code{modularity} number also contains the modularity of the final partitioning.
 #' }
 #'
 #' @author Aaron Lun
@@ -55,12 +69,14 @@
 #' @importFrom methods is
 clusterGraph <- function(
     x,
-    method=c("multilevel", "leiden", "walktrap"),
-    multilevel.resolution=1, 
-    leiden.resolution=1, 
-    leiden.objective=c("modularity", "cpm", "er"),
-    walktrap.steps=4,
-    seed=42
+    method = c("multilevel", "leiden", "walktrap"),
+    seed = NULL,
+    multilevel.resolution = NULL, 
+    multilevel.seed = seed,
+    leiden.resolution = NULL,
+    leiden.seed = seed,
+    leiden.objective = "modularity", 
+    walktrap.steps = NULL
 ) {
     .checkSEX(x, "clusterGraph.se")
     if (is(x, "igraph")) {
@@ -76,10 +92,10 @@ clusterGraph <- function(
 
     method <- match.arg(method)
     if (method == "multilevel") {
-        out <- cluster_multilevel(x, resolution=multilevel.resolution, seed=seed)
+        out <- cluster_multilevel(x, resolution=multilevel.resolution, seed=multilevel.seed)
         out$levels <- lapply(out$levels, function(x) factor(x + 1L))
     } else if (method == "leiden") {
-        out <- cluster_leiden(x, objective=match.arg(leiden.objective), resolution=leiden.resolution, seed=seed)
+        out <- cluster_leiden(x, objective=leiden.objective, resolution=leiden.resolution, seed=leiden.seed)
     } else if (method == "walktrap") {
         out <- cluster_walktrap(x, steps=walktrap.steps)
         out$merges <- out$merges + 1L
@@ -88,3 +104,13 @@ clusterGraph <- function(
     out$membership <- factor(out$membership + 1L)
     out
 }
+
+#' Default parameters for \code{\link{clusterGraph}}
+#' @description Default parameters from the underlying C++ library.
+#' Some of these may be overridden by defaults in the \code{\link{clusterGraph}} function signature.
+#' @return Named list containing default values for various function arguments.
+#' @author Aaron Lun
+#' @examples
+#' clusterGraphDefaults()
+#' @export
+clusterGraphDefaults <- function() cluster_graph_defaults()

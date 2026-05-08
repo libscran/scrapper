@@ -8,11 +8,19 @@
 #' Values are typically expected to be counts.
 #' @param factors A list or data frame (or their equivalents from \pkg{S4Vectors}) containing one or more grouping factors, see \code{\link{combineFactors}}.
 #' @param compute.sum Boolean indicating whether to compute the sum in each group.
+#'
+#' If \code{NULL}, the default value in \code{\link{aggregateAcrossCellsDefaults}} is used.
 #' @param compute.detected Boolean indicating whether to compute the number of cells with detected expression in each group.
+#'
+#' If \code{NULL}, the default value in \code{\link{aggregateAcrossCellsDefaults}} is used.
 #' @param compute.median Boolean indicating whether to compute the median in each group.
+#'
+#' If \code{NULL}, the default value in \code{\link{aggregateAcrossCellsDefaults}} is used.
 #' @param num.threads Integer specifying the number of threads to be used for aggregation.
 #'
-#' @return A list containing:
+#' If \code{NULL}, the default value in \code{\link{aggregateAcrossCellsDefaults}} is used.
+#'
+#' @return List containing:
 #' \itemize{
 #' \item \code{sums}, a numeric matrix where each row corresponds to a gene and each column corresponds to a unique combination of levels from \code{factors}.
 #' Each entry contains the summed expression across all cells with that combination. 
@@ -60,10 +68,10 @@
 aggregateAcrossCells <- function(
     x,
     factors,
-    compute.sum = TRUE,
-    compute.detected = TRUE,
-    compute.median = FALSE,
-    num.threads = 1
+    compute.sum = NULL,
+    compute.detected = NULL,
+    compute.median = NULL,
+    num.threads = NULL
 ) {
     .checkSEX(x, "aggregateAcrossCells.se")
 
@@ -90,3 +98,13 @@ aggregateAcrossCells <- function(
 
     output
 }
+
+#' Default parameters for \code{\link{aggregateAcrossCells}}
+#' @description Default parameters from the underlying C++ library.
+#' These may be overridden by defaults in the \code{\link{aggregateAcrossCells}} function signature.
+#' @return Named list containing default values for various function arguments.
+#' @author Aaron Lun
+#' @examples
+#' aggregateAcrossCellsDefaults()
+#' @export
+aggregateAcrossCellsDefaults <- function() aggregate_across_cells_defaults()

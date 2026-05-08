@@ -4,7 +4,13 @@
 \alias{aggregateAcrossGenes}
 \title{Aggregate expression across genes}
 \usage{
-aggregateAcrossGenes(x, sets, average = FALSE, convert = TRUE, num.threads = 1)
+aggregateAcrossGenes(
+  x,
+  sets,
+  average = NULL,
+  convert = TRUE,
+  num.threads = NULL
+)
 }
 \arguments{
 \item{x}{A matrix-like object where rows correspond to genes or genomic features and columns correspond to cells.
@@ -21,15 +27,19 @@ The second vector should be numeric and of the same length as the first vector, 
 If duplicate genes are present, only the first occurrence is used.
 If the first vector contains gene names not present in \code{x}, those genes are ignored.}
 
-\item{average}{Logical scalar indicating whether to compute the average rather than the sum.}
+\item{average}{Boolean indicating whether to compute the average rather than the sum.
 
-\item{convert}{Logical scalar indicating whether to convert gene identities to non-duplicate row indices in each entry of \code{sets}.
+If \code{NULL}, the default value in \code{\link{aggregateAcrossGenesDefaults}} is used.}
+
+\item{convert}{Boolean indicating whether to convert gene identities to non-duplicate row indices in each entry of \code{sets}.
 Can be set to \code{FALSE} for greater efficiency if the \code{sets} already contains non-duplicated integer vectors.}
 
-\item{num.threads}{Integer specifying the number of threads to be used for aggregation.}
+\item{num.threads}{Integer specifying the number of threads to be used for aggregation.
+
+If \code{NULL}, the default value in \code{\link{aggregateAcrossGenesDefaults}} is used.}
 }
 \value{
-A list of length equal to that of \code{sets}.
+List of length equal to that of \code{sets}.
 Each entry is a numeric vector of length equal to the number of columns in \code{x}, 
 containing the (weighted) sum/mean of expression values for the corresponding set across all cells.
 }

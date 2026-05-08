@@ -8,14 +8,10 @@
 
 #include "utils_other.h"
 #include "utils_block.h"
+#include "utils_norm.h"
 
 //[[Rcpp::export(rng=false)]]
-Rcpp::List center_spike_in_factors(
-    Rcpp::NumericVector endogenous,
-    Rcpp::List spike_ins,
-    Rcpp::Nullable<Rcpp::IntegerVector> block,
-    bool lowest
-) {
+Rcpp::List center_spike_in_factors(Rcpp::NumericVector endogenous, Rcpp::List spike_ins, Rcpp::Nullable<Rcpp::IntegerVector> block, Rcpp::RObject mode) {
     auto block_info = MaybeBlock(block);
     auto ptr = block_info.get();
     const auto ncells = endogenous.size();
@@ -42,8 +38,9 @@ Rcpp::List center_spike_in_factors(
         }
 
         scran_norm::CenterSpikeInFactorsBlockedOptions opt;
-        opt.block_mode = (lowest ? scran_norm::CenterBlockMode::LOWEST : scran_norm::CenterBlockMode::PER_BLOCK);
         opt.ignore_invalid = true;
+        set_block_mode(mode, opt.block_mode);
+
         scran_norm::center_spike_in_factors_blocked(
             sanisizer::cast<std::size_t>(ncells),
             static_cast<double*>(e_output.begin()),
@@ -67,4 +64,16 @@ Rcpp::List center_spike_in_factors(
         Rcpp::Named("endogenous") = e_output,
         Rcpp::Named("spike.ins") = Rcpp::List(s_output.begin(), s_output.end())
     );
+}
+
+//[[Rcpp::export(rng=false)]]
+Rcpp::List center_spike_in_factors_defaults() {
+    Rcpp::List output;
+    scran_norm::CenterSpikeInFactorsBlockedOptions opt;
+    if (opt.block_mode == scran_norm::CenterBlockMode::LOWEST) {
+        output["mode"] = "lowest";
+    } else {
+        throw std::runtime_error("unexpected mode default for centerSpikeInFactors");
+    }
+    return output;
 }

@@ -7,17 +7,17 @@
 scoreGeneSet(
   x,
   set,
-  rank = 1,
-  scale = FALSE,
+  rank = NULL,
+  scale = NULL,
   block = NULL,
-  block.weight.policy = c("variable", "equal", "none"),
-  variable.block.weight = c(0, 1000),
+  block.weight.policy = NULL,
+  variable.block.weight = NULL,
   extra.work = NULL,
-  iterations = 1000,
-  tolerance = 1e-05,
-  seed = 5489,
-  realized = TRUE,
-  num.threads = 1
+  iterations = NULL,
+  tolerance = NULL,
+  seed = NULL,
+  realized = NULL,
+  num.threads = NULL
 )
 }
 \arguments{
@@ -30,12 +30,16 @@ For integer and character vectors, duplicate entries are ignored.
 For a character vector, any string not present in \code{rownames(x)} is ignored.}
 
 \item{rank}{Integer scalar specifying the rank of the approximation.
-The default value of 1 assumes that each gene set only describes a single coordinated biological function.}
+The default value of 1 assumes that each gene set only describes a single coordinated biological function.
+
+If \code{NULL}, the default value in \code{\link{scoreGeneSetDefaults}} is used.}
 
 \item{scale}{Logical scalar indicating whether to scale all genes to have the same variance.
 This ensures that each gene contributes equally to the PCA, favoring consistent variation across many genes rather than large variation in a few genes.
 If \code{block} is specified, each gene's variance is calculated as a weighted sum of the variances from each block. 
-Genes with zero variance are ignored.}
+Genes with zero variance are ignored.
+
+If \code{NULL}, the default value in \code{\link{scoreGeneSetDefaults}} is used.}
 
 \item{block}{Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{x}.
 The PCA will be performed on the residuals after regressing out the block effect, ensuring that differences between block do not dominate the variation in the dataset.
@@ -43,28 +47,45 @@ Alternatively \code{NULL} if all cells are from the same block.}
 
 \item{block.weight.policy}{String specifying the policy to use for weighting the contribution of different blocks to the PCA.
 See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
-Only used if \code{block} is not \code{NULL}.}
+
+If \code{NULL}, the default value in \code{\link{scoreGeneSetDefaults}} is used.
+
+This argument is only used if \code{block} is not \code{NULL}.}
 
 \item{variable.block.weight}{Numeric vector of length 2, specifying the parameters for variable block weighting.
 See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
-Only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.}
+
+If \code{NULL}, the default value in \code{\link{scoreGeneSetDefaults}} is used.
+
+This argument is only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.}
 
 \item{extra.work}{Integer scalar specifying the number of extra dimensions for the IRLBA workspace.
 Larger values improve accuracy at the cost of compute time.
-If \code{NULL}, it defaults to the larger of 7 and \code{number}.}
+
+If \code{NULL}, this defaults to the larger of 7 and \code{number}.}
 
 \item{iterations}{Integer scalar specifying the maximum number of restart iterations for IRLBA.
-Larger values improve accuracy at the cost of compute time.}
+Larger values improve accuracy at the cost of compute time.
+
+If \code{NULL}, the default value in \code{\link{scoreGeneSetDefaults}} is used.}
 
 \item{tolerance}{Number specifying the tolerance on the approximation error of the singular triplets, to determine IRLBA convergence.
-Lower values improve accuracy at the cost of compute time.}
+Lower values improve accuracy at the cost of compute time.
 
-\item{seed}{Integer scalar specifying the seed for the initial random vector in IRLBA.}
+If \code{NULL}, the default value in \code{\link{scoreGeneSetDefaults}} is used.}
+
+\item{seed}{Integer scalar specifying the seed for the initial random vector in IRLBA.
+
+If \code{NULL}, the default value in \code{\link{scoreGeneSetDefaults}} is used.}
 
 \item{realized}{Logical scalar indicating whether to realize \code{x} into an optimal memory layout for IRLBA.
-This speeds up computation at the cost of increased memory usage.}
+This speeds up computation at the cost of increased memory usage.
 
-\item{num.threads}{Number of threads to use.}
+If \code{NULL}, the default value in \code{\link{scoreGeneSetDefaults}} is used.}
+
+\item{num.threads}{Number of threads to use.
+
+If \code{NULL}, the default value in \code{\link{scoreGeneSetDefaults}} is used.}
 }
 \value{
 List containing:

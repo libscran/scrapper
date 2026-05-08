@@ -9,7 +9,7 @@
 #include "utils_other.h"
 
 //[[Rcpp::export(rng=false)]]
-Rcpp::NumericVector test_enrichment(Rcpp::IntegerVector overlap, int num_interest, Rcpp::IntegerVector set_sizes, int universe, bool log, int num_threads) {
+Rcpp::NumericVector test_enrichment(Rcpp::IntegerVector overlap, int num_interest, Rcpp::IntegerVector set_sizes, int universe, Rcpp::RObject log, int num_threads) {
     const auto nsets = overlap.size();
     if (!sanisizer::is_equal(nsets, set_sizes.size())) {
         throw std::runtime_error("'overlap' and 'set_sizes' should have the same length");
@@ -17,7 +17,7 @@ Rcpp::NumericVector test_enrichment(Rcpp::IntegerVector overlap, int num_interes
 
     phyper::Options opt;
     opt.upper_tail = true;
-    opt.log = log;
+    set_bool(log, opt.log, "log");
 
     auto output = sanisizer::create<Rcpp::NumericVector>(nsets);
     double* optr = output.begin(); // avoid Rcpp inside the parallel section.
@@ -36,5 +36,13 @@ Rcpp::NumericVector test_enrichment(Rcpp::IntegerVector overlap, int num_interes
         }
     });
 
+    return output;
+}
+
+//[[Rcpp::export(rng=false)]]
+Rcpp::List test_enrichment_defaults() {
+    Rcpp::List output;
+    phyper::Options opt;
+    output["log"] = opt.log;
     return output;
 }

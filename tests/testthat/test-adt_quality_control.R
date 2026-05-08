@@ -65,3 +65,11 @@ test_that("suggestAdtQcThresholds works as expected with blocking", {
     )
     expect_identical(observed[last], last_observed)
 })
+
+test_that("defaults works as expected", {
+    def <- computeAdtQcMetricsDefaults()
+    expect_true(all(names(def) %in% names(formals(computeAdtQcMetrics))))
+
+    def <- suggestAdtQcThresholdsDefaults()
+    expect_true(all(names(def) %in% names(formals(suggestAdtQcThresholds))))
+})

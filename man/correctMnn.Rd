@@ -7,9 +7,9 @@
 correctMnn(
   x,
   block,
-  num.neighbors = 15,
-  num.steps = 1,
-  merge.policy = c("rss", "size", "variance", "input"),
+  num.neighbors = NULL,
+  num.steps = NULL,
+  merge.policy = NULL,
   num.mads = NULL,
   robust.iterations = NULL,
   robust.trim = NULL,
@@ -17,7 +17,7 @@ correctMnn(
   order = NULL,
   reference.policy = NULL,
   BNPARAM = AnnoyParam(),
-  num.threads = 1
+  num.threads = NULL
 )
 }
 \arguments{
@@ -26,12 +26,16 @@ typically containing coordinates in a low-dimensional embedding (e.g., from \cod
 
 \item{block}{Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{x}.}
 
-\item{num.neighbors}{Integer scalar specifying the number of neighbors in the various search steps.
+\item{num.neighbors}{Integer specifying the number of neighbors in the various search steps.
 Larger values improve the stability of the correction by increasing the number of MNN pairs and including more observations in each center of mass.
-However, this comes at the cost of reduced resolution when matching subpopulations across batches.}
+However, this comes at the cost of reduced resolution when matching subpopulations across batches.
 
-\item{num.steps}{Integer scalar specifying the number of steps for the recursive neighbor search to compute the center of mass.
-Larger values mitigate the kissing effect but increase the risk of including inappropriately distant subpopulations into the center of mass.}
+If \code{NULL}, the default value in \code{\link{correctMnnDefaults}} is used.}
+
+\item{num.steps}{Integer specifying the number of steps for the recursive neighbor search to compute the center of mass.
+Larger values mitigate the kissing effect but increase the risk of including inappropriately distant subpopulations into the center of mass.
+
+If \code{NULL}, the default value in \code{\link{correctMnnDefaults}} is used.}
 
 \item{merge.policy}{String specifying the policy to use to choose the order of batches to merge.
 \itemize{
@@ -46,7 +50,8 @@ So, the batch with the lowest variance is corrected first while the batch with t
 The aim is to lower compute time by encouraging more observations to be corrected to the most variable batch, thus avoid reprocessing in later merge steps.
 \item \code{"rss"} will merge batches in order of increasing residual sum of squares (RSS).
 This is effectively a compromise between \code{"variance"} and \code{"size"}.
-}}
+}
+If \code{NULL}, the default value in \code{\link{correctMnnDefaults}} is used.}
 
 \item{num.mads}{Deprecated and ignored.}
 
@@ -62,10 +67,16 @@ This is effectively a compromise between \code{"variance"} and \code{"size"}.
 
 \item{BNPARAM}{A \link[BiocNeighbors]{BiocNeighborParam} object specifying the nearest-neighbor algorithm to use.}
 
-\item{num.threads}{Integer scalar specifying the number of threads to use.}
+\item{num.threads}{Integer specifying the number of threads to use.
+
+If \code{NULL}, the default value in \code{\link{correctMnnDefaults}} is used.}
 }
 \value{
-List containing \code{corrected}, a numeric matrix of the same dimensions as \code{x}, containing the corrected values.
+List containing:
+\itemize{
+\item \code{corrected}, a numeric matrix of the same dimensions as \code{x}.
+This contains the MNN-corrected coordinates for each cell (column) across dimensions (rows).
+}
 }
 \description{
 Apply mutual nearest neighbor (MNN) correction to remove batch effects from a low-dimensional embedding.

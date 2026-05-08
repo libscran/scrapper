@@ -8,3 +8,8 @@ test_that("computeBlockWeights works as expected", {
     expect_equal(computeBlockWeights(sizes, block.weight.policy="size"), sizes)
     expect_equal(computeBlockWeights(sizes, block.weight.policy="none"), sizes)
 })
+
+test_that("defaults work as expected", {
+    def <- computeBlockWeightsDefaults()
+    expect_true(all(names(def) %in% names(formals(computeBlockWeights))))
+})

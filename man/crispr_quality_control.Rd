@@ -7,9 +7,14 @@
 \alias{filterCrisprQcMetrics}
 \title{Quality control for CRISPR count data}
 \usage{
-computeCrisprQcMetrics(x, num.threads = 1)
+computeCrisprQcMetrics(x, num.threads = NULL)
 
-suggestCrisprQcThresholds(metrics, block = NULL, num.mads = 3)
+suggestCrisprQcThresholds(
+  metrics,
+  block = NULL,
+  num.mads = NULL,
+  max.value.num.mads = num.mads
+)
 
 filterCrisprQcMetrics(thresholds, metrics, block = NULL)
 }
@@ -17,7 +22,8 @@ filterCrisprQcMetrics(thresholds, metrics, block = NULL)
 \item{x}{A matrix-like object where rows are CRISPRs and columns are cells.
 Values are expected to be counts.}
 
-\item{num.threads}{Integer scalar specifying the number of threads to use.}
+\item{num.threads}{Integer scalar specifying the number of threads to use.
+If \code{NULL}, the default value in \code{\link{computeCrisprQcMetricsDefaults}} is used.}
 
 \item{metrics}{\link[S4Vectors]{DataFrame} of per-cell QC metrics.
 This should have the same structure as the return value of \code{computeCrisprQcMetrics}.}
@@ -28,6 +34,9 @@ Alternatively \code{NULL} if all cells are from the same block.
 For \code{filterCrisprQcMetrics}, a blocking factor should be provided if \code{block} was used to construct \code{thresholds}.}
 
 \item{num.mads}{Number of median from the median, to define the threshold for outliers in each metric.}
+
+\item{max.value.num.mads}{Number of median from the median, to define the threshold for the maximum count in each cell.
+If \code{NULL}, the default value in \code{\link{suggestCrisprQcThresholdsDefaults}} is used.}
 
 \item{thresholds}{List with the same structure as produced by \code{suggestCrisprQcThresholds}.}
 }

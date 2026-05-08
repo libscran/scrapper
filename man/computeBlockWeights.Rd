@@ -7,7 +7,7 @@
 computeBlockWeights(
   sizes,
   block.weight.policy = c("variable", "equal", "size", "none"),
-  variable.block.weight = c(0, 1000)
+  variable.block.weight = NULL
 )
 }
 \arguments{
@@ -27,7 +27,10 @@ This avoids outsized contributions from very large blocks.
 
 \item{variable.block.weight}{Numeric vector of length 2, specifying the parameters for variable block weighting.
 The first and second values are used as the lower and upper bounds, respectively, for the variable weight calculation.
-Only used if \code{block.weight.policy = "variable"}.}
+
+If \code{NULL}, the default value in \code{computeBlockWeightsDefaults} is used.
+
+This argument is only used if \code{block.weight.policy = "variable"}.}
 }
 \value{
 Numeric vector containing the relative block weights.

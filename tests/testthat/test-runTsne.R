@@ -22,7 +22,12 @@ test_that("runTSNE works in basic mode", {
     res <- findKNN(x, transposed=TRUE, k=30, get.distance="transposed", get.index="transposed", BNPARAM=AnnoyParam())
     expect_warning(runTsne(res), "not consistent with 'num.neighbors'")
     expect_warning(runTsne(res, num.neighbors=30), NA)
-    expect_warning(runTsne(res, num.neighbors=NULL), NA)
+    expect_warning(runTsne(res, num.neighbors=NA), NA)
 
     expect_error(runTsne(SummarizedExperiment::SummarizedExperiment(x)), "not supported")
+})
+
+test_that("defaults work correctly", {
+    def <- runTsneDefaults()
+    expect_true(all(names(def) %in% names(formals(runTsne))))
 })

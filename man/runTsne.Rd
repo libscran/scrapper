@@ -7,20 +7,20 @@
 \usage{
 runTsne(
   x,
-  perplexity = 30,
-  num.neighbors = tsnePerplexityToNeighbors(perplexity),
-  theta = 1,
-  early.exaggeration.iterations = 250,
-  exaggeration.factor = 12,
-  momentum.switch.iterations = 250,
-  start.momentum = 0.5,
-  final.momentum = 0.8,
-  eta = 200,
+  perplexity = NULL,
+  num.neighbors = NULL,
+  theta = NULL,
+  early.exaggeration.iterations = NULL,
+  exaggeration.factor = NULL,
+  momentum.switch.iterations = NULL,
+  start.momentum = NULL,
+  final.momentum = NULL,
+  eta = NULL,
   max.depth = 7,
-  leaf.approximation = FALSE,
-  max.iterations = 500,
+  leaf.approximation = NULL,
+  max.iterations = NULL,
   seed = 42,
-  num.threads = 1,
+  num.threads = NULL,
   BNPARAM = AnnoyParam()
 )
 
@@ -35,53 +35,82 @@ This should contain \code{index}, an integer matrix where rows are neighbors and
 and \code{distance}, a numeric matrix of the same dimensions containing the distances to each neighbor.
 Each column contains 1-based indices for the nearest neighbors of the corresponding cell, ordered by increasing distance.
 The number of neighbors should be the same as \code{num.neighbors}, otherwise a warning is raised.
+Generally, it is expected that the number of neighbors is defined as \code{tsnePerplexityToNeighbors(perplexity)}.
 
 Alternatively, an index constructed by \code{\link[BiocNeighbors]{buildIndex}}.}
 
 \item{perplexity}{Numeric scalar specifying the perplexity to use in the t-SNE algorithm.
-Higher perplexities will focus on global structure, at the cost of increased runtime and decreased local resolution.}
+Higher perplexities will focus on global structure, at the cost of increased runtime and decreased local resolution.
 
-\item{num.neighbors}{Integer scalar specifying the number of neighbors, typically derived from \code{perplexity}.
-If \code{x} contains pre-computed neighbor search results with a different number of neighbors than \code{num.neighbors}, an error is thrown;
-this can be suppressed by setting \code{num.neighbors = NULL}.}
+If \code{NULL}, the default value in \code{\link{runTsneDefaults}} is used.}
 
-\item{theta}{Numeric scalar specifying the approximation level for the Barnes-Hut calculation of repulsive forces.
+\item{num.neighbors}{Integer scalar specifying the number of neighbors.
+More neighbors are required for higher \code{perplexity} values.
+
+If \code{x} contains pre-computed neighbor search results with a different number of neighbors than \code{num.neighbors}, a warning is raised.
+This can be suppressed by setting \code{num.neighbors = NA}, though the better solution is to perform the search with the number of neighbors derived from \code{perplexity}.
+
+If \code{NULL}, this is set to \code{tsnePerplexityToNeighbors(perplexity)}.}
+
+\item{theta}{Number specifying the approximation level for the Barnes-Hut calculation of repulsive forces.
 Lower values increase accuracy at the cost of increased compute time.
-All values should be non-negative.}
+Any value should be non-negative.
+
+If \code{NULL}, the default value in \code{\link{runTsneDefaults}} is used.}
 
 \item{early.exaggeration.iterations}{Integer scalar specifying the number of iterations of the early exaggeration phase,
 where clusters are artificially compacted to leave more empty space so that cells can easily relocate to find a good global organization.
-Larger values improve convergence within this phase at the cost of reducing the remaining iterations in \code{max.iterations}.}
+Larger values improve convergence within this phase at the cost of reducing the remaining iterations in \code{max.iterations}.
+
+If \code{NULL}, the default value in \code{\link{runTsneDefaults}} is used.}
 
 \item{exaggeration.factor}{Numeric scalar containing the exaggeration factor for the early exaggeration phase (see \code{early.exaggeration.iterations}).
-Larger values increase the attraction between nearest neighbors to favor local structure.}
+Larger values increase the attraction between nearest neighbors to favor local structure.
+
+If \code{NULL}, the default value in \code{\link{runTsneDefaults}} is used.}
 
 \item{momentum.switch.iterations}{Integer scalar specifying the number of iterations to perform before switching from the starting momentum to the final momentum.
-Higher momentums can improve convergence by increasing the step size and smoothing over local oscillations, at the risk of potentially skipping over relevant minima.}
+Higher momentums can improve convergence by increasing the step size and smoothing over local oscillations, at the risk of potentially skipping over relevant minima.
+
+If \code{NULL}, the default value in \code{\link{runTsneDefaults}} is used.}
 
 \item{start.momentum}{Numeric scalar containing the starting momentum, to be used in the iterations before the momentum switch at \code{momentum.switch.iterations}.
-This is usually lower than \code{final.momentum} to avoid skipping over suitable local minima.}
+This is usually lower than \code{final.momentum} to avoid skipping over suitable local minima. 
+
+If \code{NULL}, the default value in \code{\link{runTsneDefaults}} is used.}
 
 \item{final.momentum}{Numeric scalar containing the final momentum, to be used in the iterations after the momentum switch at \code{momentum.switch.iterations}.
-This is usually higher than \code{start.momentum} to accelerate convergence to the local minima once the observations are moderately well-organized.}
+This is usually higher than \code{start.momentum} to accelerate convergence to the local minima once the observations are moderately well-organized.
+
+If \code{NULL}, the default value in \code{\link{runTsneDefaults}} is used.}
 
 \item{eta}{Numeric scalar containing the learning rate, used to scale the updates for each cell.
-Larger values can speed up convergence at the cost of skipping over local minima.}
+Larger values can speed up convergence at the cost of skipping over local minima. 
+
+If \code{NULL}, the default value in \code{\link{runTsneDefaults}} is used.}
 
 \item{max.depth}{Integer scalar specifying the maximum depth of the Barnes-Hut quadtree.
 If neighboring cells cannot be separated before the maximum depth is reached, they will be assigned to the same leaf node of the quadtree.
-Smaller values (7-10) improve speed by bounding the recursion depth at the cost of accuracy.}
+Smaller values (7-10) improve speed by bounding the recursion depth at the cost of accuracy.
+
+If \code{NULL}, the default value in \code{\link{runTsneDefaults}} is used.}
 
 \item{leaf.approximation}{Logical scalar indicating whether to use the \dQuote{leaf approximation}.
 If \code{TRUE}, repulsive forces are computed between leaf nodes and re-used across all cells assigned to that leaf node. 
-This sacrifices some accuracy for greater speed, assuming that \code{max.depth} is small enough for multiple cells to be assigned to the same leaf.}
+This sacrifices some accuracy for greater speed, assuming that \code{max.depth} is small enough for multiple cells to be assigned to the same leaf.
+
+If \code{NULL}, the default value in \code{\link{runTsneDefaults}} is used.}
 
 \item{max.iterations}{Integer scalar specifying the maximum number of iterations to perform.
-Larger values improve convergence at the cost of compute time.}
+Larger values improve convergence at the cost of compute time.
+
+If \code{NULL}, the default value in \code{\link{runTsneDefaults}} is used.}
 
 \item{seed}{Integer scalar specifying the seed to use for generating the initial coordinates.}
 
-\item{num.threads}{Integer scalar specifying the number of threads to use.}
+\item{num.threads}{Integer scalar specifying the number of threads to use.
+
+If \code{NULL}, the default value in \code{\link{runTsneDefaults}} is used.}
 
 \item{BNPARAM}{A \link[BiocNeighbors]{BiocNeighborParam} object specifying the algorithm to use.
 Only used if \code{x} is not a prebuilt index or a list of existing nearest-neighbor search results.}

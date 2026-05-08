@@ -7,13 +7,19 @@
 #' @param size.factors Numeric vector of size factors for all cells.
 #' It is expected that these have already been centered, e.g., with \code{\link{centerSizeFactors}}.
 #' Invalid size factors (e.g., non-positive, non-finite) will be ignored.
-#' @param quantile Numeric scalar specifying the quantile to use for finding the smallest/largest size factors.
+#' @param quantile Number specifying the quantile to use for finding the smallest/largest size factors.
 #' Setting this to zero will use the observed minimum and maximum, though in practice, this is usually too sensitive to outliers.
-#' The default is to take the 5th and 95th percentile to obtain a range that captures most of the distribution.
-#' @param max.bias Numeric scalar specifying the maximum allowed bias.
+#'
+#' If \code{NULL}, the default value in \code{\link{choosePseudoCountDefaults}} is used.
+#' The default uses the 5th and 95th percentile to obtain a range that captures most of the distribution.
+#' @param max.bias Number specifying the maximum allowed bias.
 #' This is the maximum absolute value of any spurious log2-fold change between the cells with the smallest and largest size factors.
-#' @param min.value Numeric scalar specifying the minimum value for the pseudo-count.
-#' Defaults to 1 to stabilize near-zero normalized expression values, otherwise these manifest as avoid large negative values.
+#'
+#' If \code{NULL}, the default value in \code{\link{choosePseudoCountDefaults}} is used.
+#' @param min.value Number specifying the minimum value for the pseudo-count.
+#'
+#' If \code{NULL}, the default value in \code{\link{choosePseudoCountDefaults}} is used.
+#' The default of 1 will stabilize near-zero normalized expression values, otherwise these manifest as avoid large negative values.
 #'
 #' @return A choice of pseudo-count for \code{\link{normalizeCounts}}.
 #'
@@ -34,6 +40,16 @@
 #' choosePseudoCount(sf, max.bias=0.5)
 #'
 #' @export
-choosePseudoCount <- function(size.factors, quantile = 0.05, max.bias = 1, min.value = 1) {
+choosePseudoCount <- function(size.factors, quantile = NULL, max.bias = NULL, min.value = NULL) {
     choose_pseudo_count(size.factors, quantile, max.bias, min.value)
 }
+
+#' Default parameters for \code{\link{choosePseudoCount}}
+#' @description Default parameters from the underlying C++ library.
+#' These may be overridden by defaults in the \code{\link{choosePseudoCount}} function signature.
+#' @return Named list containing default values for various function arguments.
+#' @author Aaron Lun
+#' @examples
+#' choosePseudoCountDefaults()
+#' @export
+choosePseudoCountDefaults <- function() choose_pseudo_count_defaults()

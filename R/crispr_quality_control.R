@@ -6,6 +6,7 @@
 #' @param x A matrix-like object where rows are CRISPRs and columns are cells.
 #' Values are expected to be counts.
 #' @param num.threads Integer scalar specifying the number of threads to use.
+#' If \code{NULL}, the default value in \code{\link{computeCrisprQcMetricsDefaults}} is used.
 #' @param metrics \link[S4Vectors]{DataFrame} of per-cell QC metrics.
 #' This should have the same structure as the return value of \code{computeCrisprQcMetrics}.
 #' @param block Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{metrics}.
@@ -13,6 +14,8 @@
 #'
 #' For \code{filterCrisprQcMetrics}, a blocking factor should be provided if \code{block} was used to construct \code{thresholds}. 
 #' @param num.mads Number of median from the median, to define the threshold for outliers in each metric.
+#' @param max.value.num.mads Number of median from the median, to define the threshold for the maximum count in each cell.
+#' If \code{NULL}, the default value in \code{\link{suggestCrisprQcThresholdsDefaults}} is used.
 #' @param thresholds List with the same structure as produced by \code{suggestCrisprQcThresholds}.
 #'
 #' @return For \code{computeCrisprQcMetrics}, a \link[S4Vectors]{DataFrame} is returned with one row per cell in \code{x}.
@@ -93,7 +96,7 @@
 #' @export
 #' @name crispr_quality_control
 #' @importFrom S4Vectors DataFrame
-computeCrisprQcMetrics <- function(x, num.threads = 1) {
+computeCrisprQcMetrics <- function(x, num.threads = NULL) {
     .checkSEX(x, "quickCrisprQc.se")
     y <- initializeCpp(x, .check.na=FALSE)
     output <- compute_crispr_qc_metrics(y, num_threads=num.threads)
@@ -103,11 +106,11 @@ computeCrisprQcMetrics <- function(x, num.threads = 1) {
 
 #' @export
 #' @rdname crispr_quality_control
-suggestCrisprQcThresholds <- function(metrics, block=NULL, num.mads=3) {
+suggestCrisprQcThresholds <- function(metrics, block = NULL, num.mads = NULL, max.value.num.mads = num.mads) {
     block <- .transformFactor(block)
     metrics <- as.list(metrics)
     metrics$max.index <- metrics$max.index - 1L # restore 0-based indexing.
-    thresholds <- suggest_crispr_qc_thresholds(metrics, block=block$index, num_mads=num.mads)
+    thresholds <- suggest_crispr_qc_thresholds(metrics, block=block$index, max_value_num_mads = max.value.num.mads)
 
     if (!is.null(block$names)) {
         names(thresholds$max.value) <- block$names
@@ -126,3 +129,19 @@ filterCrisprQcMetrics <- function(thresholds, metrics, block=NULL) {
     .checkThresholdNames(thresholds, c("max.value"), NULL, NULL)
     filter_crispr_qc_metrics(thresholds, metrics, block=block)
 }
+
+#' Default parameters for CRISPR quality control
+#' @description Default parameters from the underlying C++ library.
+#' These may be overridden by defaults in each function's signature.
+#' @return Named list containing default values for the various function arguments.
+#' @author Aaron Lun
+#' @examples
+#' computeCrisprQcMetricsDefaults()
+#' suggestCrisprQcThresholdsDefaults()
+#' @export
+#' @name crispr_quality_control_defaults
+computeCrisprQcMetricsDefaults <- function() compute_crispr_qc_metrics_defaults()
+
+#' @export
+#' @rdname crispr_quality_control_defaults
+suggestCrisprQcThresholdsDefaults <- function() suggest_crispr_qc_thresholds_defaults()

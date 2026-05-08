@@ -13,13 +13,13 @@ SEXP summarize_effects(
     int num_genes,
     int num_groups,
     Rcpp::NumericVector effects,
-    bool compute_summary_min,
-    bool compute_summary_mean,
-    bool compute_summary_median,
-    bool compute_summary_max,
-    Rcpp::Nullable<Rcpp::NumericVector> compute_summary_quantiles,
-    bool compute_summary_min_rank,
-    int num_threads
+    Rcpp::RObject compute_summary_min,
+    Rcpp::RObject compute_summary_mean,
+    Rcpp::RObject compute_summary_median,
+    Rcpp::RObject compute_summary_max,
+    Rcpp::RObject compute_summary_quantiles,
+    Rcpp::RObject compute_summary_min_rank,
+    Rcpp::RObject num_threads
 ) {
     const auto expected = sanisizer::product<std::size_t>(num_groups, num_groups, num_genes);
     if (!sanisizer::is_equal(effects.size(), expected)) {
@@ -27,8 +27,14 @@ SEXP summarize_effects(
     }
 
     scran_markers::SummarizeEffectsOptions opt;
-    opt.num_threads = num_threads;
-    const auto num_quantiles = setup_quantile_options(compute_summary_quantiles, opt.compute_quantiles);
+    set_bool(compute_summary_min, opt.compute_min, "compute.summary.min");
+    set_bool(compute_summary_mean, opt.compute_mean, "compute.summary.mean");
+    set_bool(compute_summary_median, opt.compute_median, "compute.summary.median");
+    set_bool(compute_summary_median, opt.compute_median, "compute.summary.median");
+    set_bool(compute_summary_max, opt.compute_max, "compute.summary.max");
+    const auto num_quantiles = setup_summary_quantiles(compute_summary_quantiles, opt.compute_quantiles);
+    set_bool(compute_summary_min_rank, opt.compute_min_rank, "compute.summary.min.rank");
+    set_integer(num_threads, opt.num_threads, "num.threads");
 
     std::vector<Rcpp::NumericVector> min, mean, median, max;
     std::vector<std::vector<Rcpp::NumericVector> > quant;
@@ -39,17 +45,17 @@ SEXP summarize_effects(
         num_groups,
         num_genes,
         groupwise,
-        compute_summary_min,
+        opt.compute_min,
         min,
-        compute_summary_mean,
+        opt.compute_mean,
         mean,
-        compute_summary_median,
+        opt.compute_median,
         median,
-        compute_summary_max,
+        opt.compute_max,
         max,
         num_quantiles,
         quant,
-        compute_summary_min_rank,
+        opt.compute_min_rank,
         mr
     );
 
@@ -63,17 +69,35 @@ SEXP summarize_effects(
 
     return format_summary_output(
         num_groups,
-        compute_summary_min,
+        opt.compute_min,
         min,
-        compute_summary_mean,
+        opt.compute_mean,
         mean,
-        compute_summary_median,
+        opt.compute_median,
         median,
-        compute_summary_max,
+        opt.compute_max,
         max,
         opt.compute_quantiles.has_value(),
         quant,
-        compute_summary_min_rank,
+        opt.compute_min_rank,
         mr
     );
+}
+
+//[[Rcpp::export(rng=false)]]
+Rcpp::List summarize_effects_defaults() {
+    Rcpp::List output;
+    scran_markers::SummarizeEffectsOptions opt;
+    output["compute.summary.min"] = opt.compute_min;
+    output["compute.summary.mean"] = opt.compute_mean;
+    output["compute.summary.median"] = opt.compute_median;
+    output["compute.summary.max"] = opt.compute_max;
+    if (opt.compute_quantiles.has_value()) {
+        throw std::runtime_error("unexpected compute.summary.quantiles default for summarizeEffects");
+    } else {
+        output["compute.summary.quantiles"] = R_NilValue;
+    }
+    output["compute.summary.min.rank"] = opt.compute_min_rank;
+    output["num.threads"] = opt.num_threads;
+    return output;
 }

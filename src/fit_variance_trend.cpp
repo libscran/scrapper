@@ -6,28 +6,30 @@
 #include "scran_variances/scran_variances.hpp"
 #include "sanisizer/sanisizer.hpp"
 
+#include "utils_other.h"
+
 //[[Rcpp::export(rng=false)]]
 Rcpp::List fit_variance_trend(
     Rcpp::NumericVector means,
     Rcpp::NumericVector variances,
-    bool mean_filter,
-    double min_mean,
-    bool transform,
-    double span,
-    bool use_min_width,
-    double min_width,
-    int min_window_count,
-    int num_threads)
-{
+    Rcpp::RObject mean_filter,
+    Rcpp::RObject min_mean,
+    Rcpp::RObject transform,
+    Rcpp::RObject span,
+    Rcpp::RObject use_min_width,
+    Rcpp::RObject min_width,
+    Rcpp::RObject min_window_count,
+    Rcpp::RObject num_threads
+) {
     scran_variances::FitVarianceTrendOptions opt;
-    opt.mean_filter = mean_filter;
-    opt.minimum_mean = min_mean;
-    opt.transform = transform;
-    opt.span = span;
-    opt.use_minimum_width = use_min_width;
-    opt.minimum_width = min_width;
-    opt.minimum_window_count = min_window_count;
-    opt.num_threads = num_threads;
+    set_bool(mean_filter, opt.mean_filter, "mean.filter");
+    set_number(min_mean, opt.minimum_mean, "min.mean");
+    set_bool(transform, opt.transform, "transform");
+    set_number(span, opt.span, "span");
+    set_bool(use_min_width, opt.use_minimum_width, "use.min.width");
+    set_number(min_width, opt.minimum_width, "min.width");
+    set_integer(min_window_count, opt.minimum_window_count, "min.window.count");
+    set_integer(num_threads, opt.num_threads, "num.threads");
 
     const auto n = means.size();
     if (!sanisizer::is_equal(n, variances.size())) {
@@ -51,4 +53,19 @@ Rcpp::List fit_variance_trend(
         Rcpp::Named("fitted") = fitted,
         Rcpp::Named("residuals") = residuals
     );
+}
+
+//[[Rcpp::export(rng=false)]]
+Rcpp::List fit_variance_trend_defaults() {
+    Rcpp::List output; 
+    scran_variances::FitVarianceTrendOptions opt;
+    output["mean.filter"] = opt.mean_filter;
+    output["min.mean"] = opt.minimum_mean;
+    output["transform"] = opt.transform;
+    output["span"] = opt.span;
+    output["use.min.width"] = opt.use_minimum_width;
+    output["min.width"] = opt.minimum_width;
+    output["min.window.count"] = opt.minimum_window_count;
+    output["num.threads"] = opt.num_threads;
+    return output;
 }

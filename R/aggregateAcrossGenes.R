@@ -15,12 +15,16 @@
 #' The second vector should be numeric and of the same length as the first vector, specifying the weight associated with each gene.
 #' If duplicate genes are present, only the first occurrence is used.
 #' If the first vector contains gene names not present in \code{x}, those genes are ignored.
-#' @param average Logical scalar indicating whether to compute the average rather than the sum.
-#' @param convert Logical scalar indicating whether to convert gene identities to non-duplicate row indices in each entry of \code{sets}.
+#' @param average Boolean indicating whether to compute the average rather than the sum.
+#'
+#' If \code{NULL}, the default value in \code{\link{aggregateAcrossGenesDefaults}} is used.
+#' @param convert Boolean indicating whether to convert gene identities to non-duplicate row indices in each entry of \code{sets}.
 #' Can be set to \code{FALSE} for greater efficiency if the \code{sets} already contains non-duplicated integer vectors. 
 #' @param num.threads Integer specifying the number of threads to be used for aggregation.
 #'
-#' @return A list of length equal to that of \code{sets}.
+#' If \code{NULL}, the default value in \code{\link{aggregateAcrossGenesDefaults}} is used.
+#'
+#' @return List of length equal to that of \code{sets}.
 #' Each entry is a numeric vector of length equal to the number of columns in \code{x}, 
 #' containing the (weighted) sum/mean of expression values for the corresponding set across all cells.
 #'
@@ -55,7 +59,7 @@
 #' 
 #' @export
 #' @importFrom beachmat initializeCpp
-aggregateAcrossGenes <- function(x, sets, average = FALSE, convert = TRUE, num.threads = 1) {
+aggregateAcrossGenes <- function(x, sets, average = NULL, convert = TRUE, num.threads = NULL) {
     .checkSEX(x, "aggregateAcrossGenes.se")
 
     if (convert) {
@@ -75,7 +79,7 @@ aggregateAcrossGenes <- function(x, sets, average = FALSE, convert = TRUE, num.t
     }
 
     ptr <- initializeCpp(x, .check.na=FALSE)
-    output <- aggregate_across_genes(ptr, sets, average, num.threads)
+    output <- aggregate_across_genes(ptr, sets, average = average, num_threads = num.threads)
     names(output) <- names(sets)
     output
 }
@@ -117,3 +121,13 @@ aggregateAcrossGenes <- function(x, sets, average = FALSE, convert = TRUE, num.t
     }
     list(genes, weights)
 }
+
+#' Default parameters for \code{\link{aggregateAcrossGenes}}
+#' @description Default parameters from the underlying C++ library.
+#' These may be overridden by defaults in the \code{\link{aggregateAcrossGenes}} function signature.
+#' @return Named list containing default values for various function arguments.
+#' @author Aaron Lun
+#' @examples
+#' aggregateAcrossGenesDefaults()
+#' @export
+aggregateAcrossGenesDefaults <- function() aggregate_across_genes_defaults()

@@ -6,11 +6,11 @@
 \usage{
 scaleByNeighbors(
   x,
-  num.neighbors = 20,
+  num.neighbors = NULL,
   block = NULL,
-  block.weight.policy = c("variable", "equal", "none"),
-  variable.block.weight = c(0, 1000),
-  num.threads = 1,
+  block.weight.policy = NULL,
+  variable.block.weight = NULL,
+  num.threads = NULL,
   weights = NULL,
   BNPARAM = AnnoyParam()
 )
@@ -20,7 +20,9 @@ scaleByNeighbors(
 For each entry, rows are dimensions and columns are cells.
 All entries should have the same number of columns but may have different numbers of rows.}
 
-\item{num.neighbors}{Integer scalar specifying the number of neighbors to use to define the scaling factor.}
+\item{num.neighbors}{Integer scalar specifying the number of neighbors to use to define the scaling factor.
+
+If \code{NULL}, the default value in \code{\link{scaleByNeighborsDefaults}} is used.}
 
 \item{block}{Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{x}.
 If provided, the scaling factor is computed as a weighted average across blocks to ensure that block effects do not inflate the within-population variance.
@@ -28,13 +30,21 @@ Alternatively \code{NULL}, if all cells are from the same block.}
 
 \item{block.weight.policy}{String specifying the policy to use for weighting different blocks when computing the average scaling factor.
 See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
-Only used if \code{block} is not \code{NULL}.}
+
+If \code{NULL}, the default value in \code{\link{scaleByNeighborsDefaults}} is used.
+
+This argument is only used if \code{block} is not \code{NULL}.}
 
 \item{variable.block.weight}{Numeric vector of length 2, specifying the parameters for variable block weighting.
 See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
-Only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.}
 
-\item{num.threads}{Integer scalar specifying the number of threads to use.}
+If \code{NULL}, the default value in \code{\link{scaleByNeighborsDefaults}} is used.
+
+This argument is only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.}
+
+\item{num.threads}{Integer scalar specifying the number of threads to use.
+
+If \code{NULL}, the default value in \code{\link{scaleByNeighborsDefaults}} is used.}
 
 \item{weights}{Numeric vector of length equal to that of \code{x}, specifying the weights to apply to each modality.
 Each value represents a multiplier of the within-population variance of its modality, i.e., larger values increase the contribution of that modality in the combined output matrix.

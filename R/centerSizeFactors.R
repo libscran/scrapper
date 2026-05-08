@@ -10,7 +10,10 @@
 #' Alternatively \code{NULL}, in which case all cells are assumed to be in the same block.
 #' @param mode String specifying how to scale size factors across blocks.
 #' This can be either \code{"lowest"} or \code{"per-block"}, see Details.
-#' Only used if \code{block} is provided.
+#'
+#' If \code{NULL}, the default value in \code{\link{centerSizeFactorsDefaults}} is used.
+#'
+#' This argument is only used if \code{block} is provided.
 #' 
 #' @return Numeric vector of length equal to \code{size.factors}, containing the centered size factors.
 #'
@@ -42,7 +45,17 @@
 #' centerSizeFactors(runif(100), block=sample(3, 100, replace=TRUE))
 #'
 #' @export
-centerSizeFactors <- function(size.factors, block=NULL, mode=c("lowest", "per-block")) {
+centerSizeFactors <- function(size.factors, block = NULL, mode = NULL) {
     block <- .transformFactor(block)
-    center_size_factors(size.factors, block$index, match.arg(mode) == "lowest")
+    center_size_factors(size.factors, block$index, mode)
 }
+
+#' Default parameters for \code{\link{centerSizeFactors}}
+#' @description Default parameters from the underlying C++ library.
+#' These may be overridden by defaults in the \code{\link{centerSizeFactors}} function signature.
+#' @return Named list containing default values for various function arguments.
+#' @author Aaron Lun
+#' @examples
+#' centerSizeFactorsDefaults()
+#' @export
+centerSizeFactorsDefaults <- function() center_size_factors_defaults()

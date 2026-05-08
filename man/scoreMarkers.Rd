@@ -8,27 +8,27 @@ scoreMarkers(
   x,
   groups,
   block = NULL,
-  block.average.policy = c("mean", "quantile"),
-  block.weight.policy = c("variable", "equal", "none"),
-  variable.block.weight = c(0, 1000),
-  block.quantile = 0.5,
-  compute.group.mean = TRUE,
-  compute.group.detected = TRUE,
-  compute.delta.mean = TRUE,
-  compute.delta.detected = TRUE,
-  compute.cohens.d = TRUE,
-  compute.auc = TRUE,
-  compute.summary.min = TRUE,
-  compute.summary.mean = TRUE,
-  compute.summary.median = TRUE,
-  compute.summary.max = TRUE,
+  block.average.policy = NULL,
+  block.weight.policy = NULL,
+  variable.block.weight = NULL,
+  block.quantile = NULL,
+  compute.group.mean = NULL,
+  compute.group.detected = NULL,
+  compute.delta.mean = NULL,
+  compute.delta.detected = NULL,
+  compute.cohens.d = NULL,
+  compute.auc = NULL,
+  compute.summary.min = NULL,
+  compute.summary.mean = NULL,
+  compute.summary.median = NULL,
+  compute.summary.max = NULL,
   compute.summary.quantiles = NULL,
-  compute.summary.min.rank = TRUE,
-  threshold = 0,
+  compute.summary.min.rank = NULL,
+  threshold = NULL,
   all.pairwise = FALSE,
   top.index.only = FALSE,
-  min.rank.limit = 500,
-  num.threads = 1
+  min.rank.limit = NULL,
+  num.threads = NULL
 )
 }
 \arguments{
@@ -44,70 +44,118 @@ Alternatively \code{NULL}, if all cells are from the same block.}
 
 \item{block.average.policy}{String specifying the policy to use for average statistics across blocks.
 This can either be a (weighted) \code{"mean"} or a \code{"quantile"}.
-Only used if \code{block} is not \code{NULL}.}
+
+If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.
+
+This argument is only used if \code{block} is not \code{NULL}.}
 
 \item{block.weight.policy}{String specifying the policy to use for weighting different blocks when computing the average for each statistic.
 See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
-Only used if \code{block} is not \code{NULL}.}
+
+If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.
+
+This argument is only used if \code{block} is not \code{NULL}.}
 
 \item{variable.block.weight}{Numeric vector of length 2, specifying the parameters for variable block weighting.
 See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
-Only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.}
+
+If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.
+
+THis arugment is only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.}
 
 \item{block.quantile}{Number specifying the probability of the quantile of statistics across blocks. 
 Defaults to 0.5, i.e., the median of per-block statistics.
-Only used if \code{block} is not \code{NULL} and \code{block.average.policy="quantile"}.}
 
-\item{compute.group.mean}{Logical scalar indicating whether to compute the group-wise mean expression for each gene.}
+If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.
 
-\item{compute.group.detected}{Logical scalar indicating whether to compute the group-wise proportion of detected cells for each gene.}
+This argument is only used if \code{block} is not \code{NULL} and \code{block.average.policy="quantile"}.}
 
-\item{compute.delta.mean}{Logical scalar indicating whether to compute the delta-means, i.e., the log-fold change when \code{x} contains log-expression values.}
+\item{compute.group.mean}{Boolean indicating whether to compute the group-wise mean expression for each gene.
 
-\item{compute.delta.detected}{Logical scalar indicating whether to compute the delta-detected, i.e., differences in the proportion of cells with detected expression.}
+If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.}
 
-\item{compute.cohens.d}{Logical scalar indicating whether to compute Cohen's d.}
+\item{compute.group.detected}{Boolean indicating whether to compute the group-wise proportion of detected cells for each gene.
 
-\item{compute.auc}{Logical scalar indicating whether to compute the AUC.
-Setting this to \code{FALSE} can improve speed and memory efficiency.}
+If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.}
+
+\item{compute.delta.mean}{Boolean indicating whether to compute the delta-means, i.e., the log-fold change when \code{x} contains log-expression values.
+
+If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.}
+
+\item{compute.delta.detected}{Boolean indicating whether to compute the delta-detected, i.e., differences in the proportion of cells with detected expression.
+
+If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.}
+
+\item{compute.cohens.d}{Boolean indicating whether to compute Cohen's d.
+
+If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.}
+
+\item{compute.auc}{Boolean indicating whether to compute the AUC.
+Setting this to \code{FALSE} can improve speed and memory efficiency.
+
+If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.}
 
 \item{compute.summary.min}{Boolean specifying whether to compute the minimum as a summary statistic for each effect size.
-Only used if \code{all.pairwise=FALSE}.}
+
+If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.
+
+This argument is only used if \code{all.pairwise=FALSE}.}
 
 \item{compute.summary.mean}{Boolean specifying whether to compute the mean as a summary statistic for each effect size.
-Only used if \code{all.pairwise=FALSE}.}
+
+If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.
+
+This argument is only used if \code{all.pairwise=FALSE}.}
 
 \item{compute.summary.median}{Boolean specifying whether to compute the median as a summary statistic for each effect size.
-Only used if \code{all.pairwise=FALSE}.}
+
+If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.
+
+This argument is only used if \code{all.pairwise=FALSE}.}
 
 \item{compute.summary.max}{Boolean specifying whether to compute the maximum as a summary statistic for each effect size.
-Only used if \code{all.pairwise=FALSE}.}
 
-\item{compute.summary.quantiles}{Numeric scalars containing the probabilities of quantiles to compute as summary statistics for each effect size.
-If \code{NULL}, no quantiles are computed.
-Only used if \code{all.pairwise=FALSE}.}
+If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.
+
+This argument is only used if \code{all.pairwise=FALSE}.}
+
+\item{compute.summary.quantiles}{Numeric vector containing the probabilities of quantiles to compute as summary statistics for each effect size.
+
+If \code{NULL}, no summary quantiles are computed.
+
+This argument is only used if \code{all.pairwise=FALSE}.}
 
 \item{compute.summary.min.rank}{Boolean specifying whether to compute the mininum rank as a summary statistic for each effect size.
-If \code{NULL}, no quantiles are computed.
-Only used if \code{all.pairwise=FALSE}.}
 
-\item{threshold}{Non-negative numeric scalar specifying the minimum threshold on the differences in means (i.e., the log-fold change, if \code{x} contains log-expression values). 
+If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.
+
+This argument is only used if \code{all.pairwise=FALSE}.}
+
+\item{threshold}{Non-negative number specifying the minimum threshold on the differences in means (i.e., the log-fold change, if \code{x} contains log-expression values). 
 This is incorporated into the effect sizes for Cohen's d and the AUC.
-Larger thresholds will favor genes with large differences at the expense of genes with low variance that would otherwise have comparable effect sizes.}
+Larger thresholds will favor genes with large differences at the expense of genes with low variance that would otherwise have comparable effect sizes.
 
-\item{all.pairwise}{Logical scalar indicating whether to report the effect sizes for every pairwise comparison between groups.
-Alternatively, an integer scalar indicating the number of top markers to report from each pairwise comparison between groups.
+If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.}
+
+\item{all.pairwise}{Boolean indicating whether to report the effect sizes for every pairwise comparison between groups.
+Alternatively, an integer indicating the number of top markers to report from each pairwise comparison between groups.
 If \code{FALSE}, only the summary statistics are reported.}
 
 \item{top.index.only}{Boolean indicating whether to only report the indices of the top genes when \code{all.pairwise} is an integer.
 This is more efficient when the effect sizes of the top genes are not required.
-Ignored for all other values of \code{all.pairwise}.}
 
-\item{min.rank.limit}{Integer scalar specifying the maximum value of the min-rank to report.
+This argument is ignored for all other values of \code{all.pairwise}.}
+
+\item{min.rank.limit}{Integer specifying the maximum value of the min-rank to report.
 Lower values improve memory efficiency at the cost of discarding information about lower-ranked genes.
-Only used if \code{all.pairwise=FALSE}.}
 
-\item{num.threads}{Integer scalar specifying the number of threads to use.}
+If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.
+
+This argument is only used if \code{all.pairwise=FALSE}.}
+
+\item{num.threads}{Integer specifying the number of threads to use.
+
+If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.}
 }
 \value{
 A named list containing:

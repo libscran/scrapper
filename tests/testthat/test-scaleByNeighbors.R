@@ -63,3 +63,10 @@ test_that("scaleByNeighbors works as expected with blocking", {
         expect_equal(normalized, out$scaling)
     }
 })
+
+test_that("defaults work correctly", {
+    def <- scaleByNeighborsDefaults()
+    expect_true(all(names(def) %in% names(formals(scaleByNeighbors))))
+    def <- scaleByNeighborsDefaults(block="foo")
+    expect_true(all(names(def) %in% names(formals(scaleByNeighbors))))
+})

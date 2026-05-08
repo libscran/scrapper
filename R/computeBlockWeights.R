@@ -17,7 +17,10 @@
 #' }
 #' @param variable.block.weight Numeric vector of length 2, specifying the parameters for variable block weighting.
 #' The first and second values are used as the lower and upper bounds, respectively, for the variable weight calculation.
-#' Only used if \code{block.weight.policy = "variable"}.
+#'
+#' If \code{NULL}, the default value in \code{computeBlockWeightsDefaults} is used.
+#'
+#' This argument is only used if \code{block.weight.policy = "variable"}.
 #'
 #' @return Numeric vector containing the relative block weights.
 #'
@@ -33,8 +36,18 @@
 #' @export
 computeBlockWeights <- function(
     sizes,
-    block.weight.policy=c("variable", "equal", "size", "none"),
-    variable.block.weight=c(0, 1000))
-{
+    block.weight.policy = c("variable", "equal", "size", "none"),
+    variable.block.weight = NULL
+) {
     compute_block_weights(sizes, match.arg(block.weight.policy), variable.block.weight)
 }
+
+#' Default parameters for \code{\link{computeBlockWeights}}
+#' @description Default parameters from the underlying C++ library.
+#' These may be overridden by defaults in the \code{\link{computeBlockWeights}} function signature.
+#' @return Named list containing default values for various function arguments.
+#' @author Aaron Lun
+#' @examples
+#' computeBlockWeightsDefaults()
+#' @export
+computeBlockWeightsDefaults <- function() compute_block_weights_defaults()

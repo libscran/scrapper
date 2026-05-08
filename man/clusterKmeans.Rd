@@ -9,15 +9,17 @@ clusterKmeans(
   k,
   init.method = c("var-part", "kmeans++", "random"),
   refine.method = c("hartigan-wong", "lloyd"),
-  var.part.optimize.partition = TRUE,
-  var.part.size.adjustment = 1,
-  lloyd.iterations = 100,
-  hartigan.wong.iterations = 10,
-  hartigan.wong.quick.transfer.iterations = 50,
-  hartigan.wong.quit.quick.transfer.failure = FALSE,
-  seed = 5489L,
   warn = TRUE,
-  num.threads = 1
+  seed = NULL,
+  random.seed = seed,
+  kmeanspp.seed = seed,
+  var.part.optimize.partition = NULL,
+  var.part.size.adjustment = NULL,
+  lloyd.iterations = NULL,
+  hartigan.wong.iterations = NULL,
+  hartigan.wong.quick.transfer.iterations = NULL,
+  hartigan.wong.quit.quick.transfer.failure = NULL,
+  num.threads = NULL
 )
 }
 \arguments{
@@ -25,7 +27,7 @@ clusterKmeans(
 This is typically a dense double-precision matrix containing a low-dimensional representation from, e.g., \code{\link{runPca}}.
 However, any matrix representation supported by \code{\link[beachmat]{initializeCpp}} can also be used.}
 
-\item{k}{Integer scalar specifying the number of clusters.}
+\item{k}{Integer specifying the number of clusters.}
 
 \item{init.method}{String specifying the initialization method for the centers:
 \itemize{
@@ -47,49 +49,65 @@ This is simple and amenable to parallelization but may not converge.
 This is slower but has a greater chance of convergence.
 }}
 
-\item{var.part.optimize.partition}{Logical scalar indicating whether each partition boundary should be optimized to reduce the sum of squares in the child partitions.
-This is slower but improves the quality of the partition.
-Only used if \code{init.method = "var.part"}.}
-
-\item{var.part.size.adjustment}{Numeric scalar between 0 and 1, specifying the adjustment to the cluster size when selecting the next cluster to partition.
-Setting this to 0 or 1 will select the cluster with the highest variance or sum of squares, respectively, for partitioning.
-In other words, a value of 0 will ignore the cluster size while setting a value of 1 will generally cause larger clusters to be selected. 
-Only used if \code{init.method = "var.part"}.}
-
-\item{lloyd.iterations}{Integer scalar specifying the maximum number of iterations for the Lloyd algorithm.
-Larger values increase the chance of convergence at the cost of increasing compute time.
-Only used if \code{refine.method = "lloyd"}.}
-
-\item{hartigan.wong.iterations}{Integer scalar specifying the maximum number of iterations for the Hartigan-Wong algorithm.
-Larger values increase the chance of convergence at the cost of increasing compute time.
-Only used if \code{refine.method = "hartigan-wong"}.}
-
-\item{hartigan.wong.quick.transfer.iterations}{Integer scalar specifying the maximum number of quick transfer iterations for the Hartigan-Wong algorithm.
-Larger values increase the chance of convergence at the cost of increasing compute time.
-Only used if \code{refine.method = "hartigan-wong"}.}
-
-\item{hartigan.wong.quit.quick.transfer.failure}{Logical scalar indicating whether to quit the Hartigan-Wong algorithm upon convergence failure during quick transfer iterations.
-Setting this to \code{FALSE} gives the algorithm another chance to converge by attempting another optimal transfer iteration, at the cost of more compute time.
-If \code{TRUE}, the function follows the same behavior as R's \code{\link{kmeans}}.
-Only used if \code{refine.method = "hartigan-wong"}.}
-
-\item{seed}{Integer scalar specifying the seed for random number generation.
-Only used if \code{init.method = "random"} or \code{"kmeans++"}.}
-
 \item{warn}{Boolean specifying whether a warning should be emitted if the k-means algorithm failed to converge.}
 
-\item{num.threads}{Integer scalar specifying the number of threads to use.}
+\item{seed}{Integer specifying the seed for random number generation in some of the initialization methods.}
+
+\item{random.seed}{Integer specifying the seed for random number generation when \code{init.method = "random"}.
+
+If \code{NULL}, the default value in \code{\link{clusterKmeansDefaults}} is used.}
+
+\item{kmeanspp.seed}{Integer specifying the seed for random number generation when \code{init.method = "kmeans++"}.
+
+If \code{NULL}, the default value in \code{\link{clusterKmeansDefaults}} is used.}
+
+\item{var.part.optimize.partition}{Boolean indicating whether each partition boundary should be optimized in \code{init.method = "var.part"}.
+This reduces the sum of squares in the child partitions, which improves the quality of the partition at the cost of some extra compute time.
+
+If \code{NULL}, the default value in \code{\link{clusterKmeansDefaults}} is used.}
+
+\item{var.part.size.adjustment}{Number specifying the cluster size adjustment when selecting the next cluster to partition in \code{init.method = "var.part"}.
+This should be non-negative and no greater than 1.
+Setting it to 0 will select the cluster with the highest variance, ignoring the cluster size.
+Setting it to 1 will select the cluster with the highest sum of squares, favoring larger clusters.
+
+If \code{NULL}, the default value in \code{\link{clusterKmeansDefaults}} is used.}
+
+\item{lloyd.iterations}{Integer specifying the maximum number of iterations for \code{refine.method = "lloyd"}.
+Larger values increase the chance of convergence at the cost of increasing compute time.
+
+If \code{NULL}, the default value in \code{\link{clusterKmeansDefaults}} is used.}
+
+\item{hartigan.wong.iterations}{Integer specifying the maximum number of iterations for \code{refine.method = "hartigan-wong"}.
+Larger values increase the chance of convergence at the cost of increasing compute time.
+
+If \code{NULL}, the default value in \code{\link{clusterKmeansDefaults}} is used.}
+
+\item{hartigan.wong.quick.transfer.iterations}{Integer specifying the maximum number of quick transfer iterations for \code{refine.method = "hartigan-wong"}.
+Larger values increase the chance of convergence at the cost of increasing compute time.
+
+If \code{NULL}, the default value in \code{\link{clusterKmeansDefaults}} is used.}
+
+\item{hartigan.wong.quit.quick.transfer.failure}{Boolean indicating whether to quit kon convergence failure during quick transfer iterations in \code{refine.method = "hartigan-wong"}.
+Setting this to \code{FALSE} gives the algorithm another chance to converge by attempting another optimal transfer iteration, at the cost of more compute time.
+
+If \code{TRUE}, the function follows the same behavior as R's \code{\link{kmeans}}.
+If \code{NULL}, the default value in \code{\link{clusterKmeansDefaults}} is used.}
+
+\item{num.threads}{Integer specifying the number of threads to use.
+
+If \code{NULL}, the default value in \code{\link{clusterKmeansDefaults}} is used.}
 }
 \value{
-By default, a list is returned containing:
+List containing:
 \itemize{
 \item \code{clusters}, a factor containing the cluster assignment for each cell.
 The number of levels is no greater than \code{k}, where each level is an integer that refer to a column of \code{centers}.
 \item \code{centers}, a numeric matrix with the coordinates of the cluster centroids (dimensions in rows, centers in columns).
 The number of columns is no greater than \code{k}.
 Empty clusters are automatically removed.
-\item \code{iterations}, an integer scalar specifying the number of refinement iterations that were performed.
-\item \code{status}, an integer scalar specifying the completion status of the algorithm.
+\item \code{iterations}, an integer specifying the number of refinement iterations that were performed.
+\item \code{status}, an integer specifying the completion status of the algorithm.
 A value of zero indicates success while the meaning of any non-zero value depends on the choice of \code{refine.method}:
 \itemize{
 \item For Lloyd, a value of 2 indicates convergence failure.

@@ -12,13 +12,23 @@
 #' Alternatively \code{NULL}, if all cells are from the same block.
 #' @param block.weight.policy String specifying the policy to use for weighting different blocks when computing the average scaling factor.
 #' See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
-#' Only used if \code{block} is not \code{NULL}.
+#'
+#' If \code{NULL}, the default value in \code{\link{scaleByNeighborsDefaults}} is used.
+#'
+#' This argument is only used if \code{block} is not \code{NULL}.
 #' @param variable.block.weight Numeric vector of length 2, specifying the parameters for variable block weighting.
 #' See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
-#' Only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.
+#'
+#' If \code{NULL}, the default value in \code{\link{scaleByNeighborsDefaults}} is used.
+#'
+#' This argument is only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.
 #' @param num.neighbors Integer scalar specifying the number of neighbors to use to define the scaling factor.
+#'
+#' If \code{NULL}, the default value in \code{\link{scaleByNeighborsDefaults}} is used.
 #' @param BNPARAM A \link[BiocNeighbors]{BiocNeighborParam} object specifying how to perform the neighbor search.
 #' @param num.threads Integer scalar specifying the number of threads to use.
+#'
+#' If \code{NULL}, the default value in \code{\link{scaleByNeighborsDefaults}} is used.
 #' @param weights Numeric vector of length equal to that of \code{x}, specifying the weights to apply to each modality.
 #' Each value represents a multiplier of the within-population variance of its modality, i.e., larger values increase the contribution of that modality in the combined output matrix.
 #' \code{NULL} is equivalent to an all-1 vector, i.e., all modalities are scaled to have the same within-population variance.
@@ -46,13 +56,13 @@
 #' @importFrom BiocNeighbors defineBuilder AnnoyParam
 scaleByNeighbors <- function(
     x,
-    num.neighbors=20, 
-    block=NULL,
-    block.weight.policy=c("variable", "equal", "none"),
-    variable.block.weight=c(0, 1000),
-    num.threads=1,
-    weights=NULL,
-    BNPARAM=AnnoyParam()
+    num.neighbors = NULL,
+    block = NULL,
+    block.weight.policy = NULL,
+    variable.block.weight = NULL,
+    num.threads = NULL,
+    weights= NULL,
+    BNPARAM = AnnoyParam()
 ) {
     .checkSEX(x, "scaleByNeighbors.se")
 
@@ -69,14 +79,14 @@ scaleByNeighbors <- function(
     block <- .transformFactor(block)
 
     scaling <- scale_by_neighbors(
-        num_cells=ref.ncol,
-        embedding=x,
-        num_neighbors=num.neighbors,
-        block=block$index,
-        block_weight_policy=match.arg(block.weight.policy),
-        variable_block_weight=variable.block.weight,
-        nn_builder=defineBuilder(BNPARAM)$builder,
-        num_threads=num.threads
+        num_cells = ref.ncol,
+        embedding = x,
+        num_neighbors = num.neighbors,
+        block = block$index,
+        block_weight_policy = block.weight.policy,
+        variable_block_weight = variable.block.weight,
+        nn_builder = defineBuilder(BNPARAM)$builder,
+        num_threads = num.threads
     )
 
     if (!is.null(weights)) {
@@ -93,3 +103,15 @@ scaleByNeighbors <- function(
          combined = do.call(rbind, x)
     )
 }
+
+#' Default parameters for \code{\link{scaleByNeighbors}}
+#' @description Default parameters from the underlying C++ library.
+#' These may be overridden by defaults in the \code{\link{scaleByNeighbors}} function signature.
+#' @param block See the argument of the same name in \code{\link{scaleByNeighbors}}.
+#' @return Named list containing default values for various function arguments.
+#' These values may change depending on whether \code{block} is supplied.
+#' @author Aaron Lun
+#' @examples
+#' scaleByNeighborsDefaults()
+#' @export
+scaleByNeighborsDefaults <- function(block=NULL) scale_by_neighbors_defaults(!is.null(block))

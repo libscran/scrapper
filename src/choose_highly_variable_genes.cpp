@@ -8,21 +8,25 @@
 #include "utils_other.h"
 
 //[[Rcpp::export(rng=false)]]
-Rcpp::IntegerVector choose_highly_variable_genes(Rcpp::NumericVector stats, int top, bool larger, bool keep_ties, Rcpp::Nullable<Rcpp::NumericVector> bound) {
+Rcpp::IntegerVector choose_highly_variable_genes(Rcpp::NumericVector stats, Rcpp::RObject top, Rcpp::RObject larger, Rcpp::RObject keep_ties, Rcpp::RObject use_bound, Rcpp::RObject bound) {
     scran_variances::ChooseHighlyVariableGenesOptions opt;
-    opt.top = sanisizer::cast<I<decltype(opt.top)> >(top);
-    opt.larger = larger;
-    opt.keep_ties = keep_ties;
-
-    opt.use_bound = !bound.isNull();
-    if (opt.use_bound) {
-        Rcpp::NumericVector bnd(bound);
-        if (bnd.size() != 1) {
-            throw std::runtime_error("'bound' should be a numeric scalar");
-        }
-        opt.bound = bnd[0];
-    }
-
+    set_integer(top, opt.top, "top");
+    set_bool(larger, opt.larger, "larger");
+    set_bool(keep_ties, opt.keep_ties, "keep.ties");
+    set_bool(use_bound, opt.use_bound, "use.bound");
+    set_number(bound, opt.bound, "bound");
     auto res = scran_variances::choose_highly_variable_genes_index(sanisizer::cast<std::size_t>(stats.size()), static_cast<const double*>(stats.begin()), opt);
     return Rcpp::IntegerVector(res.begin(), res.end());
+}
+
+//[[Rcpp::export(rng=false)]]
+Rcpp::List choose_highly_variable_genes_defaults() {
+    Rcpp::List output;
+    scran_variances::ChooseHighlyVariableGenesOptions opt;
+    output["top"] = opt.top;
+    output["larger"] = opt.larger;
+    output["keep.ties"] = opt.keep_ties;
+    output["use.bound"] = opt.use_bound;
+    output["bound"] = opt.bound;
+    return output;
 }

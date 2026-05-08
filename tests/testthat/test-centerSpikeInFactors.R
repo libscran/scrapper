@@ -25,6 +25,9 @@ test_that("centerSpikeInFactors works with blocking", {
     s2.scaling <- vapply(split(spike.sirv, b), mean, 0)
     expect_equal(centered$spike.ins$SIRV, spike.sirv / unname(s2.scaling[b] / eout.scaling[b]))
 
+    centered2 <- centerSpikeInFactors(endogenous, list(ERCC = spike.ercc, SIRV = spike.sirv), block = b, mode = "lowest")
+    expect_identical(centered, centered2)
+
     centered <- centerSpikeInFactors(endogenous, list(ERCC = spike.ercc, SIRV = spike.sirv), block = b, mode = "per-block")
     e.scaling <- vapply(split(endogenous, b), mean, 0)
     expect_equal(centered$endogenous, endogenous / unname(e.scaling[b]))
@@ -32,4 +35,11 @@ test_that("centerSpikeInFactors works with blocking", {
     expect_equal(centered$spike.ins$ERCC, spike.ercc / unname(s1.scaling[b]))
     s2.scaling <- vapply(split(spike.sirv, b), mean, 0)
     expect_equal(centered$spike.ins$SIRV, spike.sirv / unname(s2.scaling[b]))
+
+    expect_error(centerSpikeInFactors(endogenous, list(ERCC = spike.ercc, SIRV = spike.sirv), block = b, mode = "WHEE"), "unknown")
+})
+
+test_that("defaults work correctly", {
+    def <- centerSpikeInFactorsDefaults()
+    expect_true(all(names(def) %in% names(formals(centerSpikeInFactors))))
 })

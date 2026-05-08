@@ -34,12 +34,17 @@ test_that("runUmap works with pre-specified a/b", {
     custom <- runUmap(x, a=2, b=1)
     expect_false(identical(custom, ref))
 
-    expect_error(runUmap(x, a=1:2, b=1), "should be a numeric scalar")
-    expect_error(runUmap(x, a=2, b=1:2), "should be a numeric scalar")
+    expect_error(runUmap(x, a=1:2, b=1), "expected a single integer")
+    expect_error(runUmap(x, a=2, b=1:2), "expected a single integer")
 })
 
 test_that("runUmap works with an explicit number of epochs", {
     custom <- runUmap(x, num.epochs=600)
     expect_false(identical(custom, ref))
-    expect_error(runUmap(x, num.epochs=1:1000), "should be an integer scalar")
+    expect_error(runUmap(x, num.epochs=1:1000), "expected a single integer")
+})
+
+test_that("defaults work correctly", {
+    def <- runUmapDefaults()
+    expect_true(all(names(def) %in% names(formals(runUmap))))
 })

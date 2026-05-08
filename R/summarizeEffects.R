@@ -8,13 +8,26 @@
 #' The entry \code{[i, j, k]} represents the effect size from the comparison of group \code{j} against group \code{i} for gene \code{k}.
 #' See also the output of \code{\link{scoreMarkers}} with \code{all.pairwise=TRUE}.
 #' @param compute.summary.min Boolean specifying whether to compute the minimum as a summary statistic.
+#'
+#' If \code{NULL}, the default value in \code{\link{summarizeEffectsDefaults}} is used.
 #' @param compute.summary.mean Boolean specifying whether to compute the mean as a summary statistic. 
+#'
+#' If \code{NULL}, the default value in \code{\link{summarizeEffectsDefaults}} is used.
 #' @param compute.summary.median Boolean specifying whether to compute the median as a summary statistic. 
+#'
+#' If \code{NULL}, the default value in \code{\link{summarizeEffectsDefaults}} is used.
 #' @param compute.summary.max Boolean specifying whether to compute the maximum as a summary statistic. 
+#'
+#' If \code{NULL}, the default value in \code{\link{summarizeEffectsDefaults}} is used.
 #' @param compute.summary.quantiles Numeric scalars containing the probabilities of quantiles to compute as summary statistics. 
+#'
 #' If \code{NULL}, no quantiles are computed.
 #' @param compute.summary.min.rank Boolean specifying whether to compute the mininum rank as a summary statistic. 
+#'
+#' If \code{NULL}, the default value in \code{\link{summarizeEffectsDefaults}} is used.
 #' @param num.threads Integer scalar specifying the number of threads to use.
+#'
+#' If \code{NULL}, the default value in \code{\link{summarizeEffectsDefaults}} is used.
 #'
 #' @return List of \link[S4Vectors]{DataFrame}s containing summary statistics for the effect sizes.
 #' Each DataFrame corresponds to a group, each row corresponds to a gene, and each column contains a summary statistic.
@@ -77,13 +90,13 @@
 #' @export
 summarizeEffects <- function(
     effects,
-    compute.summary.min=TRUE,
-    compute.summary.mean=TRUE,
-    compute.summary.median=TRUE,
-    compute.summary.max=TRUE,
-    compute.summary.quantiles=NULL,
-    compute.summary.min.rank=TRUE,
-    num.threads=1
+    compute.summary.min = NULL,
+    compute.summary.mean = NULL,
+    compute.summary.median = NULL,
+    compute.summary.max = NULL,
+    compute.summary.quantiles = NULL,
+    compute.summary.min.rank = NULL,
+    num.threads = NULL
 ) {
     dm <- dim(effects)
     ngroups <- dm[1]
@@ -135,3 +148,13 @@ format_summary_output <- function(raw, ngenes, rownames, quantiles) {
     }
     raw
 }
+
+#' Default parameters for \code{\link{summarizeEffectsDefaults}}
+#' @description Default parameters from the underlying C++ library.
+#' These may be overridden by defaults in the \code{\link{summarizeEffects}} function signature.
+#' @return Named list containing default values for various function arguments.
+#' @author Aaron Lun
+#' @examples
+#' summarizeEffectsDefaults()
+#' @export
+summarizeEffectsDefaults <- function() summarize_effects_defaults()

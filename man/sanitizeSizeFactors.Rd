@@ -6,29 +6,57 @@
 \usage{
 sanitizeSizeFactors(
   size.factors,
-  replace.zero = TRUE,
-  replace.negative = TRUE,
-  replace.infinite = TRUE,
-  replace.nan = TRUE
+  replace.zero = NULL,
+  replace.negative = NULL,
+  replace.infinite = NULL,
+  replace.nan = NULL,
+  handle.zero = "sanitize",
+  handle.negative = "sanitize",
+  handle.infinite = "sanitize",
+  handle.nan = "sanitize"
 )
 }
 \arguments{
 \item{size.factors}{Numeric vector of size factors across cells.}
 
-\item{replace.zero}{Logical scalar indicating whether to replace size factors of zero with the lowest positive factor in \code{size.factors}.
-This ensures that the normalized values will be large to reflect the extremity of the scaling, but still finite for sensible downstream processing. 
-If \code{FALSE}, zeros are retained.}
+\item{replace.zero}{Deprecated, use \code{handle.zero} instead.}
 
-\item{replace.negative}{Logical scalar indicating whether to replace negative size factors with the lowest positive factor in \code{size.factors}.
-This ensures that the normalized values will be large to reflect the extremity of the scaling, but still finite for sensible downstream processing. 
-If \code{FALSE}, negative values are retained.}
+\item{replace.negative}{Deprecated, use \code{handle.negative} instead.}
 
-\item{replace.infinite}{Logical scalar indicating whether to replace infinite size factors with the largest positive factor in \code{size.factors}.
+\item{replace.infinite}{Deprecated, use \code{handle.infinite} instead.}
+
+\item{replace.nan}{Deprecated, use \code{handle.nan} instead.}
+
+\item{handle.zero}{String specifying how to handle replace size factors of zero.
+If \code{"sanitize"}, zero size factors are replaced with the lowest positive factor in \code{size.factors}.
+This ensures that the normalized values will be large to reflect the extremity of the scaling, but still finite for sensible downstream processing. 
+If \code{"error"}, an error is raised upon encountering a size factor of zero.
+If \code{"ignore"}, no action is taken.
+
+If \code{NULL}, the default value in \code{\link{sanitizeSizeFactorsDefaults}} is used.}
+
+\item{handle.negative}{String specifying how to handle negative size factors.
+If \code{"sanitize"}, negative size factors are replaced with the lowest positive factor in \code{size.factors}.
+This ensures that the normalized values will be large to reflect the extremity of the scaling, but still finite for sensible downstream processing. 
+If \code{"error"}, an error is raised upon encountering a negative size factor. 
+If \code{"ignore"}, no action is taken.
+
+If \code{NULL}, the default value in \code{\link{sanitizeSizeFactorsDefaults}} is used.}
+
+\item{handle.infinite}{String specifying how to handle infinite size factors.
+If \code{"sanitize"}, infinite size factors are replaced with the largest positive factor in \code{size.factors}.
 This ensures that any normalized values will be, at least, finite; the choice of a relatively large replacement value reflects the extremity of the scaling.
-If \code{FALSE}, infinite values are retained.}
+If \code{"error"}, an error is raised upon encountering an infinite size factor. 
+If \code{"ignore"}, no action is taken.
 
-\item{replace.nan}{Logical scalar indicating whether to replace NaN size factors with unity, e.g., scaling normalization is a no-op.
-If \code{FALSE}, NaN values are retained.}
+If \code{NULL}, the default value in \code{\link{sanitizeSizeFactorsDefaults}} is used.}
+
+\item{handle.nan}{String specifying how to handle NaN size factors.
+If \code{"sanitize"}, NaN size factors are replaced with unity, e.g., scaling normalization is a no-op.
+If \code{"error"}, an error is raised upon encountering an NaN size factor. 
+If \code{"ignore"}, no action is taken.
+
+If \code{NULL}, the default value in \code{\link{sanitizeSizeFactorsDefaults}} is used.}
 }
 \value{
 Numeric vector of length equal to \code{size.factors}, containing the sanitized size factors.

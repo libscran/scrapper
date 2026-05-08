@@ -15,9 +15,12 @@
 #' The number of neighbors for each cell should be equal to \code{num.neighbors}, otherwise a warning is raised.
 #'
 #' Alternatively, an index constructed by \code{\link[BiocNeighbors]{buildIndex}}.
-#' @param num.neighbors Integer scalar specifying the number of neighbors to use to construct the graph.
+#' @param num.neighbors Integer specifying the number of neighbors to use to construct the graph.
 #' Larger values increase the connectivity of the graph and reduce the granularity of subsequent community detection steps, at the cost of speed.
-#' Ignored if \code{x} contains pre-computed neighbor search results. 
+#'
+#' If \code{NULL}, the default value in \code{\link{buildSnnGraphDefaults}} is used.
+#'
+#' This argument is ignored if \code{x} contains pre-computed neighbor search results. 
 #' @param weight.scheme String specifying the weighting scheme to use for constructing the SNN graph.
 #' This can be one of:
 #' \itemize{
@@ -28,16 +31,21 @@
 #' \item \code{"jaccard"}, where the weight of the edge is the Jaccard index of their neighbor sets,
 #' This is a monotonic transformation of the weight used in \code{"number"}.
 #' }
-#' @param num.threads Integer scalar specifying the number of threads to use.
-#' Only used if \code{x} is not a list of existing nearest-neighbor search results.
+#' If \code{NULL}, the default value in \code{\link{buildSnnGraphDefaults}} is used.
+#' @param num.threads Integer specifying the number of threads to use.
+#'
+#' If \code{NULL}, the default value in \code{\link{buildSnnGraphDefaults}} is used.
+#'
+#' This argument is only used if \code{x} is not a list of existing nearest-neighbor search results.
 #' @param BNPARAM A \link[BiocNeighbors]{BiocNeighborParam} object specifying the algorithm to use.
-#' Only used if \code{x} is not a list of existing nearest-neighbor search results.
-#' @param as.pointer Logical scalar indicating whether to return an external pointer for direct use in \code{\link{clusterGraph}}.
+#' 
+#' This argument is only used if \code{x} is not a list of existing nearest-neighbor search results.
+#' @param as.pointer Boolean indicating whether to return an external pointer for direct use in \code{\link{clusterGraph}}.
 #' This avoids the extra memory usage caused by conversion to/from an R list.
 #'
 #' @return If \code{as.pointer=FALSE}, a list is returned containing:
 #' \itemize{
-#' \item \code{vertices}, an integer scalar specifying the number of vertices in the graph (i.e., cells in \code{x}).
+#' \item \code{vertices}, an integer specifying the number of vertices in the graph (i.e., cells in \code{x}).
 #' \item \code{edges}, an integer vector of 1-based indices for graph edges.
 #' Pairs of values represent the endpoints of an (undirected) edge,
 #' i.e., \code{edges[1:2]} form the first edge, \code{edges[3:4]} form the second edge and so on.
@@ -45,7 +53,8 @@
 #' This has length equal to half the length of \code{edges}.
 #' }
 #'
-#' If \code{as.pointer=TRUE}, an external pointer to the graph is returned that can be directly used in \code{\link{clusterGraph}}.
+#' If \code{as.pointer=TRUE}, an external pointer to the graph structure is returned.
+#' This can be directly used in \code{\link{clusterGraph}}.
 #'
 #' @author Aaron Lun
 #'
@@ -67,10 +76,17 @@
 #'
 #' @export 
 #' @importFrom BiocNeighbors findKNN AnnoyParam
-buildSnnGraph <- function(x, num.neighbors=10, weight.scheme="ranked", num.threads=1, BNPARAM=AnnoyParam(), as.pointer=FALSE) {
+buildSnnGraph <- function(x, num.neighbors = NULL, weight.scheme = NULL, num.threads = NULL, BNPARAM = AnnoyParam(), as.pointer = FALSE) {
     .checkSEX(x, "clusterGraph.se")
 
     if (!is.list(x)) {
+        defaults <- buildSnnGraphDefaults()
+        if (is.null(num.neighbors)) {
+            num.neighbors <- defaults$num.neighbors
+        }
+        if (is.null(num.threads)) {
+            num.threads <- defaults$num.threads
+        }
         x <- findKNN(x, k=num.neighbors, transposed=TRUE, get.index="transposed", get.distance=FALSE, num.threads=num.threads, BNPARAM=BNPARAM)
     } else {
         .checkNeighborResults(x$index, NULL)
@@ -82,3 +98,13 @@ buildSnnGraph <- function(x, num.neighbors=10, weight.scheme="ranked", num.threa
     }
     out
 }
+
+#' Default parameters for \code{\link{buildSnnGraph}}
+#' @description Default parameters from the underlying C++ library.
+#' These may be overridden by defaults in the \code{\link{buildSnnGraph}} function signature.
+#' @return Named list containing default values for various function arguments.
+#' @author Aaron Lun
+#' @examples
+#' buildSnnGraphDefaults()
+#' @export
+buildSnnGraphDefaults <- function() build_snn_graph_defaults()

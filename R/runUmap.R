@@ -2,30 +2,55 @@
 #'
 #' Compute UMAP coordinates to visualize similarities between cells.
 #'
+#' @param x Numeric matrix where rows are dimensions and columns are cells,
+#' typically containing a low-dimensional representation from, e.g., \code{\link{runPca}}.
+#'
+#' Alternatively, a named list of nearest-neighbor search results like that returned by \code{\link[BiocNeighbors]{findKNN}}.
+#' This should contain \code{index}, an integer matrix where rows are neighbors and columns are cells;
+#' and \code{distance}, a numeric matrix of the same dimensions containing the distances to each neighbor.
+#' Each column contains 1-based indices for the nearest neighbors of the corresponding cell, ordered by increasing distance.
+#'
+#' Alternatively, an index constructed by \code{\link[BiocNeighbors]{buildIndex}}.
 #' @inheritParams runTsne
 #' @param num.dim Integer scalar specifying the number of dimensions of the output embedding.
 #' @param local.connectivity Numeric scalar specifying the number of nearest neighbors that are assumed to be always connected, with maximum membership confidence.
 #' Larger values increase the connectivity of the embedding and reduce the focus on local structure.
 #' This may be a fractional number of neighbors, in which case interpolation is performed when computing the membership confidence.
+#'
+#' If \code{NULL}, the default value from \code{\link{runUmapDefaults}} is used. 
 #' @param bandwidth Numeric scalar specifying the effective bandwidth of the kernel when converting the distance to a neighbor into a fuzzy set membership confidence.
 #' Larger values reduce the decay in confidence with respect to distance, increasing connectivity and favoring global structure. 
+#'
+#' If \code{NULL}, the default value from \code{\link{runUmapDefaults}} is used. 
 #' @param mix.ratio Numeric scalar between 0 and 1 specifying the mixing ratio when combining fuzzy sets.
 #' A mixing ratio of 1 will take the union of confidences, a ratio of 0 will take the intersection, and intermediate values will interpolate between them.
 #' Larger values favor connectivity and more global structure.
+#'
+#' If \code{NULL}, the default value from \code{\link{runUmapDefaults}} is used. 
 #' @param spread Numeric scalar specifying the scale of the coordinates of the final low-dimensional embedding.
-#' Ignored if \code{a} and \code{b} are provided.
+#'
+#' If \code{NULL}, the default value from \code{\link{runUmapDefaults}} is used. 
+#'
+#' This argument is ignored if \code{a} and \code{b} are provided.
 #' @param min.dist Numeric scalar specifying the minimum distance between observations in the final low-dimensional embedding.
 #' Smaller values will increase local clustering while larger values favor a more even distribution of observations throughout the low-dimensional space.
 #' This is interpreted relative to \code{spread}.
-#' Ignored if \code{a} and \code{b} are provided.
+#'
+#' If \code{NULL}, the default value from \code{\link{runUmapDefaults}} is used. 
+#'
+#' This argument is ignored if \code{a} and \code{b} are provided.
 #' @param a Numeric scalar specifying the \eqn{a} parameter for the fuzzy set membership strength calculations.
 #' Larger values yield a sharper decay in membership strength with increasing distance between observations.
-#' If this or \code{b} are \code{NULL}, a suitable value for this parameter is automatically determined from \code{spread} and \code{min.dist}.
+#'
+#' If this or \code{b} is \code{NULL}, a suitable value for this parameter is automatically determined from \code{spread} and \code{min.dist}.
 #' @param b Numeric scalar specifying the \eqn{b} parameter for the fuzzy set membership strength calculations.
 #' Larger values yield an earlier decay in membership strength with increasing distance between observations.
-#' If this or \code{a} are \code{NULL}, a suitable value for this parameter is automatically determined from \code{spread} and \code{min.dist}.
+#'
+#' If this or \code{a} is \code{NULL}, a suitable value for this parameter is automatically determined from \code{spread} and \code{min.dist}.
 #' @param repulsion.strength Numeric scalar specifying the modifier for the repulsive force.
 #' Larger values increase repulsion and favor local structure.
+#'
+#' If \code{NULL}, the default value from \code{\link{runUmapDefaults}} is used. 
 #' @param initialize.method String specifying how to initialize the embedding.
 #' This should be one of:
 #' \itemize{
@@ -35,33 +60,52 @@
 #' \item \code{random}: fills the embedding with random draws from a normal distribution.
 #' \item \code{none}: uses initial values from \code{initial.coordinates}.
 #' }
+#' If \code{NULL}, the default value from \code{\link{runUmapDefaults}} is used. 
 #' @param initialize.random.on.spectral.fail Logical scalar indicating whether to fall back to random sampling (i.e., same as \code{random})
 #' if spectral initialization fails due to the presence of multiple components in the graph.
 #' If \code{FALSE}, the values in \code{initial.coordinates} will be used instead, i.e., same as \code{none}.
-#' Only relevant if \code{initialize.method = "spectral"} and spectral initialization fails.
+#'
+#' If \code{NULL}, the default value from \code{\link{runUmapDefaults}} is used. 
+#'
+#' This argument is only used if \code{initialize.method = "spectral"} and spectral initialization fails.
 #' @param initialize.spectral.scale Numeric scalar specifying the maximum absolute magnitude of the coordinates after spectral initialization.
 #' All initial coordinates are scaled such that the maximum of the absolute values is equal to \code{initialize.spectral.scale}.
 #' This ensures that outlier observations will not have large absolute distances that may interfere with optimization.
-#' Only relevant if \code{initialize.method = "spectral"} and spectral initialization does not fail.
+#'
+#' If \code{NULL}, the default value from \code{\link{runUmapDefaults}} is used. 
+#'
+#' This argument is only used if \code{initialize.method = "spectral"} and spectral initialization does not fail.
 #' @param initialize.spectral.jitter Logical scalar indicating whether to jitter coordinates after spectral initialization to separate duplicate observations (e.g., to avoid overplotting).
 #' This is done using normally-distributed noise of mean zero and standard deviation of \code{initialize.spectral.jitter.sd}.
-#' Only relevant if \code{initialize.method = "spectral"} and spectral initialization does not fail.
+#'
+#' If \code{NULL}, the default value from \code{\link{runUmapDefaults}} is used. 
+#'
+#' This argument is only used if \code{initialize.method = "spectral"} and spectral initialization does not fail.
 #' @param initialize.spectral.jitter.sd Numeric scalar specifying the standard deviation of the jitter to apply after spectral initialization.
 #' Only relevant if \code{initialize.method = "spectral"} and spectral initialization does not fail and \code{initialize.spectral.jitter = TRUE}.
 #' @param initialize.random.scale Numeric scalar specifying the scale of the randomly generated initial coordinates.
 #' Coordinates are sampled from a uniform distribution from \eqn{[-x, x)} where \eqn{x} is \code{initialize.random.scale}.
-#' Only relevant if \code{initialize.method = "random"},
+#'
+#' If \code{NULL}, the default value from \code{\link{runUmapDefaults}} is used. 
+#' 
+#' This argument is only used if \code{initialize.method = "random"},
 #' or \code{initialize.method = "spectral"} and spectral initialization fails and \code{initialize.random.on.spectral.fail = TRUE}.
 #' @param initialize.seed Numeric scalar specifying the seed for the random number generation during initialization.
-#' Only relevant if \code{initialize.method = "random"},
+#'
+#' If \code{NULL}, the default value from \code{\link{runUmapDefaults}} is used. 
+#' 
+#' This argument is only used if \code{initialize.method = "random"},
 #' or \code{initialize.method = "spectral"} and \code{initialize.spectral.jitter = TRUE};
 #' or \code{initialize.method = "spectral"} and spectral initialization fails and \code{initialize.random.on.spectral.fail = TRUE}.
 #' @param initial.coordinates Numeric matrix of initial coordinates, with number of rows equal to the number of observations and number of columns equal to \code{num.dim}.
-#' Only relevant if \code{initialize.method = "none"};
-#' or \code{initialize.method = "spectral"} and spectral initialization fails and \code{initialize.random.on.spectral.fail = FALSE}.
+#'
+#' This argument is required if \code{initialize.method = "none"};
+#' or \code{initialize.method = "spectral"} and \code{initialize.random.on.spectral.fail = FALSE}, where it is used if spectral initialization fails.
 #' @param num.epochs Integer scalar specifying the number of epochs for the gradient descent, i.e., optimization iterations. 
 #' Larger values improve accuracy at the cost of increased compute time.
-#' If \code{NULL}, a value is automatically chosen based on the size of the dataset:
+#'
+#' If \code{NULL}, the default value from \code{\link{runUmapDefaults}} is used. 
+#' This depends on the size of the dataset:
 #' \itemize{
 #' \item For datasets with no more than 10000 observations, the default number of epochs is set to 500.
 #' \item For larger datasets, the number of epochs is inversely proportional to the number of cells, starting from 500 and decreasing asymptotically to a lower limit of 200.
@@ -69,14 +113,30 @@
 #' }
 #' @param learning.rate Numeric scalar specifying the initial learning rate used in the gradient descent.
 #' Larger values can accelerate convergence but at the risk of skipping over suitable local optima.
+#'
+#' If \code{NULL}, the default value from \code{\link{runUmapDefaults}} is used. 
 #' @param negative.sample.rate Numeric scalar specifying the rate of sampling negative observations to compute repulsive forces.
 #' Greater values will improve accuracy but increase compute time. 
+#'
+#' If \code{NULL}, the default value from \code{\link{runUmapDefaults}} is used. 
 #' @param num.neighbors Integer scalar specifying the number of neighbors to use to define the fuzzy sets.
 #' Larger values improve connectivity and favor preservation of global structure, at the cost of increased compute time.
-#' Ignored if \code{x} contains pre-computed neighbor search results. 
+#'
+#' If \code{NULL}, the default value from \code{\link{runUmapDefaults}} is used. 
+#'
+#' This argument is ignored if \code{x} contains pre-computed neighbor search results,
+#' in which case the number of neighbors is determined from \code{x}.
 #' @param optimize.seed Numeric scalar specifying the seed to use for the optimization epochs. 
-#' @param num.threads Integer scalar specifying the number of threads to use.
-#' @param parallel.optimization Logical scalar specifying whether to parallelize the optimization step.
+#'
+#' If \code{NULL}, the default value from \code{\link{runUmapDefaults}} is used. 
+#' @param num.threads Integer scalar specifying the number of threads to use for most UMAP steps. 
+#'
+#' If \code{NULL}, the default value from \code{\link{runUmapDefaults}} is used. 
+#' @param num.threads.optimize Integer scalar specifying the number of threads to use during UMAP layout optimization.
+#' Parallel optimization uses spinlocks so the number of threads should not be greater than the number of available CPUs.
+#'
+#' If \code{NULL}, the default value from \code{\link{runUmapDefaults}} is used. 
+#' @param parallel.optimization Deprecated, use \code{num.threads.optimize} instead.
 #' 
 #' @return 
 #' A numeric matrix where rows are cells and columns are the two dimensions of the embedding.
@@ -102,35 +162,43 @@
 #' @importFrom BiocNeighbors findKNN AnnoyParam
 runUmap <- function(
     x, 
-    num.dim=2,
-    local.connectivity=1,
-    bandwidth=1,
-    mix.ratio=1,
-    spread=1,
-    min.dist=0.1, 
-    a=NULL,
-    b=NULL,
-    repulsion.strength=1,
-    initialize.method=c("spectral", "random", "none"),
-    initial.coordinates=NULL,
-    initialize.random.on.spectral.fail=TRUE,
-    initialize.spectral.scale=10,
-    initialize.spectral.jitter=FALSE,
-    initialize.spectral.jitter.sd=0.0001,
-    initialize.random.scale=10,
-    initialize.seed=9876543210,
-    num.epochs=NULL, 
-    learning.rate=1,
-    negative.sample.rate=5,
-    num.neighbors=15, 
-    optimize.seed=1234567890, 
-    num.threads=1,
-    parallel.optimization=FALSE,
-    BNPARAM=AnnoyParam())
-{
+    num.dim = 2,
+    num.neighbors = NULL, 
+    local.connectivity = NULL,
+    bandwidth = NULL,
+    mix.ratio = NULL,
+    spread = NULL,
+    min.dist = NULL, 
+    a = NULL,
+    b = NULL,
+    repulsion.strength = NULL,
+    initialize.method = NULL,
+    initial.coordinates = NULL,
+    initialize.random.on.spectral.fail = NULL,
+    initialize.spectral.scale = NULL,
+    initialize.spectral.jitter = NULL,
+    initialize.spectral.jitter.sd = NULL,
+    initialize.random.scale = NULL,
+    initialize.seed = NULL,
+    num.epochs = NULL, 
+    learning.rate = NULL,
+    negative.sample.rate = NULL,
+    optimize.seed = NULL, 
+    num.threads = NULL,
+    num.threads.optimize = NULL,
+    parallel.optimization = FALSE,
+    BNPARAM=AnnoyParam()
+) {
     .checkSEX(x, "runUmap.se")
 
     if (!is.list(x)) {
+        def <- runUmapDefaults()
+        if (is.null(num.neighbors)) {
+            num.neighbors <- def$num.neighbors
+        }
+        if (is.null(num.threads)) {
+            num.threads <- def$num.threads
+        }
         x <- findKNN(x, k=num.neighbors, transposed=TRUE, get.index="transposed", get.distance="transposed", num.threads=num.threads, BNPARAM=BNPARAM)
     } else {
         .checkNeighborResults(x$index, x$distance)
@@ -141,6 +209,11 @@ runUmap <- function(
         stopifnot(identical(nrow(initial.coordinates), num.obs))
         stopifnot(identical(ncol(initial.coordinates), as.integer(num.dim)))
         initial.coordinates <- t(initial.coordinates)
+    }
+
+    if (parallel.optimization) {
+        .Deprecated(msg="'parallel.optimization=' is deprecated.\nUse 'num.threads.optimize=' instead.")
+        num.threads.optimize <- num.threads
     }
 
     output <- run_umap(
@@ -155,7 +228,7 @@ runUmap <- function(
         a=a,
         b=b,
         repulsion_strength=repulsion.strength,
-        initialize_method=match.arg(initialize.method),
+        initialize_method=initialize.method,
         initial_coordinates=initial.coordinates,
         initialize_random_on_spectral_fail=initialize.random.on.spectral.fail,
         initialize_spectral_scale=initialize.spectral.scale,
@@ -168,8 +241,18 @@ runUmap <- function(
         negative_sample_rate=negative.sample.rate,
         optimize_seed=optimize.seed,
         num_threads=num.threads,
-        parallel_optimization=parallel.optimization
+        num_threads_optimize=num.threads.optimize
     )
 
     t(output)
 }
+
+#' Default parameters for \code{\link{runUmap}}
+#' @description Default parameters from the underlying C++ library.
+#' These may be overridden by defaults in the \code{\link{runUmap}} function signature.
+#' @return Named list containing default values for various function arguments.
+#' @author Aaron Lun
+#' @examples
+#' runUmapDefaults()
+#' @export
+runUmapDefaults <- function() run_umap_defaults()

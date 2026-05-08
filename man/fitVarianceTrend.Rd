@@ -7,14 +7,14 @@
 fitVarianceTrend(
   means,
   variances,
-  mean.filter = TRUE,
-  min.mean = 0.1,
-  transform = TRUE,
-  span = 0.3,
-  use.min.width = FALSE,
-  min.width = 1,
-  min.window.count = 200,
-  num.threads = 1
+  mean.filter = NULL,
+  min.mean = NULL,
+  transform = NULL,
+  span = NULL,
+  use.min.width = NULL,
+  min.width = NULL,
+  min.window.count = NULL,
+  num.threads = NULL
 )
 }
 \arguments{
@@ -23,37 +23,56 @@ fitVarianceTrend(
 \item{variances}{Numeric vector containing the variance in the (log-)expression for each gene.}
 
 \item{mean.filter}{Logical scalar indicating whether to filter on the means before trend fitting.
-The assumption is that there is a bulk of low-abundance genes that are uninteresting and should be removed to avoid skewing the windows of the LOWESS smoother.}
+The assumption is that there is a bulk of low-abundance genes that are uninteresting and should be removed to avoid skewing the windows of the LOWESS smoother.
+
+If \code{NULL}, the default value in \code{\link{fitVarianceTrendDefaults}} is used.}
 
 \item{min.mean}{Numeric scalar specifying the minimum mean of genes to use in trend fitting.
 Genes with lower means do not participate in the LOWESS fit, to ensure that windows are not skewed towards the majority of low-abundance genes.
 Instead, the fitted values for these genes are defined by extrapolating the left edge of the fitted trend is extrapolated to the origin.
-The default value is chosen based on the typical distribution of means of log-expression values across genes.
-Only used if \code{mean.filter=TRUE}.}
+
+If \code{NULL}, the default value in \code{\link{fitVarianceTrendDefaults}} is used;
+this is chosen based on the typical distribution of means of log-expression values across genes.
+
+This argument is ignored if \code{mean.filter=FALSE}.}
 
 \item{transform}{Logical scalar indicating whether a quarter-root transformation should be applied before trend fitting.
 This transformation is copied from \code{limma::voom} and shrinks all values towards 1, flattening any sharp gradients in the trend for an easier fit.
-The default of \code{TRUE} assumes that the variances are computed from log-expression values, in which case there is typically a strong \dQuote{hump} in the mean-variance relationship.}
+For example, variances are computed from log-expression values typically exhibit a strong \dQuote{hump} in the mean-variance relationship.
+
+If \code{NULL}, the default value in \code{\link{fitVarianceTrendDefaults}} is used;}
 
 \item{span}{Numeric scalar specifying the span of the LOWESS smoother, as a proportion of the total number of points.
 Larger values improve stability at the cost of sensitivity to changes in low-density regions.
-Ignored if \code{use.min.width=TRUE}.}
+
+If \code{NULL}, the default value in \code{\link{fitVarianceTrendDefaults}} is used.
+
+This argument is ignored if \code{use.min.width=TRUE}.}
 
 \item{use.min.width}{Logical scalar indicating whether a minimum width constraint should be applied to the LOWESS smoother.
 This replaces the proportion-based span for defining each window.
 Instead, the window for each point must be of a minimum width and is extended until it contains a minimum number of points. 
 Setting this to `TRUE` ensures that sensitivity is maintained in the trend fit at low-density regions for the distribution of means, e.g., at high abundances.
-It also avoids overfitting from very small windows in high-density intervals.}
+It also avoids overfitting from very small windows in high-density intervals. 
+
+If \code{NULL}, the default value in \code{\link{fitVarianceTrendDefaults}} is used.}
 
 \item{min.width}{Minimum width of the window to use when \code{use.min.width=TRUE}.
-The default value is chosen based on the typical range of means in single-cell RNA-seq data.}
+
+If \code{NULL}, the default value in \code{\link{fitVarianceTrendDefaults}} is used;
+this is chosen based on the typical range of means in single-cell RNA-seq data.}
 
 \item{min.window.count}{Minimum number of observations in each window.
 This ensures that each window contains at least a given number of observations for a stable fit.
 If the minimum width window contains fewer observations, it is extended using the standard LOWESS logic until the minimum number is achieved.
-Only used if \code{use.min.width=TRUE}.}
 
-\item{num.threads}{Number of threads to use.}
+If \code{NULL}, the default value in \code{\link{fitVarianceTrendDefaults}} is used.
+
+This argument is ignored if \code{use.min.width = FALSE}.}
+
+\item{num.threads}{Number of threads to use.
+
+If \code{NULL}, the default value in \code{\link{fitVarianceTrendDefaults}} is used.}
 }
 \value{
 List containing \code{fitted}, a numeric vector containing the fitted values of the trend for each gene;

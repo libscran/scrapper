@@ -11,34 +11,34 @@
 SEXP run_tsne(
     Rcpp::IntegerMatrix nnidx,
     Rcpp::NumericMatrix nndist,
-    double perplexity,
-    double theta,
-    int early_exaggeration_iterations,
-    double exaggeration_factor,
-    int momentum_switch_iterations,
-    double start_momentum,
-    double final_momentum,
-    double eta,
-    int max_depth,
-    int leaf_approx,
-    int max_iter,
+    Rcpp::RObject perplexity,
+    Rcpp::RObject theta,
+    Rcpp::RObject early_exaggeration_iterations,
+    Rcpp::RObject exaggeration_factor,
+    Rcpp::RObject momentum_switch_iterations,
+    Rcpp::RObject start_momentum,
+    Rcpp::RObject final_momentum,
+    Rcpp::RObject eta,
+    Rcpp::RObject max_depth,
+    Rcpp::RObject leaf_approximation,
+    Rcpp::RObject max_iterations,
     double seed,
-    int num_threads)
-{
+    Rcpp::RObject num_threads
+) {
     qdtsne::Options opt;
-    opt.perplexity = perplexity;
+    set_number(perplexity, opt.perplexity, "perplexity");
     opt.infer_perplexity = false; // rely on the perplexity supplied by the user.
-    opt.theta = theta;
-    opt.early_exaggeration_iterations = early_exaggeration_iterations;
-    opt.exaggeration_factor = exaggeration_factor;
-    opt.momentum_switch_iterations = momentum_switch_iterations;
-    opt.start_momentum = start_momentum;
-    opt.final_momentum = final_momentum;
-    opt.eta = eta;
-    opt.leaf_approximation = leaf_approx;
-    opt.max_depth = max_depth;
-    opt.max_iterations = max_iter;
-    opt.num_threads = num_threads;
+    set_number(theta, opt.theta, "theta");
+    set_integer(early_exaggeration_iterations, opt.early_exaggeration_iterations, "early.exaggeration.iterations");
+    set_number(exaggeration_factor, opt.exaggeration_factor, "exaggeration.factor");
+    set_integer(momentum_switch_iterations, opt.momentum_switch_iterations, "momentum.switch.iterations");
+    set_number(start_momentum, opt.start_momentum, "start.momentum");
+    set_number(final_momentum, opt.final_momentum, "final.momentum");
+    set_number(eta, opt.eta, "eta");
+    set_bool(leaf_approximation, opt.leaf_approximation, "leaf.approximation");
+    set_integer(max_depth, opt.max_depth, "max.depth");
+    set_integer(max_iterations, opt.max_iterations, "max.iterations");
+    set_integer(num_threads, opt.num_threads, "num.threads");
 
     auto neighbors = unpack_neighbors<int, double>(nnidx, nndist);
     const auto nobs = neighbors.size();
@@ -55,4 +55,23 @@ SEXP run_tsne(
 //[[Rcpp::export(rng=false)]]
 int perplexity_to_neighbors(double p) {
     return qdtsne::perplexity_to_k(p);
+}
+
+//[[Rcpp::export(rng=false)]]
+Rcpp::List run_tsne_defaults() {
+    Rcpp::List output;
+    qdtsne::Options opt;
+    output["perplexity"] = opt.perplexity;
+    output["theta"] = opt.theta;
+    output["early.exaggeration.iterations"] = opt.early_exaggeration_iterations;
+    output["exaggeration.factor"] = opt.exaggeration_factor;
+    output["momentum.switch.iterations"] = opt.momentum_switch_iterations;
+    output["start.momentum"] = opt.start_momentum;
+    output["final.momentum"] = opt.final_momentum;
+    output["eta"] = opt.eta;
+    output["leaf.approximation"] = opt.leaf_approximation;
+    output["max.depth"] = opt.max_depth;
+    output["max.iterations"] = opt.max_iterations;
+    output["num.threads"] = opt.num_threads;
+    return output;
 }

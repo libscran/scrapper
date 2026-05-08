@@ -10,7 +10,7 @@
 #include "utils_qc.h"
 
 // [[Rcpp::export(rng=false)]]
-Rcpp::List compute_crispr_qc_metrics(SEXP x, int num_threads) {
+Rcpp::List compute_crispr_qc_metrics(SEXP x, Rcpp::RObject num_threads) {
     auto raw_mat = Rtatami::BoundNumericPointer(x);
     const auto& mat = raw_mat->ptr;
     const auto nc = mat->ncol();
@@ -29,7 +29,7 @@ Rcpp::List compute_crispr_qc_metrics(SEXP x, int num_threads) {
 
     // Running QC code.
     scran_qc::ComputeCrisprQcMetricsOptions opt;
-    opt.num_threads = num_threads;
+    set_integer(num_threads, opt.num_threads, "num.threads");
     scran_qc::compute_crispr_qc_metrics(*mat, buffers, opt);
 
     return Rcpp::List::create(
@@ -38,6 +38,14 @@ Rcpp::List compute_crispr_qc_metrics(SEXP x, int num_threads) {
         Rcpp::Named("max.value") = max_value,
         Rcpp::Named("max.index") = max_index
     );
+}
+
+//[[Rcpp::export(rng=false)]]
+Rcpp::List compute_crispr_qc_metrics_defaults() {
+    Rcpp::List output;
+    scran_qc::ComputeCrisprQcMetricsOptions opt;
+    output["num.threads"] = opt.num_threads;
+    return output; 
 }
 
 class ConvertedCrisprQcMetrics {
@@ -84,13 +92,13 @@ public:
 };
 
 // [[Rcpp::export(rng=false)]]
-Rcpp::List suggest_crispr_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::IntegerVector> block, double num_mads) {
+Rcpp::List suggest_crispr_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::IntegerVector> block, Rcpp::RObject max_value_num_mads) {
     ConvertedCrisprQcMetrics all_metrics(metrics);
     auto buffers = all_metrics.to_buffer();
     const auto ncells = all_metrics.size();
 
     scran_qc::ComputeCrisprQcFiltersOptions opt;
-    opt.max_value_num_mads = num_mads;
+    set_number(max_value_num_mads, opt.max_value_num_mads, "max.value.num.mads");
 
     auto block_info = MaybeBlock(block);
     auto ptr = block_info.get();
@@ -110,6 +118,14 @@ Rcpp::List suggest_crispr_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp:
             Rcpp::Named("max.value") = Rcpp::NumericVector::create(filt.get_max_value())
         );
     }
+}
+
+// [[Rcpp::export(rng=false)]]
+Rcpp::List suggest_crispr_qc_thresholds_defaults() {
+    Rcpp::List output;
+    scran_qc::ComputeCrisprQcFiltersOptions opt;
+    output["max.value.num.mads"] = opt.max_value_num_mads;
+    return output;
 }
 
 //[[Rcpp::export(rng=false)]]

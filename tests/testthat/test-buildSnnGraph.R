@@ -23,3 +23,23 @@ test_that("buildSnnGraph works correctly", {
 
     expect_error(buildSnnGraph(SummarizedExperiment::SummarizedExperiment(data)), "not supported")
 })
+
+test_that("buildSnnGraph works with other weighting schemes", {
+    data <- matrix(rnorm(10000), ncol=1000)
+    ref <- buildSnnGraph(data)
+    out <- buildSnnGraph(data, weight.scheme="ranked") # i.e., the default.
+    expect_identical(ref, out)
+
+    out <- buildSnnGraph(data, weight.scheme="jaccard")
+    expect_identical(length(out$edges), 2L * length(out$weights))  
+
+    out <- buildSnnGraph(data, weight.scheme="number")
+    expect_identical(length(out$edges), 2L * length(out$weights))  
+
+    expect_error(buildSnnGraph(data, weight.scheme="foo"), "unknown")
+})
+
+test_that("defaults work correctly", {
+    defs <- buildSnnGraphDefaults()
+    expect_true(all(names(defs) %in% names(formals(buildSnnGraph))))
+})

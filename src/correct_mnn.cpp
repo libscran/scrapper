@@ -14,27 +14,30 @@
 Rcpp::List correct_mnn(
     Rcpp::NumericMatrix x, 
     Rcpp::IntegerVector block, 
-    int num_neighbors, 
-    int num_steps, 
-    int num_threads,
-    std::string merge_policy, 
-    SEXP builder)
-{
+    Rcpp::RObject num_neighbors, 
+    Rcpp::RObject num_steps, 
+    Rcpp::RObject num_threads,
+    Rcpp::RObject merge_policy, 
+    SEXP builder
+) {
     mnncorrect::Options<int, double> opts;
-    opts.num_neighbors = num_neighbors;
-    opts.num_steps = num_steps;
-    opts.num_threads = num_threads;
+    set_integer(num_neighbors, opts.num_neighbors, "num.neighbors");
+    set_integer(num_steps, opts.num_steps, "num.steps");
+    set_integer(num_threads, opts.num_threads, "num.threads"); 
 
-    if (merge_policy == "input") {
-        opts.merge_policy = mnncorrect::MergePolicy::INPUT;
-    } else if (merge_policy == "max-variance" || merge_policy == "variance") {
-        opts.merge_policy = mnncorrect::MergePolicy::VARIANCE;
-    } else if (merge_policy == "max-rss" || merge_policy == "rss") {
-        opts.merge_policy = mnncorrect::MergePolicy::RSS;
-    } else if (merge_policy == "max-size" || merge_policy == "size") {
-        opts.merge_policy = mnncorrect::MergePolicy::SIZE;
-    } else {
-        throw std::runtime_error("unknown merge policy");
+    if (!merge_policy.isNULL()) {
+        const std::string mp = parse_single_string(merge_policy, "merge.policy");
+        if (mp == "input") {
+            opts.merge_policy = mnncorrect::MergePolicy::INPUT;
+        } else if (mp == "max-variance" || mp == "variance") {
+            opts.merge_policy = mnncorrect::MergePolicy::VARIANCE;
+        } else if (mp == "max-rss" || mp == "rss") {
+            opts.merge_policy = mnncorrect::MergePolicy::RSS;
+        } else if (mp == "max-size" || mp == "size") {
+            opts.merge_policy = mnncorrect::MergePolicy::SIZE;
+        } else {
+            throw std::runtime_error("unknown merge policy");
+        }
     }
 
     BiocNeighbors::BuilderPointer ptr(builder);
@@ -57,4 +60,19 @@ Rcpp::List correct_mnn(
     return Rcpp::List::create(
         Rcpp::Named("corrected") = output
     );
+}
+
+//[[Rcpp::export(rng=false)]]
+Rcpp::List correct_mnn_defaults() {
+    Rcpp::List output;
+    mnncorrect::Options<int, double> opts;
+    output["num.neighbors"] = opts.num_neighbors;
+    output["num.steps"] = opts.num_steps;
+    output["num.threads"] = opts.num_threads;
+    if (opts.merge_policy == mnncorrect::MergePolicy::RSS) {
+        output["merge.policy"] = "rss";
+    } else {
+        throw std::runtime_error("unexpected merge.policy default for correctMnn");
+    }
+    return output;
 }

@@ -7,9 +7,16 @@
 \alias{filterRnaQcMetrics}
 \title{Quality control for RNA count data}
 \usage{
-computeRnaQcMetrics(x, subsets, num.threads = 1)
+computeRnaQcMetrics(x, subsets, num.threads = NULL)
 
-suggestRnaQcThresholds(metrics, block = NULL, num.mads = 3)
+suggestRnaQcThresholds(
+  metrics,
+  block = NULL,
+  num.mads = NULL,
+  sum.num.mads = num.mads,
+  detected.num.mads = num.mads,
+  subset.proportion.num.mads = num.mads
+)
 
 filterRnaQcMetrics(thresholds, metrics, block = NULL)
 }
@@ -21,7 +28,9 @@ Values are expected to be counts.}
 Each vector may be logical (whether to keep each row), integer (row indices) or character (row names).
 For character vectors, strings not present in \code{rownames(x)} are ignored.}
 
-\item{num.threads}{Integer scalar specifying the number of threads to use.}
+\item{num.threads}{Integer scalar specifying the number of threads to use.
+
+If \code{NULL}, the default value in \code{\link{computeRnaQcMetricsDefaults}} is used.}
 
 \item{metrics}{\link[S4Vectors]{DataFrame} of per-cell QC metrics.
 This should have the same structure as the return value of \code{computeRnaQcMetrics}.}
@@ -31,7 +40,19 @@ Alternatively \code{NULL} if all cells are from the same block.
 
 For \code{filterRnaQcMetrics}, a blocking factor should be provided if \code{block} was used to construct \code{thresholds}.}
 
-\item{num.mads}{Number of median from the median, to define the threshold for outliers in each metric.}
+\item{num.mads}{Number of median absolute deviations (MADs) from the median to define the threshold for outliers in each metric.}
+
+\item{sum.num.mads}{Number of MADS from the median to define the threshold for outliers in the total sum of counts.
+
+If \code{NULL}, the default value in \code{\link{suggestRnaQcThresholdsDefaults}} is used.}
+
+\item{detected.num.mads}{Number of MADS from the median to define the threshold for outliers in the number of detected genes.
+
+If \code{NULL}, the default value in \code{\link{suggestRnaQcThresholdsDefaults}} is used.}
+
+\item{subset.proportion.num.mads}{Number of MADS from the median to define the threshold for outliers in the subset proportions.
+
+If \code{NULL}, the default value in \code{\link{suggestRnaQcThresholdsDefaults}} is used.}
 
 \item{thresholds}{List with the same structure as produced by \code{suggestRnaQcThresholds}.}
 }

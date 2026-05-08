@@ -19,3 +19,8 @@ test_that("fitVarianceTrend works as expected", {
     out2 <- fitVarianceTrend(x, y, span=0.5)
     expect_false(identical(out, out2))
 })
+
+test_that("fitVarianceTrendDefaults works as expected", {
+    def <- fitVarianceTrendDefaults()
+    expect_true(all(names(def) %in% names(formals(fitVarianceTrend))))
+})

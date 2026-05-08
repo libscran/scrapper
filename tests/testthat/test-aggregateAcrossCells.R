@@ -64,3 +64,8 @@ test_that("aggregateAcrossCells works for multiple factors", {
 
     expect_identical(agg$counts, expected.counts)
 })
+
+test_that("defaults work correctly", {
+    def <- aggregateAcrossCellsDefaults()
+    expect_true(all(names(def) %in% names(formals(aggregateAcrossCells))))
+})

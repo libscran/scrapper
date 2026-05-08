@@ -80,3 +80,11 @@ test_that("suggestRnaQcThresholds works as expected with blocking", {
     expect_error(filterRnaQcMetrics(thresholds, qc), "expected 'block='")
     expect_error(filterRnaQcMetrics(thresholds, qc, block=1:10), "not present in 'thresholds'")
 })
+
+test_that("defaults works as expected", {
+    def <- computeRnaQcMetricsDefaults()
+    expect_true(all(names(def) %in% names(formals(computeRnaQcMetrics))))
+
+    def <- suggestRnaQcThresholdsDefaults()
+    expect_true(all(names(def) %in% names(formals(suggestRnaQcThresholds))))
+})

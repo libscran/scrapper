@@ -11,7 +11,7 @@
 #include "utils_qc.h"
 
 // [[Rcpp::export(rng=false)]]
-Rcpp::List compute_adt_qc_metrics(SEXP x, Rcpp::List subsets, int num_threads) {
+Rcpp::List compute_adt_qc_metrics(SEXP x, Rcpp::List subsets, Rcpp::RObject num_threads) {
     auto raw_mat = Rtatami::BoundNumericPointer(x);
     const auto& mat = raw_mat->ptr;
     const auto nc = mat->ncol();
@@ -33,7 +33,7 @@ Rcpp::List compute_adt_qc_metrics(SEXP x, Rcpp::List subsets, int num_threads) {
 
     // Running QC code.
     scran_qc::ComputeAdtQcMetricsOptions opt;
-    opt.num_threads = num_threads;
+    set_integer(num_threads, opt.num_threads, "num.threads");
     scran_qc::compute_adt_qc_metrics(*mat, sub_ptrs, buffers, opt);
 
     return Rcpp::List::create(
@@ -41,6 +41,14 @@ Rcpp::List compute_adt_qc_metrics(SEXP x, Rcpp::List subsets, int num_threads) {
         Rcpp::Named("detected") = detected,
         Rcpp::Named("subsets") = Rcpp::List(out_subsets.begin(), out_subsets.end())
     );
+}
+
+// [[Rcpp::export(rng=false)]]
+Rcpp::List compute_adt_qc_metrics_defaults() {
+    Rcpp::List output;
+    scran_qc::ComputeAdtQcMetricsOptions opt;
+    output["num.threads"] = opt.num_threads;
+    return output;
 }
 
 class ConvertedAdtQcMetrics {
@@ -85,15 +93,21 @@ public:
 };
 
 // [[Rcpp::export(rng=false)]]
-Rcpp::List suggest_adt_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::IntegerVector> block, double min_detected_drop, double num_mads) {
+Rcpp::List suggest_adt_qc_thresholds(
+    Rcpp::List metrics,
+    Rcpp::Nullable<Rcpp::IntegerVector> block,
+    Rcpp::RObject min_detected_drop,
+    Rcpp::RObject detected_num_mads,
+    Rcpp::RObject subset_sum_num_mads 
+) {
     ConvertedAdtQcMetrics all_metrics(metrics);
     auto buffers = all_metrics.to_buffer();
     const auto ncells = all_metrics.size();
 
     scran_qc::ComputeAdtQcFiltersOptions opt;
-    opt.detected_num_mads = num_mads;
-    opt.subset_sum_num_mads = num_mads;
-    opt.detected_min_drop = min_detected_drop;
+    set_number(detected_num_mads, opt.detected_num_mads, "detected.num.mads");
+    set_number(subset_sum_num_mads, opt.subset_sum_num_mads, "subset.sum.num.mads");
+    set_number(min_detected_drop, opt.detected_min_drop, "min.detected.drop");
 
     auto block_info = MaybeBlock(block);
     auto ptr = block_info.get();
@@ -117,6 +131,17 @@ Rcpp::List suggest_adt_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::In
         );
     }
 }
+
+// [[Rcpp::export(rng=false)]]
+Rcpp::List suggest_adt_qc_thresholds_defaults() {
+    Rcpp::List output;
+    scran_qc::ComputeAdtQcFiltersOptions opt;
+    output["min.detected.drop"] = opt.detected_min_drop;
+    output["detected.num.mads"] = opt.detected_num_mads;
+    output["subset.sum.num.mads"] = opt.detected_num_mads;
+    return output;
+}
+
 
 //[[Rcpp::export(rng=false)]]
 Rcpp::LogicalVector filter_adt_qc_metrics(Rcpp::List filters, Rcpp::List metrics, Rcpp::Nullable<Rcpp::IntegerVector> block) {

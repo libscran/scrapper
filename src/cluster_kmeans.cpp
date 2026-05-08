@@ -20,14 +20,15 @@ Rcpp::List cluster_kmeans(
     bool tatami,
     std::string init_method,
     std::string refine_method,
-    bool var_part_optimize_partition,
-    double var_part_size_adjustment,
-    int lloyd_iterations,
-    int hartigan_wong_iterations,
-    int hartigan_wong_quick_transfer_iterations,
-    bool hartigan_wong_quit_quick_transfer_failure,
-    double seed,
-    int nthreads
+    Rcpp::RObject random_seed,
+    Rcpp::RObject kmeanspp_seed,
+    Rcpp::RObject var_part_optimize_partition,
+    Rcpp::RObject var_part_size_adjustment,
+    Rcpp::RObject lloyd_iterations,
+    Rcpp::RObject hartigan_wong_iterations,
+    Rcpp::RObject hartigan_wong_quick_transfer_iterations,
+    Rcpp::RObject hartigan_wong_quit_quick_transfer_failure,
+    Rcpp::RObject nthreads
 ) {
     std::optional<Rcpp::NumericMatrix> data;
     std::unique_ptr<kmeans::Matrix<int, double> > mptr;
@@ -54,21 +55,19 @@ Rcpp::List cluster_kmeans(
     std::unique_ptr<kmeans::Initialize<int, double, int, double> > iptr;
     if (init_method == "random") {
         auto ptr = new kmeans::InitializeRandom<int, double, int, double>;
-        auto& dest_seed = ptr->get_options().seed;
-        dest_seed = sanisizer::from_float<I<decltype(dest_seed)> >(seed);
+        set_integer(random_seed, ptr->get_options().seed, "random.seed");
         iptr.reset(ptr);
 
     } else if (init_method == "kmeans++") {
         auto ptr = new kmeans::InitializeKmeanspp<int, double, int, double>;
-        ptr->get_options().num_threads = nthreads;
-        auto& dest_seed = ptr->get_options().seed;
-        dest_seed = sanisizer::from_float<I<decltype(dest_seed)> >(seed);
+        set_integer(nthreads, ptr->get_options().num_threads, "num.threads");
+        set_integer(kmeanspp_seed, ptr->get_options().seed, "kmeanspp.seed"); 
         iptr.reset(ptr);
 
     } else if (init_method == "var-part") {
         auto ptr = new kmeans::InitializeVariancePartition<int, double, int, double>;
-        ptr->get_options().optimize_partition = var_part_optimize_partition;
-        ptr->get_options().size_adjustment = var_part_size_adjustment;
+        set_bool(var_part_optimize_partition, ptr->get_options().optimize_partition, "var.part.optimize.partition");
+        set_number(var_part_size_adjustment, ptr->get_options().size_adjustment, "var.part.size.adjustment");
         iptr.reset(ptr);
 
     } else {
@@ -78,16 +77,16 @@ Rcpp::List cluster_kmeans(
     std::unique_ptr<kmeans::Refine<int, double, int, double> > rptr;
     if (refine_method == "lloyd") {
         auto ptr = new kmeans::RefineLloyd<int, double, int, double>;
-        ptr->get_options().max_iterations = lloyd_iterations;
-        ptr->get_options().num_threads = nthreads;
+        set_integer(lloyd_iterations, ptr->get_options().max_iterations, "lloyd.iterations");
+        set_integer(nthreads, ptr->get_options().num_threads, "num.threads"); 
         rptr.reset(ptr);
 
     } else if (refine_method == "hartigan-wong") {
         auto ptr = new kmeans::RefineHartiganWong<int, double, int, double>;
-        ptr->get_options().max_iterations = hartigan_wong_iterations;
-        ptr->get_options().max_quick_transfer_iterations = hartigan_wong_quick_transfer_iterations;
-        ptr->get_options().quit_on_quick_transfer_convergence_failure = hartigan_wong_quit_quick_transfer_failure;
-        ptr->get_options().num_threads = nthreads;
+        set_integer(hartigan_wong_iterations, ptr->get_options().max_iterations, "hartigan.wong.iterations");
+        set_integer(hartigan_wong_quick_transfer_iterations, ptr->get_options().max_quick_transfer_iterations, "hartigan.wong.quick.transfer.iterations");
+        set_bool(hartigan_wong_quit_quick_transfer_failure, ptr->get_options().quit_on_quick_transfer_convergence_failure, "hartigan.wong.quit.quick.transfer.failure");
+        set_integer(nthreads, ptr->get_options().num_threads, "num.threads");
         rptr.reset(ptr);
     }
 
@@ -105,4 +104,40 @@ Rcpp::List cluster_kmeans(
         Rcpp::Named("iterations") = Rcpp::IntegerVector::create(out.iterations),
         Rcpp::Named("status") = Rcpp::IntegerVector::create(out.status) 
     );
+}
+
+//[[Rcpp::export(rng=false)]]
+Rcpp::List cluster_kmeans_defaults() {
+    Rcpp::List output;
+
+    {
+        kmeans::InitializeRandomOptions opt;
+        output["random.seed"] = opt.seed;
+    }
+
+    {
+        kmeans::InitializeKmeansppOptions opt;
+        output["num.threads"] = opt.num_threads; // just use this value as the representative, it should be 1 for everything anyway.
+        output["kmeanspp.seed"] = opt.seed;
+    }
+
+    {
+        kmeans::InitializeVariancePartitionOptions opt;
+        output["var.part.optimize.partition"] = opt.optimize_partition;
+        output["var.part.size.adjustment"] = opt.size_adjustment;
+    }
+
+    {
+        kmeans::RefineLloydOptions opt;
+        output["lloyd.iterations"] = opt.max_iterations;
+    }
+
+    {
+        kmeans::RefineHartiganWongOptions opt;
+        output["hartigan.wong.iterations"] = opt.max_iterations;
+        output["hartigan.wong.quick.transfer.iterations"] = opt.max_quick_transfer_iterations;
+        output["hartigan.wong.quit.quick.transfer.failure"] = opt.quit_on_quick_transfer_convergence_failure;
+    }
+
+    return output;
 }

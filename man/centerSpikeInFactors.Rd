@@ -4,12 +4,7 @@
 \alias{centerSpikeInFactors}
 \title{Center spike-in size factors}
 \usage{
-centerSpikeInFactors(
-  endogenous,
-  spike.ins,
-  block = NULL,
-  mode = c("lowest", "per-block")
-)
+centerSpikeInFactors(endogenous, spike.ins, block = NULL, mode = NULL)
 }
 \arguments{
 \item{endogenous}{Numeric vector of size factors for endogenous genes across cells.
@@ -23,10 +18,18 @@ Invalid size factors (e.g., non-positive, non-finite) will be ignored.}
 Alternatively \code{NULL}, in which case all cells are assumed to be in the same block.}
 
 \item{mode}{String specifying how to scale size factors across blocks, see the argument of the same name in \code{\link{centerSizeFactors}}.
-Only used if \code{block} is provided.}
+
+If \code{NULL}, the default value in \code{\link{centerSpikeInFactors}} is used.
+
+This argument is only used if \code{block} is provided.}
 }
 \value{
-List containing \code{endogenous} and \code{spike.ins}, containing centered size factors for the endogenous genes and spike-in transcripts, respectively.
+List containing:
+\itemize{
+\item \code{endogenous}, a numeric vector containing the centered size factors for the endogenous genes.
+\item \code{spike.ins}, a named list of numeric vectors.
+Each vector is named after an entry of \code{spike.ins} and contains centered size factors for the corresponding spike-in transcripts.
+}
 }
 \description{
 Center size factors for endogenous genes and spike-in transcripts, following the rationale in \code{\link{centerSizeFactors}}.
