@@ -6,7 +6,8 @@
 #' @param x A matrix-like object containing ADT count data.
 #' Rows correspond to tags and columns correspond to cells.
 #' @param num.threads Number of threads to use.
-#' If \code{NULL}, the default value in \code{\link{computeClrm1FactorDefaults}} is used.
+#'
+#' If \code{NULL}, the default value in \code{\link{computeClrm1FactorsDefaults}} is used.
 #'
 #' @return Numeric vector containing the CLRm1 size factor for each cell.
 #' Note that these size factors are not centered and should be passed through, e.g., \code{\link{centerSizeFactors}} before normalization.

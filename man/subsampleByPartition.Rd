@@ -15,12 +15,12 @@ If greater than the length of \code{partitions}, all cells are retained.}
 
 \item{seed}{Integer specifying the seed for the random number generator.
 
-If \code{NULL}, the default value in \code{\link{subsampleByartitionDefaults}} is used.}
+If \code{NULL}, the default value in \code{\link{subsampleByPartitionDefaults}} is used.}
 
 \item{force.non.empty}{Boolean indicating whether each partition should have at least one cell in the subsample.
 If \code{FALSE}, partitions may not be represented if the number of cells is less than the ratio of \code{number} to \code{length(partitions)}.
 
-If \code{NULL}, the default value in \code{\link{subsampleByartitionDefaults}} is used.}
+If \code{NULL}, the default value in \code{\link{subsampleByPartitionDefaults}} is used.}
 }
 \value{
 Integer vector containing the indices of the cells retained in the subsample.

@@ -53,7 +53,11 @@ This is slower but has a greater chance of convergence.
 
 \item{seed}{Integer specifying the seed for random number generation in some of the initialization methods.}
 
-\item{random.seed}{Integer specifying the seed for random number generation when \code{init.method = "kmeans++"}.
+\item{random.seed}{Integer specifying the seed for random number generation when \code{init.method = "random"}.
+
+If \code{NULL}, the default value in \code{\link{clusterKmeansDefaults}} is used.}
+
+\item{kmeanspp.seed}{Integer specifying the seed for random number generation when \code{init.method = "kmeans++"}.
 
 If \code{NULL}, the default value in \code{\link{clusterKmeansDefaults}} is used.}
 

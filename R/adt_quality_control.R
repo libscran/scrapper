@@ -19,14 +19,14 @@
 #' For \code{filterAdtQcMetrics}, a blocking factor should be provided if \code{block} was used to construct \code{thresholds}. 
 #' @param min.detected.drop Minimum drop in the number of detected features from the median, in order to consider a cell to be of low quality.
 #'
-#' If \code{NULL}, the default value in \code{\link{suggestAdtQcThresholdDefaults}} is used.
+#' If \code{NULL}, the default value in \code{\link{suggestAdtQcThresholdsDefaults}} is used.
 #' @param num.mads Number of median from the median, to define the threshold for outliers in each metric.
 #' @param detected.num.mads Number of median from the median, to define the threshold for outliers in the number of detected tags.
 #'
-#' If \code{NULL}, the default value in \code{\link{suggestAdtQcThresholdDefaults}} is used.
+#' If \code{NULL}, the default value in \code{\link{suggestAdtQcThresholdsDefaults}} is used.
 #' @param subset.sum.num.mads Number of median from the median, to define the threshold for outliers in the subset sums.
 #'
-#' If \code{NULL}, the default value in \code{\link{suggestAdtQcThresholdDefaults}} is used.
+#' If \code{NULL}, the default value in \code{\link{suggestAdtQcThresholdsDefaults}} is used.
 #' @param thresholds List with the same structure as produced by \code{suggestAdtQcThresholds}.
 #'
 #' @return For \code{computeAdtQcMetrics}, a \link[S4Vectors]{DataFrame} is returned with one row per cell in \code{x}.

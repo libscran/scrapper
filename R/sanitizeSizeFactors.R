@@ -22,7 +22,7 @@
 #' 
 #' If \code{NULL}, the default value in \code{\link{sanitizeSizeFactorsDefaults}} is used.
 #' @param replace.infinite Deprecated, use \code{handle.infinite} instead.
-#' @param handle.negative String specifying how to handle infinite size factors.
+#' @param handle.infinite String specifying how to handle infinite size factors.
 #' If \code{"sanitize"}, infinite size factors are replaced with the largest positive factor in \code{size.factors}.
 #' This ensures that any normalized values will be, at least, finite; the choice of a relatively large replacement value reflects the extremity of the scaling.
 #' If \code{"error"}, an error is raised upon encountering an infinite size factor. 

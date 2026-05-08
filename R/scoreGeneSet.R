@@ -9,6 +9,15 @@
 #' This may be an integer vector of row indices, a logical vector of length equal to the number of rows, or a character vector of row names.
 #' For integer and character vectors, duplicate entries are ignored.
 #' For a character vector, any string not present in \code{rownames(x)} is ignored.
+#' @param scale Logical scalar indicating whether to scale all genes to have the same variance.
+#' This ensures that each gene contributes equally to the PCA, favoring consistent variation across many genes rather than large variation in a few genes.
+#' If \code{block} is specified, each gene's variance is calculated as a weighted sum of the variances from each block. 
+#' Genes with zero variance are ignored.
+#'
+#' If \code{NULL}, the default value in \code{\link{scoreGeneSetDefaults}} is used.
+#' @param block Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{x}.
+#' The PCA will be performed on the residuals after regressing out the block effect, ensuring that differences between block do not dominate the variation in the dataset.
+#' Alternatively \code{NULL} if all cells are from the same block.
 #' @param rank Integer scalar specifying the rank of the approximation.
 #' The default value of 1 assumes that each gene set only describes a single coordinated biological function.
 #'

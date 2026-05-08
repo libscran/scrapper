@@ -11,7 +11,8 @@ computeClrm1Factors(x, num.threads = NULL)
 Rows correspond to tags and columns correspond to cells.}
 
 \item{num.threads}{Number of threads to use.
-If \code{NULL}, the default value in \code{\link{computeClrm1FactorDefaults}} is used.}
+
+If \code{NULL}, the default value in \code{\link{computeClrm1FactorsDefaults}} is used.}
 }
 \value{
 Numeric vector containing the CLRm1 size factor for each cell.

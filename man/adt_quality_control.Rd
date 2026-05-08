@@ -42,17 +42,17 @@ For \code{filterAdtQcMetrics}, a blocking factor should be provided if \code{blo
 
 \item{min.detected.drop}{Minimum drop in the number of detected features from the median, in order to consider a cell to be of low quality.
 
-If \code{NULL}, the default value in \code{\link{suggestAdtQcThresholdDefaults}} is used.}
+If \code{NULL}, the default value in \code{\link{suggestAdtQcThresholdsDefaults}} is used.}
 
 \item{num.mads}{Number of median from the median, to define the threshold for outliers in each metric.}
 
 \item{detected.num.mads}{Number of median from the median, to define the threshold for outliers in the number of detected tags.
 
-If \code{NULL}, the default value in \code{\link{suggestAdtQcThresholdDefaults}} is used.}
+If \code{NULL}, the default value in \code{\link{suggestAdtQcThresholdsDefaults}} is used.}
 
 \item{subset.sum.num.mads}{Number of median from the median, to define the threshold for outliers in the subset sums.
 
-If \code{NULL}, the default value in \code{\link{suggestAdtQcThresholdDefaults}} is used.}
+If \code{NULL}, the default value in \code{\link{suggestAdtQcThresholdsDefaults}} is used.}
 
 \item{thresholds}{List with the same structure as produced by \code{suggestAdtQcThresholds}.}
 }

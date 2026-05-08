@@ -35,7 +35,15 @@ If \code{"ignore"}, no action is taken.
 
 If \code{NULL}, the default value in \code{\link{sanitizeSizeFactorsDefaults}} is used.}
 
-\item{handle.negative}{String specifying how to handle infinite size factors.
+\item{handle.negative}{String specifying how to handle negative size factors.
+If \code{"sanitize"}, negative size factors are replaced with the lowest positive factor in \code{size.factors}.
+This ensures that the normalized values will be large to reflect the extremity of the scaling, but still finite for sensible downstream processing. 
+If \code{"error"}, an error is raised upon encountering a negative size factor. 
+If \code{"ignore"}, no action is taken.
+
+If \code{NULL}, the default value in \code{\link{sanitizeSizeFactorsDefaults}} is used.}
+
+\item{handle.infinite}{String specifying how to handle infinite size factors.
 If \code{"sanitize"}, infinite size factors are replaced with the largest positive factor in \code{size.factors}.
 This ensures that any normalized values will be, at least, finite; the choice of a relatively large replacement value reflects the extremity of the scaling.
 If \code{"error"}, an error is raised upon encountering an infinite size factor. 

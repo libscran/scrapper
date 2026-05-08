@@ -55,7 +55,7 @@
 #' @param random.seed Integer specifying the seed for random number generation when \code{init.method = "random"}.
 #'
 #' If \code{NULL}, the default value in \code{\link{clusterKmeansDefaults}} is used.
-#' @param random.seed Integer specifying the seed for random number generation when \code{init.method = "kmeans++"}.
+#' @param kmeanspp.seed Integer specifying the seed for random number generation when \code{init.method = "kmeans++"}.
 #'
 #' If \code{NULL}, the default value in \code{\link{clusterKmeansDefaults}} is used.
 #' @param warn Boolean specifying whether a warning should be emitted if the k-means algorithm failed to converge.

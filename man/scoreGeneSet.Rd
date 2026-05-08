@@ -34,6 +34,17 @@ The default value of 1 assumes that each gene set only describes a single coordi
 
 If \code{NULL}, the default value in \code{\link{scoreGeneSetDefaults}} is used.}
 
+\item{scale}{Logical scalar indicating whether to scale all genes to have the same variance.
+This ensures that each gene contributes equally to the PCA, favoring consistent variation across many genes rather than large variation in a few genes.
+If \code{block} is specified, each gene's variance is calculated as a weighted sum of the variances from each block. 
+Genes with zero variance are ignored.
+
+If \code{NULL}, the default value in \code{\link{scoreGeneSetDefaults}} is used.}
+
+\item{block}{Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{x}.
+The PCA will be performed on the residuals after regressing out the block effect, ensuring that differences between block do not dominate the variation in the dataset.
+Alternatively \code{NULL} if all cells are from the same block.}
+
 \item{block.weight.policy}{String specifying the policy to use for weighting the contribution of different blocks to the PCA.
 See the argument of the same name in \code{\link{computeBlockWeights}} for more detail.
 
