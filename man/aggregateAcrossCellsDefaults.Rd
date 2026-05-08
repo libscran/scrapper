@@ -10,7 +10,8 @@ aggregateAcrossCellsDefaults()
 Named list containing default values for various function arguments.
 }
 \description{
-Default parameters for \code{\link{aggregateAcrossCells}}
+Default parameters from the underlying C++ library.
+These may be overridden by defaults in the \code{\link{aggregateAcrossCells}} function signature.
 }
 \examples{
 aggregateAcrossCellsDefaults()

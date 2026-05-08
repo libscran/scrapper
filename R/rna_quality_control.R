@@ -234,6 +234,8 @@ filterRnaQcMetrics <- function(thresholds, metrics, block=NULL) {
 }
 
 #' Default parameters for RNA quality control
+#' @description Default parameters from the underlying C++ library.
+#' These may be overridden by defaults in each function's signature.
 #' @return Named list containing default values for the various function arguments.
 #' @author Aaron Lun
 #' @examples

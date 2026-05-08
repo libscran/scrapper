@@ -11,6 +11,7 @@ Named list containing default values for various function arguments.
 }
 \description{
 Default parameters from the underlying C++ library.
+These may be overridden by defaults in the \code{\link{runUmap}} function signature.
 }
 \examples{
 runUmapDefaults()

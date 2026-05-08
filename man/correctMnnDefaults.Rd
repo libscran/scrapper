@@ -10,7 +10,8 @@ correctMnnDefaults()
 Named list containing default values for various function arguments.
 }
 \description{
-Default parameters for \code{\link{correctMnn}}
+Default parameters from the underlying C++ library.
+These may be overridden by defaults in the \code{\link{correctMnn}} function signature.
 }
 \examples{
 correctMnnDefaults()

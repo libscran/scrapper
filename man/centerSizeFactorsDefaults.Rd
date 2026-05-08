@@ -10,7 +10,8 @@ centerSizeFactorsDefaults()
 Named list containing default values for various function arguments.
 }
 \description{
-Default parameters for \code{\link{centerSizeFactors}}
+Default parameters from the underlying C++ library.
+These may be overridden by defaults in the \code{\link{centerSizeFactors}} function signature.
 }
 \examples{
 centerSizeFactorsDefaults()

@@ -105,7 +105,9 @@ scaleByNeighbors <- function(
 }
 
 #' Default parameters for \code{\link{scaleByNeighbors}}
-#' @param block See the argument of the same name in \code{\link{runPca}}.
+#' @description Default parameters from the underlying C++ library.
+#' These may be overridden by defaults in the \code{\link{scaleByNeighbors}} function signature.
+#' @param block See the argument of the same name in \code{\link{scaleByNeighbors}}.
 #' @return Named list containing default values for various function arguments.
 #' These values may change depending on whether \code{block} is supplied.
 #' @author Aaron Lun

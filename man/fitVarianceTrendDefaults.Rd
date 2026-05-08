@@ -10,7 +10,8 @@ fitVarianceTrendDefaults()
 Named list containing default values for the various function arguments.
 }
 \description{
-Default parameters for \code{\link{fitVarianceTrend}}
+Default parameters from the underlying C++ library.
+These may be overridden by defaults in the \code{\link{fitVarianceTrend}} function signature.
 }
 \examples{
 fitVarianceTrendDefaults()

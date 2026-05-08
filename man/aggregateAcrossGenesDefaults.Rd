@@ -10,7 +10,8 @@ aggregateAcrossGenesDefaults()
 Named list containing default values for various function arguments.
 }
 \description{
-Default parameters for \code{\link{aggregateAcrossGenes}}
+Default parameters from the underlying C++ library.
+These may be overridden by defaults in the \code{\link{aggregateAcrossGenes}} function signature.
 }
 \examples{
 aggregateAcrossGenesDefaults()

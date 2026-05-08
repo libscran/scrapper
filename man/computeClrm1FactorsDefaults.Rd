@@ -10,7 +10,8 @@ computeClrm1FactorsDefaults()
 Named list containing default values for various function arguments.
 }
 \description{
-Default parameters for \code{\link{computeClrm1Factors}}
+Default parameters from the underlying C++ library.
+These may be overridden by defaults in the \code{\link{computeClrm1Factors}} function signature.
 }
 \examples{
 computeClrm1FactorsDefaults()

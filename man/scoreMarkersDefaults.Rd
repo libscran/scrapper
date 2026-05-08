@@ -14,7 +14,8 @@ Named list containing default values for various function arguments.
 These defaults may change depending on the values for \code{all.pairwise}.
 }
 \description{
-Default parameters for \code{\link{scoreMarkers}}
+Default parameters from the underlying C++ library.
+These may be overridden by defaults in the \code{\link{scoreMarkers}} function signature.
 }
 \examples{
 scoreMarkersDefaults()

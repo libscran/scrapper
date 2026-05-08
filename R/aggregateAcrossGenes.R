@@ -123,6 +123,8 @@ aggregateAcrossGenes <- function(x, sets, average = NULL, convert = TRUE, num.th
 }
 
 #' Default parameters for \code{\link{aggregateAcrossGenes}}
+#' @description Default parameters from the underlying C++ library.
+#' These may be overridden by defaults in the \code{\link{aggregateAcrossGenes}} function signature.
 #' @return Named list containing default values for various function arguments.
 #' @author Aaron Lun
 #' @examples

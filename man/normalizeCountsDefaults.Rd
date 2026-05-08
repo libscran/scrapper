@@ -10,7 +10,8 @@ normalizeCountsDefaults()
 Named list of default values for various function arguments.
 }
 \description{
-Default parameters for \code{\link{normalizeCounts}}
+Default parameters from the underlying C++ library.
+These may be overridden by defaults in the \code{\link{normalizeCounts}} function signature.
 }
 \examples{
 normalizeCountsDefaults()

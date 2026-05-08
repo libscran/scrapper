@@ -81,6 +81,8 @@ subsampleByNeighbors <- function(x, num.neighbors = NULL, min.remaining = NULL, 
 }
 
 #' Default parameters for \code{\link{subsampleByNeighbors}}
+#' @description Default parameters from the underlying C++ library.
+#' These may be overridden by defaults in the \code{\link{subsampleByNeighbors}} function signature.
 #' @return Named list containing default values for various function arguments.
 #' @author Aaron Lun
 #' @examples

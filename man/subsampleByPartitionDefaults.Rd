@@ -10,7 +10,8 @@ subsampleByPartitionDefaults()
 Named list containing default values for various function arguments.
 }
 \description{
-Default parameters for \code{\link{subsampleByPartition}}
+Default parameters from the underlying C++ library.
+These may be overridden by defaults in the \code{\link{subsampleByPartition}} function signature.
 }
 \examples{
 subsampleByPartitionDefaults()

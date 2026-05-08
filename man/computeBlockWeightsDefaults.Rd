@@ -10,7 +10,8 @@ computeBlockWeightsDefaults()
 Named list containing default values for various function arguments.
 }
 \description{
-Default parameters for \code{\link{computeBlockWeights}}
+Default parameters from the underlying C++ library.
+These may be overridden by defaults in the \code{\link{computeBlockWeights}} function signature.
 }
 \examples{
 computeBlockWeightsDefaults()

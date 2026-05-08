@@ -10,7 +10,8 @@ chooseHighlyVariableGenesDefaults()
 Named list containing default values for various function arguments.
 }
 \description{
-Default parameters for \code{\link{chooseHighlyVariableGenes}}
+Default parameters from the underlying C++ library.
+These may be overridden by defaults in the \code{\link{chooseHighlyVariableGenes}} function signature.
 }
 \examples{
 chooseHighlyVariableGenesDefaults()

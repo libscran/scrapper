@@ -100,6 +100,8 @@ aggregateAcrossCells <- function(
 }
 
 #' Default parameters for \code{\link{aggregateAcrossCells}}
+#' @description Default parameters from the underlying C++ library.
+#' These may be overridden by defaults in the \code{\link{aggregateAcrossCells}} function signature.
 #' @return Named list containing default values for various function arguments.
 #' @author Aaron Lun
 #' @examples

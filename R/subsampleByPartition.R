@@ -42,6 +42,8 @@ subsampleByPartition <- function(partitions, number, seed = NULL, force.non.empt
 }
 
 #' Default parameters for \code{\link{subsampleByPartition}}
+#' @description Default parameters from the underlying C++ library.
+#' These may be overridden by defaults in the \code{\link{subsampleByPartition}} function signature.
 #' @return Named list containing default values for various function arguments.
 #' @author Aaron Lun
 #' @examples

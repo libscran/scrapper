@@ -51,6 +51,8 @@ centerSizeFactors <- function(size.factors, block = NULL, mode = NULL) {
 }
 
 #' Default parameters for \code{\link{centerSizeFactors}}
+#' @description Default parameters from the underlying C++ library.
+#' These may be overridden by defaults in the \code{\link{centerSizeFactors}} function signature.
 #' @return Named list containing default values for various function arguments.
 #' @author Aaron Lun
 #' @examples

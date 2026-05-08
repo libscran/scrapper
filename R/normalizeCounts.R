@@ -105,6 +105,8 @@ normalizeCounts <- function(x, size.factors, log = NULL, pseudo.count = NULL, lo
 }
 
 #' Default parameters for \code{\link{normalizeCounts}}
+#' @description Default parameters from the underlying C++ library.
+#' These may be overridden by defaults in the \code{\link{normalizeCounts}} function signature.
 #' @return Named list of default values for various function arguments. 
 #' @author Aaron Lun
 #' @examples

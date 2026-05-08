@@ -10,7 +10,8 @@ modelGeneVariancesDefaults()
 Named list of default values for various function arguments.
 }
 \description{
-Default parameters for \code{\link{modelGeneVariances}}
+Default parameters from the underlying C++ library.
+These may be overridden by defaults in the \code{\link{modelGeneVariances}} function signature.
 }
 \examples{
 modelGeneVariancesDefaults()

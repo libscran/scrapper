@@ -249,6 +249,7 @@ runUmap <- function(
 
 #' Default parameters for \code{\link{runUmap}}
 #' @description Default parameters from the underlying C++ library.
+#' These may be overridden by defaults in the \code{\link{runUmap}} function signature.
 #' @return Named list containing default values for various function arguments.
 #' @author Aaron Lun
 #' @examples

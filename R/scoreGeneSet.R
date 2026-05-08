@@ -162,6 +162,8 @@ scoreGeneSet <- function(
 }
 
 #' Default parameters for \code{\link{scoreGeneSet}}
+#' @description Default parameters from the underlying C++ library.
+#' These may be overridden by defaults in the \code{\link{scoreGeneSet}} function signature.
 #' @return Named list containing default values for various function arguments.
 #' @author Aaron Lun
 #' @examples

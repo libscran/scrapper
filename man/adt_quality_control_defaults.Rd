@@ -14,7 +14,8 @@ suggestAdtQcThresholdsDefaults()
 Named list containing default values for the various function arguments.
 }
 \description{
-Default parameters for ADT quality control
+Default parameters from the underlying C++ library.
+These may be overridden by defaults in each function's signature.
 }
 \examples{
 computeAdtQcMetricsDefaults()

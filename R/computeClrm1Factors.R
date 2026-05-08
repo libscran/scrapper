@@ -33,6 +33,8 @@ computeClrm1Factors <- function(x, num.threads = NULL) {
 }
 
 #' Default parameters for \code{\link{computeClrm1Factors}}
+#' @description Default parameters from the underlying C++ library.
+#' These may be overridden by defaults in the \code{\link{computeClrm1Factors}} function signature.
 #' @return Named list containing default values for various function arguments.
 #' @author Aaron Lun
 #' @examples

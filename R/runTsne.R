@@ -155,8 +155,8 @@ runTsne <- function(
         final_momentum=final.momentum,
         eta=eta,
         max_depth=max.depth,
-        leaf_approx=leaf.approximation,
-        max_iter=max.iterations,
+        leaf_approxmation=leaf.approximation,
+        max_iterations=max.iterations,
         num_threads=num.threads,
         seed=seed
     )
