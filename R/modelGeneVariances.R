@@ -11,29 +11,35 @@
 #' Alternatively \code{NULL}, if all cells are from the same block.
 #' @param block.average.policy String specifying the policy to use for average statistics across blocks.
 #' This can either be \code{"mean"} (to compute a weighted mean), \code{"quantile"} (to compute a quantile) or \code{"none"} (no averaging).
+#'
 #' If \code{NULL}, the default value in \code{\link{modelGeneVariancesDefaults}} is used.
 #'
 #' This argument is only used if \code{block} is not \code{NULL}.
 #' @param block.weight.policy String specifying the policy to use for weighting different blocks when computing the average for each statistic.
 #' See the argument of the same name in \code{\link{computeBlockWeights}} for more details.
+#'
 #' If \code{NULL}, the default value in \code{\link{modelGeneVariancesDefaults}} is used.
 #'
 #' This argument is only used if \code{block} is not \code{NULL} and \code{block.average.policy = "mean"}.
 #' @param variable.block.weight Numeric vector of length 2, specifying the parameters for variable block weighting.
 #' See the argument of the same name in \code{\link{computeBlockWeights}} for more details.
+#'
 #' If \code{NULL}, the default value in \code{\link{modelGeneVariancesDefaults}} is used.
 #'
 #' This argument is only used if \code{block} is not \code{NULL}, \code{block.average.policy = "mean"} and \code{block.weight.policy = "variable"}.
 #' @param block.quantile Number specifying the probability of the quantile of statistics across blocks. 
+#'
 #' If \code{NULL}, the default value in \code{\link{modelGeneVariancesDefaults}} is used; this is 0.5, i.e., the median of per-block statistics.
 #'
 #' This argument is only used if \code{block} is not \code{NULL} and \code{block.average.policy = "quantile"}.
 #' @param fit.trend Boolean indicating whether a mean-variance trend should be fitted.
 #' If \code{FALSE}, only the means and variances are computed.
 #' This can occasionally be useful when the trend is computed separately (e.g., spike-ins).
+#'
 #' If \code{NULL}, the default value in \code{\link{modelGeneVariancesDefaults}} is used.
 #' @param mean.filter Logical scalar indicating whether to filter on the means before trend fitting.
 #' See the argument of the same name in \code{\link{fitVarianceTrend}} for more details.
+#'
 #' If \code{NULL}, the default value in \code{\link{modelGeneVariancesDefaults}} is used.
 #'
 #' This argument is only used if \code{fit.trend = TRUE}.
@@ -44,30 +50,36 @@
 #' This argument is only used if \code{fit.trend = TRUE}.
 #' @param transform Logical scalar indicating whether a quarter-root transformation should be applied before trend fitting.
 #' See the argument of the same name in \code{\link{fitVarianceTrend}} for more details.
+#'
 #' If \code{NULL}, the default value in \code{\link{modelGeneVariancesDefaults}} is used.
 #'
 #' This argument is only used if \code{fit.trend = TRUE}.
 #' @param span Numeric scalar specifying the span of the LOWESS smoother, as a proportion of the total number of points.
 #' See the argument of the same name in \code{\link{fitVarianceTrend}} for more details.
+#'
 #' If \code{NULL}, the default value in \code{\link{modelGeneVariancesDefaults}} is used.
 #'
 #' This argument is only used if \code{fit.trend = TRUE}.
 #' @param use.min.width Logical scalar indicating whether a minimum width constraint should be applied to the LOWESS smoother.
 #' See the argument of the same name in \code{\link{fitVarianceTrend}} for more details.
+#'
 #' If \code{NULL}, the default value in \code{\link{modelGeneVariancesDefaults}} is used.
 #'
 #' This argument is only used if \code{fit.trend = TRUE}.
 #' @param min.width Minimum width of the window to use when \code{use.min.width=TRUE}.
 #' See the argument of the same name in \code{\link{fitVarianceTrend}} for more details.
+#'
 #' If \code{NULL}, the default value in \code{\link{modelGeneVariancesDefaults}} is used.
 #'
 #' This argument is only used if \code{fit.trend = TRUE}.
 #' @param min.window.count Minimum number of observations in each window.
 #' See the argument of the same name in \code{\link{fitVarianceTrend}} for more details.
+#'
 #' If \code{NULL}, the default value in \code{\link{modelGeneVariancesDefaults}} is used.
 #'
 #' This argument is only used if \code{fit.trend = TRUE}.
 #' @param num.threads Integer scalar specifying the number of threads to use.
+#'
 #' If \code{NULL}, the default value in \code{\link{modelGeneVariancesDefaults}} is used.
 #'
 #' @details
@@ -117,15 +129,15 @@ modelGeneVariances <- function(
     block.weight.policy = NULL,
     variable.block.weight = NULL,
     block.quantile = NULL,
-    fit.trend = TRUE,
-    mean.filter = TRUE,
-    min.mean = 0.1, 
-    transform = TRUE, 
-    span = 0.3,
-    use.min.width = FALSE,
-    min.width = 1,
-    min.window.count = 200,
-    num.threads = 1
+    fit.trend = NULL,
+    mean.filter = NULL,
+    min.mean = NULL, 
+    transform = NULL, 
+    span = NULL,
+    use.min.width = NULL,
+    min.width = NULL,
+    min.window.count = NULL,
+    num.threads = NULL
 ) {
     .checkSEX(x, "chooseRnaHvgs.se")
     block <- .transformFactor(block)
@@ -151,7 +163,7 @@ modelGeneVariances <- function(
 
     if ("means" %in% names(computed)) {
         stats <- DataFrame(means = computed$means, variances = computed$variances)
-        if (fit.trend) {
+        if ("fitted" %in% names(computed)) {
             stats$fitted <- computed$fitted
             stats$residuals <- computed$residuals
         }
@@ -167,7 +179,7 @@ modelGeneVariances <- function(
         for (i in seq_along(pb)) {
             curcomp <- pb[[i]]
             curstats <- DataFrame(means = curcomp$means, variances = curcomp$variances, row.names = rownames(x))
-            if (fit.trend) {
+            if ("fitted" %in% names(curcomp)) {
                 curstats$fitted <- curcomp$fitted
                 curstats$residuals <- curcomp$residuals
             }
