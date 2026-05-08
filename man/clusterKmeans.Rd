@@ -27,7 +27,7 @@ clusterKmeans(
 This is typically a dense double-precision matrix containing a low-dimensional representation from, e.g., \code{\link{runPca}}.
 However, any matrix representation supported by \code{\link[beachmat]{initializeCpp}} can also be used.}
 
-\item{k}{Integer scalar specifying the number of clusters.}
+\item{k}{Integer specifying the number of clusters.}
 
 \item{init.method}{String specifying the initialization method for the centers:
 \itemize{
@@ -102,8 +102,8 @@ The number of levels is no greater than \code{k}, where each level is an integer
 \item \code{centers}, a numeric matrix with the coordinates of the cluster centroids (dimensions in rows, centers in columns).
 The number of columns is no greater than \code{k}.
 Empty clusters are automatically removed.
-\item \code{iterations}, an integer scalar specifying the number of refinement iterations that were performed.
-\item \code{status}, an integer scalar specifying the completion status of the algorithm.
+\item \code{iterations}, an integer specifying the number of refinement iterations that were performed.
+\item \code{status}, an integer specifying the completion status of the algorithm.
 A value of zero indicates success while the meaning of any non-zero value depends on the choice of \code{refine.method}:
 \itemize{
 \item For Lloyd, a value of 2 indicates convergence failure.

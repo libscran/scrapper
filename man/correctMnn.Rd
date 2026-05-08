@@ -26,13 +26,15 @@ typically containing coordinates in a low-dimensional embedding (e.g., from \cod
 
 \item{block}{Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{x}.}
 
-\item{num.neighbors}{Integer scalar specifying the number of neighbors in the various search steps.
+\item{num.neighbors}{Integer specifying the number of neighbors in the various search steps.
 Larger values improve the stability of the correction by increasing the number of MNN pairs and including more observations in each center of mass.
 However, this comes at the cost of reduced resolution when matching subpopulations across batches.
+
 If \code{NULL}, the default value in \code{\link{correctMnnDefaults}} is used.}
 
-\item{num.steps}{Integer scalar specifying the number of steps for the recursive neighbor search to compute the center of mass.
+\item{num.steps}{Integer specifying the number of steps for the recursive neighbor search to compute the center of mass.
 Larger values mitigate the kissing effect but increase the risk of including inappropriately distant subpopulations into the center of mass.
+
 If \code{NULL}, the default value in \code{\link{correctMnnDefaults}} is used.}
 
 \item{merge.policy}{String specifying the policy to use to choose the order of batches to merge.
@@ -65,7 +67,8 @@ If \code{NULL}, the default value in \code{\link{correctMnnDefaults}} is used.}
 
 \item{BNPARAM}{A \link[BiocNeighbors]{BiocNeighborParam} object specifying the nearest-neighbor algorithm to use.}
 
-\item{num.threads}{Integer scalar specifying the number of threads to use.
+\item{num.threads}{Integer specifying the number of threads to use.
+
 If \code{NULL}, the default value in \code{\link{correctMnnDefaults}} is used.}
 }
 \value{

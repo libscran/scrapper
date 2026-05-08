@@ -81,8 +81,7 @@
 #' This argument is only used if \code{all.pairwise=FALSE}.
 #' @param compute.summary.quantiles Numeric vector containing the probabilities of quantiles to compute as summary statistics for each effect size.
 #'
-#' If \code{NULL}, the default value in \code{\link{scoreMarkersDefaults}} is used.
-#' By default, no summary quantiles are computed.
+#' If \code{NULL}, no summary quantiles are computed.
 #'
 #' This argument is only used if \code{all.pairwise=FALSE}.
 #' @param compute.summary.min.rank Boolean specifying whether to compute the mininum rank as a summary statistic for each effect size.
@@ -95,7 +94,8 @@
 #' If \code{FALSE}, only the summary statistics are reported.
 #' @param top.index.only Boolean indicating whether to only report the indices of the top genes when \code{all.pairwise} is an integer.
 #' This is more efficient when the effect sizes of the top genes are not required.
-#' Ignored for all other values of \code{all.pairwise}.
+#'
+#' This argument is ignored for all other values of \code{all.pairwise}.
 #' @param min.rank.limit Integer specifying the maximum value of the min-rank to report.
 #' Lower values improve memory efficiency at the cost of discarding information about lower-ranked genes.
 #'

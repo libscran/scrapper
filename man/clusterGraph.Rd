@@ -30,23 +30,23 @@ see \url{https://igraph.org/c/doc/igraph-Community.html#igraph_community_walktra
 see \url{https://igraph.org/c/doc/igraph-Community.html#igraph_community_leiden} for details.
 }}
 
-\item{seed}{Integer scalar specifying the random seed for some of community detection algorithms.}
+\item{seed}{Integer specifying the random seed for some of community detection algorithms.}
 
-\item{multilevel.resolution}{Numeric scalar specifying the resolution when \code{method="multilevel"}.
+\item{multilevel.resolution}{Number specifying the resolution when \code{method="multilevel"}.
 Lower values favor fewer, larger communities; higher values favor more, smaller communities.
 
 If \code{NULL}, the default value in \code{\link{clusterGraphDefaults}} is used.}
 
-\item{multilevel.seed}{Integer scalar specifying the random seed to use for \code{method="multilevel"}.
+\item{multilevel.seed}{Integer specifying the random seed to use for \code{method="multilevel"}.
 
 If \code{NULL}, the default value in \code{\link{clusterGraphDefaults}} is used.}
 
-\item{leiden.resolution}{Numeric scalar specifying the resolution when \code{method="leiden"}.
+\item{leiden.resolution}{Number specifying the resolution when \code{method="leiden"}.
 Lower values favor fewer, larger communities; higher values favor more, smaller communities.
 
 If \code{NULL}, the default value in \code{\link{clusterGraphDefaults}} is used.}
 
-\item{leiden.seed}{Integer scalar specifying the random seed to use for \code{method="leiden"}.
+\item{leiden.seed}{Integer specifying the random seed to use for \code{method="leiden"}.
 
 If \code{NULL}, the default value in \code{\link{clusterGraphDefaults}} is used.}
 
@@ -56,7 +56,7 @@ The CPM typically yields more fine-grained clusters than the modularity at the s
 
 If \code{NULL}, the default value in \code{\link{clusterGraphDefaults}} is used.}
 
-\item{walktrap.steps}{Integer scalar specifying the number of steps to use when \code{method="walktrap"}.
+\item{walktrap.steps}{Integer specifying the number of steps to use when \code{method="walktrap"}.
 This determines the ability of the Walktrap algorithm to distinguish highly interconnected communities from the rest of the graph.
 
 If \code{NULL}, the default value in \code{\link{clusterGraphDefaults}} is used.}
@@ -67,9 +67,9 @@ Additional fields may be present depending on the \code{method}:
 \itemize{
 \item For \code{method="multilevel"}, the \code{levels} list contains the clustering result at each level of the algorithm.
 A \code{modularity} numeric vector also contains the modularity at each level, the highest of which corresponds to the reported \code{membership}.
-\item For \code{method="leiden"}, a \code{quality} numeric scalar containg the quality of the partitioning.
-\item For \code{method="walktrap"}, a \code{merges} matrix specifies the pair of cells or clusters that were merged at each step of the algorithm.
-A \code{modularity} numeric scalar also contains the modularity of the final partitioning.
+\item For \code{method="leiden"}, the \code{quality} number contains the quality of the partitioning.
+\item For \code{method="walktrap"}, the \code{merges} matrix specifies the pair of cells or clusters that were merged at each step of the algorithm.
+The \code{modularity} number also contains the modularity of the final partitioning.
 }
 }
 \description{

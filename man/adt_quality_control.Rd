@@ -28,7 +28,7 @@ Values are expected to be counts.}
 Each vector may be logical (whether to keep each row), integer (row indices) or character (row names).
 For character vectors, strings not present in \code{rownames(x)} are ignored.}
 
-\item{num.threads}{Integer scalar specifying the number of threads to use.
+\item{num.threads}{Integer specifying the number of threads to use.
 
 If \code{NULL}, the default value in \code{\link{computeAdtQcMetricsDefaults}} is used.}
 
@@ -80,7 +80,7 @@ For \code{suggestAdtQcThresholds}, a named list is returned:
 \itemize{
 \item If \code{block=NULL}, the list contains:
 \itemize{
-\item \code{detected}, a numeric scalar containing the lower bound on the number of detected tags. 
+\item \code{detected}, a number containing the lower bound on the number of detected tags. 
 This is defined as the lower of (i) \code{num.mads} MADs below the median for the log-transformed values across all cells,
 and (ii) the product of \code{1 - min.detected.drop} and the median across all cells.
 The latter avoids overly aggressive filtering when the MAD is zero.

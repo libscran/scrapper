@@ -281,8 +281,16 @@ subsample_by_neighbors <- function(indices, distances, min_remaining) {
     .Call('_scrapper_subsample_by_neighbors', PACKAGE = 'scrapper', indices, distances, min_remaining)
 }
 
+subsample_by_neighbors_defaults <- function() {
+    .Call('_scrapper_subsample_by_neighbors_defaults', PACKAGE = 'scrapper')
+}
+
 subsample_by_partition <- function(partitions, target, seed, force_non_empty) {
     .Call('_scrapper_subsample_by_partition', PACKAGE = 'scrapper', partitions, target, seed, force_non_empty)
+}
+
+subsample_by_partition_defaults <- function() {
+    .Call('_scrapper_subsample_by_partition_defaults', PACKAGE = 'scrapper')
 }
 
 summarize_effects <- function(num_genes, num_groups, effects, compute_summary_min, compute_summary_mean, compute_summary_median, compute_summary_max, compute_summary_quantiles, compute_summary_min_rank, num_threads) {

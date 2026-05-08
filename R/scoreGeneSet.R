@@ -28,8 +28,7 @@
 #' @param extra.work Integer scalar specifying the number of extra dimensions for the IRLBA workspace.
 #' Larger values improve accuracy at the cost of compute time.
 #'
-#' If \code{NULL}, the default value in \code{\link{scoreGeneSetDefaults}} is used.
-#' Specifically, this defaults to the larger of 7 and \code{number}.
+#' If \code{NULL}, this defaults to the larger of 7 and \code{number}.
 #' @param tolerance Number specifying the tolerance on the approximation error of the singular triplets, to determine IRLBA convergence.
 #' Lower values improve accuracy at the cost of compute time.
 #'

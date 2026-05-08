@@ -5,18 +5,21 @@
 #' @param x Numeric matrix where rows are dimensions and columns are cells,
 #' typically containing coordinates in a low-dimensional embedding (e.g., from \code{\link{runPca}}).
 #' @param block Factor specifying the block of origin (e.g., batch, sample) for each cell in \code{x}.
-#' @param num.neighbors Integer scalar specifying the number of neighbors in the various search steps.
+#' @param num.neighbors Integer specifying the number of neighbors in the various search steps.
 #' Larger values improve the stability of the correction by increasing the number of MNN pairs and including more observations in each center of mass.
 #' However, this comes at the cost of reduced resolution when matching subpopulations across batches.
+#'
 #' If \code{NULL}, the default value in \code{\link{correctMnnDefaults}} is used.
-#' @param num.steps Integer scalar specifying the number of steps for the recursive neighbor search to compute the center of mass.
+#' @param num.steps Integer specifying the number of steps for the recursive neighbor search to compute the center of mass.
 #' Larger values mitigate the kissing effect but increase the risk of including inappropriately distant subpopulations into the center of mass.
+#'
 #' If \code{NULL}, the default value in \code{\link{correctMnnDefaults}} is used.
 #' @param num.mads Deprecated and ignored.
 #' @param robust.iterations Deprecated and ignored.
 #' @param robust.trim Deprecated and ignored.
 #' @param mass.cap Deprecated and ignored.
-#' @param num.threads Integer scalar specifying the number of threads to use.
+#' @param num.threads Integer specifying the number of threads to use.
+#'
 #' If \code{NULL}, the default value in \code{\link{correctMnnDefaults}} is used.
 #' @param order Deprecated and ignored, the merge order is now always automatically determined.
 #' @param reference.policy Deprecated, use \code{merge.policy} instead. 

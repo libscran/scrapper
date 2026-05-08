@@ -8,8 +8,12 @@
 #' @param number Integer specifying the number of cells to retain in the subsample.
 #' If greater than the length of \code{partitions}, all cells are retained.
 #' @param seed Integer specifying the seed for the random number generator.
+#'
+#' If \code{NULL}, the default value in \code{\link{subsampleByartitionDefaults}} is used.
 #' @param force.non.empty Boolean indicating whether each partition should have at least one cell in the subsample.
 #' If \code{FALSE}, partitions may not be represented if the number of cells is less than the ratio of \code{number} to \code{length(partitions)}.
+#'
+#' If \code{NULL}, the default value in \code{\link{subsampleByartitionDefaults}} is used.
 #'
 #' @return Integer vector containing the indices of the cells retained in the subsample.
 #' @author Aaron Lun
@@ -32,7 +36,15 @@
 #' table(grouping[keep])
 #'
 #' @export
-subsampleByPartition <- function(partitions, number, seed = 2763, force.non.empty = TRUE) { 
+subsampleByPartition <- function(partitions, number, seed = NULL, force.non.empty = NULL) { 
     part <- .transformFactor(partitions)
     subsample_by_partition(part$index, number, seed = seed, force_non_empty = force.non.empty)
 }
+
+#' Default parameters for \code{\link{subsampleByPartition}}
+#' @return Named list containing default values for various function arguments.
+#' @author Aaron Lun
+#' @examples
+#' subsampleByPartitionDefaults()
+#' @export
+subsampleByPartitionDefaults <- function() subsample_by_partition_defaults()

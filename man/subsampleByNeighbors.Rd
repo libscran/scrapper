@@ -6,8 +6,8 @@
 \usage{
 subsampleByNeighbors(
   x,
-  num.neighbors = 20,
-  min.remaining = 10,
+  num.neighbors = NULL,
+  min.remaining = NULL,
   num.threads = 1,
   BNPARAM = AnnoyParam()
 )
@@ -30,17 +30,26 @@ The number of neighbors should be equal to \code{num.neighbors}, otherwise a war
 
 \item{num.neighbors}{Integer scalar specifying the number of neighbors to use.
 Larger values result in stronger downsampling. 
-Ignored if \code{x} contains pre-computed neighbor search results.}
 
-\item{min.remaining}{Integer scalar specifying the minimum number of remaining neighbors that a cell must have in order to be considered for selection.
+If \code{NULL}, the default value in \code{\link{subsampleByNeighborsDefaults}} is used.
+
+This argument is ignored if \code{x} contains pre-computed neighbor search results.}
+
+\item{min.remaining}{Integer specifying the minimum number of remaining neighbors that a cell must have in order to be considered for selection.
 This should be less than or equal to \code{num.neighbors}.
-Larger values result in stronger downsampling.}
+Larger values result in stronger downsampling. 
+
+If \code{NULL}, the default value in \code{\link{subsampleByNeighborsDefaults}} is used.}
 
 \item{num.threads}{Integer scalar specifying the number of threads to use for the nearest-neighbor search.
-Only used if \code{x} does not contain existing nearest-neighbor results.}
+
+If \code{NULL}, the default value in \code{\link{subsampleByNeighborsDefaults}} is used.
+
+This argument is only used if \code{x} does not contain existing nearest-neighbor results.}
 
 \item{BNPARAM}{A \link[BiocNeighbors]{BiocNeighborParam} object specifying the algorithm to use.
-Only used if \code{x} does not contain existing nearest-neighbor results.}
+
+This argument is only used if \code{x} does not contain existing nearest-neighbor results.}
 }
 \value{
 Integer vector with the indices of the selected cells in the subsample.

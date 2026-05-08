@@ -4,7 +4,7 @@
 \alias{subsampleByPartition}
 \title{Subsample by partition}
 \usage{
-subsampleByPartition(partitions, number, seed = 2763, force.non.empty = TRUE)
+subsampleByPartition(partitions, number, seed = NULL, force.non.empty = NULL)
 }
 \arguments{
 \item{partitions}{Factor, integer vector or character vector of length equal to the number of cells,
@@ -13,10 +13,14 @@ containing the assignment of each cell to a partition (e.g., clustering).}
 \item{number}{Integer specifying the number of cells to retain in the subsample.
 If greater than the length of \code{partitions}, all cells are retained.}
 
-\item{seed}{Integer specifying the seed for the random number generator.}
+\item{seed}{Integer specifying the seed for the random number generator.
+
+If \code{NULL}, the default value in \code{\link{subsampleByartitionDefaults}} is used.}
 
 \item{force.non.empty}{Boolean indicating whether each partition should have at least one cell in the subsample.
-If \code{FALSE}, partitions may not be represented if the number of cells is less than the ratio of \code{number} to \code{length(partitions)}.}
+If \code{FALSE}, partitions may not be represented if the number of cells is less than the ratio of \code{number} to \code{length(partitions)}.
+
+If \code{NULL}, the default value in \code{\link{subsampleByartitionDefaults}} is used.}
 }
 \value{
 Integer vector containing the indices of the cells retained in the subsample.

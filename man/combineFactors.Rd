@@ -14,7 +14,7 @@ For other vectors, the sorted and unique values are used as levels.
 
 Alternatively, a data frame or \link[S4Vectors]{DataFrame} where each column is a vector or factor and each row corresponds to an observation.}
 
-\item{keep.unused}{Logical scalar indicating whether to report unused combinations of levels.}
+\item{keep.unused}{Boolean indicating whether to report unused combinations of levels.}
 }
 \value{
 List containing:

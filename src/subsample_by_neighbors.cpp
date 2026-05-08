@@ -6,24 +6,23 @@
 #include "utils_other.h"
 
 //[[Rcpp::export(rng=false)]]
-SEXP subsample_by_neighbors(Rcpp::IntegerMatrix indices, Rcpp::NumericMatrix distances, int min_remaining) {
+SEXP subsample_by_neighbors(Rcpp::IntegerMatrix indices, Rcpp::NumericMatrix distances, Rcpp::RObject min_remaining) {
     const auto num_obs = distances.cols();
     const auto k = distances.rows();
     if (!sanisizer::is_equal(indices.rows(), k) || !sanisizer::is_equal(indices.cols(), num_obs)) {
         throw std::runtime_error("'indices' and 'distances' must have the same dimensions");
     }
 
-    if (sanisizer::is_less_than(k, min_remaining)) {
-        throw std::runtime_error("'min_remaining' should not be greater than the number of neighbors");
-    }
-
     const int* iptr = indices.begin();
     const double* dptr = distances.begin();
 
     nenesub::Options opt;
-    opt.min_remaining = min_remaining;
-    std::vector<int> selected;
+    set_integer(min_remaining, opt.min_remaining, "min.remaining");
+    if (sanisizer::is_less_than(k, opt.min_remaining)) {
+        throw std::runtime_error("'min_remaining' should not be greater than the number of neighbors");
+    }
 
+    std::vector<int> selected;
     nenesub::compute(
         num_obs,
         /* get_neighbors = */ [&](I<decltype(num_obs)> i) -> tatami::ArrayView<int> {
@@ -43,4 +42,14 @@ SEXP subsample_by_neighbors(Rcpp::IntegerMatrix indices, Rcpp::NumericMatrix dis
         ++s;
     }
     return Rcpp::IntegerVector(selected.begin(), selected.end());
+}
+
+//[[Rcpp::export(rng=false)]]
+Rcpp::List subsample_by_neighbors_defaults() {
+    Rcpp::List output;
+    nenesub::Options opt;
+    output["min.remaining"] = opt.min_remaining;
+    output["num.neighbors"] = opt.num_neighbors;
+    output["num.threads"] = opt.num_threads;
+    return output;
 }

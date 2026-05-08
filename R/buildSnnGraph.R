@@ -15,7 +15,7 @@
 #' The number of neighbors for each cell should be equal to \code{num.neighbors}, otherwise a warning is raised.
 #'
 #' Alternatively, an index constructed by \code{\link[BiocNeighbors]{buildIndex}}.
-#' @param num.neighbors Integer scalar specifying the number of neighbors to use to construct the graph.
+#' @param num.neighbors Integer specifying the number of neighbors to use to construct the graph.
 #' Larger values increase the connectivity of the graph and reduce the granularity of subsequent community detection steps, at the cost of speed.
 #'
 #' If \code{NULL}, the default value in \code{\link{buildSnnGraphDefaults}} is used.
@@ -32,7 +32,7 @@
 #' This is a monotonic transformation of the weight used in \code{"number"}.
 #' }
 #' If \code{NULL}, the default value in \code{\link{buildSnnGraphDefaults}} is used.
-#' @param num.threads Integer scalar specifying the number of threads to use.
+#' @param num.threads Integer specifying the number of threads to use.
 #'
 #' If \code{NULL}, the default value in \code{\link{buildSnnGraphDefaults}} is used.
 #'
@@ -40,12 +40,12 @@
 #' @param BNPARAM A \link[BiocNeighbors]{BiocNeighborParam} object specifying the algorithm to use.
 #' 
 #' This argument is only used if \code{x} is not a list of existing nearest-neighbor search results.
-#' @param as.pointer Logical scalar indicating whether to return an external pointer for direct use in \code{\link{clusterGraph}}.
+#' @param as.pointer Boolean indicating whether to return an external pointer for direct use in \code{\link{clusterGraph}}.
 #' This avoids the extra memory usage caused by conversion to/from an R list.
 #'
 #' @return If \code{as.pointer=FALSE}, a list is returned containing:
 #' \itemize{
-#' \item \code{vertices}, an integer scalar specifying the number of vertices in the graph (i.e., cells in \code{x}).
+#' \item \code{vertices}, an integer specifying the number of vertices in the graph (i.e., cells in \code{x}).
 #' \item \code{edges}, an integer vector of 1-based indices for graph edges.
 #' Pairs of values represent the endpoints of an (undirected) edge,
 #' i.e., \code{edges[1:2]} form the first edge, \code{edges[3:4]} form the second edge and so on.

@@ -8,7 +8,7 @@
 #' For other vectors, the sorted and unique values are used as levels.
 #'
 #' Alternatively, a data frame or \link[S4Vectors]{DataFrame} where each column is a vector or factor and each row corresponds to an observation.
-#' @param keep.unused Logical scalar indicating whether to report unused combinations of levels.
+#' @param keep.unused Boolean indicating whether to report unused combinations of levels.
 #'
 #' @return List containing:
 #' \itemize{

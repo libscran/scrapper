@@ -21,17 +21,17 @@ Note that the actual number of retained genes may not be equal to \code{top}, de
 
 If \code{NULL}, the default value in \code{\link{chooseHighlyVariableGenesDefaults}} is used.}
 
-\item{larger}{Logical scalar indicating whether larger values of \code{stats} correspond to more variable genes.
+\item{larger}{Boolean indicating whether larger values of \code{stats} correspond to more variable genes.
 If \code{TRUE}, HVGs are defined as those with the largest values of \code{stats}.
 This is typically the case for variances or related statistics, e.g., residuals.
 
 If \code{NULL}, the default value in \code{\link{chooseHighlyVariableGenesDefaults}} is used.}
 
-\item{keep.ties}{Logical scalar indicating whether to keep tied values of \code{stats}, even if \code{top} may be exceeded.
+\item{keep.ties}{Boolean indicating whether to keep tied values of \code{stats}, even if \code{top} may be exceeded.
 
 If \code{NULL}, the default value in \code{\link{chooseHighlyVariableGenesDefaults}} is used.}
 
-\item{bound}{Numeric scalar specifying the lower bound (if \code{larger=TRUE}) or upper bound (otherwise) to be applied to \code{stats}.
+\item{bound}{Number specifying the lower bound (if \code{larger=TRUE}) or upper bound (otherwise) to be applied to \code{stats}.
 Genes are not considered to be HVGs if they do not satisfy this bound, even if they are within the \code{top} genes.
 For example, residuals from the fitted trend should be positive, which can be enforced by setting \code{bound = 0}. 
 

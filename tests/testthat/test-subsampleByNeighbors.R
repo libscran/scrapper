@@ -27,3 +27,8 @@ test_that("subsampleByNeighbors works as expected", {
     keep.copy <- subsampleByNeighbors(copyres, num.neighbors=10, min.remaining=2)
     expect_identical(keep.copy, keep.alt)
 })
+
+test_that("defaults work correctly", {
+    def <- subsampleByNeighborsDefaults()
+    expect_true(all(names(def) %in% names(formals(subsampleByNeighbors))))
+})
