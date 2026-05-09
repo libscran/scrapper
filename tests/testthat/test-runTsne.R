@@ -20,9 +20,8 @@ test_that("runTSNE works in basic mode", {
     expect_identical(nnin, embed)
 
     res <- findKNN(x, transposed=TRUE, k=30, get.distance="transposed", get.index="transposed", BNPARAM=AnnoyParam())
-    expect_warning(runTsne(res), "not consistent with 'num.neighbors'")
-    expect_warning(runTsne(res, num.neighbors=30), NA)
-    expect_warning(runTsne(res, num.neighbors=NA), NA)
+    expect_error(runTsne(res), "unexpected number of neighbors")
+    expect_error(runTsne(res, perplexity=10), NA)
 
     expect_error(runTsne(SummarizedExperiment::SummarizedExperiment(x)), "not supported")
 })

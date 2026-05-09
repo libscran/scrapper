@@ -27,7 +27,7 @@ SEXP run_tsne(
 ) {
     qdtsne::Options opt;
     set_number(perplexity, opt.perplexity, "perplexity");
-    opt.precomputed_perplexity_policy = qdtsne::PrecomputedPerplexityPolicy::ASIS;
+    opt.precomputed_perplexity_policy = qdtsne::PrecomputedPerplexityPolicy::CHECK;
     set_number(theta, opt.theta, "theta");
     set_integer(early_exaggeration_iterations, opt.early_exaggeration_iterations, "early.exaggeration.iterations");
     set_number(exaggeration_factor, opt.exaggeration_factor, "exaggeration.factor");

@@ -9,21 +9,15 @@
 #' This should contain \code{index}, an integer matrix where rows are neighbors and columns are cells;
 #' and \code{distance}, a numeric matrix of the same dimensions containing the distances to each neighbor.
 #' Each column contains 1-based indices for the nearest neighbors of the corresponding cell, ordered by increasing distance.
-#' The number of neighbors should be the same as \code{num.neighbors}, otherwise a warning is raised.
-#' Generally, it is expected that the number of neighbors is defined as \code{tsnePerplexityToNeighbors(perplexity)}.
+#' The number of neighbors should be the same as \code{tsnePerplexityToNeighbors(perplexity)}.
 #'
 #' Alternatively, an index constructed by \code{\link[BiocNeighbors]{buildIndex}}.
 #' @param perplexity Numeric scalar specifying the perplexity to use in the t-SNE algorithm.
 #' Higher perplexities will focus on global structure, at the cost of increased runtime and decreased local resolution.
 #'
 #' If \code{NULL}, the default value in \code{\link{runTsneDefaults}} is used.
-#' @param num.neighbors Integer scalar specifying the number of neighbors.
-#' More neighbors are required for higher \code{perplexity} values.
-#'
-#' If \code{x} contains pre-computed neighbor search results with a different number of neighbors than \code{num.neighbors}, a warning is raised.
-#' This can be suppressed by setting \code{num.neighbors = NA}, though the better solution is to perform the search with the number of neighbors derived from \code{perplexity}.
-#'
-#' If \code{NULL}, this is set to \code{tsnePerplexityToNeighbors(perplexity)}.
+#' @param num.neighbors Deprecated and ignored.
+#' The number of neighbors is now computed from \code{perplexity} via \code{tsnePerplexityToNeighbors}.
 #' @param theta Number specifying the approximation level for the Barnes-Hut calculation of repulsive forces.
 #' Lower values increase accuracy at the cost of increased compute time.
 #' Any value should be non-negative.
@@ -123,24 +117,23 @@ runTsne <- function(
 ) {
     .checkSEX(x, "runTsne.se")
 
-    def <- runTsneDefaults()
-    if (is.null(perplexity)) {
-        perplexity <- def$perplexity
-    }
-    if (is.null(num.neighbors)) {
-        num.neighbors <- tsnePerplexityToNeighbors(perplexity)
-    }
-    if (is.null(num.threads)) {
-        num.threads <- def$num.threads
-    }
-
     if (!is.list(x)) {
+        def <- runTsneDefaults()
+        if (is.null(perplexity)) {
+            perplexity <- def$perplexity
+        }
+        if (is.null(num.threads)) {
+            num.threads <- def$num.threads
+        }
+
+        if (!is.null(num.neighbors)) {
+            .Deprecated(old="num.neighbors=", new="perplexity=")
+        }
+        num.neighbors <- tsnePerplexityToNeighbors(perplexity)
+
         x <- findKNN(x, k=num.neighbors, transposed=TRUE, get.index="transposed", get.distance="transposed", num.threads=num.threads, BNPARAM=BNPARAM)
     } else {
         .checkNeighborResults(x$index, x$distance)
-        if (!is.na(num.neighbors) && nrow(x$index) != num.neighbors) {
-            warning("'nrow(x$index)' is not consistent with 'num.neighbors'")
-        }
     }
 
     output <- run_tsne(

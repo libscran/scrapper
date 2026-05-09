@@ -34,8 +34,7 @@ Alternatively, a named list of nearest-neighbor search results like that returne
 This should contain \code{index}, an integer matrix where rows are neighbors and columns are cells;
 and \code{distance}, a numeric matrix of the same dimensions containing the distances to each neighbor.
 Each column contains 1-based indices for the nearest neighbors of the corresponding cell, ordered by increasing distance.
-The number of neighbors should be the same as \code{num.neighbors}, otherwise a warning is raised.
-Generally, it is expected that the number of neighbors is defined as \code{tsnePerplexityToNeighbors(perplexity)}.
+The number of neighbors should be the same as \code{tsnePerplexityToNeighbors(perplexity)}.
 
 Alternatively, an index constructed by \code{\link[BiocNeighbors]{buildIndex}}.}
 
@@ -44,13 +43,8 @@ Higher perplexities will focus on global structure, at the cost of increased run
 
 If \code{NULL}, the default value in \code{\link{runTsneDefaults}} is used.}
 
-\item{num.neighbors}{Integer scalar specifying the number of neighbors.
-More neighbors are required for higher \code{perplexity} values.
-
-If \code{x} contains pre-computed neighbor search results with a different number of neighbors than \code{num.neighbors}, a warning is raised.
-This can be suppressed by setting \code{num.neighbors = NA}, though the better solution is to perform the search with the number of neighbors derived from \code{perplexity}.
-
-If \code{NULL}, this is set to \code{tsnePerplexityToNeighbors(perplexity)}.}
+\item{num.neighbors}{Deprecated and ignored.
+The number of neighbors is now computed from \code{perplexity} via \code{tsnePerplexityToNeighbors}.}
 
 \item{theta}{Number specifying the approximation level for the Barnes-Hut calculation of repulsive forces.
 Lower values increase accuracy at the cost of increased compute time.
