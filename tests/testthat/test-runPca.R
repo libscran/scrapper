@@ -55,7 +55,7 @@ test_that("runPCA works with blocking", {
 
 test_that("runPCA works with residual components", {
     block <- sample(3, ncol(x), replace=TRUE)
-    pcs <- runPca(normed, block=block, components.from.residuals=TRUE)
+    pcs <- runPca(normed, block=block, center.scores.by.block=TRUE)
 
     rm <- rowMeans(pcs$components)
     expect_true(all(abs(rm) < 1e-8))

@@ -606,8 +606,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // run_pca
-Rcpp::List run_pca(SEXP x, Rcpp::RObject number, Rcpp::Nullable<Rcpp::IntegerVector> block, Rcpp::RObject block_weight_policy, Rcpp::RObject variable_block_weight, Rcpp::RObject components_from_residuals, Rcpp::RObject scale, Rcpp::Nullable<Rcpp::IntegerVector> subset, Rcpp::RObject realized, Rcpp::RObject irlba_work, Rcpp::RObject irlba_iterations, Rcpp::RObject irlba_tolerance, Rcpp::RObject irlba_seed, Rcpp::RObject num_threads);
-RcppExport SEXP _scrapper_run_pca(SEXP xSEXP, SEXP numberSEXP, SEXP blockSEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP components_from_residualsSEXP, SEXP scaleSEXP, SEXP subsetSEXP, SEXP realizedSEXP, SEXP irlba_workSEXP, SEXP irlba_iterationsSEXP, SEXP irlba_toleranceSEXP, SEXP irlba_seedSEXP, SEXP num_threadsSEXP) {
+Rcpp::List run_pca(SEXP x, Rcpp::RObject number, Rcpp::Nullable<Rcpp::IntegerVector> block, Rcpp::RObject block_weight_policy, Rcpp::RObject variable_block_weight, Rcpp::RObject center_scores_by_block, Rcpp::RObject scale, Rcpp::Nullable<Rcpp::IntegerVector> subset, Rcpp::RObject realized, Rcpp::RObject irlba_work, Rcpp::RObject irlba_iterations, Rcpp::RObject irlba_tolerance, Rcpp::RObject irlba_seed, Rcpp::RObject num_threads);
+RcppExport SEXP _scrapper_run_pca(SEXP xSEXP, SEXP numberSEXP, SEXP blockSEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP center_scores_by_blockSEXP, SEXP scaleSEXP, SEXP subsetSEXP, SEXP realizedSEXP, SEXP irlba_workSEXP, SEXP irlba_iterationsSEXP, SEXP irlba_toleranceSEXP, SEXP irlba_seedSEXP, SEXP num_threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
@@ -615,7 +615,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type block(blockSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type block_weight_policy(block_weight_policySEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type variable_block_weight(variable_block_weightSEXP);
-    Rcpp::traits::input_parameter< Rcpp::RObject >::type components_from_residuals(components_from_residualsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type center_scores_by_block(center_scores_by_blockSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type scale(scaleSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type subset(subsetSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type realized(realizedSEXP);
@@ -624,7 +624,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::RObject >::type irlba_tolerance(irlba_toleranceSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type irlba_seed(irlba_seedSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type num_threads(num_threadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(run_pca(x, number, block, block_weight_policy, variable_block_weight, components_from_residuals, scale, subset, realized, irlba_work, irlba_iterations, irlba_tolerance, irlba_seed, num_threads));
+    rcpp_result_gen = Rcpp::wrap(run_pca(x, number, block, block_weight_policy, variable_block_weight, center_scores_by_block, scale, subset, realized, irlba_work, irlba_iterations, irlba_tolerance, irlba_seed, num_threads));
     return rcpp_result_gen;
 END_RCPP
 }

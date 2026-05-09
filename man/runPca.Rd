@@ -11,7 +11,8 @@ runPca(
   block = NULL,
   block.weight.policy = NULL,
   variable.block.weight = NULL,
-  components.from.residuals = FALSE,
+  components.from.residuals = NULL,
+  center.scores.by.block = components.from.residuals,
   subset = NULL,
   extra.work = NULL,
   iterations = NULL,
@@ -57,8 +58,9 @@ If \code{NULL}, the default value in \code{\link{runPcaDefaults}} is used.
 
 This argument is only used if \code{block} is not \code{NULL} and \code{block.weight.policy = "variable"}.}
 
-\item{components.from.residuals}{Logical scalar indicating whether to compute the PC scores from the residuals in the presence of a blocking factor.
-By default, the residuals are only used to compute the rotation matrix, and the original expression values of the cells are projected onto this new space (see Details).
+\item{components.from.residuals}{Deprecated, use \code{center.scores.by.block} instead.}
+
+\item{center.scores.by.block}{Boolean indicating whether to center the PC scores within each block, see Details.
 
 If \code{NULL}, the default value in \code{\link{runPcaDefaults}} is used.
 
@@ -126,15 +128,16 @@ This yields a low-dimensional representation that reduces noise and compute time
 For efficiency, the PCA itself is approximated using IRLBA.
 }
 \details{
-When \code{block} is specified, the nature of the reported PC scores depends on the choice of \code{components.from.residuals}:
+When \code{block} is specified, the interpretation of the reported PC scores in \code{components} depends on the choice of \code{center.scores.by.block}:
 \itemize{
-\item If \code{TRUE}, the PC scores are computed from the matrix of residuals.
+\item If \code{FALSE} (the default), the centroid of all cells is shifted to the origin.
+This does not attempt to explicitly remove any differences between blocks.
+Any differences in expression that are not orthogonal to the rotation vectors will still manifest in the PC scores.
+In this mode, blocking only reduces the impact of inter-block differences on the identification of the rotation vectors.
+\item If \code{TRUE}, the scores are centered at the origin within each block.
 This yields a low-dimensional space where inter-block differences have been removed,
 assuming that all blocks have the same subpopulation composition and the inter-block differences are consistent for all cell subpopulations.
 Under these assumptions, we could use these components for downstream analysis without any concern for block-wise effects.
-\item If \code{FALSE}, the rotation vectors are first computed from the matrix of residuals.
-To obtain PC scores, each cell is then projected onto the associated subspace using its original expression values.
-This approach ensures that inter-block differences do not contribute to the PCA but does not attempt to explicitly remove them.
 }
 In complex datasets, the assumptions mentioned for \code{TRUE} not hold and more sophisticated batch correction methods like MNN correction are required.
 Functions like \code{\link{correctMnn}} will accept a low-dimensional embedding of cells that can be created as described above with \code{FALSE}.

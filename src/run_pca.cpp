@@ -30,7 +30,7 @@ Rcpp::List run_pca(
     Rcpp::Nullable<Rcpp::IntegerVector> block, 
     Rcpp::RObject block_weight_policy,
     Rcpp::RObject variable_block_weight,
-    Rcpp::RObject components_from_residuals,
+    Rcpp::RObject center_scores_by_block,
     Rcpp::RObject scale,
     Rcpp::Nullable<Rcpp::IntegerVector> subset,
     Rcpp::RObject realized,
@@ -87,7 +87,7 @@ Rcpp::List run_pca(
             fill_common_options(opt);
             set_block_weight_policy(block_weight_policy, opt.block_weight_policy, "block.weight.policy");
             set_variable_block_weight(variable_block_weight, opt.variable_block_weight_parameters, "variable.block.weight");
-            set_bool(components_from_residuals, opt.components_from_residuals, "components.from.residuals");
+            set_bool(center_scores_by_block, opt.center_scores_by_block, "center.scores.by.block");
         };
 
         if (subset.isNull()) {
@@ -141,7 +141,7 @@ Rcpp::List run_pca_defaults(bool use_block, bool use_subset) {
     auto populate_blocked = [&](const auto& opt) -> void {
         report_block_weight_policy_default(output, opt.block_weight_policy, "block.weight.policy", "runPca");
         report_variable_block_weight_default(output, opt.variable_block_weight_parameters, "variable.block.weight");
-        output["components.from.residuals"] = opt.components_from_residuals;
+        output["center.scores.by.block"] = opt.center_scores_by_block;
     };
 
     if (!use_block) {

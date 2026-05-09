@@ -28,6 +28,7 @@ This is occasionally helpful for downstream plotting frameworks.
 \item Added \code{normalizeRnaCountsWithSpikeIns.se()} for convenient normalization in the presence of spike-in transcripts.
 \item Added \code{chooseRnaHvgsWithSpikeIns.se()} for convenient variance modelling against a spike-in trend.
 }
+\item Renamed \code{components.from.residuals=} to \code{center.scores.by.block=} in \code{runPca()}, for consistency with the C++ code.
 }}
 
 \section{Version 1.6.0}{\itemize{
