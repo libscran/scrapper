@@ -63,7 +63,7 @@
 #'
 #' @export
 #' @importFrom BiocNeighbors findKNN AnnoyParam
-subsampleByNeighbors <- function(x, num.neighbors = NULL, min.remaining = NULL, num.threads = 1, BNPARAM = AnnoyParam()) {
+subsampleByNeighbors <- function(x, num.neighbors = NULL, min.remaining = NULL, num.threads = NULL, BNPARAM = AnnoyParam()) {
     if (!is.list(x)) {
         def <- subsampleByNeighborsDefaults()
         if (is.null(num.neighbors)) {

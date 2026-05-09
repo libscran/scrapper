@@ -48,25 +48,25 @@ Rcpp::List sanitize_size_factors_defaults() {
     Rcpp::List output;
     scran_norm::SanitizeSizeFactorsOptions opt;
 
-    if (opt.handle_zero != scran_norm::SanitizeAction::ERROR) {
+    if (opt.handle_zero != scran_norm::SanitizeAction::SANITIZE) {
         throw std::runtime_error("expected handle.zero default for sanitizeSizeFactors");
     }
-    output["handle.zero"] = "error";
+    output["handle.zero"] = "sanitize";
 
-    if (opt.handle_negative != scran_norm::SanitizeAction::ERROR) {
+    if (opt.handle_negative != scran_norm::SanitizeAction::SANITIZE) {
         throw std::runtime_error("expected handle.negative default for sanitizeSizeFactors");
     }
-    output["handle.negative"] = "error";
+    output["handle.negative"] = "sanitize";
 
-    if (opt.handle_infinite != scran_norm::SanitizeAction::ERROR) {
+    if (opt.handle_infinite != scran_norm::SanitizeAction::SANITIZE) {
         throw std::runtime_error("expected handle.infinite default for sanitizeSizeFactors");
     }
-    output["handle.infinite"] = "error";
+    output["handle.infinite"] = "sanitize";
 
-    if (opt.handle_nan != scran_norm::SanitizeAction::ERROR) {
+    if (opt.handle_nan != scran_norm::SanitizeAction::SANITIZE) {
         throw std::runtime_error("expected handle.nan default for sanitizeSizeFactors");
     }
-    output["handle.nan"] = "error";
+    output["handle.nan"] = "sanitize";
 
     return output;
 }

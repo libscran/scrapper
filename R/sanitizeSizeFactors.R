@@ -59,10 +59,10 @@ sanitizeSizeFactors <- function(
     replace.negative = NULL,
     replace.infinite = NULL,
     replace.nan = NULL,
-    handle.zero = "sanitize",
-    handle.negative = "sanitize",
-    handle.infinite = "sanitize",
-    handle.nan = "sanitize"
+    handle.zero = NULL,
+    handle.negative = NULL,
+    handle.infinite = NULL, 
+    handle.nan = NULL
 ) {
     sanitize_size_factors(
         size.factors,

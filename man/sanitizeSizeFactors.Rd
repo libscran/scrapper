@@ -10,10 +10,10 @@ sanitizeSizeFactors(
   replace.negative = NULL,
   replace.infinite = NULL,
   replace.nan = NULL,
-  handle.zero = "sanitize",
-  handle.negative = "sanitize",
-  handle.infinite = "sanitize",
-  handle.nan = "sanitize"
+  handle.zero = NULL,
+  handle.negative = NULL,
+  handle.infinite = NULL,
+  handle.nan = NULL
 )
 }
 \arguments{

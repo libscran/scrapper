@@ -8,7 +8,7 @@ subsampleByNeighbors(
   x,
   num.neighbors = NULL,
   min.remaining = NULL,
-  num.threads = 1,
+  num.threads = NULL,
   BNPARAM = AnnoyParam()
 )
 }
