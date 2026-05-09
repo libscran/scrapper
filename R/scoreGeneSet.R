@@ -53,6 +53,7 @@
 #' This speeds up computation at the cost of increased memory usage.
 #'
 #' If \code{NULL}, the default value in \code{\link{scoreGeneSetDefaults}} is used.
+#' @param warn Boolean specifying whether a warning should be emitted if IRLBA failed to converge.
 #' @param num.threads Number of threads to use.
 #'
 #' If \code{NULL}, the default value in \code{\link{scoreGeneSetDefaults}} is used.
@@ -94,6 +95,7 @@ scoreGeneSet <- function(
     tolerance = NULL,
     seed = NULL,
     realized = NULL,
+    warn = TRUE,
     num.threads = NULL 
 ) {
     .checkSEX(x, "scoreGeneSet.se")
@@ -119,6 +121,11 @@ scoreGeneSet <- function(
         irlba_seed=seed,
         num_threads=num.threads
     )
+
+    if (!out$converged && warn) {
+        warning("convergence failure for the approximate PCA")
+    }
+    out$converged <- NULL
 
     out$weights <- DataFrame(row=chosen, weight=out$weights)
     out

@@ -49,19 +49,20 @@ Rcpp::List score_gene_set(
     output.scores = scores.begin();
     output.weights = weights.begin();
 
+    irlba::Metrics met;
     if (ptr) {
         if (!sanisizer::is_equal(block_info.size(), NC)) {
             throw std::runtime_error("'block' must be the same length as the number of cells");
         }
-        gsdecon::compute_blocked(matrix, block_info.get(), opt, output);
-
+        met = gsdecon::compute_blocked(matrix, block_info.get(), opt, output);
     } else {
-        gsdecon::compute(matrix, opt, output);
+        met = gsdecon::compute(matrix, opt, output);
     }
 
     return Rcpp::List::create(
         Rcpp::Named("scores") = scores,
-        Rcpp::Named("weights") = weights
+        Rcpp::Named("weights") = weights,
+        Rcpp::Named("converged") = met.converged
     );
 }
 

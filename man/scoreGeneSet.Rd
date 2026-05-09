@@ -17,6 +17,7 @@ scoreGeneSet(
   tolerance = NULL,
   seed = NULL,
   realized = NULL,
+  warn = TRUE,
   num.threads = NULL
 )
 }
@@ -82,6 +83,8 @@ If \code{NULL}, the default value in \code{\link{scoreGeneSetDefaults}} is used.
 This speeds up computation at the cost of increased memory usage.
 
 If \code{NULL}, the default value in \code{\link{scoreGeneSetDefaults}} is used.}
+
+\item{warn}{Boolean specifying whether a warning should be emitted if IRLBA failed to converge.}
 
 \item{num.threads}{Number of threads to use.
 
