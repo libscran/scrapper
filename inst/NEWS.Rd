@@ -2,6 +2,34 @@
 \title{scrapper News}
 \encoding{UTF-8}
 
+\section{Version 1.8.0}{\itemize{
+\item Respect default options from the underlying C++ libraries in most functions.
+Specifically, almost all R defaults are now set to \code{NULL}, and we only replace the defaults in the C++ library if a non-\code{NULL} argument is passed in R.
+This eliminates the need for manual synchronization between R and C++ when updating libraries with new defaults.
+We also add \code{*Defaults()} utility functions to report the C++ defaults for user inspection.
+This has some additional specific consequences for individual functions:
+\itemize{
+\item Updated default \code{max.bias=} in \code{choosePseudoCount()} to reduce log-transformation bias. 
+\item Updated default \code{extra.work=} in \code{runPca()} and \code{scoreGeneSet()} for better performance.
+\item Updated default \code{compute.median=} in \code{aggregateAcrossCells()} to avoid unnecessary work.
+}
+\item Deprecated the \code{num.neighbors=} argument in \code{runTsne()}.
+Now, the number of neighbors is fully determined by \code{perplexity=}.
+For precomputed KNN results, an error is thrown if there are any mismatches between the number of supplied neighbors and \code{tsnePerplexityToNeighbors(perplexity)}.
+\item Optionally add column names to the dimensions for \code{runTsne.se()}, \code{runPca.se()} and \code{runUmap.se()}.
+This is occasionally helpful for downstream plotting frameworks.
+\item Added \code{fit.trend=} option to skip trend fitting in \code{modelGeneVariances()}.
+\item Check for IRLBA convergence in \code{scoreGeneSet()} and raise a warning if the algorithm did not converge.
+\item Bugfix to preserve assay names so that they match up to character \code{subsets=} in various \code{compute*QcMetrics()} functions.
+\item Added \code{subsampleByPartition()} to subsample cells within each partition.
+\item Improved support for experiments with spike-in transcripts:
+\itemize{
+\item Added \code{centerSpikeInFactors()} for convenient centering of size factors for endogenous genes and spike-in transcripts.
+\item Added \code{normalizeRnaCountsWithSpikeIns.se()} for convenient normalization in the presence of spike-in transcripts.
+\item Added \code{chooseRnaHvgsWithSpikeIns.se()} for convenient variance modelling against a spike-in trend.
+}
+}}
+
 \section{Version 1.6.0}{\itemize{
 \item Multiple changes to \code{clusterGraph()}:
 \itemize{
