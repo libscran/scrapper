@@ -15,12 +15,12 @@ test_that("modelGeneVariances works without blocking", {
     expect_identical(out$residuals, fit$residuals)
 
     # Responds to trend-fitting options. 
-    out2 <- modelGeneVariances(x, span=0.5)$statistics
+    out2 <- modelGeneVariances(x, use.min.width=FALSE, span=0.5)$statistics
     expect_identical(out$variances, out2$variances)
     expect_identical(out$means, out2$means)
     expect_false(identical(out$fitted, out2$fitted))
 
-    fit2 <- fitVarianceTrend(out2$means, out2$variances, span=0.5)
+    fit2 <- fitVarianceTrend(out2$means, out2$variances, use.min.width=FALSE, span=0.5)
     expect_equal(out2$fitted, fit2$fitted)
     expect_equal(out2$residuals, fit2$residuals)
 

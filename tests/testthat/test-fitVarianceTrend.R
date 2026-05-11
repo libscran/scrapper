@@ -10,13 +10,16 @@ test_that("fitVarianceTrend works as expected", {
     expect_identical(out, out2)
 
     # Responds to the various options.
-    out2 <- fitVarianceTrend(x, y, use.min.width=TRUE, min.width=0.5)
+    out2 <- fitVarianceTrend(x, y, use.min.width=FALSE)
+    expect_false(identical(out, out2))
+
+    out2 <- fitVarianceTrend(x, y, min.width=0.5)
     expect_false(identical(out, out2))
 
     out2 <- fitVarianceTrend(x, y, transform=FALSE)
     expect_false(identical(out, out2))
 
-    out2 <- fitVarianceTrend(x, y, span=0.5)
+    out2 <- fitVarianceTrend(x, y, use.min.width=FALSE, span=0.5)
     expect_false(identical(out, out2))
 })
 

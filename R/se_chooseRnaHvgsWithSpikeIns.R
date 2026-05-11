@@ -37,6 +37,10 @@
 #' It is generally expected that normalization has been performed with \code{\link{normalizeRnaCountsWithSpikeIns.se}}.
 #' This ensures that the means are comparable between endogenous genes and spike-in transcripts.
 #'
+#' We set \code{use.min.width=FALSE} by default for the spike-in trend fit,
+#' as (i) there are typically too few spike-in transcripts for the default choice of \code{min.window.count},
+#' and (ii) spike-in sets typically have regularly-spaced abundances that are amenable to regular LOWESS.
+#'
 #' @seealso
 #' \code{\link{chooseRnaHvgs.se}}, for a simpler function when spike-ins are not available.
 #'
@@ -61,7 +65,7 @@ chooseRnaHvgsWithSpikeIns.se <- function(
     block = NULL,
     num.threads = 1,
     more.endogenous.var.args = list(),
-    more.spike.var.args = list(),
+    more.spike.var.args = list(use.min.width=FALSE),
     top = 4000,
     more.choose.args = list(),
     assay.type = "logcounts",
@@ -88,7 +92,7 @@ chooseRnaHvgsWithSpikeIns.se <- function(
         modelGeneVariances,
         list(SummarizedExperiment::assay(spike.x, spike.altexp[[1]])),
         common.var.args,
-        more.endogenous.var.args
+        more.spike.var.args
     )
 
     # Adding zero to force a linear to zero on the left edge.

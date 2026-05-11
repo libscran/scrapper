@@ -65,7 +65,7 @@ and then calls \code{\link{chooseHighlyVariableGenes}} on the residuals.
 \examples{
 library(SingleCellExperiment)
 sce <- getTestRnaData.se("norm")
-sce <- chooseRnaHvgs.se(sce, more.var.args=list(use.min.width=TRUE))
+sce <- chooseRnaHvgs.se(sce)
 summary(rowData(sce)$hvg)
 
 plot(rowData(sce)$means, rowData(sce)$variances, col=factor(rowData(sce)$hvg))

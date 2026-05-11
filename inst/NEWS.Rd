@@ -12,6 +12,7 @@ This has some additional specific consequences for individual functions:
 \item Updated default \code{max.bias=} in \code{choosePseudoCount()} to reduce log-transformation bias. 
 \item Updated default \code{extra.work=} in \code{runPca()} and \code{scoreGeneSet()} for better performance.
 \item Updated default \code{compute.median=} in \code{aggregateAcrossCells()} to avoid unnecessary work.
+\item Updated default \code{use.min.width=} in \code{fitVarianceTrend()} and \code{modelGeneVariances()} to improve trend fits for typical scRNA-seq datasets.
 }
 \item Deprecated the \code{num.neighbors=} argument in \code{runTsne()}.
 Now, the number of neighbors is fully determined by \code{perplexity=}.
