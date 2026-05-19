@@ -54,6 +54,7 @@ test_that("scoreMarkers works as expected for simple cases", {
     expect_error(scoreMarkers(SummarizedExperiment::SummarizedExperiment(x), g), "not supported")
     expect_error(scoreMarkers(x, NULL), "non-NULL")
     expect_error(scoreMarkers(x, 1), "length equal")
+    expect_error(scoreMarkers(x, rep(NA, ncol(x))), "NA values")
 })
 
 test_that("scoreMarkers works with blocking", {

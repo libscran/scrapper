@@ -275,7 +275,7 @@ scoreMarkers <- function(
     ngenes <- nrow(x)
     x <- initializeCpp(x, .check.na=FALSE)
 
-    groups <- .transformFactor(groups)
+    groups <- .transformFactor(groups, arg = "groups")
     if (is.null(groups$index)) {
         stop("'groups' should be non-NULL")
     }

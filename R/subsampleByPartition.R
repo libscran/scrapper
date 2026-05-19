@@ -37,7 +37,7 @@
 #'
 #' @export
 subsampleByPartition <- function(partitions, number, seed = NULL, force.non.empty = NULL) { 
-    part <- .transformFactor(partitions)
+    part <- .transformFactor(partitions, arg = "partitions")
     subsample_by_partition(part$index, number, seed = seed, force_non_empty = force.non.empty)
 }
 
