@@ -32,3 +32,15 @@ test_that("chooseRnaHvgs.se works as expected", {
     expect_type(rowData(altExp(pre))$VAR.variances, "double")
     expect_true(all(rowData(pre)$VAR.hvgs))
 })
+
+test_that("chooseRnaHvgs.se overwrites existing entries", {
+    copy <- sce
+    rowData(copy)$hvg <- "A"
+    rowData(copy)$variances <- "B"
+    rowData(altExp(copy))$variances <- "D"
+
+    copy <- chooseRnaHvgsWithSpikeIns.se(copy, "ERCC", top=20)
+    expect_type(rowData(copy)$hvg, "logical")
+    expect_type(rowData(copy)$variances, "double")
+    expect_type(rowData(altExp(copy))$variances, "double")
+})

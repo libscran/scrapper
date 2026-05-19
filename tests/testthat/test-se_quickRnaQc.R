@@ -60,3 +60,15 @@ test_that("quickRnaQc.se works with custom thresholds", {
     refixed$subset.proportion <- setNames(numeric(0), character(0))
     expect_identical(metadata(out)$qc$thresholds, refixed)
 })
+
+test_that("quickRnaQc.se overwrites existing entries", {
+    copy <- se
+    copy$sum <- "A"
+    copy$detected <- "B"
+    copy$subset.proportion.Mt <- "C"
+
+    copy <- quickRnaQc.se(copy, subsets=list(Mt=1:10))
+    expect_type(copy$sum, "double")
+    expect_type(copy$detected, "integer")
+    expect_type(copy$subset.proportion.Mt, "double")
+})

@@ -108,11 +108,11 @@ chooseRnaHvgsWithSpikeIns.se <- function(
 
     endog.df <- formatModelGeneVariancesResult(endog.var, choose.res=hvg.index, include.per.block=include.per.block)
     colnames(endog.df) <- paste0(output.prefix, colnames(endog.df))
-    SummarizedExperiment::rowData(x) <- cbind(SummarizedExperiment::rowData(x), endog.df)
+    SummarizedExperiment::rowData(x) <- .cbindOverwrite(SummarizedExperiment::rowData(x), endog.df)
 
     spike.df <- formatModelGeneVariancesResult(spike.var, choose.res=NULL, include.per.block=include.per.block)
     colnames(spike.df) <- paste0(output.prefix, colnames(spike.df))
-    SummarizedExperiment::rowData(spike.x) <- cbind(SummarizedExperiment::rowData(spike.x), spike.df)
+    SummarizedExperiment::rowData(spike.x) <- .cbindOverwrite(SummarizedExperiment::rowData(spike.x), spike.df)
     SingleCellExperiment::altExp(x, names(spike.altexp)[1]) <- spike.x
 
     x

@@ -29,12 +29,12 @@ test_that("quickAdtQc.se works as expected", {
 })
 
 test_that("quickAdtQc.se works with character subsets", {
-    ref <- quickAdtQc.se(se, subsets=list(Mt=1:10))
+    ref <- quickAdtQc.se(se, subsets=list(Igg=1:10))
 
     # Check that we set the rownames when extracting the assay.
     copy <- se
     rownames(copy) <- sprintf("GENE_%s", seq_len(nrow(copy)))
-    out <- quickAdtQc.se(copy, subsets=list(Mt=rownames(copy)[1:10]))
+    out <- quickAdtQc.se(copy, subsets=list(Igg=rownames(copy)[1:10]))
 
     expect_identical(colData(out), colData(ref))
 })
@@ -46,4 +46,16 @@ test_that("quickAdtQc.se works with custom thresholds", {
     refixed <- fixed
     refixed$subset.sum <- setNames(numeric(0), character(0))
     expect_identical(metadata(out)$qc$thresholds, refixed)
+})
+
+test_that("quickAdtQc.se overwrites existing entries", {
+    copy <- se
+    copy$sum <- "A"
+    copy$detected <- "B"
+    copy$subset.sum.Igg <- "C"
+
+    copy <- quickAdtQc.se(copy, subsets=list(Igg=1:10))
+    expect_type(copy$sum, "double")
+    expect_type(copy$detected, "integer")
+    expect_type(copy$subset.sum.Igg, "double")
 })

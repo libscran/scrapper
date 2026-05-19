@@ -71,7 +71,7 @@ quickAdtQc.se <- function(
     df <- formatComputeAdtQcMetricsResult(metrics, flatten=flatten)
     df$keep <- keep
     colnames(df) <- paste0(output.prefix, colnames(df))
-    SummarizedExperiment::colData(x) <- cbind(SummarizedExperiment::colData(x), df)
+    SummarizedExperiment::colData(x) <- .cbindOverwrite(SummarizedExperiment::colData(x), df)
 
     if (!is.null(meta.name)) {
         names(thresholds)[names(thresholds) == "subsets"] <- "subset.sum"

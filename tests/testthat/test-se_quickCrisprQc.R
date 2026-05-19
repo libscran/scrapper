@@ -23,3 +23,13 @@ test_that("quickCrisprQc.se works as expected", {
     out4 <- quickCrisprQc.se(se, meta.name=NULL)
     expect_null(metadata(out4)$qc)
 })
+
+test_that("quickCrisprQc.se overwrites existing entries", {
+    copy <- se
+    copy$max.value <- "A"
+    copy$max.index <- "B" 
+
+    copy <- quickCrisprQc.se(copy)
+    expect_type(copy$max.value, "double")
+    expect_type(copy$max.index, "integer")
+})

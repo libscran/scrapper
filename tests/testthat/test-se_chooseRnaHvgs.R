@@ -29,3 +29,12 @@ test_that("chooseRnaHvgs.se works as expected", {
     expect_type(rowData(out)$per.block$A$means, "double")
     expect_type(rowData(out)$per.block$B$residuals, "double")
 })
+
+test_that("chooseRnaHvgs.se overwrites existing entries", {
+    copy <- se
+    rowData(copy)$hvg <- "A"
+    rowData(copy)$variances <- "C"
+    copy <- chooseRnaHvgs.se(copy, top=20)
+    expect_type(rowData(copy)$hvg, "logical")
+    expect_type(rowData(copy)$variances, "double")
+})

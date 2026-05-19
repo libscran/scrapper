@@ -109,7 +109,7 @@ quickRnaQc.se <- function(
     df <- formatComputeRnaQcMetricsResult(metrics$main, flatten=flatten)
     df$keep <- keep
     colnames(df) <- paste0(output.prefix, colnames(df))
-    SummarizedExperiment::colData(x) <- cbind(SummarizedExperiment::colData(x), df)
+    SummarizedExperiment::colData(x) <- .cbindOverwrite(SummarizedExperiment::colData(x), df)
 
     if (!is.null(altexp.proportions)) {
         for (ae.name in names(metrics$altexp)) {
@@ -117,7 +117,7 @@ quickRnaQc.se <- function(
             colnames(ae.df) <- paste0(output.prefix, colnames(ae.df))
 
             ae.se <- SingleCellExperiment::altExp(x, ae.name)
-            ae.cd <- SummarizedExperiment::colData(ae.se) <- cbind(SummarizedExperiment::colData(ae.se), ae.df)
+            ae.cd <- SummarizedExperiment::colData(ae.se) <- .cbindOverwrite(SummarizedExperiment::colData(ae.se), ae.df)
             SingleCellExperiment::altExp(x, ae.name) <- ae.se
         }
     }

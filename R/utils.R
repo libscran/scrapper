@@ -1,11 +1,16 @@
-.transformFactor <- function(f) {
+.transformFactor <- function(f, arg = "block") {
     if (is.null(f)) {
-        list(index=NULL, names=NULL)
-    } else {
-        # Don't use 'factor', to preserve the type of 'f' in the 'names'.
-        lev <- sort(unique(f))
-        list(index=match(f, lev) - 1L, names=lev)
+        return(list(index=NULL, names=NULL))
     }
+
+    # Don't use 'factor', to preserve the type of 'f' in the 'names'.
+    lev <- sort(unique(f))
+    m <- match(f, lev) 
+    if (anyNA(m)) {
+        stop("NA values in the provided '", arg, "'")
+    }
+
+    list(index=m - 1L, names=lev)
 }
 
 #' @importFrom methods is
@@ -91,4 +96,11 @@
 
     colnames(mat) <- colnames(x)
     return(as.matrix(mat))
+}
+
+.cbindOverwrite <- function(x, y) {
+    for (n in colnames(y)) {
+        x[[n]] <- y[[n]]
+    }
+    x
 }
