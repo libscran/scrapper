@@ -30,6 +30,12 @@ This is occasionally helpful for downstream plotting frameworks.
 \item Added \code{chooseRnaHvgsWithSpikeIns.se()} for convenient variance modelling against a spike-in trend.
 }
 \item Renamed \code{components.from.residuals=} to \code{center.scores.by.block=} in \code{runPca()}, for consistency with the C++ code.
+\item Prevent an R session crash when an \code{NA} is supplied to \code{block=} and \code{group=} in functions like \code{suggestRnaQcThresholds()} and \code{scoreMarkers()}.
+Now, an error is thrown if a \code{NA} value is detected.
+\item Consistently overwrite existing columns when saving results in the \code{colData} or \code{rowData} of a SummarizedExperiment.
+This affects \code{chooseRnaHvgs.se()}, \code{quickAdtQc.se()}, \code{quickCrisprQc.se()} and \code{quickRnaQc.se()},
+where the results would be appended onto the existing DataFrame and introduce columns with duplicate names.
+\item Removed the defunct \code{analyze()} and \code{convertAnalyzeResults()} functions.
 }}
 
 \section{Version 1.6.0}{\itemize{
