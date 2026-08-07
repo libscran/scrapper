@@ -35,10 +35,10 @@ test_that("aggregateAcrossCells.se works as expected", {
     expect_identical(metadata(mult)$aggregated$index, counters)
 
     # Works if we disable the outputs.
-    out4 <- aggregateAcrossCells.se(se, se$stuff, meta.name=NULL, counts.name=NULL, include.coldata=FALSE)
+    out4 <- aggregateAcrossCells.se(se, se$stuff, include.factors=FALSE, meta.name=NULL, counts.name=NULL, include.coldata=FALSE)
     expect_null(out4$counts)
     expect_null(metadata(out4)$aggregated)
-    expect_null(out4$stuff)
+    expect_identical(ncol(colData(out4)), 0L)
 })
 
 test_that("aggregateAcrossCells.se works with alternative experiments", {

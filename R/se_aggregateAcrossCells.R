@@ -11,8 +11,11 @@
 #' @param num.threads Number of threads, passed to \code{\link{aggregateAcrossCells}}.
 #' @param more.aggr.args Named list of additional arguments to pass to \code{\link{aggregateAcrossCells}}.
 #' @param assay.type Integer or string specifying the assay of \code{x} to be aggregated.
+#' @param include.factors Boolean indicating whether to store the factor combinations to the \code{\link[SummarizedExperiment]{colData}}. 
+#' Users may wish to set this to \code{FALSE} if \code{include.coldata=TRUE} and the factors are redundant with those already in \code{colData(x)}.
 #' @param output.prefix String specifying a prefix to add to the names of the \code{\link[SummarizedExperiment]{colData}} columns storing the factor combinations. 
 #' If \code{NULL}, no prefix is added.
+#' Ignored if \code{include.factors=FALSE}.
 #' @param counts.name String specifying the name of the \code{\link[SummarizedExperiment]{colData}} column in which to store the cell count for each factor combination. 
 #' If \code{NULL}, the cell counts are not reported.
 #' @param meta.name String specifying the name of the \code{\link[S4Vectors]{metadata}} entry in which to store additional outputs like the combination indices.
@@ -75,7 +78,7 @@
 #'
 #' @export
 #' @importFrom methods is
-#' @importFrom S4Vectors cbind metadata metadata<-
+#' @importFrom S4Vectors cbind metadata metadata<- make_zero_col_DFrame
 #' @importClassesFrom S4Vectors List DataFrame
 aggregateAcrossCells.se <- function(
     x,
@@ -83,6 +86,7 @@ aggregateAcrossCells.se <- function(
     num.threads = 1,
     more.aggr.args = list(),
     assay.type = "counts",
+    include.factors = TRUE,
     output.prefix = "factor.",
     counts.name = "counts",
     meta.name = "aggregated",
@@ -111,12 +115,18 @@ aggregateAcrossCells.se <- function(
     }
     se <- CON(out[intersect(names(out), c("sums", "detected", "medians"))], rowData=SummarizedExperiment::rowData(x))
 
-    common.cd <- out$combinations
-    colnames(common.cd) <- paste0(output.prefix, colnames(common.cd))
+    if (include.factors) {
+        common.cd <- out$combinations
+        colnames(common.cd) <- paste0(output.prefix, colnames(common.cd))
+    } else {
+        common.cd <- make_zero_col_DFrame(ncol(se))
+    }
+
     if (!is.null(counts.name)) {
         common.cd[[counts.name]] <- out$counts
     }
     SummarizedExperiment::colData(se) <- common.cd
+
     if (include.coldata) {
         aggr.cd <- do.call(aggregateColData, c(list(SummarizedExperiment::colData(x), out$index, number=nrow(out$combinations)), more.coldata.args))
         SummarizedExperiment::colData(se) <- cbind(SummarizedExperiment::colData(se), aggr.cd)

@@ -11,6 +11,7 @@ aggregateAcrossCells.se(
   num.threads = 1,
   more.aggr.args = list(),
   assay.type = "counts",
+  include.factors = TRUE,
   output.prefix = "factor.",
   counts.name = "counts",
   meta.name = "aggregated",
@@ -36,8 +37,12 @@ Alternatively, an atomic vector or factor representing a single variable.}
 
 \item{assay.type}{Integer or string specifying the assay of \code{x} to be aggregated.}
 
+\item{include.factors}{Boolean indicating whether to store the factor combinations to the \code{\link[SummarizedExperiment]{colData}}. 
+Users may wish to set this to \code{FALSE} if \code{include.coldata=TRUE} and the factors are redundant with those already in \code{colData(x)}.}
+
 \item{output.prefix}{String specifying a prefix to add to the names of the \code{\link[SummarizedExperiment]{colData}} columns storing the factor combinations. 
-If \code{NULL}, no prefix is added.}
+If \code{NULL}, no prefix is added.
+Ignored if \code{include.factors=FALSE}.}
 
 \item{counts.name}{String specifying the name of the \code{\link[SummarizedExperiment]{colData}} column in which to store the cell count for each factor combination. 
 If \code{NULL}, the cell counts are not reported.}
