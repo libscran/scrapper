@@ -12,7 +12,7 @@
 #' @param top Number of HVGs to choose, to pass to \code{\link{chooseHighlyVariableGenes}}.
 #' @param more.choose.args Named list of arguments to pass to \code{\link{chooseHighlyVariableGenes}}.
 #' @param assay.type Integer or string specifying the assay of \code{x} containing the log-normalized expression matrix for the RNA data.
-#' @param output.prefix String containing a prefix to add to the names of the \code{link[SummarizedExperiment]{rowData}} columns containing the output statistics.
+#' @param output.prefix String containing a prefix to add to the names of the \code{\link[SummarizedExperiment]{rowData}} columns containing the output statistics.
 #' @param include.per.block Logical scalar indicating whether the per-block statistics should be stored in the output \code{rowData}.
 #' Only relevant if \code{block} is specified.
 #' @param model.res List returned by \code{\link{modelGeneVariances}}.

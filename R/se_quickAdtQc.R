@@ -13,10 +13,10 @@
 #' see the return value of \code{\link{suggestAdtQcThresholds}} for the expected format.
 #' @param more.suggest.args Named list of additional arguments to pass to \code{\link{suggestAdtQcThresholds}}.
 #' @param assay.type Integer or string specifying the assay of \code{x} containing the ADT count matrix.
-#' @param output.prefix String containing a prefix to add to the names of the \code{link[SummarizedExperiment]{colData}} columns containing the output statistics.
+#' @param output.prefix String containing a prefix to add to the names of the \code{\link[SummarizedExperiment]{colData}} columns containing the output statistics.
 #' @param meta.name String containing the name of the \code{\link[S4Vectors]{metadata}} entry containing additional outputs like the filtering thresholds.
 #' If \code{NULL}, additional outputs are not reported.
-#' @param flatten Logical scalar indicating whether to flatten the subset proportions into separate columns of the \code{link[SummarizedExperiment]{colData}}.
+#' @param flatten Logical scalar indicating whether to flatten the subset proportions into separate columns of the \code{\link[SummarizedExperiment]{colData}}.
 #' If \code{FALSE}, the subset proportions are stored in a nested \link[S4Vectors]{DataFrame}.
 #' @param compute.res \link[S4Vectors]{DataFrame} returned by \code{\link{computeAdtQcMetrics}}.
 #' 

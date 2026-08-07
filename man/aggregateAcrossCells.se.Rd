@@ -36,7 +36,7 @@ Alternatively, an atomic vector or factor representing a single variable.}
 
 \item{assay.type}{Integer or string specifying the assay of \code{x} to be aggregated.}
 
-\item{output.prefix}{String specifying a prefix to add to the names of the \code{link[SummarizedExperiment]{colData}} columns storing the factor combinations. 
+\item{output.prefix}{String specifying a prefix to add to the names of the \code{\link[SummarizedExperiment]{colData}} columns storing the factor combinations. 
 If \code{NULL}, no prefix is added.}
 
 \item{counts.name}{String specifying the name of the \code{\link[SummarizedExperiment]{colData}} column in which to store the cell count for each factor combination. 

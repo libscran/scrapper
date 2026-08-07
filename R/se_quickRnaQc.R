@@ -25,10 +25,10 @@
 #' 
 #' Only relevant if \code{x} is a \link[SingleCellExperiment]{SingleCellExperiment}.
 #' @param assay.type Integer or string specifying the assay of \code{x} containing the RNA count matrix.
-#' @param output.prefix String containing a prefix to add to the names of the \code{link[SummarizedExperiment]{colData}} columns containing the output statistics.
+#' @param output.prefix String containing a prefix to add to the names of the \code{\link[SummarizedExperiment]{colData}} columns containing the output statistics.
 #' @param meta.name String containing the name of the \code{\link[S4Vectors]{metadata}} entry containing the additional outputs such as the filtering thresholds.
 #' If \code{NULL}, additional outputs are not reported. 
-#' @param flatten Logical scalar indicating whether to flatten the subset proportions into separate columns of the \code{link[SummarizedExperiment]{colData}}.
+#' @param flatten Logical scalar indicating whether to flatten the subset proportions into separate columns of the \code{\link[SummarizedExperiment]{colData}}.
 #' If \code{FALSE}, the subset proportions are stored in a nested \link[S4Vectors]{DataFrame}.
 #' @param compute.res \link[S4Vectors]{DataFrame} returned by \code{\link{computeRnaQcMetrics}}.
 #' 

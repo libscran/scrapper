@@ -39,7 +39,7 @@ Rows correspond to genes and columns correspond to cells.}
 
 \item{assay.type}{Integer or string specifying the assay of \code{x} containing the log-normalized expression matrix for the RNA data.}
 
-\item{output.prefix}{String containing a prefix to add to the names of the \code{link[SummarizedExperiment]{rowData}} columns containing the output statistics.}
+\item{output.prefix}{String containing a prefix to add to the names of the \code{\link[SummarizedExperiment]{rowData}} columns containing the output statistics.}
 
 \item{include.per.block}{Logical scalar indicating whether the per-block statistics should be stored in the output \code{rowData}.
 Only relevant if \code{block} is specified.}

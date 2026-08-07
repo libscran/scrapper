@@ -39,7 +39,7 @@ This is typically the log-normalized expression matrix created by \code{\link{no
 
 \item{output.name}{String containing the name of the \code{\link[SingleCellExperiment]{reducedDim}} entry in which to store the PC scores.}
 
-\item{meta.name}{String containing the name of the \code{link[S4Vectors]{metadata}} entry in which to store other PCA statistics.}
+\item{meta.name}{String containing the name of the \code{\link[S4Vectors]{metadata}} entry in which to store other PCA statistics.}
 
 \item{dim.prefix}{String containing a prefix for the column names of the score and rotation matrices.
 Each column is named as \code{dim.prefix} followed by its column number.

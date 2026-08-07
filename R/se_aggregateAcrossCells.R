@@ -11,7 +11,7 @@
 #' @param num.threads Number of threads, passed to \code{\link{aggregateAcrossCells}}.
 #' @param more.aggr.args Named list of additional arguments to pass to \code{\link{aggregateAcrossCells}}.
 #' @param assay.type Integer or string specifying the assay of \code{x} to be aggregated.
-#' @param output.prefix String specifying a prefix to add to the names of the \code{link[SummarizedExperiment]{colData}} columns storing the factor combinations. 
+#' @param output.prefix String specifying a prefix to add to the names of the \code{\link[SummarizedExperiment]{colData}} columns storing the factor combinations. 
 #' If \code{NULL}, no prefix is added.
 #' @param counts.name String specifying the name of the \code{\link[SummarizedExperiment]{colData}} column in which to store the cell count for each factor combination. 
 #' If \code{NULL}, the cell counts are not reported.
