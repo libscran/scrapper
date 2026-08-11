@@ -150,19 +150,16 @@ aggregateAcrossCells.se <- function(
                 num.threads=num.threads,
                 more.aggr.args=more.aggr.args,
                 assay.type=altexps[[ae]],
+                include.factors=FALSE,
                 altexps=NULL,
-                output.prefix=NULL,
                 counts.name=NULL,
                 meta.name=NULL,
                 include.coldata=include.coldata
             )
 
-            ae.cd <- SummarizedExperiment::colData(ae.se)[,-1,drop=FALSE] # remove uninteresting factor combination
             if (copy.altexps) {
-                ae.cd <- cbind(common.cd, ae.cd)
+                SummarizedExperiment::colData(ae.se) <- cbind(common.cd, SummarizedExperiment::colData(ae.se))
             }
-            SummarizedExperiment::colData(ae.se) <- ae.cd
-
             if (copy.altexps) {
                 metadata(ae.se) <- metadata(se)
             }
