@@ -10,7 +10,6 @@ rowData(se)$foo <- runif(nrow(se))
 test_that("aggregateAcrossCells.se works as expected", {
     out <- aggregateAcrossCells.se(se, colData(se)[,"stuff",drop=FALSE])
     expect_identical(ncol(out), length(unique(se$stuff)))
-    expect_identical(rowData(out), rowData(se))
     expect_identical(out$factor.stuff, out$stuff)
     expect_identical(sort(out$factor.stuff), sort(unique(se$stuff)))
     expect_identical(out$counts, as.integer(table(se$stuff)[out$stuff]))
@@ -41,6 +40,29 @@ test_that("aggregateAcrossCells.se works as expected", {
     expect_identical(ncol(colData(out4)), 0L)
 })
 
+test_that("aggregateAcrossCells.se preserves row-level information", {
+    copy <- se
+    rownames(copy) <- paste0("GENE_", seq_len(nrow(mat)))
+    out <- aggregateAcrossCells.se(copy, colData(se)[,"stuff",drop=FALSE])
+    expect_identical(rownames(out), rownames(copy))
+    expect_identical(rowData(out), rowData(copy))
+
+    expect_false(is(out, "RangedSummarizedExperiment")) # check that we don't promote unnecessarily.
+    expect_null(rowRanges(out))
+    expect_null(rownames(assay(out, withDimnames=FALSE)))
+
+    # Respects rowRanges as well.
+    rowRanges(copy) <- GRanges("chrA", IRanges(seq_len(nrow(mat)), width=10))
+    rownames(copy) <- paste0("GENE_", seq_len(nrow(mat)))
+    out <- aggregateAcrossCells.se(copy, colData(se)[,"stuff",drop=FALSE])
+    expect_identical(rowRanges(out), rowRanges(copy))
+    expect_identical(rownames(out), rownames(copy))
+    expect_identical(rowData(out), rowData(copy))
+
+    expect_s4_class(out, "RangedSummarizedExperiment")
+    expect_false(is(out, "SingleCellExperiment")) # check that we don't promote unnecessarily.
+})
+
 test_that("aggregateAcrossCells.se works with alternative experiments", {
     sce <- as(se, "SingleCellExperiment")
     is.even <- 1:10 %% 2 == 0
@@ -48,7 +70,7 @@ test_that("aggregateAcrossCells.se works with alternative experiments", {
     sce$random <- paste0("FOO_", sce$stuff)
 
     out <- aggregateAcrossCells.se(sce, colData(se)[,c("stuff", "whee"),drop=FALSE])
-    expect_false(is(out, "SingleCellExperiment"))
+    expect_false(is(out, "SingleCellExperiment")) # avoid unnecessary promotions if altexps are not required.
 
     out <- aggregateAcrossCells.se(sce, colData(se)[,c("stuff", "whee"),drop=FALSE], altexps="GuP")
     expect_s4_class(out, "SingleCellExperiment")

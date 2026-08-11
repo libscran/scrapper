@@ -104,7 +104,7 @@ aggregateAcrossCells.se <- function(
 
     out <- .call(
         aggregateAcrossCells,
-        list(SummarizedExperiment::assay(x, assay.type)),
+        list(SummarizedExperiment::assay(x, assay.type, withDimnames=FALSE)),
         list(factors=factors, num.threads=num.threads),
         more.aggr.args
     )
@@ -113,7 +113,10 @@ aggregateAcrossCells.se <- function(
     if (length(altexps)) {
         CON <- SingleCellExperiment::SingleCellExperiment
     }
-    se <- CON(out[intersect(names(out), c("sums", "detected", "medians"))], rowData=SummarizedExperiment::rowData(x))
+    se <- CON(out[intersect(names(out), c("sums", "detected", "medians"))])
+    SummarizedExperiment::rowRanges(se) <- SummarizedExperiment::rowRanges(x)
+    SummarizedExperiment::rowData(se) <- SummarizedExperiment::rowData(x)
+    rownames(se) <- rownames(x)
 
     if (include.factors) {
         common.cd <- out$combinations

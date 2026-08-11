@@ -36,7 +36,11 @@ Now, an error is thrown if a \code{NA} value is detected.
 This affects \code{chooseRnaHvgs.se()}, \code{quickAdtQc.se()}, \code{quickCrisprQc.se()} and \code{quickRnaQc.se()},
 where the results would be appended onto the existing DataFrame and introduce columns with duplicate names.
 \item Removed the defunct \code{analyze()} and \code{convertAnalyzeResults()} functions.
-\item Added an \code{include.factors=} option to omit storage of the factor combinations in \code{aggregateAcrossCells.se()}.
+\item Various improvments to \code{aggregateAcrossCells.se()}:
+\itemize{
+\item Added an \code{include.factors=} option to omit storage of the factor combinations in 
+\item Propagate the \code{rowRanges()} of the input SummarizedExperiment to the output object.
+}
 }}
 
 \section{Version 1.6.0}{\itemize{
