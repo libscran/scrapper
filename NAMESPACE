@@ -123,38 +123,52 @@ import(methods)
 importClassesFrom(DelayedArray,DelayedArray)
 importClassesFrom(S4Vectors,DataFrame)
 importClassesFrom(S4Vectors,List)
-importFrom(BiocNeighbors,AnnoyParam)
-importFrom(BiocNeighbors,buildIndex)
-importFrom(BiocNeighbors,defineBuilder)
-importFrom(BiocNeighbors,findKNN)
-importFrom(DelayedArray,DelayedArray)
-importFrom(DelayedArray,extract_array)
-importFrom(DelayedArray,new_DelayedArray)
-importFrom(DelayedArray,t)
-importFrom(DelayedArray,type)
+importFrom(BiocNeighbors,
+  AnnoyParam,
+  buildIndex,
+  defineBuilder,
+  findKNN
+)
+importFrom(DelayedArray,
+  DelayedArray,
+  extract_array,
+  new_DelayedArray,
+  t,
+  type
+)
 importFrom(Rcpp,sourceCpp)
-importFrom(S4Vectors,"metadata<-")
-importFrom(S4Vectors,DataFrame)
-importFrom(S4Vectors,I)
-importFrom(S4Vectors,List)
-importFrom(S4Vectors,cbind)
-importFrom(S4Vectors,make_zero_col_DFrame)
-importFrom(S4Vectors,mcols)
-importFrom(S4Vectors,metadata)
-importFrom(S4Vectors,setValidity2)
-importFrom(SparseArray,extract_sparse_array)
-importFrom(SparseArray,is_sparse)
-importFrom(beachmat,getExecutor)
-importFrom(beachmat,initializeCpp)
-importFrom(beachmat,tatami.column.sums)
-importFrom(beachmat,tatami.dim)
-importFrom(beachmat,tatami.subset)
-importFrom(methods,as)
-importFrom(methods,is)
-importFrom(methods,new)
-importFrom(parallel,makeCluster)
-importFrom(parallel,parLapply)
-importFrom(parallel,stopCluster)
+importFrom(S4Vectors,
+  "metadata<-",
+  DataFrame,
+  I,
+  List,
+  cbind,
+  make_zero_col_DFrame,
+  mcols,
+  metadata,
+  setValidity2
+)
+importFrom(SparseArray,
+  extract_sparse_array,
+  is_sparse
+)
+importFrom(beachmat,
+  getExecutor,
+  initializeCpp,
+  tatami.column.sums,
+  tatami.dim,
+  tatami.subset
+)
+importFrom(methods,
+  as,
+  is,
+  new
+)
+importFrom(parallel,
+  makeCluster,
+  parLapply,
+  stopCluster
+)
 importFrom(stats,approx)
 importFrom(utils,head)
 useDynLib(scrapper)

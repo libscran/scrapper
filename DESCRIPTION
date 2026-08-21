@@ -1,6 +1,6 @@
 Package: scrapper
-Version: 1.7.5
-Date: 2026-08-11
+Version: 1.7.6
+Date: 2026-08-21
 Authors@R: person("Aaron", "Lun", role=c("cre", "aut"), email="infinite.monkeys.with.keyboards@gmail.com")
 Title: Bindings to C++ Libraries for Single-Cell Analysis
 Description: 
@@ -55,4 +55,4 @@ URL: https://github.com/libscran/scrapper
 BugReports: https://github.com/libscran/scrapper/issues
 VignetteBuilder: knitr
 Encoding: UTF-8
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.0
