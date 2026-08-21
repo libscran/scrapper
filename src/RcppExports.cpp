@@ -32,16 +32,17 @@ BEGIN_RCPP
 END_RCPP
 }
 // suggest_adt_qc_thresholds
-Rcpp::List suggest_adt_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::IntegerVector> block, Rcpp::RObject min_detected_drop, Rcpp::RObject detected_num_mads, Rcpp::RObject subset_sum_num_mads);
-RcppExport SEXP _scrapper_suggest_adt_qc_thresholds(SEXP metricsSEXP, SEXP blockSEXP, SEXP min_detected_dropSEXP, SEXP detected_num_madsSEXP, SEXP subset_sum_num_madsSEXP) {
+Rcpp::List suggest_adt_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::IntegerVector> block, int num_blocks, Rcpp::RObject min_detected_drop, Rcpp::RObject detected_num_mads, Rcpp::RObject subset_sum_num_mads);
+RcppExport SEXP _scrapper_suggest_adt_qc_thresholds(SEXP metricsSEXP, SEXP blockSEXP, SEXP num_blocksSEXP, SEXP min_detected_dropSEXP, SEXP detected_num_madsSEXP, SEXP subset_sum_num_madsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type metrics(metricsSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type block(blockSEXP);
+    Rcpp::traits::input_parameter< int >::type num_blocks(num_blocksSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type min_detected_drop(min_detected_dropSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type detected_num_mads(detected_num_madsSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type subset_sum_num_mads(subset_sum_num_madsSEXP);
-    rcpp_result_gen = Rcpp::wrap(suggest_adt_qc_thresholds(metrics, block, min_detected_drop, detected_num_mads, subset_sum_num_mads));
+    rcpp_result_gen = Rcpp::wrap(suggest_adt_qc_thresholds(metrics, block, num_blocks, min_detected_drop, detected_num_mads, subset_sum_num_mads));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -67,17 +68,18 @@ BEGIN_RCPP
 END_RCPP
 }
 // aggregate_across_cells
-Rcpp::List aggregate_across_cells(SEXP x, Rcpp::IntegerVector groups, Rcpp::RObject compute_sum, Rcpp::RObject compute_detected, Rcpp::RObject compute_median, Rcpp::RObject num_threads);
-RcppExport SEXP _scrapper_aggregate_across_cells(SEXP xSEXP, SEXP groupsSEXP, SEXP compute_sumSEXP, SEXP compute_detectedSEXP, SEXP compute_medianSEXP, SEXP num_threadsSEXP) {
+Rcpp::List aggregate_across_cells(SEXP x, Rcpp::IntegerVector groups, int num_groups, Rcpp::RObject compute_sum, Rcpp::RObject compute_detected, Rcpp::RObject compute_median, Rcpp::RObject num_threads);
+RcppExport SEXP _scrapper_aggregate_across_cells(SEXP xSEXP, SEXP groupsSEXP, SEXP num_groupsSEXP, SEXP compute_sumSEXP, SEXP compute_detectedSEXP, SEXP compute_medianSEXP, SEXP num_threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
     Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type groups(groupsSEXP);
+    Rcpp::traits::input_parameter< int >::type num_groups(num_groupsSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type compute_sum(compute_sumSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type compute_detected(compute_detectedSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type compute_median(compute_medianSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type num_threads(num_threadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(aggregate_across_cells(x, groups, compute_sum, compute_detected, compute_median, num_threads));
+    rcpp_result_gen = Rcpp::wrap(aggregate_across_cells(x, groups, num_groups, compute_sum, compute_detected, compute_median, num_threads));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -154,14 +156,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // center_size_factors
-Rcpp::NumericVector center_size_factors(Rcpp::NumericVector size_factors, Rcpp::Nullable<Rcpp::IntegerVector> block, Rcpp::RObject mode);
-RcppExport SEXP _scrapper_center_size_factors(SEXP size_factorsSEXP, SEXP blockSEXP, SEXP modeSEXP) {
+Rcpp::NumericVector center_size_factors(Rcpp::NumericVector size_factors, Rcpp::Nullable<Rcpp::IntegerVector> block, int num_blocks, Rcpp::RObject mode);
+RcppExport SEXP _scrapper_center_size_factors(SEXP size_factorsSEXP, SEXP blockSEXP, SEXP num_blocksSEXP, SEXP modeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type size_factors(size_factorsSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type block(blockSEXP);
+    Rcpp::traits::input_parameter< int >::type num_blocks(num_blocksSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type mode(modeSEXP);
-    rcpp_result_gen = Rcpp::wrap(center_size_factors(size_factors, block, mode));
+    rcpp_result_gen = Rcpp::wrap(center_size_factors(size_factors, block, num_blocks, mode));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -175,15 +178,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // center_spike_in_factors
-Rcpp::List center_spike_in_factors(Rcpp::NumericVector endogenous, Rcpp::List spike_ins, Rcpp::Nullable<Rcpp::IntegerVector> block, Rcpp::RObject mode);
-RcppExport SEXP _scrapper_center_spike_in_factors(SEXP endogenousSEXP, SEXP spike_insSEXP, SEXP blockSEXP, SEXP modeSEXP) {
+Rcpp::List center_spike_in_factors(Rcpp::NumericVector endogenous, Rcpp::List spike_ins, Rcpp::Nullable<Rcpp::IntegerVector> block, int num_blocks, Rcpp::RObject mode);
+RcppExport SEXP _scrapper_center_spike_in_factors(SEXP endogenousSEXP, SEXP spike_insSEXP, SEXP blockSEXP, SEXP num_blocksSEXP, SEXP modeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type endogenous(endogenousSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type spike_ins(spike_insSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type block(blockSEXP);
+    Rcpp::traits::input_parameter< int >::type num_blocks(num_blocksSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type mode(modeSEXP);
-    rcpp_result_gen = Rcpp::wrap(center_spike_in_factors(endogenous, spike_ins, block, mode));
+    rcpp_result_gen = Rcpp::wrap(center_spike_in_factors(endogenous, spike_ins, block, num_blocks, mode));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -373,18 +377,19 @@ BEGIN_RCPP
 END_RCPP
 }
 // correct_mnn
-Rcpp::List correct_mnn(Rcpp::NumericMatrix x, Rcpp::IntegerVector block, Rcpp::RObject num_neighbors, Rcpp::RObject num_steps, Rcpp::RObject num_threads, Rcpp::RObject merge_policy, SEXP builder);
-RcppExport SEXP _scrapper_correct_mnn(SEXP xSEXP, SEXP blockSEXP, SEXP num_neighborsSEXP, SEXP num_stepsSEXP, SEXP num_threadsSEXP, SEXP merge_policySEXP, SEXP builderSEXP) {
+Rcpp::List correct_mnn(Rcpp::NumericMatrix x, Rcpp::IntegerVector block, int num_blocks, Rcpp::RObject num_neighbors, Rcpp::RObject num_steps, Rcpp::RObject num_threads, Rcpp::RObject merge_policy, SEXP builder);
+RcppExport SEXP _scrapper_correct_mnn(SEXP xSEXP, SEXP blockSEXP, SEXP num_blocksSEXP, SEXP num_neighborsSEXP, SEXP num_stepsSEXP, SEXP num_threadsSEXP, SEXP merge_policySEXP, SEXP builderSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type x(xSEXP);
     Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type block(blockSEXP);
+    Rcpp::traits::input_parameter< int >::type num_blocks(num_blocksSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type num_neighbors(num_neighborsSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type num_steps(num_stepsSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type num_threads(num_threadsSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type merge_policy(merge_policySEXP);
     Rcpp::traits::input_parameter< SEXP >::type builder(builderSEXP);
-    rcpp_result_gen = Rcpp::wrap(correct_mnn(x, block, num_neighbors, num_steps, num_threads, merge_policy, builder));
+    rcpp_result_gen = Rcpp::wrap(correct_mnn(x, block, num_blocks, num_neighbors, num_steps, num_threads, merge_policy, builder));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -418,14 +423,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // suggest_crispr_qc_thresholds
-Rcpp::List suggest_crispr_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::IntegerVector> block, Rcpp::RObject max_value_num_mads);
-RcppExport SEXP _scrapper_suggest_crispr_qc_thresholds(SEXP metricsSEXP, SEXP blockSEXP, SEXP max_value_num_madsSEXP) {
+Rcpp::List suggest_crispr_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::IntegerVector> block, int num_blocks, Rcpp::RObject max_value_num_mads);
+RcppExport SEXP _scrapper_suggest_crispr_qc_thresholds(SEXP metricsSEXP, SEXP blockSEXP, SEXP num_blocksSEXP, SEXP max_value_num_madsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type metrics(metricsSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type block(blockSEXP);
+    Rcpp::traits::input_parameter< int >::type num_blocks(num_blocksSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type max_value_num_mads(max_value_num_madsSEXP);
-    rcpp_result_gen = Rcpp::wrap(suggest_crispr_qc_thresholds(metrics, block, max_value_num_mads));
+    rcpp_result_gen = Rcpp::wrap(suggest_crispr_qc_thresholds(metrics, block, num_blocks, max_value_num_mads));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -479,13 +485,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // model_gene_variances
-Rcpp::List model_gene_variances(SEXP x, Rcpp::Nullable<Rcpp::IntegerVector> block, int nblocks, Rcpp::RObject block_average_policy, Rcpp::RObject block_weight_policy, Rcpp::RObject variable_block_weight, Rcpp::RObject block_quantile, Rcpp::RObject fit_trend, Rcpp::RObject mean_filter, Rcpp::RObject min_mean, Rcpp::RObject transform, Rcpp::RObject span, Rcpp::RObject use_min_width, Rcpp::RObject min_width, Rcpp::RObject min_window_count, Rcpp::RObject num_threads);
-RcppExport SEXP _scrapper_model_gene_variances(SEXP xSEXP, SEXP blockSEXP, SEXP nblocksSEXP, SEXP block_average_policySEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP block_quantileSEXP, SEXP fit_trendSEXP, SEXP mean_filterSEXP, SEXP min_meanSEXP, SEXP transformSEXP, SEXP spanSEXP, SEXP use_min_widthSEXP, SEXP min_widthSEXP, SEXP min_window_countSEXP, SEXP num_threadsSEXP) {
+Rcpp::List model_gene_variances(SEXP x, Rcpp::Nullable<Rcpp::IntegerVector> block, int num_blocks, Rcpp::RObject block_average_policy, Rcpp::RObject block_weight_policy, Rcpp::RObject variable_block_weight, Rcpp::RObject block_quantile, Rcpp::RObject fit_trend, Rcpp::RObject mean_filter, Rcpp::RObject min_mean, Rcpp::RObject transform, Rcpp::RObject span, Rcpp::RObject use_min_width, Rcpp::RObject min_width, Rcpp::RObject min_window_count, Rcpp::RObject num_threads);
+RcppExport SEXP _scrapper_model_gene_variances(SEXP xSEXP, SEXP blockSEXP, SEXP num_blocksSEXP, SEXP block_average_policySEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP block_quantileSEXP, SEXP fit_trendSEXP, SEXP mean_filterSEXP, SEXP min_meanSEXP, SEXP transformSEXP, SEXP spanSEXP, SEXP use_min_widthSEXP, SEXP min_widthSEXP, SEXP min_window_countSEXP, SEXP num_threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type block(blockSEXP);
-    Rcpp::traits::input_parameter< int >::type nblocks(nblocksSEXP);
+    Rcpp::traits::input_parameter< int >::type num_blocks(num_blocksSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type block_average_policy(block_average_policySEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type block_weight_policy(block_weight_policySEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type variable_block_weight(variable_block_weightSEXP);
@@ -499,7 +505,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::RObject >::type min_width(min_widthSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type min_window_count(min_window_countSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type num_threads(num_threadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(model_gene_variances(x, block, nblocks, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, fit_trend, mean_filter, min_mean, transform, span, use_min_width, min_width, min_window_count, num_threads));
+    rcpp_result_gen = Rcpp::wrap(model_gene_variances(x, block, num_blocks, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, fit_trend, mean_filter, min_mean, transform, span, use_min_width, min_width, min_window_count, num_threads));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -571,16 +577,17 @@ BEGIN_RCPP
 END_RCPP
 }
 // suggest_rna_qc_thresholds
-Rcpp::List suggest_rna_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::IntegerVector> block, Rcpp::RObject sum_num_mads, Rcpp::RObject detected_num_mads, Rcpp::RObject subset_proportion_num_mads);
-RcppExport SEXP _scrapper_suggest_rna_qc_thresholds(SEXP metricsSEXP, SEXP blockSEXP, SEXP sum_num_madsSEXP, SEXP detected_num_madsSEXP, SEXP subset_proportion_num_madsSEXP) {
+Rcpp::List suggest_rna_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::IntegerVector> block, int num_blocks, Rcpp::RObject sum_num_mads, Rcpp::RObject detected_num_mads, Rcpp::RObject subset_proportion_num_mads);
+RcppExport SEXP _scrapper_suggest_rna_qc_thresholds(SEXP metricsSEXP, SEXP blockSEXP, SEXP num_blocksSEXP, SEXP sum_num_madsSEXP, SEXP detected_num_madsSEXP, SEXP subset_proportion_num_madsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type metrics(metricsSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type block(blockSEXP);
+    Rcpp::traits::input_parameter< int >::type num_blocks(num_blocksSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type sum_num_mads(sum_num_madsSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type detected_num_mads(detected_num_madsSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type subset_proportion_num_mads(subset_proportion_num_madsSEXP);
-    rcpp_result_gen = Rcpp::wrap(suggest_rna_qc_thresholds(metrics, block, sum_num_mads, detected_num_mads, subset_proportion_num_mads));
+    rcpp_result_gen = Rcpp::wrap(suggest_rna_qc_thresholds(metrics, block, num_blocks, sum_num_mads, detected_num_mads, subset_proportion_num_mads));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -606,13 +613,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // run_pca
-Rcpp::List run_pca(SEXP x, Rcpp::RObject number, Rcpp::Nullable<Rcpp::IntegerVector> block, Rcpp::RObject block_weight_policy, Rcpp::RObject variable_block_weight, Rcpp::RObject center_scores_by_block, Rcpp::RObject scale, Rcpp::Nullable<Rcpp::IntegerVector> subset, Rcpp::RObject realized, Rcpp::RObject irlba_work, Rcpp::RObject irlba_iterations, Rcpp::RObject irlba_tolerance, Rcpp::RObject irlba_seed, Rcpp::RObject num_threads);
-RcppExport SEXP _scrapper_run_pca(SEXP xSEXP, SEXP numberSEXP, SEXP blockSEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP center_scores_by_blockSEXP, SEXP scaleSEXP, SEXP subsetSEXP, SEXP realizedSEXP, SEXP irlba_workSEXP, SEXP irlba_iterationsSEXP, SEXP irlba_toleranceSEXP, SEXP irlba_seedSEXP, SEXP num_threadsSEXP) {
+Rcpp::List run_pca(SEXP x, Rcpp::RObject number, Rcpp::Nullable<Rcpp::IntegerVector> block, int num_blocks, Rcpp::RObject block_weight_policy, Rcpp::RObject variable_block_weight, Rcpp::RObject center_scores_by_block, Rcpp::RObject scale, Rcpp::Nullable<Rcpp::IntegerVector> subset, Rcpp::RObject realized, Rcpp::RObject irlba_work, Rcpp::RObject irlba_iterations, Rcpp::RObject irlba_tolerance, Rcpp::RObject irlba_seed, Rcpp::RObject num_threads);
+RcppExport SEXP _scrapper_run_pca(SEXP xSEXP, SEXP numberSEXP, SEXP blockSEXP, SEXP num_blocksSEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP center_scores_by_blockSEXP, SEXP scaleSEXP, SEXP subsetSEXP, SEXP realizedSEXP, SEXP irlba_workSEXP, SEXP irlba_iterationsSEXP, SEXP irlba_toleranceSEXP, SEXP irlba_seedSEXP, SEXP num_threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type number(numberSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type block(blockSEXP);
+    Rcpp::traits::input_parameter< int >::type num_blocks(num_blocksSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type block_weight_policy(block_weight_policySEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type variable_block_weight(variable_block_weightSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type center_scores_by_block(center_scores_by_blockSEXP);
@@ -624,7 +632,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::RObject >::type irlba_tolerance(irlba_toleranceSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type irlba_seed(irlba_seedSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type num_threads(num_threadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(run_pca(x, number, block, block_weight_policy, variable_block_weight, center_scores_by_block, scale, subset, realized, irlba_work, irlba_iterations, irlba_tolerance, irlba_seed, num_threads));
+    rcpp_result_gen = Rcpp::wrap(run_pca(x, number, block, num_blocks, block_weight_policy, variable_block_weight, center_scores_by_block, scale, subset, realized, irlba_work, irlba_iterations, irlba_tolerance, irlba_seed, num_threads));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -749,19 +757,20 @@ BEGIN_RCPP
 END_RCPP
 }
 // scale_by_neighbors
-Rcpp::NumericVector scale_by_neighbors(int num_cells, Rcpp::List embedding, Rcpp::RObject num_neighbors, Rcpp::Nullable<Rcpp::IntegerVector> block, Rcpp::RObject block_weight_policy, Rcpp::RObject variable_block_weight, Rcpp::RObject num_threads, SEXP nn_builder);
-RcppExport SEXP _scrapper_scale_by_neighbors(SEXP num_cellsSEXP, SEXP embeddingSEXP, SEXP num_neighborsSEXP, SEXP blockSEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP num_threadsSEXP, SEXP nn_builderSEXP) {
+Rcpp::NumericVector scale_by_neighbors(int num_cells, Rcpp::List embedding, Rcpp::RObject num_neighbors, Rcpp::Nullable<Rcpp::IntegerVector> block, int num_blocks, Rcpp::RObject block_weight_policy, Rcpp::RObject variable_block_weight, Rcpp::RObject num_threads, SEXP nn_builder);
+RcppExport SEXP _scrapper_scale_by_neighbors(SEXP num_cellsSEXP, SEXP embeddingSEXP, SEXP num_neighborsSEXP, SEXP blockSEXP, SEXP num_blocksSEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP num_threadsSEXP, SEXP nn_builderSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< int >::type num_cells(num_cellsSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type embedding(embeddingSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type num_neighbors(num_neighborsSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type block(blockSEXP);
+    Rcpp::traits::input_parameter< int >::type num_blocks(num_blocksSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type block_weight_policy(block_weight_policySEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type variable_block_weight(variable_block_weightSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type num_threads(num_threadsSEXP);
     Rcpp::traits::input_parameter< SEXP >::type nn_builder(nn_builderSEXP);
-    rcpp_result_gen = Rcpp::wrap(scale_by_neighbors(num_cells, embedding, num_neighbors, block, block_weight_policy, variable_block_weight, num_threads, nn_builder));
+    rcpp_result_gen = Rcpp::wrap(scale_by_neighbors(num_cells, embedding, num_neighbors, block, num_blocks, block_weight_policy, variable_block_weight, num_threads, nn_builder));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -776,13 +785,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // score_gene_set
-Rcpp::List score_gene_set(SEXP x, Rcpp::RObject rank, Rcpp::Nullable<Rcpp::IntegerVector> block, Rcpp::RObject block_weight_policy, Rcpp::RObject variable_block_weight, Rcpp::RObject scale, Rcpp::RObject realized, Rcpp::RObject irlba_work, Rcpp::RObject irlba_iterations, Rcpp::RObject irlba_tolerance, Rcpp::RObject irlba_seed, Rcpp::RObject num_threads);
-RcppExport SEXP _scrapper_score_gene_set(SEXP xSEXP, SEXP rankSEXP, SEXP blockSEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP scaleSEXP, SEXP realizedSEXP, SEXP irlba_workSEXP, SEXP irlba_iterationsSEXP, SEXP irlba_toleranceSEXP, SEXP irlba_seedSEXP, SEXP num_threadsSEXP) {
+Rcpp::List score_gene_set(SEXP x, Rcpp::RObject rank, Rcpp::Nullable<Rcpp::IntegerVector> block, int num_blocks, Rcpp::RObject block_weight_policy, Rcpp::RObject variable_block_weight, Rcpp::RObject scale, Rcpp::RObject realized, Rcpp::RObject irlba_work, Rcpp::RObject irlba_iterations, Rcpp::RObject irlba_tolerance, Rcpp::RObject irlba_seed, Rcpp::RObject num_threads);
+RcppExport SEXP _scrapper_score_gene_set(SEXP xSEXP, SEXP rankSEXP, SEXP blockSEXP, SEXP num_blocksSEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP scaleSEXP, SEXP realizedSEXP, SEXP irlba_workSEXP, SEXP irlba_iterationsSEXP, SEXP irlba_toleranceSEXP, SEXP irlba_seedSEXP, SEXP num_threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type rank(rankSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type block(blockSEXP);
+    Rcpp::traits::input_parameter< int >::type num_blocks(num_blocksSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type block_weight_policy(block_weight_policySEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type variable_block_weight(variable_block_weightSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type scale(scaleSEXP);
@@ -792,7 +802,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::RObject >::type irlba_tolerance(irlba_toleranceSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type irlba_seed(irlba_seedSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type num_threads(num_threadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(score_gene_set(x, rank, block, block_weight_policy, variable_block_weight, scale, realized, irlba_work, irlba_iterations, irlba_tolerance, irlba_seed, num_threads));
+    rcpp_result_gen = Rcpp::wrap(score_gene_set(x, rank, block, num_blocks, block_weight_policy, variable_block_weight, scale, realized, irlba_work, irlba_iterations, irlba_tolerance, irlba_seed, num_threads));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -806,14 +816,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // score_markers_summary
-Rcpp::List score_markers_summary(SEXP x, Rcpp::IntegerVector groups, int num_groups, Rcpp::Nullable<Rcpp::IntegerVector> block, Rcpp::RObject block_average_policy, Rcpp::RObject block_weight_policy, Rcpp::RObject variable_block_weight, Rcpp::RObject block_quantile, Rcpp::RObject threshold, Rcpp::RObject num_threads, Rcpp::RObject compute_group_mean, Rcpp::RObject compute_group_detected, Rcpp::RObject compute_delta_mean, Rcpp::RObject compute_delta_detected, Rcpp::RObject compute_cohens_d, Rcpp::RObject compute_auc, Rcpp::RObject compute_summary_min, Rcpp::RObject compute_summary_mean, Rcpp::RObject compute_summary_median, Rcpp::RObject compute_summary_max, Rcpp::RObject compute_summary_quantiles, Rcpp::RObject compute_summary_min_rank, Rcpp::RObject min_rank_limit);
-RcppExport SEXP _scrapper_score_markers_summary(SEXP xSEXP, SEXP groupsSEXP, SEXP num_groupsSEXP, SEXP blockSEXP, SEXP block_average_policySEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP block_quantileSEXP, SEXP thresholdSEXP, SEXP num_threadsSEXP, SEXP compute_group_meanSEXP, SEXP compute_group_detectedSEXP, SEXP compute_delta_meanSEXP, SEXP compute_delta_detectedSEXP, SEXP compute_cohens_dSEXP, SEXP compute_aucSEXP, SEXP compute_summary_minSEXP, SEXP compute_summary_meanSEXP, SEXP compute_summary_medianSEXP, SEXP compute_summary_maxSEXP, SEXP compute_summary_quantilesSEXP, SEXP compute_summary_min_rankSEXP, SEXP min_rank_limitSEXP) {
+Rcpp::List score_markers_summary(SEXP x, Rcpp::IntegerVector groups, int num_groups, Rcpp::Nullable<Rcpp::IntegerVector> block, int num_blocks, Rcpp::RObject block_average_policy, Rcpp::RObject block_weight_policy, Rcpp::RObject variable_block_weight, Rcpp::RObject block_quantile, Rcpp::RObject threshold, Rcpp::RObject num_threads, Rcpp::RObject compute_group_mean, Rcpp::RObject compute_group_detected, Rcpp::RObject compute_delta_mean, Rcpp::RObject compute_delta_detected, Rcpp::RObject compute_cohens_d, Rcpp::RObject compute_auc, Rcpp::RObject compute_summary_min, Rcpp::RObject compute_summary_mean, Rcpp::RObject compute_summary_median, Rcpp::RObject compute_summary_max, Rcpp::RObject compute_summary_quantiles, Rcpp::RObject compute_summary_min_rank, Rcpp::RObject min_rank_limit);
+RcppExport SEXP _scrapper_score_markers_summary(SEXP xSEXP, SEXP groupsSEXP, SEXP num_groupsSEXP, SEXP blockSEXP, SEXP num_blocksSEXP, SEXP block_average_policySEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP block_quantileSEXP, SEXP thresholdSEXP, SEXP num_threadsSEXP, SEXP compute_group_meanSEXP, SEXP compute_group_detectedSEXP, SEXP compute_delta_meanSEXP, SEXP compute_delta_detectedSEXP, SEXP compute_cohens_dSEXP, SEXP compute_aucSEXP, SEXP compute_summary_minSEXP, SEXP compute_summary_meanSEXP, SEXP compute_summary_medianSEXP, SEXP compute_summary_maxSEXP, SEXP compute_summary_quantilesSEXP, SEXP compute_summary_min_rankSEXP, SEXP min_rank_limitSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
     Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type groups(groupsSEXP);
     Rcpp::traits::input_parameter< int >::type num_groups(num_groupsSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type block(blockSEXP);
+    Rcpp::traits::input_parameter< int >::type num_blocks(num_blocksSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type block_average_policy(block_average_policySEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type block_weight_policy(block_weight_policySEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type variable_block_weight(variable_block_weightSEXP);
@@ -833,19 +844,20 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::RObject >::type compute_summary_quantiles(compute_summary_quantilesSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type compute_summary_min_rank(compute_summary_min_rankSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type min_rank_limit(min_rank_limitSEXP);
-    rcpp_result_gen = Rcpp::wrap(score_markers_summary(x, groups, num_groups, block, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc, compute_summary_min, compute_summary_mean, compute_summary_median, compute_summary_max, compute_summary_quantiles, compute_summary_min_rank, min_rank_limit));
+    rcpp_result_gen = Rcpp::wrap(score_markers_summary(x, groups, num_groups, block, num_blocks, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc, compute_summary_min, compute_summary_mean, compute_summary_median, compute_summary_max, compute_summary_quantiles, compute_summary_min_rank, min_rank_limit));
     return rcpp_result_gen;
 END_RCPP
 }
 // score_markers_pairwise
-Rcpp::List score_markers_pairwise(SEXP x, Rcpp::IntegerVector groups, int num_groups, Rcpp::Nullable<Rcpp::IntegerVector> block, Rcpp::RObject block_average_policy, Rcpp::RObject block_weight_policy, Rcpp::RObject variable_block_weight, Rcpp::RObject block_quantile, Rcpp::RObject threshold, Rcpp::RObject num_threads, Rcpp::RObject compute_group_mean, Rcpp::RObject compute_group_detected, Rcpp::RObject compute_delta_mean, Rcpp::RObject compute_delta_detected, Rcpp::RObject compute_cohens_d, Rcpp::RObject compute_auc);
-RcppExport SEXP _scrapper_score_markers_pairwise(SEXP xSEXP, SEXP groupsSEXP, SEXP num_groupsSEXP, SEXP blockSEXP, SEXP block_average_policySEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP block_quantileSEXP, SEXP thresholdSEXP, SEXP num_threadsSEXP, SEXP compute_group_meanSEXP, SEXP compute_group_detectedSEXP, SEXP compute_delta_meanSEXP, SEXP compute_delta_detectedSEXP, SEXP compute_cohens_dSEXP, SEXP compute_aucSEXP) {
+Rcpp::List score_markers_pairwise(SEXP x, Rcpp::IntegerVector groups, int num_groups, Rcpp::Nullable<Rcpp::IntegerVector> block, int num_blocks, Rcpp::RObject block_average_policy, Rcpp::RObject block_weight_policy, Rcpp::RObject variable_block_weight, Rcpp::RObject block_quantile, Rcpp::RObject threshold, Rcpp::RObject num_threads, Rcpp::RObject compute_group_mean, Rcpp::RObject compute_group_detected, Rcpp::RObject compute_delta_mean, Rcpp::RObject compute_delta_detected, Rcpp::RObject compute_cohens_d, Rcpp::RObject compute_auc);
+RcppExport SEXP _scrapper_score_markers_pairwise(SEXP xSEXP, SEXP groupsSEXP, SEXP num_groupsSEXP, SEXP blockSEXP, SEXP num_blocksSEXP, SEXP block_average_policySEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP block_quantileSEXP, SEXP thresholdSEXP, SEXP num_threadsSEXP, SEXP compute_group_meanSEXP, SEXP compute_group_detectedSEXP, SEXP compute_delta_meanSEXP, SEXP compute_delta_detectedSEXP, SEXP compute_cohens_dSEXP, SEXP compute_aucSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
     Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type groups(groupsSEXP);
     Rcpp::traits::input_parameter< int >::type num_groups(num_groupsSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type block(blockSEXP);
+    Rcpp::traits::input_parameter< int >::type num_blocks(num_blocksSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type block_average_policy(block_average_policySEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type block_weight_policy(block_weight_policySEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type variable_block_weight(variable_block_weightSEXP);
@@ -858,13 +870,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::RObject >::type compute_delta_detected(compute_delta_detectedSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type compute_cohens_d(compute_cohens_dSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type compute_auc(compute_aucSEXP);
-    rcpp_result_gen = Rcpp::wrap(score_markers_pairwise(x, groups, num_groups, block, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc));
+    rcpp_result_gen = Rcpp::wrap(score_markers_pairwise(x, groups, num_groups, block, num_blocks, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc));
     return rcpp_result_gen;
 END_RCPP
 }
 // score_markers_best
-Rcpp::List score_markers_best(SEXP x, int top, Rcpp::IntegerVector groups, int num_groups, Rcpp::Nullable<Rcpp::IntegerVector> block, Rcpp::RObject block_average_policy, Rcpp::RObject block_weight_policy, Rcpp::RObject variable_block_weight, Rcpp::RObject block_quantile, Rcpp::RObject threshold, Rcpp::RObject num_threads, Rcpp::RObject compute_group_mean, Rcpp::RObject compute_group_detected, Rcpp::RObject compute_delta_mean, Rcpp::RObject compute_delta_detected, Rcpp::RObject compute_cohens_d, Rcpp::RObject compute_auc, bool index_only);
-RcppExport SEXP _scrapper_score_markers_best(SEXP xSEXP, SEXP topSEXP, SEXP groupsSEXP, SEXP num_groupsSEXP, SEXP blockSEXP, SEXP block_average_policySEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP block_quantileSEXP, SEXP thresholdSEXP, SEXP num_threadsSEXP, SEXP compute_group_meanSEXP, SEXP compute_group_detectedSEXP, SEXP compute_delta_meanSEXP, SEXP compute_delta_detectedSEXP, SEXP compute_cohens_dSEXP, SEXP compute_aucSEXP, SEXP index_onlySEXP) {
+Rcpp::List score_markers_best(SEXP x, int top, Rcpp::IntegerVector groups, int num_groups, Rcpp::Nullable<Rcpp::IntegerVector> block, int num_blocks, Rcpp::RObject block_average_policy, Rcpp::RObject block_weight_policy, Rcpp::RObject variable_block_weight, Rcpp::RObject block_quantile, Rcpp::RObject threshold, Rcpp::RObject num_threads, Rcpp::RObject compute_group_mean, Rcpp::RObject compute_group_detected, Rcpp::RObject compute_delta_mean, Rcpp::RObject compute_delta_detected, Rcpp::RObject compute_cohens_d, Rcpp::RObject compute_auc, bool index_only);
+RcppExport SEXP _scrapper_score_markers_best(SEXP xSEXP, SEXP topSEXP, SEXP groupsSEXP, SEXP num_groupsSEXP, SEXP blockSEXP, SEXP num_blocksSEXP, SEXP block_average_policySEXP, SEXP block_weight_policySEXP, SEXP variable_block_weightSEXP, SEXP block_quantileSEXP, SEXP thresholdSEXP, SEXP num_threadsSEXP, SEXP compute_group_meanSEXP, SEXP compute_group_detectedSEXP, SEXP compute_delta_meanSEXP, SEXP compute_delta_detectedSEXP, SEXP compute_cohens_dSEXP, SEXP compute_aucSEXP, SEXP index_onlySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
@@ -872,6 +884,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type groups(groupsSEXP);
     Rcpp::traits::input_parameter< int >::type num_groups(num_groupsSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type block(blockSEXP);
+    Rcpp::traits::input_parameter< int >::type num_blocks(num_blocksSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type block_average_policy(block_average_policySEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type block_weight_policy(block_weight_policySEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type variable_block_weight(variable_block_weightSEXP);
@@ -885,7 +898,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::RObject >::type compute_cohens_d(compute_cohens_dSEXP);
     Rcpp::traits::input_parameter< Rcpp::RObject >::type compute_auc(compute_aucSEXP);
     Rcpp::traits::input_parameter< bool >::type index_only(index_onlySEXP);
-    rcpp_result_gen = Rcpp::wrap(score_markers_best(x, top, groups, num_groups, block, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc, index_only));
+    rcpp_result_gen = Rcpp::wrap(score_markers_best(x, top, groups, num_groups, block, num_blocks, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc, index_only));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1008,10 +1021,10 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_compute_adt_qc_metrics", (DL_FUNC) &_scrapper_compute_adt_qc_metrics, 3},
     {"_scrapper_compute_adt_qc_metrics_defaults", (DL_FUNC) &_scrapper_compute_adt_qc_metrics_defaults, 0},
-    {"_scrapper_suggest_adt_qc_thresholds", (DL_FUNC) &_scrapper_suggest_adt_qc_thresholds, 5},
+    {"_scrapper_suggest_adt_qc_thresholds", (DL_FUNC) &_scrapper_suggest_adt_qc_thresholds, 6},
     {"_scrapper_suggest_adt_qc_thresholds_defaults", (DL_FUNC) &_scrapper_suggest_adt_qc_thresholds_defaults, 0},
     {"_scrapper_filter_adt_qc_metrics", (DL_FUNC) &_scrapper_filter_adt_qc_metrics, 3},
-    {"_scrapper_aggregate_across_cells", (DL_FUNC) &_scrapper_aggregate_across_cells, 6},
+    {"_scrapper_aggregate_across_cells", (DL_FUNC) &_scrapper_aggregate_across_cells, 7},
     {"_scrapper_aggregate_across_cells_defaults", (DL_FUNC) &_scrapper_aggregate_across_cells_defaults, 0},
     {"_scrapper_aggregate_across_genes", (DL_FUNC) &_scrapper_aggregate_across_genes, 4},
     {"_scrapper_aggregate_across_genes_defaults", (DL_FUNC) &_scrapper_aggregate_across_genes_defaults, 0},
@@ -1019,9 +1032,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_build_snn_graph_defaults", (DL_FUNC) &_scrapper_build_snn_graph_defaults, 0},
     {"_scrapper_graph_to_list", (DL_FUNC) &_scrapper_graph_to_list, 1},
     {"_scrapper_list_to_graph", (DL_FUNC) &_scrapper_list_to_graph, 1},
-    {"_scrapper_center_size_factors", (DL_FUNC) &_scrapper_center_size_factors, 3},
+    {"_scrapper_center_size_factors", (DL_FUNC) &_scrapper_center_size_factors, 4},
     {"_scrapper_center_size_factors_defaults", (DL_FUNC) &_scrapper_center_size_factors_defaults, 0},
-    {"_scrapper_center_spike_in_factors", (DL_FUNC) &_scrapper_center_spike_in_factors, 4},
+    {"_scrapper_center_spike_in_factors", (DL_FUNC) &_scrapper_center_spike_in_factors, 5},
     {"_scrapper_center_spike_in_factors_defaults", (DL_FUNC) &_scrapper_center_spike_in_factors_defaults, 0},
     {"_scrapper_choose_highly_variable_genes", (DL_FUNC) &_scrapper_choose_highly_variable_genes, 6},
     {"_scrapper_choose_highly_variable_genes_defaults", (DL_FUNC) &_scrapper_choose_highly_variable_genes_defaults, 0},
@@ -1038,11 +1051,11 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_compute_block_weights_defaults", (DL_FUNC) &_scrapper_compute_block_weights_defaults, 0},
     {"_scrapper_compute_clrm1_factors", (DL_FUNC) &_scrapper_compute_clrm1_factors, 2},
     {"_scrapper_compute_clrm1_factors_defaults", (DL_FUNC) &_scrapper_compute_clrm1_factors_defaults, 0},
-    {"_scrapper_correct_mnn", (DL_FUNC) &_scrapper_correct_mnn, 7},
+    {"_scrapper_correct_mnn", (DL_FUNC) &_scrapper_correct_mnn, 8},
     {"_scrapper_correct_mnn_defaults", (DL_FUNC) &_scrapper_correct_mnn_defaults, 0},
     {"_scrapper_compute_crispr_qc_metrics", (DL_FUNC) &_scrapper_compute_crispr_qc_metrics, 2},
     {"_scrapper_compute_crispr_qc_metrics_defaults", (DL_FUNC) &_scrapper_compute_crispr_qc_metrics_defaults, 0},
-    {"_scrapper_suggest_crispr_qc_thresholds", (DL_FUNC) &_scrapper_suggest_crispr_qc_thresholds, 3},
+    {"_scrapper_suggest_crispr_qc_thresholds", (DL_FUNC) &_scrapper_suggest_crispr_qc_thresholds, 4},
     {"_scrapper_suggest_crispr_qc_thresholds_defaults", (DL_FUNC) &_scrapper_suggest_crispr_qc_thresholds_defaults, 0},
     {"_scrapper_filter_crispr_qc_metrics", (DL_FUNC) &_scrapper_filter_crispr_qc_metrics, 3},
     {"_scrapper_fit_variance_trend", (DL_FUNC) &_scrapper_fit_variance_trend, 10},
@@ -1054,10 +1067,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_initialize_LogNormalizedMatrix", (DL_FUNC) &_scrapper_initialize_LogNormalizedMatrix, 4},
     {"_scrapper_compute_rna_qc_metrics", (DL_FUNC) &_scrapper_compute_rna_qc_metrics, 3},
     {"_scrapper_compute_rna_qc_metrics_defaults", (DL_FUNC) &_scrapper_compute_rna_qc_metrics_defaults, 0},
-    {"_scrapper_suggest_rna_qc_thresholds", (DL_FUNC) &_scrapper_suggest_rna_qc_thresholds, 5},
+    {"_scrapper_suggest_rna_qc_thresholds", (DL_FUNC) &_scrapper_suggest_rna_qc_thresholds, 6},
     {"_scrapper_suggest_rna_qc_thresholds_defaults", (DL_FUNC) &_scrapper_suggest_rna_qc_thresholds_defaults, 0},
     {"_scrapper_filter_rna_qc_metrics", (DL_FUNC) &_scrapper_filter_rna_qc_metrics, 3},
-    {"_scrapper_run_pca", (DL_FUNC) &_scrapper_run_pca, 14},
+    {"_scrapper_run_pca", (DL_FUNC) &_scrapper_run_pca, 15},
     {"_scrapper_run_pca_defaults", (DL_FUNC) &_scrapper_run_pca_defaults, 2},
     {"_scrapper_run_tsne", (DL_FUNC) &_scrapper_run_tsne, 15},
     {"_scrapper_perplexity_to_neighbors", (DL_FUNC) &_scrapper_perplexity_to_neighbors, 1},
@@ -1066,13 +1079,13 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scrapper_run_umap_defaults", (DL_FUNC) &_scrapper_run_umap_defaults, 0},
     {"_scrapper_sanitize_size_factors", (DL_FUNC) &_scrapper_sanitize_size_factors, 5},
     {"_scrapper_sanitize_size_factors_defaults", (DL_FUNC) &_scrapper_sanitize_size_factors_defaults, 0},
-    {"_scrapper_scale_by_neighbors", (DL_FUNC) &_scrapper_scale_by_neighbors, 8},
+    {"_scrapper_scale_by_neighbors", (DL_FUNC) &_scrapper_scale_by_neighbors, 9},
     {"_scrapper_scale_by_neighbors_defaults", (DL_FUNC) &_scrapper_scale_by_neighbors_defaults, 1},
-    {"_scrapper_score_gene_set", (DL_FUNC) &_scrapper_score_gene_set, 12},
+    {"_scrapper_score_gene_set", (DL_FUNC) &_scrapper_score_gene_set, 13},
     {"_scrapper_score_gene_set_defaults", (DL_FUNC) &_scrapper_score_gene_set_defaults, 0},
-    {"_scrapper_score_markers_summary", (DL_FUNC) &_scrapper_score_markers_summary, 23},
-    {"_scrapper_score_markers_pairwise", (DL_FUNC) &_scrapper_score_markers_pairwise, 16},
-    {"_scrapper_score_markers_best", (DL_FUNC) &_scrapper_score_markers_best, 18},
+    {"_scrapper_score_markers_summary", (DL_FUNC) &_scrapper_score_markers_summary, 24},
+    {"_scrapper_score_markers_pairwise", (DL_FUNC) &_scrapper_score_markers_pairwise, 17},
+    {"_scrapper_score_markers_best", (DL_FUNC) &_scrapper_score_markers_best, 19},
     {"_scrapper_score_markers_defaults", (DL_FUNC) &_scrapper_score_markers_defaults, 1},
     {"_scrapper_set_executor", (DL_FUNC) &_scrapper_set_executor, 1},
     {"_scrapper_subsample_by_neighbors", (DL_FUNC) &_scrapper_subsample_by_neighbors, 3},

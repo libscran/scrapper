@@ -42,6 +42,7 @@ Rcpp::List score_markers_summary(
     Rcpp::IntegerVector groups,
     int num_groups,
     Rcpp::Nullable<Rcpp::IntegerVector> block,
+    int num_blocks,
     Rcpp::RObject block_average_policy,
     Rcpp::RObject block_weight_policy,
     Rcpp::RObject variable_block_weight,
@@ -83,12 +84,12 @@ Rcpp::List score_markers_summary(
     set_bool(compute_delta_detected, opt.compute_delta_detected, "compute.delta.detected");
     set_bool(compute_cohens_d, opt.compute_cohens_d, "compute.cohens.d");
     set_bool(compute_auc, opt.compute_auc, "compute.auc");
-    set_bool(compute_summary_min, opt.compute_min, "compute.summary.min");
-    set_bool(compute_summary_mean, opt.compute_mean, "compute.summary.mean");
-    set_bool(compute_summary_median, opt.compute_median, "compute.summary.median");
-    set_bool(compute_summary_max, opt.compute_max, "compute.summary.max");
+    set_bool(compute_summary_min, opt.compute_summary_min, "compute.summary.min");
+    set_bool(compute_summary_mean, opt.compute_summary_mean, "compute.summary.mean");
+    set_bool(compute_summary_median, opt.compute_summary_median, "compute.summary.median");
+    set_bool(compute_summary_max, opt.compute_summary_max, "compute.summary.max");
     const auto num_quantiles = setup_summary_quantiles(compute_summary_quantiles, opt.compute_summary_quantiles);
-    set_bool(compute_summary_min_rank, opt.compute_min_rank, "compute.summary.min.rank");
+    set_bool(compute_summary_min_rank, opt.compute_summary_min_rank, "compute.summary.min.rank");
     set_integer(min_rank_limit, opt.min_rank_limit, "min.rank.limit");
 
     scran_markers::ScoreMarkersSummaryBuffers<double, int> buffers;
@@ -113,17 +114,17 @@ Rcpp::List score_markers_summary(
             num_groups,
             NR,
             buffers.cohens_d,
-            opt.compute_min,
+            opt.compute_summary_min,
             cohens_min,
-            opt.compute_mean,
+            opt.compute_summary_mean,
             cohens_mean,
-            opt.compute_median,
+            opt.compute_summary_median,
             cohens_median,
-            opt.compute_max,
+            opt.compute_summary_max,
             cohens_max,
             num_quantiles,
             cohens_quant,
-            opt.compute_min_rank,
+            opt.compute_summary_min_rank,
             cohens_mr
         );
     }
@@ -133,17 +134,17 @@ Rcpp::List score_markers_summary(
             num_groups,
             NR,
             buffers.auc,
-            opt.compute_min,
+            opt.compute_summary_min,
             auc_min,
-            opt.compute_mean,
+            opt.compute_summary_mean,
             auc_mean,
-            opt.compute_median,
+            opt.compute_summary_median,
             auc_median,
-            opt.compute_max,
+            opt.compute_summary_max,
             auc_max,
             num_quantiles,
             auc_quant,
-            opt.compute_min_rank,
+            opt.compute_summary_min_rank,
             auc_mr
         );
     }
@@ -153,17 +154,17 @@ Rcpp::List score_markers_summary(
             num_groups,
             NR,
             buffers.delta_mean,
-            opt.compute_min,
+            opt.compute_summary_min,
             dm_min,
-            opt.compute_mean,
+            opt.compute_summary_mean,
             dm_mean,
-            opt.compute_median,
+            opt.compute_summary_median,
             dm_median,
-            opt.compute_max,
+            opt.compute_summary_max,
             dm_max,
             num_quantiles,
             dm_quant,
-            opt.compute_min_rank,
+            opt.compute_summary_min_rank,
             dm_mr
         );
     }
@@ -173,30 +174,45 @@ Rcpp::List score_markers_summary(
             num_groups,
             NR,
             buffers.delta_detected,
-            opt.compute_min,
+            opt.compute_summary_min,
             dd_min,
-            opt.compute_mean,
+            opt.compute_summary_mean,
             dd_mean,
-            opt.compute_median,
+            opt.compute_summary_median,
             dd_median,
-            opt.compute_max,
+            opt.compute_summary_max,
             dd_max,
             num_quantiles,
             dd_quant,
-            opt.compute_min_rank,
+            opt.compute_summary_min_rank,
             dd_mr
         );
     }
 
     auto block_info = MaybeBlock(block);
-    auto ptr = block_info.get();
-    if (ptr) {
+    auto block_ptr = block_info.get();
+    if (block_ptr) {
         if (!sanisizer::is_equal(block_info.size(), NC)) {
             throw std::runtime_error("'block' must be the same length as the number of cells");
         }
-        scran_markers::score_markers_summary_blocked(*mat, static_cast<const int*>(groups.begin()), ptr, opt, buffers);
+        scran_markers::score_markers_summary_blocked(
+            *mat,
+            static_cast<const int*>(groups.begin()),
+            sanisizer::cast<std::size_t>(num_groups),
+            block_ptr,
+            sanisizer::cast<std::size_t>(num_blocks),
+            opt,
+            buffers
+        );
+
     } else {
-        scran_markers::score_markers_summary(*mat, static_cast<const int*>(groups.begin()), opt, buffers);
+        scran_markers::score_markers_summary(
+            *mat,
+            static_cast<const int*>(groups.begin()),
+            sanisizer::cast<std::size_t>(num_groups),
+            opt,
+            buffers
+        );
     }
 
     Rcpp::List output;
@@ -210,17 +226,17 @@ Rcpp::List score_markers_summary(
     if (opt.compute_cohens_d) {
         output["cohens.d"] = format_summary_output(
             num_groups,
-            opt.compute_min,
+            opt.compute_summary_min,
             cohens_min,
-            opt.compute_mean,
+            opt.compute_summary_mean,
             cohens_mean,
-            opt.compute_median,
+            opt.compute_summary_median,
             cohens_median,
-            opt.compute_max,
+            opt.compute_summary_max,
             cohens_max,
             opt.compute_summary_quantiles.has_value(),
             cohens_quant,
-            opt.compute_min_rank,
+            opt.compute_summary_min_rank,
             cohens_mr
         );
     }
@@ -228,17 +244,17 @@ Rcpp::List score_markers_summary(
     if (opt.compute_auc) {
         output["auc"] = format_summary_output(
             num_groups,
-            opt.compute_min,
+            opt.compute_summary_min,
             auc_min,
-            opt.compute_mean,
+            opt.compute_summary_mean,
             auc_mean,
-            opt.compute_median,
+            opt.compute_summary_median,
             auc_median,
-            opt.compute_max,
+            opt.compute_summary_max,
             auc_max,
             opt.compute_summary_quantiles.has_value(),
             auc_quant, 
-            opt.compute_min_rank,
+            opt.compute_summary_min_rank,
             auc_mr
         );
     }
@@ -246,17 +262,17 @@ Rcpp::List score_markers_summary(
     if (opt.compute_delta_mean) {
         output["delta.mean"] = format_summary_output(
             num_groups,
-            opt.compute_min,
+            opt.compute_summary_min,
             dm_min,
-            opt.compute_mean,
+            opt.compute_summary_mean,
             dm_mean,
-            opt.compute_median,
+            opt.compute_summary_median,
             dm_median,
-            opt.compute_max,
+            opt.compute_summary_max,
             dm_max,
             opt.compute_summary_quantiles.has_value(),
             dm_quant,
-            opt.compute_min_rank,
+            opt.compute_summary_min_rank,
             dm_mr
         );
     }
@@ -264,17 +280,17 @@ Rcpp::List score_markers_summary(
     if (opt.compute_delta_detected) {
         output["delta.detected"] = format_summary_output(
             num_groups,
-            opt.compute_min,
+            opt.compute_summary_min,
             dd_min,
-            opt.compute_mean,
+            opt.compute_summary_mean,
             dd_mean,
-            opt.compute_median,
+            opt.compute_summary_median,
             dd_median,
-            opt.compute_max,
+            opt.compute_summary_max,
             dd_max,
             opt.compute_summary_quantiles.has_value(),
             dd_quant,
-            opt.compute_min_rank,
+            opt.compute_summary_min_rank,
             dd_mr
         );
     }
@@ -288,6 +304,7 @@ Rcpp::List score_markers_pairwise(
     Rcpp::IntegerVector groups,
     int num_groups,
     Rcpp::Nullable<Rcpp::IntegerVector> block,
+    int num_blocks,
     Rcpp::RObject block_average_policy,
     Rcpp::RObject block_weight_policy,
     Rcpp::RObject variable_block_weight,
@@ -358,14 +375,29 @@ Rcpp::List score_markers_pairwise(
     }
 
     auto block_info = MaybeBlock(block);
-    auto ptr = block_info.get();
-    if (ptr) {
+    auto block_ptr = block_info.get();
+    if (block_ptr) {
         if (!sanisizer::is_equal(block_info.size(), NC)) {
             throw std::runtime_error("'block' must be the same length as the number of cells");
         }
-        scran_markers::score_markers_pairwise_blocked(*mat, static_cast<const int*>(groups.begin()), ptr, opt, buffers);
+        scran_markers::score_markers_pairwise_blocked(
+            *mat,
+            static_cast<const int*>(groups.begin()),
+            sanisizer::cast<std::size_t>(num_groups),
+            block_ptr,
+            sanisizer::cast<std::size_t>(num_blocks),
+            opt,
+            buffers
+        );
+
     } else {
-        scran_markers::score_markers_pairwise(*mat, static_cast<const int*>(groups.begin()), opt, buffers);
+        scran_markers::score_markers_pairwise(
+            *mat,
+            static_cast<const int*>(groups.begin()),
+            sanisizer::cast<std::size_t>(num_groups),
+            opt,
+            buffers
+        );
     }
 
     Rcpp::List output;
@@ -399,6 +431,7 @@ Rcpp::List score_markers_best(
     Rcpp::IntegerVector groups,
     int num_groups,
     Rcpp::Nullable<Rcpp::IntegerVector> block,
+    int num_blocks,
     Rcpp::RObject block_average_policy,
     Rcpp::RObject block_weight_policy,
     Rcpp::RObject variable_block_weight,
@@ -436,15 +469,30 @@ Rcpp::List score_markers_best(
     set_bool(compute_auc, opt.compute_auc, "compute.auc");
 
     auto block_info = MaybeBlock(block);
-    auto ptr = block_info.get();
+    auto block_ptr = block_info.get();
     scran_markers::ScoreMarkersBestResults<double, int> res; 
-    if (ptr) {
+    if (block_ptr) {
         if (!sanisizer::is_equal(block_info.size(), NC)) {
             throw std::runtime_error("'block' must be the same length as the number of cells");
         }
-        res = scran_markers::score_markers_best_blocked<double>(*mat, static_cast<const int*>(groups.begin()), ptr, top, opt);
+        res = scran_markers::score_markers_best_blocked<double>(
+            *mat,
+            static_cast<const int*>(groups.begin()),
+            sanisizer::cast<std::size_t>(num_groups),
+            block_ptr,
+            sanisizer::cast<std::size_t>(num_blocks),
+            top,
+            opt
+        );
+
     } else {
-        res = scran_markers::score_markers_best<double>(*mat, static_cast<const int*>(groups.begin()), top, opt);
+        res = scran_markers::score_markers_best<double>(
+            *mat,
+            static_cast<const int*>(groups.begin()),
+            sanisizer::cast<std::size_t>(num_groups),
+            top,
+            opt
+        );
     }
 
     const auto transfer_groupwise = [&](Rcpp::NumericMatrix& store, std::vector<std::vector<double> >& vecs) -> void {
@@ -461,7 +509,7 @@ Rcpp::List score_markers_best(
         transfer_groupwise(detected, res.detected);
     }
 
-    const auto transfer_effects = [&](Rcpp::List& store, std::vector<std::vector<std::vector<std::pair<int, double> > > >& vecs) -> void {
+    const auto transfer_effects = [&](Rcpp::List& store, std::vector<std::vector<topicks::TopQueue<double, int> > >& vecs) -> void {
         store = sanisizer::create<Rcpp::List>(num_groups);
         for (I<decltype(num_groups)> g = 0; g < num_groups; ++g) {
             auto current = sanisizer::create<Rcpp::List>(num_groups);
@@ -470,21 +518,25 @@ Rcpp::List score_markers_best(
                     continue;
                 }
 
-                const auto& curtop = vecs[g][g2];
+                auto& curtop = vecs[g][g2];
                 const auto numtop = curtop.size();
                 auto indices = sanisizer::create<Rcpp::IntegerVector>(numtop);
 
                 if (index_only) {
                     for (I<decltype(numtop)> t = 0; t < numtop; ++t) {
-                        indices[t] = curtop[t].first + 1;
+                        const auto& best = curtop.top();
+                        indices[numtop - t - 1] = best.second + 1;
+                        curtop.pop();
                     }
                     current[g2] = std::move(indices);
 
                 } else {
                     auto effects = sanisizer::create<Rcpp::NumericVector>(numtop);
                     for (I<decltype(numtop)> t = 0; t < numtop; ++t) {
-                        indices[t] = curtop[t].first + 1;
-                        effects[t] = curtop[t].second;
+                        const auto& best = curtop.top();
+                        indices[numtop - t - 1] = best.second + 1;
+                        effects[numtop - t - 1] = best.first;
+                        curtop.pop();
                     }
 
                     Rcpp::S4 df("DFrame");
@@ -579,16 +631,16 @@ Rcpp::List score_markers_defaults(int mode) {
 
     // Adding all the summary options.
     scran_markers::ScoreMarkersSummaryOptions opt;
-    output["compute.summary.min"] = opt.compute_min;
-    output["compute.summary.mean"] = opt.compute_mean;
-    output["compute.summary.median"] = opt.compute_median;
-    output["compute.summary.max"] = opt.compute_max;
+    output["compute.summary.min"] = opt.compute_summary_min;
+    output["compute.summary.mean"] = opt.compute_summary_mean;
+    output["compute.summary.median"] = opt.compute_summary_median;
+    output["compute.summary.max"] = opt.compute_summary_max;
     if (opt.compute_summary_quantiles.has_value()) {
         throw std::runtime_error("unexpected compute.summary.quantiles default for scoreMarkers");
     } else {
         output["compute.summary.quantiles"] = R_NilValue;
     }
-    output["compute.summary.min.rank"] = opt.compute_min_rank;
+    output["compute.summary.min.rank"] = opt.compute_summary_min_rank;
     output["min.rank.limit"] = opt.min_rank_limit;
 
     return output;

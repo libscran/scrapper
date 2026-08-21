@@ -109,17 +109,18 @@ scoreGeneSet <- function(
 
     out <- score_gene_set(
         ptr,
-        block=block$index,
-        rank=rank,
-        scale=scale,
-        block_weight_policy=block.weight.policy,
-        variable_block_weight=variable.block.weight,
-        realized=realized,
-        irlba_work=extra.work,
-        irlba_iterations=iterations,
+        block = block$index,
+        num_blocks = length(block$names),
+        rank = rank,
+        scale = scale,
+        block_weight_policy = block.weight.policy,
+        variable_block_weight = variable.block.weight,
+        realized = realized,
+        irlba_work = extra.work,
+        irlba_iterations = iterations,
         irlba_tolerance = tolerance,
-        irlba_seed=seed,
-        num_threads=num.threads
+        irlba_seed = seed,
+        num_threads = num.threads
     )
 
     if (!out$converged && warn) {

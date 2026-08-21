@@ -45,7 +45,7 @@
 #' @export
 centerSpikeInFactors <- function(endogenous, spike.ins, block = NULL, mode = NULL) {
     block <- .transformFactor(block)
-    output <- center_spike_in_factors(endogenous, spike.ins, block$index, mode)
+    output <- center_spike_in_factors(endogenous, spike.ins, block$index, num_blocks = length(block$names), mode = mode)
     names(output$spike.ins) <- names(spike.ins)
     output
 }

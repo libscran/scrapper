@@ -11,9 +11,7 @@
 #include "utils_norm.h"
 
 //[[Rcpp::export(rng=false)]]
-Rcpp::List center_spike_in_factors(Rcpp::NumericVector endogenous, Rcpp::List spike_ins, Rcpp::Nullable<Rcpp::IntegerVector> block, Rcpp::RObject mode) {
-    auto block_info = MaybeBlock(block);
-    auto ptr = block_info.get();
+Rcpp::List center_spike_in_factors(Rcpp::NumericVector endogenous, Rcpp::List spike_ins, Rcpp::Nullable<Rcpp::IntegerVector> block, int num_blocks, Rcpp::RObject mode) {
     const auto ncells = endogenous.size();
     auto e_output = Rcpp::clone(endogenous);
 
@@ -32,7 +30,9 @@ Rcpp::List center_spike_in_factors(Rcpp::NumericVector endogenous, Rcpp::List sp
         s_ptrs.push_back(static_cast<double*>(s_output.back().begin()));
     }
 
-    if (ptr) {
+    auto block_info = MaybeBlock(block);
+    auto block_ptr = block_info.get();
+    if (block_ptr) {
         if (!sanisizer::is_equal(block_info.size(), ncells)) {
             throw std::runtime_error("'block' must be the same length as the number of cells");
         }
@@ -45,7 +45,8 @@ Rcpp::List center_spike_in_factors(Rcpp::NumericVector endogenous, Rcpp::List sp
             sanisizer::cast<std::size_t>(ncells),
             static_cast<double*>(e_output.begin()),
             s_ptrs,
-            ptr,
+            block_ptr,
+            sanisizer::cast<std::size_t>(num_blocks),
             opt
         );
 

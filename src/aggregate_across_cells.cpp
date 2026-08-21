@@ -13,6 +13,7 @@
 Rcpp::List aggregate_across_cells(
     SEXP x,
     Rcpp::IntegerVector groups,
+    int num_groups,
     Rcpp::RObject compute_sum,
     Rcpp::RObject compute_detected,
     Rcpp::RObject compute_median,
@@ -27,50 +28,54 @@ Rcpp::List aggregate_across_cells(
         throw std::runtime_error("length of 'groups' should be equal to the number of columns in 'x'");
     }
 
-    const int* gptr = groups.begin();
-    const auto ncombos = tatami_stats::total_groups(gptr, NC);
     scran_aggregate::AggregateAcrossCellsBuffers<double, int, double> buffers;
 
     scran_aggregate::AggregateAcrossCellsOptions opt;
     set_integer(num_threads, opt.num_threads, "num.threads");
-    set_bool(compute_sum, opt.compute_sums, "compute.sum"); // setting these for convenience + consistency, even though they have no effect if a buffer is supplied. 
+    set_bool(compute_sum, opt.compute_sum, "compute.sum"); // setting these for convenience + consistency, even though they have no effect if a buffer is supplied. 
     set_bool(compute_detected, opt.compute_detected, "compute.detected");
-    set_bool(compute_median, opt.compute_medians, "compute.median");
+    set_bool(compute_median, opt.compute_median, "compute.median");
 
     Rcpp::NumericMatrix sums;
-    if (opt.compute_sums) {
-        sums = create_matrix<Rcpp::NumericMatrix>(NR, ncombos);
-        sanisizer::reserve(buffers.sums, ncombos);
+    if (opt.compute_sum) {
+        sums = create_matrix<Rcpp::NumericMatrix>(NR, num_groups);
+        buffers.sum.reserve(num_groups);
         double* osum = sums.begin();
-        for (I<decltype(ncombos)> i = 0; i < ncombos; ++i) {
-            buffers.sums.push_back(osum + sanisizer::product_unsafe<std::size_t>(NR, i));
+        for (int i = 0; i < num_groups; ++i) {
+            buffers.sum.push_back(osum + sanisizer::product_unsafe<std::size_t>(NR, i));
         }
     }
 
     Rcpp::IntegerMatrix detected;
     if (opt.compute_detected) {
-        detected = create_matrix<Rcpp::IntegerMatrix>(NR, ncombos);
-        sanisizer::reserve(buffers.detected, ncombos);
+        detected = create_matrix<Rcpp::IntegerMatrix>(NR, num_groups);
+        buffers.detected.reserve(num_groups);
         int* odet = detected.begin();
-        for (I<decltype(ncombos)> i = 0; i < ncombos; ++i) {
+        for (int i = 0; i < num_groups; ++i) {
             buffers.detected.push_back(odet + sanisizer::product_unsafe<std::size_t>(NR, i));
         }
     }
 
     Rcpp::NumericMatrix medians;
-    if (opt.compute_medians) {
-        medians = create_matrix<Rcpp::NumericMatrix>(NR, ncombos);
-        sanisizer::reserve(buffers.medians, ncombos);
+    if (opt.compute_median) {
+        medians = create_matrix<Rcpp::NumericMatrix>(NR, num_groups);
+        buffers.median.reserve(num_groups);
         double* omedian = medians.begin();
-        for (I<decltype(ncombos)> i = 0; i < ncombos; ++i) {
-            buffers.medians.push_back(omedian + sanisizer::product_unsafe<std::size_t>(NR, i));
+        for (int i = 0; i < num_groups; ++i) {
+            buffers.median.push_back(omedian + sanisizer::product_unsafe<std::size_t>(NR, i));
         }
     }
 
-    scran_aggregate::aggregate_across_cells(*mat, gptr, buffers, opt);
+    scran_aggregate::aggregate_across_cells(
+        *mat,
+        static_cast<const int*>(groups.begin()),
+        sanisizer::cast<std::size_t>(num_groups),
+        buffers,
+        opt
+    );
 
     Rcpp::RObject sums2 = R_NilValue;
-    if (opt.compute_sums) {
+    if (opt.compute_sum) {
         sums2 = sums;
     }
 
@@ -80,7 +85,7 @@ Rcpp::List aggregate_across_cells(
     }
 
     Rcpp::RObject medians2 = R_NilValue;
-    if (opt.compute_medians) {
+    if (opt.compute_median) {
         medians2 = medians;
     }
 
@@ -95,9 +100,9 @@ Rcpp::List aggregate_across_cells(
 Rcpp::List aggregate_across_cells_defaults() {
     Rcpp::List output;
     scran_aggregate::AggregateAcrossCellsOptions opt;
-    output["compute.sum"] = opt.compute_sums;
+    output["compute.sum"] = opt.compute_sum;
     output["compute.detected"] = opt.compute_detected;
-    output["compute.median"] = opt.compute_medians;
+    output["compute.median"] = opt.compute_median;
     output["num.threads"] = opt.num_threads;
     return output;
 }

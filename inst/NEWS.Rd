@@ -41,6 +41,12 @@ where the results would be appended onto the existing DataFrame and introduce co
 \item Added an \code{include.factors=} option to omit storage of the factor combinations in 
 \item Propagate the \code{rowRanges()} of the input SummarizedExperiment to the output object.
 }
+\item Updated the work-sharing scheme for certain parallelized operations on matrices to improve efficiency.
+This introduces some very small changes in floating-point results when a different number of threads is used, due to differences in round-off error.
+Affected functions include \code{modelGeneVariances()}, \code{runPca()}, \code{scoreMarkers()}, \code{scoreGeneSet()}, \code{aggregateAcrossCells()},
+\code{aggregateAcrossGenes()}, and all of the \code{compute*QcMetrics()} variants.
+\item Respect the number and ordering of pre-existing factors that are passed to functions accepting categorical variables in \code{group=}, \code{block=}, etc.
+This will not change any calculations but may result in some reordering of the output for functions that return a result per factor level. 
 }}
 
 \section{Version 1.6.0}{\itemize{

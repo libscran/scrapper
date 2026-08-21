@@ -14,6 +14,7 @@
 Rcpp::List correct_mnn(
     Rcpp::NumericMatrix x, 
     Rcpp::IntegerVector block, 
+    int num_blocks,
     Rcpp::RObject num_neighbors, 
     Rcpp::RObject num_steps, 
     Rcpp::RObject num_threads,
@@ -47,13 +48,13 @@ Rcpp::List correct_mnn(
         throw std::runtime_error("length of 'block' should equal the number of columns in 'x'");
     }
 
-    auto output = create_matrix<Rcpp::NumericMatrix>(x.nrow(), x.ncol());
+    auto output = Rcpp::clone(x);
     mnncorrect::compute(
         sanisizer::cast<std::size_t>(x.nrow()),
         sanisizer::cast<int>(x.ncol()),
-        static_cast<const double*>(x.begin()),
-        static_cast<const int*>(block.begin()),
         static_cast<double*>(output.begin()),
+        static_cast<const int*>(block.begin()),
+        sanisizer::cast<std::size_t>(num_blocks),
         opts
     );
 

@@ -81,6 +81,7 @@ aggregateAcrossCells <- function(
     output <- aggregate_across_cells(
         ptr,
         combined$index - 1L,
+        nrow(combined$levels),
         compute_sum = compute.sum,
         compute_detected = compute.detected,
         compute_median = compute.median,

@@ -28,6 +28,7 @@ Rcpp::List run_pca(
     SEXP x,
     Rcpp::RObject number,
     Rcpp::Nullable<Rcpp::IntegerVector> block, 
+    int num_blocks,
     Rcpp::RObject block_weight_policy,
     Rcpp::RObject variable_block_weight,
     Rcpp::RObject center_scores_by_block,
@@ -41,8 +42,6 @@ Rcpp::List run_pca(
     Rcpp::RObject num_threads
 ) {
     auto mat = Rtatami::BoundNumericPointer(x);
-    auto block_info = MaybeBlock(block);
-    auto ptr = block_info.get();
 
     irlba::Options iopt;
     set_optional_integer(irlba_work, iopt.extra_work, "extra.work");
@@ -68,7 +67,7 @@ Rcpp::List run_pca(
             Rcpp::Named("center") = transfer(out.center)
         );
         if (opt.scale) {
-            output["scale"] = transfer(out.scale);
+            output["scale"] = transfer(*(out.scale));
         }
         output["metrics"] = Rcpp::List::create(
             Rcpp::Named("converged") = Rcpp::LogicalVector::create(out.metrics.converged),
@@ -78,7 +77,9 @@ Rcpp::List run_pca(
         return output;
     };
 
-    if (ptr) {
+    auto block_info = MaybeBlock(block);
+    auto block_ptr = block_info.get();
+    if (block_ptr) {
         if (!sanisizer::is_equal(block_info.size(), mat->ptr->ncol())) {
             throw std::runtime_error("'block' must be the same length as the number of cells");
         }
@@ -93,12 +94,12 @@ Rcpp::List run_pca(
         if (subset.isNull()) {
             scran_pca::BlockedPcaOptions opt;
             fill_block_options(opt);
-            auto res = scran_pca::blocked_pca(*(mat->ptr), ptr, opt);
+            auto res = scran_pca::blocked_pca(*(mat->ptr), block_ptr, num_blocks, opt);
             return deposit_outputs(res, opt);
         } else {
             scran_pca::SubsetPcaBlockedOptions opt;
             fill_block_options(opt);
-            auto res = scran_pca::subset_pca_blocked(*(mat->ptr), Rcpp::IntegerVector(subset), ptr, opt);
+            auto res = scran_pca::subset_pca_blocked(*(mat->ptr), Rcpp::IntegerVector(subset), block_ptr, num_blocks, opt);
             return deposit_outputs(res, opt);
         }
 

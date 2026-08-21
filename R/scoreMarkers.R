@@ -282,21 +282,22 @@ scoreMarkers <- function(
     block <- .transformFactor(block)
 
     args <- list(
-        groups=groups$index,
-        num_groups=length(groups$names),
-        block=block$index,
-        block_average_policy=block.average.policy,
-        block_weight_policy=block.weight.policy,
-        variable_block_weight=variable.block.weight,
-        block_quantile=block.quantile,
-        threshold=threshold,
-        compute_group_mean=compute.group.mean,
-        compute_group_detected=compute.group.detected,
-        compute_cohens_d=compute.cohens.d,
-        compute_delta_mean=compute.delta.mean,
-        compute_delta_detected=compute.delta.detected,
-        compute_auc=compute.auc,
-        num_threads=num.threads
+        groups = groups$index,
+        num_groups = length(groups$names),
+        block = block$index,
+        num_blocks = length(block$names),
+        block_average_policy = block.average.policy,
+        block_weight_policy = block.weight.policy,
+        variable_block_weight = variable.block.weight,
+        block_quantile = block.quantile,
+        threshold = threshold,
+        compute_group_mean = compute.group.mean,
+        compute_group_detected = compute.group.detected,
+        compute_cohens_d = compute.cohens.d,
+        compute_delta_mean = compute.delta.mean,
+        compute_delta_detected = compute.delta.detected,
+        compute_auc = compute.auc,
+        num_threads = num.threads
     )
 
     if (isTRUE(all.pairwise)) {

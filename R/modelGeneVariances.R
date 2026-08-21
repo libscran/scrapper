@@ -144,21 +144,21 @@ modelGeneVariances <- function(
 
     computed <- model_gene_variances(
         initializeCpp(x, .check.na=FALSE),
-        block=block$index,
-        nblocks=length(block$names),
+        block = block$index,
+        num_blocks = length(block$names),
         block_average_policy = block.average.policy,
         block_weight_policy = block.weight.policy,
-        variable_block_weight=variable.block.weight,
-        block_quantile=block.quantile,
+        variable_block_weight = variable.block.weight,
+        block_quantile = block.quantile,
         fit_trend = fit.trend,
-        mean_filter=mean.filter,
-        min_mean=min.mean,
-        transform=transform,
-        span=span,
-        use_min_width=use.min.width,
-        min_width=min.width,
-        min_window_count=min.window.count,
-        num_threads=num.threads
+        mean_filter = mean.filter,
+        min_mean = min.mean,
+        transform = transform,
+        span = span,
+        use_min_width = use.min.width,
+        min_width = min.width,
+        min_window_count = min.window.count,
+        num_threads = num.threads
     )
 
     if ("means" %in% names(computed)) {

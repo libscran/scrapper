@@ -153,20 +153,21 @@ runPca <- function(
     }
 
     out <- run_pca(
-        initializeCpp(x, .check.na=FALSE),
-        number=number,
-        scale=scale,
-        block=block$index,
-        block_weight_policy=block.weight.policy,
-        variable_block_weight=variable.block.weight,
-        center_scores_by_block=center.scores.by.block,
-        subset=subset,
-        realized=realized,
+        initializeCpp(x, .check.na = FALSE),
+        number = number,
+        scale = scale,
+        block = block$index,
+        num_blocks = length(block$names),
+        block_weight_policy = block.weight.policy,
+        variable_block_weight = variable.block.weight,
+        center_scores_by_block = center.scores.by.block,
+        subset = subset,
+        realized = realized,
         irlba_work = extra.work,
-        irlba_iterations=iterations,
+        irlba_iterations = iterations,
         irlba_tolerance = tolerance,
-        irlba_seed=seed,
-        num_threads=num.threads
+        irlba_seed = seed,
+        num_threads = num.threads
     )
 
     out$converged <- out$metrics$converged # For back-compatibility.

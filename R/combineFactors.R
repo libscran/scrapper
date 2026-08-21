@@ -50,16 +50,9 @@ combineFactors <- function(factors, keep.unused=FALSE) {
 
     for (f in seq_len(nfac)) {
         current <- factors[[f]]
-        if (is.factor(current)) {
-            f0[[f]] <- as.integer(current)
-            levels0[[f]] <- levels(current)
-        } else {
-            curlevels <- sort(unique(current))
-            levels0[[f]] <- curlevels
-            f0[[f]] <- match(current, curlevels)
-        }
-
-        f0[[f]] <- f0[[f]] - 1L # get to 0-based indices.
+        current <- .transformFactor(current, arg = "factors")
+        f0[[f]] <- current$index # already 0-based indices.
+        levels0[[f]] <- current$names
     }
 
     combined <- combine_factors(f0, keep.unused, lengths(levels0))

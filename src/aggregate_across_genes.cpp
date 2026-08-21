@@ -21,15 +21,16 @@ Rcpp::List aggregate_across_genes(
     const auto& mat = raw_mat->ptr;
     const auto NC = mat->ncol();
 
-    // Converting the sets into something nice. We need to make explicit copies
-    // of the indices to convert them to 0-based values.
+    // Converting the sets into something nice.
+    // We need to make explicit copies of the indices to convert them to 0-based values.
+    // We also use sanisizer::reserve() to guarantee that reallocation doesn't occur so that pointers are still valid.
     const auto nsets = sets.size();
     std::vector<std::vector<int> > indices;
     sanisizer::reserve(indices, nsets);
     std::vector<Rcpp::NumericVector> weights;
     sanisizer::reserve(weights, nsets);
-    std::vector<std::tuple<std::size_t, const int*, const double*> > converted_sets;
-    sanisizer::reserve(converted_sets, nsets);
+    std::vector<scran_aggregate::AggregateAcrossGenesSet<int, double> > converted_sets;
+    converted_sets.reserve(nsets);
 
     for (I<decltype(nsets)> s = 0; s < nsets; ++s) {
         Rcpp::RObject current = sets[s];
@@ -65,8 +66,9 @@ Rcpp::List aggregate_across_genes(
     }
 
     // Constructing the outputs.
+    // Again, we use sanisizer::reserve() here to protect against reallocation.
     scran_aggregate::AggregateAcrossGenesBuffers<double> buffers;
-    sanisizer::reserve(buffers.sum, nsets);
+    buffers.sum.reserve(nsets);
     std::vector<Rcpp::NumericVector> tmp_output;
     sanisizer::reserve(tmp_output, nsets);
 

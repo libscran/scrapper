@@ -120,10 +120,11 @@ suggestRnaQcThresholds <- function(metrics, block = NULL, num.mads = NULL, sum.n
     metrics <- .simplifyQcMetrics(metrics)
     thresholds <- suggest_rna_qc_thresholds(
         metrics,
-        block=block$index,
-        sum_num_mads=sum.num.mads,
-        detected_num_mads=detected.num.mads,
-        subset_proportion_num_mads=subset.proportion.num.mads
+        block = block$index,
+        num_blocks = length(block$names),
+        sum_num_mads = sum.num.mads,
+        detected_num_mads = detected.num.mads,
+        subset_proportion_num_mads = subset.proportion.num.mads
     )
 
     names(thresholds$subsets) <- names(metrics$subsets)

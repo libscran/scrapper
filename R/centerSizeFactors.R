@@ -47,7 +47,7 @@
 #' @export
 centerSizeFactors <- function(size.factors, block = NULL, mode = NULL) {
     block <- .transformFactor(block)
-    center_size_factors(size.factors, block$index, mode)
+    center_size_factors(size.factors, block$index, num_blocks = length(block$names), mode = mode)
 }
 
 #' Default parameters for \code{\link{centerSizeFactors}}

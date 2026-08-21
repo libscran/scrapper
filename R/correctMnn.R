@@ -114,6 +114,7 @@ correctMnn <- function(
     output <- correct_mnn(
         x, 
         block$index, 
+        num_blocks = length(block$names),
         num_neighbors=num.neighbors,
         num_steps=num.steps,
         num_threads=num.threads,

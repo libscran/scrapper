@@ -110,7 +110,13 @@ suggestCrisprQcThresholds <- function(metrics, block = NULL, num.mads = NULL, ma
     block <- .transformFactor(block)
     metrics <- as.list(metrics)
     metrics$max.index <- metrics$max.index - 1L # restore 0-based indexing.
-    thresholds <- suggest_crispr_qc_thresholds(metrics, block=block$index, max_value_num_mads = max.value.num.mads)
+
+    thresholds <- suggest_crispr_qc_thresholds(
+        metrics,
+        block = block$index,
+        num_blocks = length(block$names),
+        max_value_num_mads = max.value.num.mads
+    )
 
     if (!is.null(block$names)) {
         names(thresholds$max.value) <- block$names

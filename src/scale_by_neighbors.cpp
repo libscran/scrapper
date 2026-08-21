@@ -16,6 +16,7 @@ Rcpp::NumericVector scale_by_neighbors(
     Rcpp::List embedding,
     Rcpp::RObject num_neighbors,
     Rcpp::Nullable<Rcpp::IntegerVector> block, 
+    int num_blocks,
     Rcpp::RObject block_weight_policy,
     Rcpp::RObject variable_block_weight,
     Rcpp::RObject num_threads,
@@ -25,18 +26,18 @@ Rcpp::NumericVector scale_by_neighbors(
     std::vector<std::pair<double, double> > values;
     sanisizer::reserve(values, nmod);
 
-    auto block_info = MaybeBlock(block);
-    auto ptr = block_info.get();
     BiocNeighbors::BuilderPointer builder(nn_builder);
 
-    if (ptr) {
+    auto block_info = MaybeBlock(block);
+    auto block_ptr = block_info.get();
+    if (block_ptr) {
         mumosa::BlockedOptions opt;
         set_integer(num_neighbors, opt.num_neighbors, "num.neighbors");
         set_integer(num_threads, opt.num_threads, "num.threads");
         set_block_weight_policy(block_weight_policy, opt.block_weight_policy, "block.weight.policy");
         set_variable_block_weight(variable_block_weight, opt.variable_block_weight_parameters, "variable.block.weight");
 
-        mumosa::BlockedIndicesFactory<int, int> factory(num_cells, ptr);
+        mumosa::BlockedIndicesFactory<int, int> factory(num_cells, block_ptr, num_blocks);
         auto buff = factory.create_buffers<double>();
         auto work = mumosa::create_workspace<double>(factory.sizes(), opt);
 

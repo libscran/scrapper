@@ -14,6 +14,7 @@ Rcpp::List score_gene_set(
     SEXP x,
     Rcpp::RObject rank,
     Rcpp::Nullable<Rcpp::IntegerVector> block, 
+    int num_blocks,
     Rcpp::RObject block_weight_policy,
     Rcpp::RObject variable_block_weight,
     Rcpp::RObject scale,
@@ -54,7 +55,7 @@ Rcpp::List score_gene_set(
         if (!sanisizer::is_equal(block_info.size(), NC)) {
             throw std::runtime_error("'block' must be the same length as the number of cells");
         }
-        met = gsdecon::compute_blocked(matrix, block_info.get(), opt, output);
+        met = gsdecon::compute_blocked(matrix, block_info.get(), sanisizer::cast<std::size_t>(num_blocks), opt, output);
     } else {
         met = gsdecon::compute(matrix, opt, output);
     }

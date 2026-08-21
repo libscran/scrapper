@@ -97,6 +97,7 @@ public:
 Rcpp::List suggest_rna_qc_thresholds(
     Rcpp::List metrics,
     Rcpp::Nullable<Rcpp::IntegerVector> block,
+    int num_blocks,
     Rcpp::RObject sum_num_mads,
     Rcpp::RObject detected_num_mads,
     Rcpp::RObject subset_proportion_num_mads
@@ -111,13 +112,20 @@ Rcpp::List suggest_rna_qc_thresholds(
     set_number(subset_proportion_num_mads, opt.subset_proportion_num_mads, "subset.proportion.num.mads");
 
     auto block_info = MaybeBlock(block);
-    auto ptr = block_info.get();
-    if (ptr) {
+    auto block_ptr = block_info.get();
+    if (block_ptr) {
         if (!sanisizer::is_equal(block_info.size(), ncells)) {
             throw std::runtime_error("'block' must be the same length as the number of cells");
         }
 
-        auto filt = scran_qc::compute_rna_qc_filters_blocked(sanisizer::cast<std::size_t>(ncells), buffers, ptr, opt);
+        auto filt = scran_qc::compute_rna_qc_filters_blocked(
+            sanisizer::cast<std::size_t>(ncells),
+            buffers,
+            block_ptr,
+            sanisizer::cast<std::size_t>(num_blocks),
+            opt
+        );
+
         const auto& sout = filt.get_sum();
         const auto& dout = filt.get_detected();
         return Rcpp::List::create(
@@ -160,8 +168,8 @@ Rcpp::LogicalVector filter_rna_qc_metrics(Rcpp::List filters, Rcpp::List metrics
     auto kptr = static_cast<int*>(keep.begin());
 
     auto block_info = MaybeBlock(block);
-    auto ptr = block_info.get();
-    if (ptr) {
+    auto block_ptr = block_info.get();
+    if (block_ptr) {
         if (!sanisizer::is_equal(block_info.size(), ncells)) {
             throw std::runtime_error("'block' must be the same length as the number of cells");
         }
@@ -173,7 +181,7 @@ Rcpp::LogicalVector filter_rna_qc_metrics(Rcpp::List filters, Rcpp::List metrics
         copy_filters_blocked(nblocks, filters["detected"], "detected", filt.get_detected());
         copy_subset_filters_blocked(nsubs, nblocks, filters["subsets"], filt.get_subset_proportion());
 
-        filt.filter(sanisizer::cast<std::size_t>(ncells), mbuffers, ptr, kptr);
+        filt.filter(sanisizer::cast<std::size_t>(ncells), mbuffers, block_ptr, kptr);
 
     } else {
         scran_qc::RnaQcFilters filt;

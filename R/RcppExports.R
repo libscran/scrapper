@@ -9,8 +9,8 @@ compute_adt_qc_metrics_defaults <- function() {
     .Call('_scrapper_compute_adt_qc_metrics_defaults', PACKAGE = 'scrapper')
 }
 
-suggest_adt_qc_thresholds <- function(metrics, block, min_detected_drop, detected_num_mads, subset_sum_num_mads) {
-    .Call('_scrapper_suggest_adt_qc_thresholds', PACKAGE = 'scrapper', metrics, block, min_detected_drop, detected_num_mads, subset_sum_num_mads)
+suggest_adt_qc_thresholds <- function(metrics, block, num_blocks, min_detected_drop, detected_num_mads, subset_sum_num_mads) {
+    .Call('_scrapper_suggest_adt_qc_thresholds', PACKAGE = 'scrapper', metrics, block, num_blocks, min_detected_drop, detected_num_mads, subset_sum_num_mads)
 }
 
 suggest_adt_qc_thresholds_defaults <- function() {
@@ -21,8 +21,8 @@ filter_adt_qc_metrics <- function(filters, metrics, block) {
     .Call('_scrapper_filter_adt_qc_metrics', PACKAGE = 'scrapper', filters, metrics, block)
 }
 
-aggregate_across_cells <- function(x, groups, compute_sum, compute_detected, compute_median, num_threads) {
-    .Call('_scrapper_aggregate_across_cells', PACKAGE = 'scrapper', x, groups, compute_sum, compute_detected, compute_median, num_threads)
+aggregate_across_cells <- function(x, groups, num_groups, compute_sum, compute_detected, compute_median, num_threads) {
+    .Call('_scrapper_aggregate_across_cells', PACKAGE = 'scrapper', x, groups, num_groups, compute_sum, compute_detected, compute_median, num_threads)
 }
 
 aggregate_across_cells_defaults <- function() {
@@ -53,16 +53,16 @@ list_to_graph <- function(contents) {
     .Call('_scrapper_list_to_graph', PACKAGE = 'scrapper', contents)
 }
 
-center_size_factors <- function(size_factors, block, mode) {
-    .Call('_scrapper_center_size_factors', PACKAGE = 'scrapper', size_factors, block, mode)
+center_size_factors <- function(size_factors, block, num_blocks, mode) {
+    .Call('_scrapper_center_size_factors', PACKAGE = 'scrapper', size_factors, block, num_blocks, mode)
 }
 
 center_size_factors_defaults <- function() {
     .Call('_scrapper_center_size_factors_defaults', PACKAGE = 'scrapper')
 }
 
-center_spike_in_factors <- function(endogenous, spike_ins, block, mode) {
-    .Call('_scrapper_center_spike_in_factors', PACKAGE = 'scrapper', endogenous, spike_ins, block, mode)
+center_spike_in_factors <- function(endogenous, spike_ins, block, num_blocks, mode) {
+    .Call('_scrapper_center_spike_in_factors', PACKAGE = 'scrapper', endogenous, spike_ins, block, num_blocks, mode)
 }
 
 center_spike_in_factors_defaults <- function() {
@@ -129,8 +129,8 @@ compute_clrm1_factors_defaults <- function() {
     .Call('_scrapper_compute_clrm1_factors_defaults', PACKAGE = 'scrapper')
 }
 
-correct_mnn <- function(x, block, num_neighbors, num_steps, num_threads, merge_policy, builder) {
-    .Call('_scrapper_correct_mnn', PACKAGE = 'scrapper', x, block, num_neighbors, num_steps, num_threads, merge_policy, builder)
+correct_mnn <- function(x, block, num_blocks, num_neighbors, num_steps, num_threads, merge_policy, builder) {
+    .Call('_scrapper_correct_mnn', PACKAGE = 'scrapper', x, block, num_blocks, num_neighbors, num_steps, num_threads, merge_policy, builder)
 }
 
 correct_mnn_defaults <- function() {
@@ -145,8 +145,8 @@ compute_crispr_qc_metrics_defaults <- function() {
     .Call('_scrapper_compute_crispr_qc_metrics_defaults', PACKAGE = 'scrapper')
 }
 
-suggest_crispr_qc_thresholds <- function(metrics, block, max_value_num_mads) {
-    .Call('_scrapper_suggest_crispr_qc_thresholds', PACKAGE = 'scrapper', metrics, block, max_value_num_mads)
+suggest_crispr_qc_thresholds <- function(metrics, block, num_blocks, max_value_num_mads) {
+    .Call('_scrapper_suggest_crispr_qc_thresholds', PACKAGE = 'scrapper', metrics, block, num_blocks, max_value_num_mads)
 }
 
 suggest_crispr_qc_thresholds_defaults <- function() {
@@ -165,8 +165,8 @@ fit_variance_trend_defaults <- function() {
     .Call('_scrapper_fit_variance_trend_defaults', PACKAGE = 'scrapper')
 }
 
-model_gene_variances <- function(x, block, nblocks, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, fit_trend, mean_filter, min_mean, transform, span, use_min_width, min_width, min_window_count, num_threads) {
-    .Call('_scrapper_model_gene_variances', PACKAGE = 'scrapper', x, block, nblocks, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, fit_trend, mean_filter, min_mean, transform, span, use_min_width, min_width, min_window_count, num_threads)
+model_gene_variances <- function(x, block, num_blocks, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, fit_trend, mean_filter, min_mean, transform, span, use_min_width, min_width, min_window_count, num_threads) {
+    .Call('_scrapper_model_gene_variances', PACKAGE = 'scrapper', x, block, num_blocks, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, fit_trend, mean_filter, min_mean, transform, span, use_min_width, min_width, min_window_count, num_threads)
 }
 
 model_gene_variances_defaults <- function() {
@@ -193,8 +193,8 @@ compute_rna_qc_metrics_defaults <- function() {
     .Call('_scrapper_compute_rna_qc_metrics_defaults', PACKAGE = 'scrapper')
 }
 
-suggest_rna_qc_thresholds <- function(metrics, block, sum_num_mads, detected_num_mads, subset_proportion_num_mads) {
-    .Call('_scrapper_suggest_rna_qc_thresholds', PACKAGE = 'scrapper', metrics, block, sum_num_mads, detected_num_mads, subset_proportion_num_mads)
+suggest_rna_qc_thresholds <- function(metrics, block, num_blocks, sum_num_mads, detected_num_mads, subset_proportion_num_mads) {
+    .Call('_scrapper_suggest_rna_qc_thresholds', PACKAGE = 'scrapper', metrics, block, num_blocks, sum_num_mads, detected_num_mads, subset_proportion_num_mads)
 }
 
 suggest_rna_qc_thresholds_defaults <- function() {
@@ -205,8 +205,8 @@ filter_rna_qc_metrics <- function(filters, metrics, block) {
     .Call('_scrapper_filter_rna_qc_metrics', PACKAGE = 'scrapper', filters, metrics, block)
 }
 
-run_pca <- function(x, number, block, block_weight_policy, variable_block_weight, center_scores_by_block, scale, subset, realized, irlba_work, irlba_iterations, irlba_tolerance, irlba_seed, num_threads) {
-    .Call('_scrapper_run_pca', PACKAGE = 'scrapper', x, number, block, block_weight_policy, variable_block_weight, center_scores_by_block, scale, subset, realized, irlba_work, irlba_iterations, irlba_tolerance, irlba_seed, num_threads)
+run_pca <- function(x, number, block, num_blocks, block_weight_policy, variable_block_weight, center_scores_by_block, scale, subset, realized, irlba_work, irlba_iterations, irlba_tolerance, irlba_seed, num_threads) {
+    .Call('_scrapper_run_pca', PACKAGE = 'scrapper', x, number, block, num_blocks, block_weight_policy, variable_block_weight, center_scores_by_block, scale, subset, realized, irlba_work, irlba_iterations, irlba_tolerance, irlba_seed, num_threads)
 }
 
 run_pca_defaults <- function(use_block, use_subset) {
@@ -241,32 +241,32 @@ sanitize_size_factors_defaults <- function() {
     .Call('_scrapper_sanitize_size_factors_defaults', PACKAGE = 'scrapper')
 }
 
-scale_by_neighbors <- function(num_cells, embedding, num_neighbors, block, block_weight_policy, variable_block_weight, num_threads, nn_builder) {
-    .Call('_scrapper_scale_by_neighbors', PACKAGE = 'scrapper', num_cells, embedding, num_neighbors, block, block_weight_policy, variable_block_weight, num_threads, nn_builder)
+scale_by_neighbors <- function(num_cells, embedding, num_neighbors, block, num_blocks, block_weight_policy, variable_block_weight, num_threads, nn_builder) {
+    .Call('_scrapper_scale_by_neighbors', PACKAGE = 'scrapper', num_cells, embedding, num_neighbors, block, num_blocks, block_weight_policy, variable_block_weight, num_threads, nn_builder)
 }
 
 scale_by_neighbors_defaults <- function(use_block) {
     .Call('_scrapper_scale_by_neighbors_defaults', PACKAGE = 'scrapper', use_block)
 }
 
-score_gene_set <- function(x, rank, block, block_weight_policy, variable_block_weight, scale, realized, irlba_work, irlba_iterations, irlba_tolerance, irlba_seed, num_threads) {
-    .Call('_scrapper_score_gene_set', PACKAGE = 'scrapper', x, rank, block, block_weight_policy, variable_block_weight, scale, realized, irlba_work, irlba_iterations, irlba_tolerance, irlba_seed, num_threads)
+score_gene_set <- function(x, rank, block, num_blocks, block_weight_policy, variable_block_weight, scale, realized, irlba_work, irlba_iterations, irlba_tolerance, irlba_seed, num_threads) {
+    .Call('_scrapper_score_gene_set', PACKAGE = 'scrapper', x, rank, block, num_blocks, block_weight_policy, variable_block_weight, scale, realized, irlba_work, irlba_iterations, irlba_tolerance, irlba_seed, num_threads)
 }
 
 score_gene_set_defaults <- function() {
     .Call('_scrapper_score_gene_set_defaults', PACKAGE = 'scrapper')
 }
 
-score_markers_summary <- function(x, groups, num_groups, block, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc, compute_summary_min, compute_summary_mean, compute_summary_median, compute_summary_max, compute_summary_quantiles, compute_summary_min_rank, min_rank_limit) {
-    .Call('_scrapper_score_markers_summary', PACKAGE = 'scrapper', x, groups, num_groups, block, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc, compute_summary_min, compute_summary_mean, compute_summary_median, compute_summary_max, compute_summary_quantiles, compute_summary_min_rank, min_rank_limit)
+score_markers_summary <- function(x, groups, num_groups, block, num_blocks, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc, compute_summary_min, compute_summary_mean, compute_summary_median, compute_summary_max, compute_summary_quantiles, compute_summary_min_rank, min_rank_limit) {
+    .Call('_scrapper_score_markers_summary', PACKAGE = 'scrapper', x, groups, num_groups, block, num_blocks, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc, compute_summary_min, compute_summary_mean, compute_summary_median, compute_summary_max, compute_summary_quantiles, compute_summary_min_rank, min_rank_limit)
 }
 
-score_markers_pairwise <- function(x, groups, num_groups, block, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc) {
-    .Call('_scrapper_score_markers_pairwise', PACKAGE = 'scrapper', x, groups, num_groups, block, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc)
+score_markers_pairwise <- function(x, groups, num_groups, block, num_blocks, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc) {
+    .Call('_scrapper_score_markers_pairwise', PACKAGE = 'scrapper', x, groups, num_groups, block, num_blocks, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc)
 }
 
-score_markers_best <- function(x, top, groups, num_groups, block, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc, index_only) {
-    .Call('_scrapper_score_markers_best', PACKAGE = 'scrapper', x, top, groups, num_groups, block, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc, index_only)
+score_markers_best <- function(x, top, groups, num_groups, block, num_blocks, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc, index_only) {
+    .Call('_scrapper_score_markers_best', PACKAGE = 'scrapper', x, top, groups, num_groups, block, num_blocks, block_average_policy, block_weight_policy, variable_block_weight, block_quantile, threshold, num_threads, compute_group_mean, compute_group_detected, compute_delta_mean, compute_delta_detected, compute_cohens_d, compute_auc, index_only)
 }
 
 score_markers_defaults <- function(mode) {

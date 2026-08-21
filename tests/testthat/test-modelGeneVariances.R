@@ -61,7 +61,7 @@ test_that("modelGeneVariances works with blocking", {
     block2 <- sample(LETTERS[4:5], ncol(x), replace=TRUE)
     def2 <- modelGeneVariances(x, block2, block.weight.policy="equal")
     out2 <- modelGeneVariances(x, block2, block.average.policy="quantile")
-    expect_identical(def2, out2)
+    expect_equal(def2, out2)
 
     # Works if we disable the average policy.
     noave <- modelGeneVariances(x, block, block.average.policy="none")

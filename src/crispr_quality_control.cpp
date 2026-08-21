@@ -92,7 +92,7 @@ public:
 };
 
 // [[Rcpp::export(rng=false)]]
-Rcpp::List suggest_crispr_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::IntegerVector> block, Rcpp::RObject max_value_num_mads) {
+Rcpp::List suggest_crispr_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp::IntegerVector> block, int num_blocks, Rcpp::RObject max_value_num_mads) {
     ConvertedCrisprQcMetrics all_metrics(metrics);
     auto buffers = all_metrics.to_buffer();
     const auto ncells = all_metrics.size();
@@ -101,13 +101,20 @@ Rcpp::List suggest_crispr_qc_thresholds(Rcpp::List metrics, Rcpp::Nullable<Rcpp:
     set_number(max_value_num_mads, opt.max_value_num_mads, "max.value.num.mads");
 
     auto block_info = MaybeBlock(block);
-    auto ptr = block_info.get();
-    if (ptr) {
+    auto block_ptr = block_info.get();
+    if (block_ptr) {
         if (!sanisizer::is_equal(block_info.size(), ncells)) {
             throw std::runtime_error("'block' must be the same length as the number of cells");
         }
 
-        auto filt = scran_qc::compute_crispr_qc_filters_blocked(sanisizer::cast<std::size_t>(ncells), buffers, ptr, opt);
+        auto filt = scran_qc::compute_crispr_qc_filters_blocked(
+            sanisizer::cast<std::size_t>(ncells),
+            buffers,
+            block_ptr,
+            sanisizer::cast<std::size_t>(num_blocks),
+            opt
+        );
+
         const auto& mout = filt.get_max_value();
         return Rcpp::List::create(
             Rcpp::Named("max.value") = Rcpp::NumericVector(mout.begin(), mout.end())
@@ -140,8 +147,8 @@ Rcpp::LogicalVector filter_crispr_qc_metrics(Rcpp::List filters, Rcpp::List metr
     auto kptr = static_cast<int*>(keep.begin());
 
     auto block_info = MaybeBlock(block);
-    auto ptr = block_info.get();
-    if (ptr) {
+    auto block_ptr = block_info.get();
+    if (block_ptr) {
         if (!sanisizer::is_equal(block_info.size(), ncells)) {
             throw std::runtime_error("'block' must be the same length as the number of cells");
         }
@@ -151,7 +158,7 @@ Rcpp::LogicalVector filter_crispr_qc_metrics(Rcpp::List filters, Rcpp::List metr
         std::optional<std::size_t> nblocks;
         copy_filters_blocked(nblocks, filters["max.value"], "max.value", filt.get_max_value());
 
-        filt.filter(sanisizer::cast<std::size_t>(ncells), mbuffers, ptr, kptr);
+        filt.filter(sanisizer::cast<std::size_t>(ncells), mbuffers, block_ptr, kptr);
 
     } else {
         scran_qc::CrisprQcFilters filt;

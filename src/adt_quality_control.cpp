@@ -96,12 +96,13 @@ public:
 Rcpp::List suggest_adt_qc_thresholds(
     Rcpp::List metrics,
     Rcpp::Nullable<Rcpp::IntegerVector> block,
+    int num_blocks,
     Rcpp::RObject min_detected_drop,
     Rcpp::RObject detected_num_mads,
     Rcpp::RObject subset_sum_num_mads 
 ) {
     ConvertedAdtQcMetrics all_metrics(metrics);
-    auto buffers = all_metrics.to_buffer();
+    auto metric_buffers = all_metrics.to_buffer();
     const auto ncells = all_metrics.size();
 
     scran_qc::ComputeAdtQcFiltersOptions opt;
@@ -110,20 +111,33 @@ Rcpp::List suggest_adt_qc_thresholds(
     set_number(min_detected_drop, opt.detected_min_drop, "min.detected.drop");
 
     auto block_info = MaybeBlock(block);
-    auto ptr = block_info.get();
-    if (ptr) {
+    auto block_ptr = block_info.get();
+    if (block_ptr) {
         if (!sanisizer::is_equal(block_info.size(), ncells)) {
             throw std::runtime_error("'block' must be the same length as the number of cells");
         }
 
-        auto filt = scran_qc::compute_adt_qc_filters_blocked(sanisizer::cast<std::size_t>(ncells), buffers, ptr, opt);
+        auto filt = scran_qc::compute_adt_qc_filters_blocked(
+            sanisizer::cast<std::size_t>(ncells),
+            metric_buffers,
+            block_ptr,
+            sanisizer::cast<std::size_t>(num_blocks),
+            opt
+        );
+
         const auto& dout = filt.get_detected();
         return Rcpp::List::create(
             Rcpp::Named("detected") = Rcpp::NumericVector(dout.begin(), dout.end()),
             Rcpp::Named("subsets") = create_subset_filters(filt.get_subset_sum())
         );
+
     } else {
-        auto filt = scran_qc::compute_adt_qc_filters(sanisizer::cast<std::size_t>(ncells), buffers, opt);
+        auto filt = scran_qc::compute_adt_qc_filters(
+            sanisizer::cast<std::size_t>(ncells),
+            metric_buffers,
+            opt
+        );
+
         const auto& ssout = filt.get_subset_sum();
         return Rcpp::List::create(
             Rcpp::Named("detected") = Rcpp::NumericVector::create(filt.get_detected()),
@@ -156,8 +170,8 @@ Rcpp::LogicalVector filter_adt_qc_metrics(Rcpp::List filters, Rcpp::List metrics
     auto kptr = static_cast<int*>(keep.begin());
 
     auto block_info = MaybeBlock(block);
-    auto ptr = block_info.get();
-    if (ptr) {
+    auto block_ptr = block_info.get();
+    if (block_ptr) {
         if (!sanisizer::is_equal(block_info.size(), ncells)) {
             throw std::runtime_error("'block' must be the same length as the number of cells");
         }
@@ -168,7 +182,7 @@ Rcpp::LogicalVector filter_adt_qc_metrics(Rcpp::List filters, Rcpp::List metrics
         copy_filters_blocked(nblocks, filters["detected"], "detected", filt.get_detected());
         copy_subset_filters_blocked(nsubs, nblocks, filters["subsets"], filt.get_subset_sum());
 
-        filt.filter(sanisizer::cast<std::size_t>(ncells), mbuffers, ptr, kptr);
+        filt.filter(sanisizer::cast<std::size_t>(ncells), mbuffers, block_ptr, kptr);
 
     } else {
         scran_qc::AdtQcFilters filt;

@@ -129,10 +129,11 @@ suggestAdtQcThresholds <- function(
     metrics <- .simplifyQcMetrics(metrics)
     thresholds <- suggest_adt_qc_thresholds(
         metrics,
-        block=block$index,
-        min_detected_drop=min.detected.drop,
-        detected_num_mads=num.mads,
-        subset_sum_num_mads=num.mads
+        block = block$index,
+        num_blocks = length(block$names),
+        min_detected_drop = min.detected.drop,
+        detected_num_mads = num.mads,
+        subset_sum_num_mads = num.mads
     )
 
     names(thresholds$subsets) <- names(metrics$subsets)

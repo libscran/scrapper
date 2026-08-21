@@ -83,6 +83,7 @@ scaleByNeighbors <- function(
         embedding = x,
         num_neighbors = num.neighbors,
         block = block$index,
+        num_blocks = length(block$names),
         block_weight_policy = block.weight.policy,
         variable_block_weight = variable.block.weight,
         nn_builder = defineBuilder(BNPARAM)$builder,

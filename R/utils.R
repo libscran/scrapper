@@ -3,9 +3,16 @@
         return(list(index=NULL, names=NULL))
     }
 
-    # Don't use 'factor', to preserve the type of 'f' in the 'names'.
-    lev <- sort(unique(f))
-    m <- match(f, lev) 
+    if (is.factor(f)) {
+        # Preserve ordering and number of levels, even if some of them are unused.
+        lev <- factor(levels(f), levels(f), ordered = is.ordered(f))
+        m <- as.integer(f)
+    } else {
+        # Don't use 'factor', to preserve the type of 'f' in the 'names'.
+        lev <- sort(unique(f))
+        m <- match(f, lev)
+    }
+
     if (anyNA(m)) {
         stop("NA values in the provided '", arg, "'")
     }
