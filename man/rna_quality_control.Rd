@@ -77,11 +77,11 @@ For \code{suggestRnaQcThresholds}, a named list is returned.
 \itemize{
 \item If \code{block=NULL}, the list contains:
 \itemize{
-\item \code{sum}, a numeric scalar containing the lower bound on the sum.
+\item \code{sum}, a number containing the lower bound on the sum.
 This is defined as \code{num.mads} MADs below the median of the log-transformed metrics across all cells.
-\item \code{detected}, a numeric scalar containing the lower bound on the number of detected genes. 
+\item \code{detected}, a number containing the lower bound on the number of detected genes. 
 This is defined as \code{num.mads} MADs below the median of the log-transformed metrics across all cells.
-\item \code{subsets}, a named list of numeric scalars containing the upper bound on the proportion of counts in each feature subset. 
+\item \code{subsets}, a named list of numbers containing the upper bound on the proportion of counts in each feature subset. 
 This is defined as \code{num.mads} MADs above the median across all cells.
 }
 \item Otherwise, if \code{block} is supplied, the list contains:
@@ -94,7 +94,7 @@ Here, the threshold is computed independently for each block, using the same met
 Here, the threshold is computed independently for each block, using the same method as the unblocked case.
 \item \code{block.ids}, a vector containing the identities of the unique blocks.
 }
-Each vector is of length equal to the number of levels in \code{block} and is named accordingly.
+Each vector of thresholds is of length equal to the number of levels in \code{block} and is named accordingly.
 }
 
 For \code{filterRnaQcMetrics}, a logical vector of length \code{ncol(x)} is returned indicating which cells are of high quality. 

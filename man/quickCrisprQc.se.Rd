@@ -25,8 +25,19 @@ Rows correspond to CRISPR guides and columns correspond to cells.}
 
 \item{num.threads}{Number of threads, to pass to \code{\link{computeCrisprQcMetrics}}.}
 
-\item{thresholds}{List containing pre-defined thresholds for each QC metric,
-see the return value of \code{\link{suggestRnaQcThresholds}} for the expected format.}
+\item{thresholds}{List containing pre-defined thresholds for each QC metric.
+This should contain zero, one or more of:
+\itemize{
+\item \code{max.value}, a number containing the lower bound on the maximum count. 
+}
+If any element is missing, it will be filled in using the corresponding value from \code{\link{suggestCrisprQcThresholds}}.
+
+If \code{block} is provided, each numeric scalar may instead be a named numeric vector containing the threshold to be used in each block.
+Otherwise, the threshold in the numeric scalar will be applied to all blocks.
+
+If \code{NULL}, all thresholds are computed by \code{suggestCrisprQcThresholds}.
+
+If \code{thresholds} is wrapped in an \link{AsIs}, it will be used verbatim, and \code{suggestCrisprQcThresholds} will not be called.}
 
 \item{block}{Block assignment for each cell, to pass to \code{\link{suggestCrisprQcThresholds}} and \code{\link{filterCrisprQcMetrics}}.}
 

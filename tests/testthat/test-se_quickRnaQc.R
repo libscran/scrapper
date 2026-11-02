@@ -67,12 +67,28 @@ test_that("quickRnaQc.se works with alternative experiments", {
 })
 
 test_that("quickRnaQc.se works with custom thresholds", {
-    fixed <- list(sum=1, detected=1)
-    out <- quickRnaQc.se(se, subsets=list(), thresholds=fixed)
+    # Auto-fills the information that wasn't provided.
+    fixed <- list(sum=pi)
+    out <- quickRnaQc.se(se, subsets=list(Mito=1:5), thresholds=fixed)
 
-    refixed <- fixed
-    refixed$subset.proportion <- setNames(numeric(0), character(0))
-    expect_identical(metadata(out)$qc$thresholds, refixed)
+    expect_identical(metadata(out)$qc$thresholds$sum, pi)
+    expect_identical(length(metadata(out)$qc$thresholds$detected), 1L)
+    expect_identical(names(metadata(out)$qc$thresholds$subset.proportion), "Mito")
+    expect_identical(length(metadata(out)$qc$thresholds$subset.proportion$Mito), 1L)
+
+    # Used verbatim (some hacking required for renamed subsets).
+    thresholds <- list(sum=pi, detected=100, subsets=list(Mito=5))
+    out <- quickRnaQc.se(se, subsets=list(Mito=1:5), thresholds=I(thresholds))
+    names(thresholds)[names(thresholds) == "subsets"] <- "subset.proportion"
+    expect_identical(metadata(out)$qc$thresholds, thresholds)
+})
+
+test_that(".substituteThresholds works correctly", {
+    expect_identical(scrapper:::.substituteThresholds(list(a=1, b=2, d=5), list(a=2, b=3, c=4)), list(a=2, b=3, d=5))
+    expect_identical(scrapper:::.substituteThresholds(list(a=1, b=c(x=2, y=4), d=5), list(a=2, b=3, c=4)), list(a=2, b=c(x=3, y=3), d=5))
+    expect_identical(scrapper:::.substituteThresholds(list(a=1, b=c(x=2, y=4), d=5), list(a=2, b=c(x=3, y=6), c=4)), list(a=2, b=c(x=3, y=6), d=5))
+    expect_error(scrapper:::.substituteThresholds(list(a=1, b=2, d=5), list(a=2, b=c(x=1), c=4)), "unexpected names")
+    expect_error(scrapper:::.substituteThresholds(list(a=1, b=2, d=5), list(a=2, b=1:2, c=4)), "expected a scalar")
 })
 
 test_that("quickRnaQc.se overwrites existing entries", {

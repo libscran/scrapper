@@ -54,12 +54,20 @@ test_that("quickAdtQc.se works with character subsets", {
 })
 
 test_that("quickAdtQc.se works with custom thresholds", {
-    fixed <- list(sum=1, detected=1)
-    out <- quickAdtQc.se(se, subsets=list(), thresholds=fixed)
+    # Auto-fills the information that wasn't provided.
+    fixed <- list(detected=pi, sum=1)
+    out <- quickAdtQc.se(se, subsets=list(IgG=1:4), thresholds=fixed)
 
-    refixed <- fixed
-    refixed$subset.sum <- setNames(numeric(0), character(0))
-    expect_identical(metadata(out)$qc$thresholds, refixed)
+    expect_identical(metadata(out)$qc$thresholds$detected, pi)
+    expect_null(metadata(out)$qc$thresholds$sum) # extra entry of thresholds is just ignored
+    expect_identical(names(metadata(out)$qc$thresholds$subset.sum), "IgG")
+    expect_identical(length(metadata(out)$qc$thresholds$subset.sum$IgG), 1L)
+
+    # Used verbatim (some hacking required for renamed subsets).
+    thresholds <- list(detected=100, subsets=list(IgG=5))
+    out <- quickAdtQc.se(se, subsets=list(IgG=1:5), thresholds=I(thresholds))
+    names(thresholds)[names(thresholds) == "subsets"] <- "subset.sum"
+    expect_identical(metadata(out)$qc$thresholds, thresholds)
 })
 
 test_that("quickAdtQc.se overwrites existing entries", {

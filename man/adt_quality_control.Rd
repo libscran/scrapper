@@ -84,7 +84,7 @@ For \code{suggestAdtQcThresholds}, a named list is returned:
 This is defined as the lower of (i) \code{num.mads} MADs below the median for the log-transformed values across all cells,
 and (ii) the product of \code{1 - min.detected.drop} and the median across all cells.
 The latter avoids overly aggressive filtering when the MAD is zero.
-\item \code{subsets}, a named list of numeric scalars containing the upper bound on the sum of counts in each control subset. 
+\item \code{subsets}, a named list of numbers containing the upper bound on the sum of counts in each control subset. 
 This is defined as \code{num.mads} MADs above the median of the log-transformed metrics across all cells.
 }
 \item Otherwise, if \code{block} is supplied, the list contains:
@@ -95,7 +95,7 @@ Here, the threshold is computed independently for each block, using the same met
 Here, the threshold is computed independently for each block, using the same method as the unblocked case.
 \item \code{block.ids}, a vector containing the identities of the unique blocks.
 }
-Each vector is of length equal to the number of levels in \code{block} and is named accordingly.
+Each vector of thresholds is of length equal to the number of levels in \code{block} and is named accordingly.
 }
 
 For \code{filterAdtQcMetrics}, a logical vector of length \code{ncol(x)} is returned indicating which cells are of high quality. 

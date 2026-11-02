@@ -9,8 +9,20 @@
 #' @param subsets List of subsets of control tags, see \code{?\link{computeAdtQcMetrics}} for more details.
 #' @param num.threads Number of threads, to pass to \code{\link{computeAdtQcMetrics}}.
 #' @param block Block assignment for each cell, to pass to \code{\link{suggestAdtQcThresholds}} and \code{\link{filterAdtQcMetrics}}.
-#' @param thresholds List containing pre-defined thresholds for each QC metric,
-#' see the return value of \code{\link{suggestAdtQcThresholds}} for the expected format.
+#' @param thresholds List containing pre-defined thresholds for each QC metric.
+#' This should contain zero, one or more of:
+#' \itemize{
+#' \item \code{detected}, a number containing the lower bound on the number of detected tags. 
+#' \item \code{subset.sum}, a named list of numbers containing the upper bound on the sum of counts in each control subset. 
+#' }
+#' If any element is missing, it will be filled in using the corresponding value from \code{\link{suggestAdtQcThresholds}}.
+#'
+#' If \code{block} is provided, each numeric scalar may instead be a named numeric vector containing the threshold to be used in each block.
+#' Otherwise, the threshold in the numeric scalar will be applied to all blocks.
+#'
+#' If \code{NULL}, all thresholds are computed by \code{suggestAdtQcThresholds}.
+#'
+#' If \code{thresholds} is wrapped in an \link{AsIs}, it will be used verbatim, and \code{suggestAdtQcThresholds} will not be called.
 #' @param more.suggest.args Named list of additional arguments to pass to \code{\link{suggestAdtQcThresholds}}.
 #' @param assay.type Integer or string specifying the assay of \code{x} containing the ADT count matrix.
 #' @param output.prefix String containing a prefix to add to the names of the \code{\link[SummarizedExperiment]{colData}} columns containing the output statistics.
@@ -59,16 +71,21 @@ quickAdtQc.se <- function(
 ) {
     metrics <- computeAdtQcMetrics(SummarizedExperiment::assay(x, assay.type), subsets, num.threads=num.threads)
 
-    if (is.null(thresholds)) {
-        thresholds <- .call(
+    if (is(thresholds, "AsIs")) {
+        thresholds <- unclass(thresholds)
+    } else {
+        thresholds.0 <- .call(
             suggestAdtQcThresholds,
             list(metrics=metrics),
             list(block=block),
             more.suggest.args
         )
-    } else {
-        names(thresholds)[names(thresholds) == "subset.sum"] <- "subsets"
-        thresholds <- .populateSubsetThresholds(thresholds, "subsets", !is.null(block))
+        if (is.null(thresholds)) {
+            thresholds <- thresholds.0
+        } else {
+            names(thresholds)[names(thresholds) == "subset.sum"] <- "subsets"
+            thresholds <- .substituteThresholds(thresholds.0, thresholds)
+        }
     }
 
     keep <- filterAdtQcMetrics(thresholds, metrics, block=block)
@@ -103,17 +120,4 @@ formatComputeAdtQcMetricsResult <- function(compute.res, flatten = TRUE) {
         colnames(compute.res)[colnames(compute.res) == "subsets"] <- "subset.sum"
         compute.res
     }
-}
-
-.populateSubsetThresholds <- function(thresholds, subset.field, has.block) {
-    if (is.null(thresholds[[subset.field]])) {
-        if (has.block) {
-            stub <- list()
-        } else {
-            stub <- numeric(0)
-        }
-        names(stub) <- character(0)
-        thresholds[[subset.field]] <- stub
-    }
-    thresholds
 }

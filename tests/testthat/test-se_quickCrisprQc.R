@@ -37,6 +37,18 @@ test_that("quickCrisprQc.se works with filtering", {
     expect_true(all(filtered$keep))
 })
 
+test_that("quickCrisprQc.se works with custom thresholds", {
+    # Auto-fills the information that wasn't provided.
+    fixed <- list()
+    out <- quickCrisprQc.se(se, thresholds=fixed)
+    expect_identical(length(metadata(out)$qc$thresholds$max.value), 1L)
+
+    # Used verbatim (some hacking required for renamed subsets).
+    thresholds <- list(max.value=pi)
+    out <- quickCrisprQc.se(se, thresholds=I(thresholds))
+    expect_identical(metadata(out)$qc$thresholds, thresholds)
+})
+
 test_that("quickCrisprQc.se overwrites existing entries", {
     copy <- se
     copy$max.value <- "A"

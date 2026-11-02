@@ -9,8 +9,21 @@
 #' @param subsets List of subsets of control genes, see \code{?\link{computeRnaQcMetrics}} for more details.
 #' @param num.threads Number of threads, to pass to \code{\link{computeRnaQcMetrics}}.
 #' @param block Block assignment for each cell, to pass to \code{\link{suggestRnaQcThresholds}} and \code{\link{filterRnaQcMetrics}}.
-#' @param thresholds List containing pre-defined thresholds for each QC metric,
-#' see the return value of \code{\link{suggestRnaQcThresholds}} for the expected format.
+#' @param thresholds List containing pre-defined thresholds for each QC metric.
+#' This should contain zero, one or more of:
+#' \itemize{
+#' \item \code{sum}, a number containing the lower bound on the sum.
+#' \item \code{detected}, a number containing the lower bound on the number of detected genes. 
+#' \item \code{subset.proportion}, a named list of numbers containing the upper bound on the proportion of counts in each feature subset. 
+#' }
+#' If any element is missing, it will be filled in using the corresponding value from \code{\link{suggestRnaQcThresholds}}.
+#'
+#' If \code{block} is provided, each number may instead be a named numeric vector containing the threshold to be used in each block.
+#' Otherwise, the threshold in the number will be applied to all blocks.
+#'
+#' If \code{NULL}, all thresholds are computed by \code{suggestRnaQcThresholds}.
+#'
+#' If \code{thresholds} is wrapped in an \link{AsIs}, it will be used verbatim, and \code{suggestRnaQcThresholds} will not be called.
 #' @param more.suggest.args Named list of additional arguments to pass to \code{\link{suggestRnaQcThresholds}}.
 #' @param altexp.proportions Alternative experiments for which to compute QC metrics.
 #' This is typically used to refer to alternative experiments holding spike-in data.
@@ -98,16 +111,21 @@ quickRnaQc.se <- function(
         num.threads=num.threads
     )
 
-    if (is.null(thresholds)) {
-        thresholds <- .call(
+    if (is(thresholds, "AsIs")) {
+        thresholds <- unclass(thresholds)
+    } else {
+        thresholds.0 <- .call(
             suggestRnaQcThresholds,
             list(metrics$main),
             list(block=block),
             more.suggest.args
         )
-    } else {
-        names(thresholds)[names(thresholds) == "subset.proportion"] <- "subsets"
-        thresholds <- .populateSubsetThresholds(thresholds, "subsets", !is.null(block))
+        if (is.null(thresholds)) {
+            thresholds <- thresholds.0
+        }  else {
+            names(thresholds)[names(thresholds) == "subset.proportion"] <- "subsets"
+            thresholds <- .substituteThresholds(thresholds.0, thresholds)
+        }
     }
 
     keep <- filterRnaQcMetrics(thresholds, metrics$main, block=block)
@@ -139,6 +157,28 @@ quickRnaQc.se <- function(
     }
 
     x
+}
+
+.substituteThresholds <- function(oldt, newt, sofar = NULL) {
+    for (x in intersect(names(oldt), names(newt))) {
+        oldx <- oldt[[x]]
+        newx <- newt[[x]]
+        if (is.list(oldx)) {
+            oldx <- .substituteThresholds(oldx, newx, sofar = c(sofar, x))
+        } else if (is.null(names(newx))) {
+            if (length(newx) != 1) {
+                stop("expected a scalar at 'thresholds$", paste(sofar, collapse="$"), "'")
+            }
+            oldx[] <- newx
+        } else {
+            if (!identical(names(newx), names(oldx))) {
+                stop("unexpected names for 'thresholds$", paste(sofar, collapse="$"), "'")
+            }
+            oldx <- newx
+        }
+        oldt[[x]] <- oldx
+    }
+    oldt
 }
 
 #' @export

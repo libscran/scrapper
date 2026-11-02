@@ -8,8 +8,19 @@
 #' Rows correspond to CRISPR guides and columns correspond to cells.
 #' @param num.threads Number of threads, to pass to \code{\link{computeCrisprQcMetrics}}.
 #' @param block Block assignment for each cell, to pass to \code{\link{suggestCrisprQcThresholds}} and \code{\link{filterCrisprQcMetrics}}.
-#' @param thresholds List containing pre-defined thresholds for each QC metric,
-#' see the return value of \code{\link{suggestRnaQcThresholds}} for the expected format.
+#' @param thresholds List containing pre-defined thresholds for each QC metric.
+#' This should contain zero, one or more of:
+#' \itemize{
+#' \item \code{max.value}, a number containing the lower bound on the maximum count. 
+#' }
+#' If any element is missing, it will be filled in using the corresponding value from \code{\link{suggestCrisprQcThresholds}}.
+#'
+#' If \code{block} is provided, each numeric scalar may instead be a named numeric vector containing the threshold to be used in each block.
+#' Otherwise, the threshold in the numeric scalar will be applied to all blocks.
+#'
+#' If \code{NULL}, all thresholds are computed by \code{suggestCrisprQcThresholds}.
+#'
+#' If \code{thresholds} is wrapped in an \link{AsIs}, it will be used verbatim, and \code{suggestCrisprQcThresholds} will not be called.
 #' @param more.suggest.args Named list of additional arguments to pass to \code{\link{suggestCrisprQcThresholds}}.
 #' @param assay.type Integer or string specifying the assay of \code{x} containing the CRISPR count matrix.
 #' @param output.prefix String containing a prefix to add to the names of the \code{\link[SummarizedExperiment]{colData}} columns containing the output statistics.
@@ -54,13 +65,20 @@ quickCrisprQc.se <- function(
 ) {
     metrics <- computeCrisprQcMetrics(SummarizedExperiment::assay(x, assay.type), num.threads=num.threads)
 
-    if (is.null(thresholds)) {
-        thresholds <- .call(
+    if (is(thresholds, "AsIs")) {
+        thresholds <- unclass(thresholds)
+    } else {
+        thresholds.0 <- .call(
             suggestCrisprQcThresholds,
             list(metrics),
             list(block=block),
             more.suggest.args
         )
+        if (is.null(thresholds)) {
+            thresholds <- thresholds.0
+        } else {
+            thresholds <- .substituteThresholds(thresholds.0, thresholds)
+        }
     }
 
     keep <- filterCrisprQcMetrics(thresholds, metrics, block=block)

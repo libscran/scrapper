@@ -29,8 +29,20 @@ Rows correspond to antibody-derived tags (ADTs) and columns correspond to cells.
 
 \item{num.threads}{Number of threads, to pass to \code{\link{computeAdtQcMetrics}}.}
 
-\item{thresholds}{List containing pre-defined thresholds for each QC metric,
-see the return value of \code{\link{suggestAdtQcThresholds}} for the expected format.}
+\item{thresholds}{List containing pre-defined thresholds for each QC metric.
+This should contain zero, one or more of:
+\itemize{
+\item \code{detected}, a number containing the lower bound on the number of detected tags. 
+\item \code{subset.sum}, a named list of numbers containing the upper bound on the sum of counts in each control subset. 
+}
+If any element is missing, it will be filled in using the corresponding value from \code{\link{suggestAdtQcThresholds}}.
+
+If \code{block} is provided, each numeric scalar may instead be a named numeric vector containing the threshold to be used in each block.
+Otherwise, the threshold in the numeric scalar will be applied to all blocks.
+
+If \code{NULL}, all thresholds are computed by \code{suggestAdtQcThresholds}.
+
+If \code{thresholds} is wrapped in an \link{AsIs}, it will be used verbatim, and \code{suggestAdtQcThresholds} will not be called.}
 
 \item{block}{Block assignment for each cell, to pass to \code{\link{suggestAdtQcThresholds}} and \code{\link{filterAdtQcMetrics}}.}
 

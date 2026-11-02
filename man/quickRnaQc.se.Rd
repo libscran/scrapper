@@ -39,8 +39,21 @@ Rows correspond to genes and columns correspond to cells.}
 
 \item{num.threads}{Number of threads, to pass to \code{\link{computeRnaQcMetrics}}.}
 
-\item{thresholds}{List containing pre-defined thresholds for each QC metric,
-see the return value of \code{\link{suggestRnaQcThresholds}} for the expected format.}
+\item{thresholds}{List containing pre-defined thresholds for each QC metric.
+This should contain zero, one or more of:
+\itemize{
+\item \code{sum}, a number containing the lower bound on the sum.
+\item \code{detected}, a number containing the lower bound on the number of detected genes. 
+\item \code{subset.proportion}, a named list of numbers containing the upper bound on the proportion of counts in each feature subset. 
+}
+If any element is missing, it will be filled in using the corresponding value from \code{\link{suggestRnaQcThresholds}}.
+
+If \code{block} is provided, each number may instead be a named numeric vector containing the threshold to be used in each block.
+Otherwise, the threshold in the number will be applied to all blocks.
+
+If \code{NULL}, all thresholds are computed by \code{suggestRnaQcThresholds}.
+
+If \code{thresholds} is wrapped in an \link{AsIs}, it will be used verbatim, and \code{suggestRnaQcThresholds} will not be called.}
 
 \item{block}{Block assignment for each cell, to pass to \code{\link{suggestRnaQcThresholds}} and \code{\link{filterRnaQcMetrics}}.}
 

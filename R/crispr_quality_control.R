@@ -37,7 +37,7 @@
 #' \itemize{
 #' \item If \code{block=NULL}, the list contains:
 #' \itemize{
-#' \item \code{max.value}, a numeric scalar containing the lower bound on the maximum count. 
+#' \item \code{max.value}, a number containing the lower bound on the maximum count. 
 #' This is defined as \code{num.mads} MADs below the median of the log-transformed metrics across cells with high maximum proportions (see Details).
 #' }
 #' \item Otherwise, if \code{block} is supplied, the list contains:
@@ -46,7 +46,7 @@
 #' Here, the threshold is computed independently for each block, using the same method as the unblocked case.
 #' \item \code{block.ids}, a vector containing the identities of the unique blocks.
 #' }
-#' Each vector is of length equal to the number of levels in \code{block} and is named accordingly.
+#' Each vector of thresholds is of length equal to the number of levels in \code{block} and is named accordingly.
 #' }
 #'
 #' For \code{filterCrisprQcMetrics}, a logical vector of length \code{ncol(x)} is returned indicating which cells are of high quality. 
