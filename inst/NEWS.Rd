@@ -49,6 +49,11 @@ Affected functions include \code{modelGeneVariances()}, \code{runPca()}, \code{s
 This will not change any calculations but may result in some reordering of the output for functions that return a result per factor level. 
 \item Added a \code{filter.cells=} option to \code{quickRnaQc.se()}, \code{quickAdtQc.se()} and \code{quickCrisprQc.se()}.
 If set to \code{TRUE}, these functions will subset the output SummarizedExperiment to only retain high-quality cells.
+\item More convenient specification of custom \code{thresholds=} in \code{quickRnaQc.se()}, \code{quickAdtQc.se()} and \code{quickCrisprQc.se()}.
+Users can now supply partial thresholds for some metrics and the thresholds for the remaining metrics will be filled in by the appropriate suggestions.
+Users can also supply a single threshold value for each metrics in a blocked analysis, which will then be used for all blocks.
+\item \code{suggestRnaQcThresholds()} and \code{suggestAdtQcThreshods()} now return a list of thresholds in \code{subsets} when \code{block=NULL}.
+This is more consistent with the data structure that is returned when \code{block=} is supplied.
 \item Include an \code{unfiltered} object in the output of \code{analyze.se()}, to report the full distribution of QC metrics prior to any filtering.
 This is not reported if \code{filter.cells=FALSE}, in which case it would be redundant with the information in \code{x}.
 }}
