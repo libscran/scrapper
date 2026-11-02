@@ -78,6 +78,15 @@ void check_subset_metrics(Ncells_ ncells, const Rcpp::RObject& raw_input, std::v
     }
 }
 
+inline Rcpp::List create_subset_filters(const std::vector<double>& filters) {
+    const auto nsubs = filters.size();
+    auto subs = sanisizer::create<Rcpp::List>(nsubs);
+    for (I<decltype(nsubs)> s = 0; s < nsubs; ++s) {
+        subs[s] = Rcpp::NumericVector::create(filters[s]);
+    }
+    return subs;
+}
+
 inline Rcpp::List create_subset_filters(const std::vector<std::vector<double> >& filters) {
     const auto nsubs = filters.size();
     auto subs = sanisizer::create<Rcpp::List>(nsubs);
@@ -146,11 +155,14 @@ inline double parse_filter_unblocked(const Rcpp::RObject& raw_val, const char* m
 
 template<typename Nsubs_>
 void copy_subset_filters_unblocked(Nsubs_ nsubs, const Rcpp::RObject& raw_subsets, std::vector<double>& store) {
-    auto subsets = safe_cast<Rcpp::NumericVector, REALSXP>(raw_subsets, [&]() -> std::string { return "'thresholds$subsets'"; });
+    auto subsets = safe_cast<Rcpp::List, VECSXP>(raw_subsets, [&]() -> std::string { return "'thresholds$subsets'"; });
     if (!sanisizer::is_equal(subsets.size(), nsubs)) {
         throw std::runtime_error("'thresholds$subsets' should have the same length as the number of subsets in 'metrics'");
     }
-    store.insert(store.end(), subsets.begin(), subsets.end());
+    store.reserve(nsubs);
+    for (I<decltype(nsubs)> s = 0; s < nsubs; ++s) {
+        store.push_back(parse_filter_unblocked(subsets[s], "thresholds$subsets[[...]]"));
+    }
 }
 
 #endif

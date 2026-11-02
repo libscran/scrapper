@@ -53,7 +53,7 @@
 #' This is defined as \code{num.mads} MADs below the median of the log-transformed metrics across all cells.
 #' \item \code{detected}, a numeric scalar containing the lower bound on the number of detected genes. 
 #' This is defined as \code{num.mads} MADs below the median of the log-transformed metrics across all cells.
-#' \item \code{subsets}, a numeric vector containing the upper bound on the sum of counts in each feature subset. 
+#' \item \code{subsets}, a named list of numeric scalars containing the upper bound on the proportion of counts in each feature subset. 
 #' This is defined as \code{num.mads} MADs above the median across all cells.
 #' }
 #' \item Otherwise, if \code{block} is supplied, the list contains:
@@ -62,7 +62,7 @@
 #' Here, the threshold is computed independently for each block, using the same method as the unblocked case.
 #' \item \code{detected}, a numeric vector containing the lower bound on the number of detected genes for each blocking level.
 #' Here, the threshold is computed independently for each block, using the same method as the unblocked case.
-#' \item \code{subsets}, a list of numeric vectors containing the upper bound on the sum of counts in each feature subset for each blocking level.
+#' \item \code{subsets}, a named list of numeric vectors containing the upper bound on the proportion of counts in each feature subset for each blocking level.
 #' Here, the threshold is computed independently for each block, using the same method as the unblocked case.
 #' \item \code{block.ids}, a vector containing the identities of the unique blocks.
 #' }
@@ -146,6 +146,7 @@ suggestRnaQcThresholds <- function(metrics, block = NULL, num.mads = NULL, sum.n
 filterRnaQcMetrics <- function(thresholds, metrics, block=NULL) {
     block <- .matchBlockThresholds(block, thresholds$block.ids)
     metrics <- .simplifyQcMetrics(metrics)
+    thresholds <- .listifySubsets(thresholds)
     .checkThresholdNames(thresholds, c("sum", "detected"), "subsets", names(metrics$subsets))
     filter_rna_qc_metrics(thresholds, metrics, block=block)
 }
@@ -232,6 +233,14 @@ filterRnaQcMetrics <- function(thresholds, metrics, block=NULL) {
     }
 
     m - 1L
+}
+
+.listifySubsets <- function(thresholds) {
+    if (!is.list(thresholds$subsets)) {
+        .Deprecated(msg="'thresholds$subsets' should be a list when 'block=NULL'")
+        thresholds$subsets <- as.list(thresholds$subsets)
+    }
+    thresholds
 }
 
 #' Default parameters for RNA quality control

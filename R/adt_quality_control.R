@@ -56,14 +56,14 @@
 #' This is defined as the lower of (i) \code{num.mads} MADs below the median for the log-transformed values across all cells,
 #' and (ii) the product of \code{1 - min.detected.drop} and the median across all cells.
 #' The latter avoids overly aggressive filtering when the MAD is zero.
-#' \item \code{subsets}, a numeric vector containing the upper bound on the sum of counts in each control subset. 
+#' \item \code{subsets}, a named list of numeric scalars containing the upper bound on the sum of counts in each control subset. 
 #' This is defined as \code{num.mads} MADs above the median of the log-transformed metrics across all cells.
 #' }
 #' \item Otherwise, if \code{block} is supplied, the list contains:
 #' \itemize{
 #' \item \code{detected}, a numeric vector containing the lower bound on the number of detected tags for each blocking level.
 #' Here, the threshold is computed independently for each block, using the same method as the unblocked case.
-#' \item \code{subsets}, a list of numeric vectors containing the upper bound on the sum of counts in each control subset for each blocking level.
+#' \item \code{subsets}, a named list of numeric vectors containing the upper bound on the sum of counts in each control subset for each blocking level.
 #' Here, the threshold is computed independently for each block, using the same method as the unblocked case.
 #' \item \code{block.ids}, a vector containing the identities of the unique blocks.
 #' }
@@ -154,6 +154,7 @@ suggestAdtQcThresholds <- function(
 filterAdtQcMetrics <- function(thresholds, metrics, block=NULL) {
     block <- .matchBlockThresholds(block, thresholds$block.ids)
     metrics <- .simplifyQcMetrics(metrics)
+    thresholds <- .listifySubsets(thresholds)
     .checkThresholdNames(thresholds, c("detected"), "subsets", names(metrics$subsets))
     filter_adt_qc_metrics(thresholds, metrics, block=block)
 }

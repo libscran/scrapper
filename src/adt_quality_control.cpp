@@ -138,10 +138,9 @@ Rcpp::List suggest_adt_qc_thresholds(
             opt
         );
 
-        const auto& ssout = filt.get_subset_sum();
         return Rcpp::List::create(
             Rcpp::Named("detected") = Rcpp::NumericVector::create(filt.get_detected()),
-            Rcpp::Named("subsets") = Rcpp::NumericVector(ssout.begin(), ssout.end())
+            Rcpp::Named("subsets") = create_subset_filters(filt.get_subset_sum())
         );
     }
 }

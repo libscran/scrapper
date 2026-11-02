@@ -140,7 +140,7 @@ Rcpp::List suggest_rna_qc_thresholds(
         return Rcpp::List::create(
             Rcpp::Named("sum") = Rcpp::NumericVector::create(filt.get_sum()),
             Rcpp::Named("detected") = Rcpp::NumericVector::create(filt.get_detected()),
-            Rcpp::Named("subsets") = Rcpp::NumericVector(ssout.begin(), ssout.end())
+            Rcpp::Named("subsets") = create_subset_filters(filt.get_subset_proportion())
         );
     }
 }

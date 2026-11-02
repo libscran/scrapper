@@ -81,7 +81,7 @@ For \code{suggestRnaQcThresholds}, a named list is returned.
 This is defined as \code{num.mads} MADs below the median of the log-transformed metrics across all cells.
 \item \code{detected}, a numeric scalar containing the lower bound on the number of detected genes. 
 This is defined as \code{num.mads} MADs below the median of the log-transformed metrics across all cells.
-\item \code{subsets}, a numeric vector containing the upper bound on the sum of counts in each feature subset. 
+\item \code{subsets}, a named list of numeric scalars containing the upper bound on the proportion of counts in each feature subset. 
 This is defined as \code{num.mads} MADs above the median across all cells.
 }
 \item Otherwise, if \code{block} is supplied, the list contains:
@@ -90,7 +90,7 @@ This is defined as \code{num.mads} MADs above the median across all cells.
 Here, the threshold is computed independently for each block, using the same method as the unblocked case.
 \item \code{detected}, a numeric vector containing the lower bound on the number of detected genes for each blocking level.
 Here, the threshold is computed independently for each block, using the same method as the unblocked case.
-\item \code{subsets}, a list of numeric vectors containing the upper bound on the sum of counts in each feature subset for each blocking level.
+\item \code{subsets}, a named list of numeric vectors containing the upper bound on the proportion of counts in each feature subset for each blocking level.
 Here, the threshold is computed independently for each block, using the same method as the unblocked case.
 \item \code{block.ids}, a vector containing the identities of the unique blocks.
 }
