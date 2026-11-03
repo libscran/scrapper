@@ -161,6 +161,9 @@ quickRnaQc.se <- function(
 
 .substituteThresholds <- function(oldt, newt, sofar = NULL) {
     for (x in intersect(names(oldt), names(newt))) {
+        if (x == "block.ids") {
+            next
+        }
         oldx <- oldt[[x]]
         newx <- newt[[x]]
         if (is.list(oldx)) {

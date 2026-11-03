@@ -89,6 +89,7 @@ test_that(".substituteThresholds works correctly", {
     expect_identical(scrapper:::.substituteThresholds(list(a=1, b=c(x=2, y=4), d=5), list(a=2, b=c(x=3, y=6), c=4)), list(a=2, b=c(x=3, y=6), d=5))
     expect_error(scrapper:::.substituteThresholds(list(a=1, b=2, d=5), list(a=2, b=c(x=1), c=4)), "unexpected names")
     expect_error(scrapper:::.substituteThresholds(list(a=1, b=2, d=5), list(a=2, b=1:2, c=4)), "expected a scalar")
+    expect_identical(scrapper:::.substituteThresholds(list(a=1, b=2, d=5, block.ids=1:5), list(a=2, b=3, c=4, block.ids=2:7)), list(a=2, b=3, d=5, block.ids=1:5))
 })
 
 test_that("quickRnaQc.se overwrites existing entries", {
